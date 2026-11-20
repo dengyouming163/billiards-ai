@@ -2188,7 +2188,6 @@ billiards\wwwtable\src\utils\serial-port.ts
 billiards\wwwtable\src\utils\serial-protocol.ts
 billiards\wwwtable\src\utils\validator.ts
 billiards\wwwtable\src\utils\websocket.ts
-billiards\wwwtable\tmp_classes.jar
 billiards\wwwtable\tsconfig.json
 billiards\wwwtable\vite.config.ts
 billiards\wwwtable\vitest.config.ts

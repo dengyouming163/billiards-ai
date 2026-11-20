@@ -178,7 +178,7 @@ ADD INDEX `idx_employee_id` (`employee_id`);
 - [ ] **Step 2: 执行迁移**
 
 ```bash
-mysql -h 132.232.166.40 -P 13306 -u billiards -pdengyouming2tll billiards < database/migrations/add_employee_id_to_assistant.sql
+mysql -h 127.0.0.1 -P 3306 -u test_user -p test_billiards < database/migrations/add_employee_id_to_assistant.sql
 ```
 
 ---

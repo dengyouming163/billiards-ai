@@ -41,11 +41,11 @@ class WechatPaymentService
         $config = config('wechatpay');
 
         // 服务商配置
-        $this->appId     = (string)($config['appid'] ?? 'wx0e5fc1f7fa23d1fe');
+        $this->appId     = (string)($config['appid'] ?? '');
         $this->mchId     = (string) ($config['mchid'] ?? '');
         $this->serialNo  = (string) ($config['serial_no'] ?? '');
         $this->apiV3Key  = (string) ($config['apiv3_key'] ?? '');
-        $this->notifyUrl = $notifyUrl ?: ((string)($config['notify_url'] ?? '') ?: 'https://poolapi.kyyp.cn/api/v1/webhooks/wechat');
+        $this->notifyUrl = $notifyUrl ?: (string)($config['notify_url'] ?? '');
 
         // v3 配置（EasyWeChat 6.x Pay Config 须包含: mch_id, secret_key, private_key, certificate）
         // 私钥：可能是路径也可能是 PEM 字符串

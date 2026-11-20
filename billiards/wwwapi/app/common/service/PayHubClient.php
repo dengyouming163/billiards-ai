@@ -124,7 +124,10 @@ class PayHubClient
      */
     private function getAdminToken(): string
     {
-        $secret = env('PAYHUB_ADMIN_SECRET', '6411583f647947ff0e7d819416f5341d36aaa8a994518fd404bd0e98f7d6d25d');
+        $secret = env('PAYHUB_ADMIN_SECRET', '');
+        if ($secret === '') {
+            throw new \RuntimeException('PAYHUB_ADMIN_SECRET is not configured');
+        }
         $header = self::base64urlEncode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
         $payload = self::base64urlEncode(json_encode([
             'role' => 'admin',

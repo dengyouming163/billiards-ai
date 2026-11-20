@@ -1,10 +1,10 @@
 <?php
 return [
-    'host'     => '127.0.0.1',
-    'port'     => 13306,
-    'dbname'   => 'dkypool',
-    'username' => 'dkypool',
-    'password' => 'dengyouming2tll',
+    'host'     => getenv('BILLIARDS_DB_HOST') ?: '127.0.0.1',
+    'port'     => (int) (getenv('BILLIARDS_DB_PORT') ?: 3306),
+    'dbname'   => getenv('BILLIARDS_DB_NAME') ?: 'test_billiards',
+    'username' => getenv('BILLIARDS_DB_USERNAME') ?: 'test_user',
+    'password' => getenv('BILLIARDS_DB_PASSWORD') ?: 'test_password',
     'charset'  => 'utf8mb4',
     'options'  => [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

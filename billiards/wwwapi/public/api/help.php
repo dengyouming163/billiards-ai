@@ -2,8 +2,8 @@
 /**
  * 公开帮助文档 + 公告 API
  * 绕过框架中间件，直接查询数据库返回 JSON
- * URL: http://poolapi.kyyp.cn/api/help.php?type=articles
- * URL: http://poolapi.kyyp.cn/api/help.php?type=announcements
+ * URL: http://127.0.0.1/api/help.php?type=articles
+ * URL: http://127.0.0.1/api/help.php?type=announcements
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -11,10 +11,16 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 
 try {
+    $host = getenv('BILLIARDS_DB_HOST') ?: '127.0.0.1';
+    $port = (int) (getenv('BILLIARDS_DB_PORT') ?: 3306);
+    $dbname = getenv('BILLIARDS_DB_NAME') ?: 'test_billiards';
+    $username = getenv('BILLIARDS_DB_USERNAME') ?: 'test_user';
+    $password = getenv('BILLIARDS_DB_PASSWORD') ?: 'test_password';
+
     $db = new PDO(
-        'mysql:host=127.0.0.1;port=13306;dbname=billiards;charset=utf8mb4',
-        'billiards',
-        'dengyouming2tll',
+        "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4",
+        $username,
+        $password,
         [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
     );
 
