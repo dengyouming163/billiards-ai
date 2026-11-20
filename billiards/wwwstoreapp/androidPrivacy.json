@@ -1,0 +1,14 @@
+{
+    "version": "1",
+    "prompt": "template",
+    "title": "服务协议和隐私政策",
+    "message": "欢迎使用球房管理。为保障功能正常使用并持续优化体验，应用需要收集必要的设备信息、运行日志，并在你使用上传图片功能时申请访问相机和相册权限。继续使用前，请先阅读并同意<a href=\"hybrid/html/service-agreement.html\">《服务协议》</a>和<a href=\"hybrid/html/privacy-policy.html\">《隐私政策》</a>。",
+    "buttonAccept": "同意并继续",
+    "buttonRefuse": "暂不同意",
+    "second": {
+        "title": "温馨提示",
+        "message": "你需要先同意<a href=\"hybrid/html/service-agreement.html\">《服务协议》</a>和<a href=\"hybrid/html/privacy-policy.html\">《隐私政策》</a>，应用才能继续提供完整服务。",
+        "buttonAccept": "重新查看",
+        "buttonRefuse": "退出应用"
+    }
+}

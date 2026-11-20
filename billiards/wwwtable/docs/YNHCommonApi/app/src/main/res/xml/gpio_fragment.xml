@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListPreference
+        android:entries="@array/gpio_mode_entries"
+        android:entryValues="@array/gpio_mode_values"
+        android:key="gpio_mode"
+        android:title="@string/gpio_mode_title" />
+
+    <ListPreference
+        android:entries="@array/gpio_state_entries"
+        android:entryValues="@array/gpio_state_values"
+        android:key="set_gpio_state"
+        android:title="@string/set_gpio_state" />
+
+    <Preference
+        android:key="gpio_state"
+        android:title="@string/gpio_state" />
+</PreferenceScreen>

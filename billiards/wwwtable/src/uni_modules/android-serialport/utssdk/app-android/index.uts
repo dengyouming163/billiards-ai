@@ -1,0 +1,410 @@
+import  SerialPort from "android.serialport.SerialPort"
+import  ByteUtil from "android.serialport.ByteUtil"
+import SerialPortFinder from "android.serialport.SerialPortFinder";
+import JSONArray from 'org.json.JSONArray';
+import Integer from 'java.lang.Integer';
+import File from 'java.io.File';
+import YNHAPI from 'com.innohi.YNHAPI';
+
+export class SerialPortHelper{
+		   
+		private  builder : SerialPort.Builder;
+		private 	mPort  : SerialPort | null=null
+		private 	devicePath : string = ""
+	
+	constructor() {
+		this.builder = SerialPort.Builder();
+	}
+	
+	public getAllDevices() :string[]{
+			   var finer=new SerialPortFinder();
+			   var f=finer.getAllDevices();
+				const list: string[] = f.joinToString(";").split(";");
+				console.log("getAllDevices="+list);
+				for(var i=0;i<list.length;i++){
+					var b:boolean=list[i.toInt()].startsWith("/dev");
+					if(b===false){
+						list[i.toInt()]="/dev/"+list[i.toInt()]; 	
+					}
+				}
+			   return list;
+	};
+	
+	 public  setPath(path:string ) :void{
+		 
+		 var b:boolean=path.startsWith("/dev");
+		
+		if(!b){
+			path="/dev/"+path; 	
+		}else{
+		}
+		 console.log("open path="+path)
+		 this.devicePath = path;
+	    this.  builder.setDevice(path);
+	  }
+	
+		     	
+	public  setBaudrate(baudrate:number ) :void{
+		this.builder .setBaudrate(baudrate.toInt());
+	} 
+
+	public getVendorApiVersion(): number {
+		try {
+			return YNHAPI.getInstance().getApiVersion();
+		} catch (e: Exception) {
+			console.log('[android-serialport] getVendorApiVersion error=' + e);
+			return -1;
+		}
+	}
+
+	public isVendorRootEnabled(): boolean {
+		try {
+			return YNHAPI.getInstance().isRoot();
+		} catch (e: Exception) {
+			console.log('[android-serialport] isVendorRootEnabled error=' + e);
+			return false;
+		}
+	}
+
+	public enableVendorRoot(enable: boolean): boolean {
+		try {
+			return YNHAPI.getInstance().enableRoot(enable);
+		} catch (e: Exception) {
+			console.log('[android-serialport] enableVendorRoot error=' + e);
+			return false;
+		}
+	}
+
+	public getVendorGpioState(index: number): number {
+		try {
+			return YNHAPI.getInstance().getGpioState(index.toInt()).mValue;
+		} catch (e: Exception) {
+			console.log('[android-serialport] getVendorGpioState(' + index + ') error=' + e);
+			return -1;
+		}
+	}
+
+	public setVendorGpioHigh(index: number, high: boolean): boolean {
+		try {
+			var api = YNHAPI.getInstance();
+			api.setGpioMode(index.toInt(), YNHAPI.GpioMode.OUTPUT);
+			return api.setGpioState(index.toInt(), high ? YNHAPI.GpioState.HIGH : YNHAPI.GpioState.LOW);
+		} catch (e: Exception) {
+			console.log('[android-serialport] setVendorGpioHigh(' + index + ') error=' + e);
+			return false;
+		}
+	}
+	
+		public open():boolean{
+			try{
+				if (this.devicePath.length > 0) {
+					var deviceFile = new File(this.devicePath);
+					console.log("[android-serialport] device exists="+deviceFile.exists()+", canRead="+deviceFile.canRead()+", canWrite="+deviceFile.canWrite());
+				}
+				var port = this.builder.build();
+				console.log("[android-serialport] open build result null="+(port == null));
+				if (port == null) {
+					this.mPort = null;
+					return false;
+				}
+				this.mPort = port;
+				var output = this.mPort!.getOutputStream();
+				console.log("[android-serialport] open output stream null="+(output == null));
+				return this.mPort!.isOpen();
+			}catch(e:Exception){
+				console.log(e);
+				this.mPort = null;
+				return false;
+			}
+			
+				
+		}
+	
+	public uint8ArrayToHexString(uint8Array:number[]):string {
+		var d="";
+		uint8Array.forEach((val,index)=>{
+			
+			var nums= Integer.toHexString(val.toInt()).padStart(2, '0');
+			if(index<uint8Array.length-1){
+				d=d+nums+" ";
+			}else{
+				d=d+nums
+			}
+			
+			
+		})
+		return d;
+	
+	}
+	
+		public isOpen():Boolean{
+			if(this.mPort==null){
+				return false;
+			}else{
+				return this.mPort!.isOpen();
+		}
+	}
+	
+			/**
+			* 数据位
+	         *
+	         * @param dataBits 默认8,可选值为5~8
+	         * @return
+	         */
+	        public  dataBits(dataBits:number ):void {
+	           this.builder.dataBits(dataBits.toInt())
+	        }
+	
+	        /**
+	         * 校验位
+	         *
+	         * @param parity 0:无校验位(NONE，默认)；1:奇校验位(ODD);2:偶校验位(EVEN)
+	         * @return
+	         */
+	        public  parity(parity:number ) :void{
+	             this.builder.parity(parity.toInt())
+	        }
+	
+	        /**
+	         * 停止位
+	         *
+	         * @param stopBits 默认1；1:1位停止位；2:2位停止位
+	         * @return
+	         */
+	        public  stopBits(stopBits:number ) :void{
+	           this.builder.stopBits(stopBits.toInt())
+	        }
+	
+	        /**
+	         * 标志
+	         *
+	         * @param flags 默认0
+	         * @return
+	         */
+	        public  flags(flags:number ) :void{
+	           this.builder.flags(flags.toInt())
+	        }
+	
+		public close():void{
+		 if(this.mPort != null){
+		 	this.mPort!.tryClose();
+		 	this.mPort = null;
+		 }
+		}
+		
+		
+
+	@UTSJS.keepAlive
+	 public  startAutoReadData(callback : (arg : object) => any):void{
+		 class OnPortReadListener implements SerialPort.Builder.OnPortReadListener {
+				override onRead(bytes : ByteArray) : void {
+				callback(bytes);
+		 	}
+		 
+		 }
+		 this.mPort!.startAutoReadData(new OnPortReadListener())
+		 
+	 }
+	 
+	 @UTSJS.keepAlive
+	  public  onStartAutoReadData(callback : (arg : number[]) => any):void{
+		  var that=this;
+	 	 class OnPortReadListener implements SerialPort.Builder.OnPortReadListener {
+	 			override onRead(bytes : ByteArray) : void {
+				var b=	that.byte2HexString(bytes);
+				var nums:number[]=[] as number[];
+				var ss=	b.split(" ");
+				for(var i=0;i<ss.length;i++){
+					nums.push(parseInt(ss[i],16))
+				}
+	 			callback(nums);
+	 	 	}
+	 	 
+	 	 }
+	 	 this.mPort!.startAutoReadData(new OnPortReadListener())
+	 	 
+	  }
+		 
+	 public  stopReadPortData():void{
+		 if(this.mPort != null){
+		 	this.mPort!.stopReadPortData();
+		 }
+				 
+	}	
+	
+	
+	  public  available():number{
+		  if(this.mPort == null){
+		  	return -1;
+		  }
+		  return this.mPort!.available();
+		  
+	  }
+		@UTSJS.keepAlive
+	   public  readData(  total:number,   off:number,  len:number, callback : (arg : object) => any):void{
+			   if(this.mPort == null){
+			   	return;
+			   }
+			   class OnPortReadListener implements SerialPort.Builder.OnPortReadListener {
+							override onRead(bytes : ByteArray) : void {
+							callback(bytes);
+				}
+		}
+		   
+		   this.mPort!.readData(total.toInt(),off.toInt(),len.toInt(),new OnPortReadListener())
+	   }
+	
+	
+	@UTSJS.keepAlive
+	public  onReadData(  total:number,   off:number,  len:number, callback : (arg : number[]) => any):void{
+		var that=this;
+		if(this.mPort == null){
+			return;
+		}
+				   class OnPortReadListener implements SerialPort.Builder.OnPortReadListener {
+								override onRead(bytes : ByteArray) : void {
+								var b=	that.byte2HexString(bytes);
+								var nums:number[]=[] as number[];
+								var ss=	b.split(" ");
+								for(var i=0;i<ss.length;i++){
+									nums.push(parseInt(ss[i],16))
+								}
+								callback(nums);
+					}
+			}
+			   
+			   this.mPort!.readData(total.toInt(),off.toInt(),len.toInt(),new OnPortReadListener())
+	}
+	  
+		public sendData(bytes : ByteArray):void{
+				if(this.mPort == null){
+					throw new NullPointerException("SerialPort is null, open() failed")
+				}
+				console.log("[android-serialport] sendData called");
+				if(bytes instanceof ByteArray){
+					var output = this.mPort!.getOutputStream();
+					console.log("[android-serialport] sendData output null="+(output == null));
+					if (output == null) {
+						return;
+					}
+					console.log("[android-serialport] sendData write length="+bytes.size);
+					output.write(bytes);
+					output.flush();
+				}else{
+					var b=bytes.toString();
+					// console.log(b);
+					var sp=	b.split(",");
+					var bs=new ByteArray(sp.length.toInt());
+					for(var i=0;i<sp.length;i++){
+						bs[i.toInt()]=parseInt(sp[i.toInt()]).toByte();
+					}
+					var output2 = this.mPort!.getOutputStream();
+					console.log("[android-serialport] sendData(converted) output null="+(output2 == null));
+					if (output2 == null) {
+						return;
+					}
+					console.log("[android-serialport] sendData(converted) write length="+bs.size);
+					output2.write(bs);
+					output2.flush();
+				}
+				
+		}
+	  
+	  public sendDataUnit8Array(bytes : number[]):void{
+		  if(this.mPort == null){
+		  	throw new NullPointerException("SerialPort is null, open() failed")
+		  }
+		  console.log("[android-serialport] sendDataUnit8Array called length="+bytes.length);
+		  var b:ByteArray =new ByteArray(bytes.length.toInt());
+		   for(var i=0;i<bytes.length;i++ ){
+			   b[i.toInt()]=bytes[i.toInt()].toByte();
+		   }
+		   
+	  	var output = this.mPort!.getOutputStream();
+	  	console.log("[android-serialport] sendDataUnit8Array output null="+(output == null));
+	  	if (output == null) {
+	  		return;
+	  	}
+	  	console.log("[android-serialport] sendDataUnit8Array write length="+b.size);
+	  	output.write(b);
+	  	output.flush();
+	  }
+	  
+	  
+		
+		public sendDataString(bytes : string):void{
+			if(this.mPort == null){
+				throw new NullPointerException("SerialPort is null, open() failed")
+			}
+			console.log("[android-serialport] sendDataString called="+bytes);
+			try {
+				var normalized = bytes.replace(" ", "");
+				console.log("[android-serialport] normalized="+normalized);
+				var size = (normalized.length / 2).toInt();
+				console.log("[android-serialport] size="+size);
+				var result = new ByteArray(size);
+				for (var i = 0; i < size; i++) {
+					var index = i.toInt();
+					var start = (i * 2).toInt();
+					var end = (start + 2).toInt();
+					var hex = normalized.substring(start, end);
+					console.log("[android-serialport] hex["+index+"]="+hex);
+					result[index] = Integer.parseInt(hex, 16).toByte();
+				}
+				console.log("[android-serialport] byte array ready");
+				var output = this.mPort!.getOutputStream();
+				console.log("[android-serialport] sendDataString output null="+(output == null));
+				if (output == null) {
+					return;
+				}
+				console.log("[android-serialport] sendDataString write length="+result.size);
+				output.write(result);
+				output.flush();
+				console.log("[android-serialport] sendDataString write done");
+			} catch(e: Exception) {
+				console.log("[android-serialport] sendDataString error="+e);
+				throw e;
+			}
+		}
+		
+		
+		public parseHexStr2Byte(bytes : string):ByteArray{
+			return ByteUtil.parseHexStr2Byte(bytes);
+		}
+		
+		public byte2HexString(bytes : any):String{
+			// console.log("---------1-----"+bytes.getClass());
+			
+			if(bytes instanceof ByteArray){
+				return ByteUtil.byte2HexString(bytes);
+			}else{
+				var b=bytes.toString();
+				// console.log(b);
+				var sp=	b.split(",");
+				var bs=new ByteArray(sp.length.toInt());
+				for(var i=0;i<sp.length;i++){
+					bs[i.toInt()]=parseInt(sp[i.toInt()]).toByte();
+				}
+				return  ByteUtil.byte2HexString(bs);
+			}
+			
+		}
+	
+	
+		
+	 public    addBytes(ob:ByteArray,cb: ByteArray ):ByteArray  {
+		 return ByteUtil.addBytes(ob,cb);
+	 }
+	 
+	  public  subBytes(bs: ByteArray ,  start:number,  length:number):ByteArray {
+		  return ByteUtil.subBytes(bs,start.toInt(),length.toInt());
+	  }
+	 
+	 
+	 public string2ByteStrWithCharset(data:string,code:string):string{
+	 		 return ByteUtil.string2ByteStrWithCharset(data,code);
+	 }
+	 public byte2StringWithCharset(data:string,code:string):string{
+	 	 return ByteUtil.byte2StringWithCharset(data,code);
+	 }
+}

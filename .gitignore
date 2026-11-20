@@ -1,1 +1,31 @@
 .worktrees/
+
+# secrets and local configuration
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+*.pem
+*.key
+# dependencies and build output
+**/node_modules/
+**/vendor/
+**/.next/
+**/dist/
+**/dist-electron/
+**/coverage/
+# runtime data
+**/runtime/
+**/logs/
+**/log/
+**/uploads/
+*.log
+# local Python
+**/__pycache__/
+**/.pytest_cache/
+**/.venv/
+# Agent data and evaluation output with sensitive content
+agent/data/
+eval/results/*.json
+!eval/results/.gitkeep

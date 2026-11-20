@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=390,initial-scale=1"><title>助教头部 · 多风格</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC',sans-serif;background:#e5e7eb}
+.toolbar{position:sticky;top:0;z-index:100;background:#1f2937;color:#fff;padding:10px 16px;display:flex;gap:10px;align-items:center}
+.toolbar span{font-size:14px;font-weight:700;margin-right:auto}
+.toolbar button{padding:8px 18px;border-radius:16px;border:none;font-size:13px;font-weight:600;cursor:pointer;background:rgba(255,255,255,.12);color:#fff}
+.toolbar button.active{background:#fff;color:#1f2937}
+.wrap{display:flex;justify-content:center;padding:20px}
+.phone{width:390px;min-height:600px;background:#f2f3f5;border-radius:32px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);padding:16px}
+.phone .sec{margin-bottom:12px}
+.phone .sec-title{font-size:14px;font-weight:700;color:#1f2937;margin-bottom:8px}
+.phone .tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:8px}
+.phone .tab{padding:6px 16px;border-radius:16px;font-size:11px;color:#6b7280;background:#f3f4f6;white-space:nowrap}
+.phone .tab.on{background:#059669;color:#fff}
+.phone .card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.03);margin-bottom:10px}
+</style></head><body>
+<div class="toolbar"><span>助教首页头部设计</span><button id=b1 class=active onclick=sw(1)>A·胶囊状态栏</button><button id=b2 onclick=sw(2)>B·渐变迷你卡</button><button id=b3 onclick=sw(3)>C·横条标签式</button><button id=b4 onclick=sw(4)>D·图标浮动钮</button></div>
+<div class=wrap><div class=phone id=p></div></div>
+<script>
+const s1=`
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;margin-bottom:14px">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff">王</div>
+    <div><div style="font-size:15px;font-weight:700;color:#1f2937">王教练</div><div style="font-size:11px;color:#9ca3af">¥680 今日</div></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981"></span>
+    <span style="font-size:12px;color:#059669;font-weight:600">在线</span>
+    <span style="padding:5px 16px;border-radius:14px;font-size:12px;font-weight:600;background:#f3f4f6;color:#6b7280">下线</span>
+  </div>
+</div>
+<div class="sec"><div class="sec-title">接单列表</div></div>
+<div class="tabs"><span class="tab on">全部</span><span class="tab">待确认</span><span class="tab">已确认</span><span class="tab">进行中</span><span class="tab">已完成</span></div>
+<div class="card"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:700">桌 A002</span><span style="color:#9ca3af">#TB20240622</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-top:8px"><span>客户 张三</span><span style="color:#059669;font-weight:700">¥120</span></div></div>
+`
+
+const s2=`
+<div style="background:linear-gradient(135deg,#059669,#10b981);border-radius:16px;padding:16px 18px;color:#fff;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px">👤</div>
+    <div><div style="font-size:16px;font-weight:700">王教练</div><div style="font-size:12px;opacity:.8">今日 ¥680</div></div>
+  </div>
+  <div style="padding:6px 20px;border-radius:16px;font-size:13px;font-weight:600;background:rgba(255,255,255,.2);color:#fff">下线</div>
+</div>
+<div class="sec"><div class="sec-title">接单列表</div></div>
+<div class="tabs"><span class="tab on">全部</span><span class="tab">待确认</span><span class="tab">已确认</span><span class="tab">进行中</span><span class="tab">已完成</span></div>
+<div class="card"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:700">桌 A002</span><span style="color:#9ca3af">#TB20240622</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-top:8px"><span>客户 张三</span><span style="color:#059669;font-weight:700">¥120</span></div></div>
+`
+
+const s3=`
+<div style="display:flex;align-items:center;padding:10px 0;margin-bottom:14px">
+  <div style="width:40px;height:40px;border-radius:12px;background:#059669;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:700;margin-right:10px">王</div>
+  <div style="flex:1"><div style="font-size:15px;font-weight:600;color:#1f2937">王教练</div></div>
+  <span style="font-size:12px;color:#9ca3af;margin-right:12px">¥680</span>
+  <span style="padding:4px 14px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid #10b981;color:#10b981">● 在线</span>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:14px">
+  <span style="flex:1;text-align:center;padding:8px;background:#059669;color:#fff;border-radius:10px;font-size:12px;font-weight:600">上线接单</span>
+  <span style="flex:1;text-align:center;padding:8px;background:#f3f4f6;color:#6b7280;border-radius:10px;font-size:12px;font-weight:500">下线休息</span>
+</div>
+<div class="sec"><div class="sec-title">接单列表</div></div>
+<div class="tabs"><span class="tab on">全部</span><span class="tab">待确认</span><span class="tab">已确认</span><span class="tab">进行中</span><span class="tab">已完成</span></div>
+<div class="card"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:700">桌 A002</span><span style="color:#9ca3af">#TB20240622</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-top:8px"><span>客户 张三</span><span style="color:#059669;font-weight:700">¥120</span></div></div>
+`
+
+const s4=`
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+  <div style="width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#059669,#10b981);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff">王</div>
+  <div style="flex:1"><div style="font-size:15px;font-weight:600;color:#1f2937">王教练</div><div style="font-size:11px;color:#9ca3af">¥680 今日收入</div></div>
+  <div style="width:48px;height:48px;border-radius:50%;background:#fff;box-shadow:0 2px 12px rgba(5,150,105,.2);display:flex;align-items:center;justify-content:center;font-size:20px;position:relative">
+    <span style="position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#10b981;border:2px solid #fff"></span>
+    ⚡
+  </div>
+</div>
+<div class="sec"><div class="sec-title">接单列表</div></div>
+<div class="tabs"><span class="tab on">全部</span><span class="tab">待确认</span><span class="tab">已确认</span><span class="tab">进行中</span><span class="tab">已完成</span></div>
+<div class="card"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:700">桌 A002</span><span style="color:#9ca3af">#TB20240622</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-top:8px"><span>客户 张三</span><span style="color:#059669;font-weight:700">¥120</span></div></div>
+`
+
+function sw(n){
+  document.querySelectorAll('.toolbar button').forEach(b=>b.classList.remove('active'))
+  document.getElementById('b'+n).classList.add('active')
+  document.getElementById('p').innerHTML=[null,s1,s2,s3,s4][n]
+}
+sw(1)
+</script></body></html>

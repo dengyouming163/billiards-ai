@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="key_model"
+        android:title="@string/title_model" />
+
+    <Preference
+        android:key="key_serialno"
+        android:title="@string/title_serialno" />
+
+    <Preference
+        android:key="key_screenshot"
+        android:title="@string/title_screenshot_interface" />
+
+<!--
+    <SwitchPreferenceCompat
+        android:key="key_boot_apk"
+        android:title="@string/boot_apk" />
+-->
+
+    <SwitchPreferenceCompat
+        android:key="key_lcd_back_light"
+        android:title="@string/title_screen_wakeup_sleep" />
+
+    <Preference
+        android:key="key_ota_update"
+        android:title="@string/title_ota_update" />
+
+
+    <Preference
+        android:key="key_apk_install"
+        android:title="@string/title_silent_apk_install" />
+
+    <Preference
+        android:key="key_storage_info"
+        android:title="@string/title_storage_info" />
+
+    <ListPreference
+        android:key="key_app_keeplive"
+        android:title="@string/app_keeplive" />
+
+    <ListPreference
+        android:entries="@array/navigation_bar_entries"
+        android:entryValues="@array/navigation_bar_values"
+        android:key="key_navigation_bar_visibility"
+        android:title="@string/navigation_bar_visibility" />
+
+    <PreferenceCategory
+        android:key="key_gpio_category"
+        android:title="@string/title_gpio_interface">
+        <SwitchPreferenceCompat
+            android:key="relay"
+            android:title="@string/relay" />
+
+        <SwitchPreferenceCompat
+            android:key="red_led"
+            android:title="@string/red_light" />
+
+        <SwitchPreferenceCompat
+            android:key="green_led"
+            android:title="@string/green_light" />
+
+        <SwitchPreferenceCompat
+            android:key="blue_led"
+            android:title="@string/blue_light" />
+
+        <SwitchPreferenceCompat
+            android:key="infrared"
+            android:title="@string/infrared_light" />
+
+        <SwitchPreferenceCompat
+            android:key="white_light"
+            android:title="@string/white_light" />
+
+        <Preference
+            android:key="cash_box"
+            android:title="@string/cash_box" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:key="key_watchdog_category"
+        android:title="@string/title_watchdog_interface">
+        <SwitchPreferenceCompat
+            android:key="toggle_watchdog"
+            android:title="@string/title_toggle_watchdog" />
+        <Preference
+            android:key="feed_watchdog"
+            android:title="@string/title_feed_dog" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="key_reboot_interface_category"
+        android:title="@string/title_reboot_interface">
+        <Preference
+            android:key="key_reboot"
+            android:title="@string/title_reboot" />
+        <Preference
+            android:key="key_shutdown"
+            android:title="@string/title_shutdown" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="key_time_interface_category"
+        android:title="@string/title_time_interface">
+
+        <Preference
+            android:key="key_current_time"
+            android:title="@string/title_current_time" />
+
+        <Preference
+            android:key="key_set_time"
+            android:title="@string/title_set_time" />
+
+        <SwitchPreferenceCompat
+            android:key="key_enable_network_provided_time"
+            android:title="@string/title_enable_network_provided_time" />
+    </PreferenceCategory>
+
+    <!--
+    <PreferenceCategory
+        android:key="key_timing_category"
+        android:title="@string/title_timing_boot_shutdown">
+
+        <Preference
+            android:key="key_set_timing_shutdown"
+            android:title="@string/title_timing_shutdown" />
+        <Preference
+            android:key="key_set_timing_boot"
+            android:title="@string/title_set_boot_time" />
+
+        <Preference
+            android:key="key_submit_timing_data"
+            android:title="@string/title_submit_timing_data" />
+
+        <Preference
+            android:key="key_clear_timing"
+            android:title="@string/title_clear_timing_data" />
+    </PreferenceCategory>
+    -->
+
+    <PreferenceCategory
+        android:key="key_set_ethernet_category"
+        android:title="@string/title_set_ip_data">
+
+        <SwitchPreferenceCompat
+            android:key="key_set_dhcp_ip"
+            app:title="@string/title_set_dhcp_ip" />
+
+        <Preference
+            android:key="key_set_static_ip"
+            app:title="@string/title_set_static_ip" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:key="wiegand_category"
+        android:title="@string/wiegand_category">
+        <ListPreference
+            android:entries="@array/wiegand_mode_entries"
+            android:entryValues="@array/wiegand_mode_values"
+            android:key="wiegand_mode"
+            android:title="@string/wiegand_mode"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:key="write_wiegand"
+            android:title="@string/write_wiegand" />
+
+        <Preference
+            android:key="read_wiegand"
+            android:title="@string/read_wiegand" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_height="match_parent"
+        android:key="install_package_category"
+        android:title="@string/install_package_category">
+
+        <ListPreference
+            android:entries="@array/allow_install_type_entries"
+            android:entryValues="@array/allow_install_type_values"
+            android:key="key_allow_install_type"
+            android:title="@string/allow_install_type" />
+
+        <ListPreference
+            android:key="key_allow_install_package"
+            android:title="@string/allow_install_package" />
+
+        <Preference
+            android:key="key_allow_install_password"
+            android:title="@string/allow_install_password" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

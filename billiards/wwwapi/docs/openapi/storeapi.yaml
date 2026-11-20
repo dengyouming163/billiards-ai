@@ -1,0 +1,340 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: 商家管理中心 API
+  description: 台球厅商家管理后台接口规范
+  contact:
+    name: 开发团队
+    email: dev@example.com
+
+servers:
+  - url: http://127.0.0.1:10002/storeapi
+    description: 开发环境
+  - url: http://api.example.com/storeapi
+    description: 生产环境
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Response:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: 状态码，1表示成功，0表示失败
+          example: 1
+        message:
+          type: string
+          description: 提示信息
+          example: 操作成功
+        data:
+          description: 返回数据
+        timestamp:
+          type: integer
+          description: 时间戳
+
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 用户ID
+        name:
+          type: string
+          description: 用户姓名
+        phone:
+          type: string
+          description: 手机号
+        avatar:
+          type: string
+          description: 头像URL
+        role:
+          type: string
+          description: 角色
+        store_id:
+          type: string
+          description: 门店ID
+        store_name:
+          type: string
+          description: 门店名称
+
+    TokenInfo:
+      type: object
+      properties:
+        token:
+          type: string
+          description: 访问令牌
+        refresh_token:
+          type: string
+          description: 刷新令牌
+        expires_in:
+          type: integer
+          description: 过期时间（秒）
+
+paths:
+  /auth.Auth/login:
+    post:
+      summary: 密码登录
+      description: 使用手机号和密码登录
+      tags:
+        - 认证
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 手机号
+                  example: '13800138000'
+                password:
+                  type: string
+                  description: 密码
+                  example: '123456'
+              required:
+                - phone
+                - password
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '#/components/schemas/TokenInfo'
+                          - type: object
+                            properties:
+                              userInfo:
+                                $ref: '#/components/schemas/UserInfo'
+
+  /auth.Auth/smsLogin:
+    post:
+      summary: 短信验证码登录
+      description: 使用手机号和验证码登录
+      tags:
+        - 认证
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 手机号
+                  example: '13800138000'
+                code:
+                  type: string
+                  description: 验证码
+                  example: '123456'
+              required:
+                - phone
+                - code
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '#/components/schemas/TokenInfo'
+                          - type: object
+                            properties:
+                              userInfo:
+                                $ref: '#/components/schemas/UserInfo'
+
+  /auth.Auth/sendSmsCode:
+    post:
+      summary: 发送验证码
+      description: 发送短信验证码到指定手机号
+      tags:
+        - 认证
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 手机号
+                  example: '13800138000'
+                type:
+                  type: string
+                  description: 验证码类型
+                  enum: [login, register, reset_password]
+                  default: login
+              required:
+                - phone
+      responses:
+        '200':
+          description: 发送成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          expire_in:
+                            type: integer
+                            description: 验证码有效期（秒）
+                            example: 300
+
+  /auth.Auth/logout:
+    post:
+      summary: 退出登录
+      description: 使当前token失效
+      tags:
+        - 认证
+      responses:
+        '200':
+          description: 退出成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /auth.Auth/info:
+    get:
+      summary: 获取用户信息
+      description: 获取当前登录用户的详细信息
+      tags:
+        - 认证
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/UserInfo'
+
+  /auth.Auth/password:
+    put:
+      summary: 修改密码
+      description: 修改当前用户密码
+      tags:
+        - 认证
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  description: 旧密码
+                new_password:
+                  type: string
+                  description: 新密码
+              required:
+                - old_password
+                - new_password
+      responses:
+        '200':
+          description: 修改成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /auth.Auth/resetPassword:
+    post:
+      summary: 重置密码
+      description: 使用验证码重置密码
+      tags:
+        - 认证
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 手机号
+                code:
+                  type: string
+                  description: 验证码
+                password:
+                  type: string
+                  description: 新密码
+              required:
+                - phone
+                - code
+                - password
+      responses:
+        '200':
+          description: 重置成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /auth.Auth/refresh:
+    post:
+      summary: 刷新token
+      description: 使用refresh_token获取新的access_token
+      tags:
+        - 认证
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  description: 刷新令牌
+              required:
+                - refresh_token
+      responses:
+        '200':
+          description: 刷新成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Response'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TokenInfo'

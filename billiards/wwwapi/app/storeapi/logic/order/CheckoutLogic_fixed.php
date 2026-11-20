@@ -1,0 +1,892 @@
+<?php
+
+declare (strict_types=1);
+
+namespace app\storeapi\logic\order;
+
+use app\common\logic\BaseLogic;
+use app\common\model\merchant\Order;
+use app\common\model\merchant\OrderItem;
+use app\common\model\merchant\OrderPayment;
+use app\common\model\merchant\OrderPauseLog;
+use app\common\model\merchant\Table;
+use app\common\model\merchant\Member;
+use app\common\model\merchant\MemberLevel;
+use app\common\model\merchant\MemberConsume;
+use app\common\model\merchant\Pricing;
+use app\common\constants\TableStatus;
+use app\common\lib\WebSocketNotification;
+use app\common\service\MockChannelService;
+use think\facade\Db;
+use think\Exception;
+
+class CheckoutLogic extends BaseLogic
+{
+    public static function getBill(string $orderId, string $storeId)
+    {
+        try {
+            $order = Order::where('id', $orderId)
+                ->where('store_id', $storeId)
+                ->whereNull('deleted_at')
+                ->find();
+
+            if (!$order) {
+                return self::setError('订单不存在');
+            }
+
+            $table = null;
+            if (!empty($order->table_id)) {
+                $table = Table::where('id', $order->table_id)
+                    ->where('store_id', $storeId)
+                    ->find();
+            }
+
+            $member = null;
+            $memberLevel = null;
+            if (!empty($order->member_id)) {
+                $member = Member::where('id', $order->member_id)
+                    ->where('store_id', $storeId)
+                    ->whereNull('deleted_at')
+                    ->with('level')
+                    ->find();
+                
+                if ($member && isset($member->level)) {
+                    $memberLevel = $member->level;
+                }
+            }
+
+            // 聚合自身 + 并入子订单的 items
+            $orderIds = [$orderId];
+            $mergedIds = \think\facade\Db::name('busi_order')
+                ->where('merged_to_order_id', $orderId)
+                ->where('status', 'completed')
+                ->column('id');
+            $orderIds = array_merge($orderIds, $mergedIds);
+            $items = OrderItem::whereIn('order_id', $orderIds)->select()->toArray();
+
+            // Enrich assistant items with billing_rule
+            foreach ($items as &$item) {
+                if (($item['item_type'] ?? '') === 'assistant' && !empty($item['assistant_id'])) {
+                    $ast = \app\common\model\merchant\Assistant::where('id', $item['assistant_id'])
+                        ->whereNull('deleted_at')->find();
+                    $item['billing_rule'] = $ast['billing_rule'] ?? 'half_hour';
+                }
+            }
+            unset($item);
+
+            $tableFee = self::calculateTableFee($order, $table);
+            $productFee = self::calculateProductFee($items);
+            $assistantFee = self::calculateAssistantFee($items);
+            $chargingFee = self::calculateChargingFee($items);
+            $mergeFee = self::calculateMergeFee($items);
+            // 并台费并入台费
+            $tableFee = round($tableFee + $mergeFee, 2);
+            $mergeFee = 0;
+
+            // Add historical pause segment fees (closed pause periods)
+            $historyTableFee = OrderPauseLog::where('order_id', $orderId)
+                ->where('pause_type', 'table')
+                ->sum('fee');
+            $tableFee = round(($tableFee + floatval($historyTableFee ?? 0)), 2);
+
+            $historyAssistantFee = OrderPauseLog::where('order_id', $orderId)
+                ->where('pause_type', 'assistant')
+                ->sum('fee');
+            $assistantFee = round(($assistantFee + floatval($historyAssistantFee ?? 0)), 2);
+
+            $originalAmount = $tableFee + $productFee + $assistantFee + $chargingFee;
+            
+            $discountAmount = 0;
+            $discountRate = 100;
+            
+            if ($memberLevel) {
+                $discountRate = floatval($memberLevel->discount_rate ?? 100);
+                if ($discountRate < 100 && $discountRate > 0) {
+                    $discountAmount = $originalAmount * (1 - $discountRate / 100);
+                }
+            }
+            
+            $finalAmount = $originalAmount - $discountAmount;
+            $finalAmount = max(0, round($finalAmount, 2));
+            $prepaidAmount = floatval($order->prepaid_amount ?? 0);
+            $paidAmount = round($prepaidAmount + self::calculatePrepaidTotal($items), 2);
+            $totalAmount = round($originalAmount, 2);
+            $payableAmount = max(0, round($totalAmount - $discountAmount - $paidAmount, 2));
+
+            $durationMinutes = 0;
+            if (!empty($order->start_time)) {
+                $startTime = strtotime($order->start_time);
+                $endTime = !empty($order->end_time) ? strtotime($order->end_time) : time();
+                $durationMinutes = max(0, intval(($endTime - $startTime) / 60));
+            }
+
+            $result = [
+                'order' => [
+                    'id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'type' => $order->type,
+                    'status' => $order->status,
+                    'start_time' => $order->start_time,
+                    'end_time' => $order->end_time,
+                    'duration_minutes' => $durationMinutes,
+                    'member_id' => $order->member_id,
+                    'member_name' => $order->member_name,
+                    'table_id' => $order->table_id,
+                    'operator_id' => $order->operator_id,
+                    'operator_name' => $order->operator_name,
+                ],
+                'table' => $table ? [
+                    'id' => $table->id,
+                    'name' => $table->name,
+                    'code' => $table->code,
+                    'type' => $table->type,
+                    'hourly_rate' => $table->hourly_rate,
+                    'pricing_id' => $table->pricing_id,
+                ] : null,
+                'member' => $member ? [
+                    'id' => $member->id,
+                    'name' => $member->name,
+                    'phone' => $member->phone,
+                    'card_number' => $member->card_number,
+                    'balance' => $member->balance,
+                    'level_id' => $member->level_id,
+                    'level_name' => $memberLevel ? $memberLevel->name : '',
+                    'level_discount' => $discountRate,
+                ] : null,
+                'items' => $items,
+                'billing' => [
+                    'table_fee' => $tableFee,
+                    'merge_fee' => $mergeFee,
+                    'product_fee' => $productFee,
+                    'assistant_fee' => $assistantFee,
+                    'charging_fee' => $chargingFee,
+                    'original_amount' => $originalAmount,
+                    'discount_amount' => $discountAmount,
+                    'discount_rate' => $discountRate,
+                    'final_amount' => $payableAmount,
+                    'prepaid_hours' => $order->prepaid_hours ?? 0,
+                    'prepaid_amount' => $order->prepaid_amount ?? 0,
+                    'prepaid_total' => self::calculatePrepaidTotal($items),
+                    'remaining_minutes' => $order->remaining_minutes ?? 0,
+                    'total_amount' => $totalAmount,
+                    'paid_amount' => $paidAmount,
+                    'payable_amount' => $payableAmount,
+                ],
+            ];
+
+            return $result;
+        } catch (Exception $e) {
+            return self::setError('获取账单失败: ' . $e->getMessage());
+        }
+    }
+
+    public static function checkout(string $orderId, string $storeId, array $params)
+    {
+        try {
+            // 行级锁防止并发重复结算
+            $order = Order::where('id', $orderId)
+                ->where('store_id', $storeId)
+                ->whereNull('deleted_at')
+                ->lock(true)
+                ->find();
+
+            if (!$order) {
+                return self::setError('订单不存在');
+            }
+
+            if ($order->status !== 'in_progress') {
+                return self::setError('订单状态不允许结算');
+            }
+
+            $bill = self::getBill($orderId, $storeId);
+            if (self::hasError()) {
+                return false;
+            }
+
+            // 快照金额校准：优先用前端打开结账弹窗时锁定的金额，后端实时计算仅做合理性校验
+            $billingFinalAmount = $bill['billing']['final_amount'];
+            $frontendPayAmount  = floatval($params['pay_amount'] ?? 0);
+            if ($frontendPayAmount > 0) {
+                $diff = abs($billingFinalAmount - $frontendPayAmount);
+                $diffPercent = $billingFinalAmount > 0 ? $diff / $billingFinalAmount : 0;
+                if ($diff < 10 || $diffPercent < 0.05) {
+                    $billingFinalAmount = $frontendPayAmount;
+                }
+            }
+
+            $balancePaid = floatval($params['balance_paid'] ?? 0);
+            $cashPaid    = floatval($params['cash_paid'] ?? 0);
+            $wechatPaid  = floatval($params['wechat_paid'] ?? 0);
+            $alipayPaid  = floatval($params['alipay_paid'] ?? 0);
+            $cardPaid    = floatval($params['card_paid'] ?? 0);
+            $paidTotal   = $balancePaid + $cashPaid + $wechatPaid + $alipayPaid + $cardPaid;
+
+            // 如果前端只传了一种支付方式，用后端权威金额校准
+            if ($paidTotal > 0 && $cashPaid > 0 && $wechatPaid == 0 && $alipayPaid == 0 && $cardPaid == 0 && $balancePaid == 0) {
+                $cashPaid = $billingFinalAmount;
+            } elseif ($paidTotal > 0 && $wechatPaid > 0 && $cashPaid == 0 && $alipayPaid == 0 && $cardPaid == 0 && $balancePaid == 0) {
+                $wechatPaid = $billingFinalAmount;
+            } elseif ($paidTotal > 0 && $balancePaid > 0 && $cashPaid == 0 && $wechatPaid == 0 && $alipayPaid == 0 && $cardPaid == 0) {
+                // 会员余额支付：用后端权威金额校准（已含会员折扣）
+                $balancePaid = $billingFinalAmount;
+            }
+            $pointsDeduct = intval($params['points_deduct'] ?? 0);
+
+            $paidAmount = $balancePaid + $cashPaid + $wechatPaid + $alipayPaid + $cardPaid;
+
+            if ($pointsDeduct > 0) {
+                $pointsDeductAmount = $pointsDeduct / 100;
+                $paidAmount += $pointsDeductAmount;
+            }
+
+            // Discount calculation (operator-applied, in addition to member discount)
+            $operatorDiscountAmount = 0;
+            if (!empty($params['discount_type']) && isset($params['discount_value']) && floatval($params['discount_value']) > 0) {
+                $totalBeforeDiscount = $billingFinalAmount;
+                if ($params['discount_type'] === 'rate') {
+                    $operatorDiscountAmount = round($totalBeforeDiscount * (100 - floatval($params['discount_value'])) / 100, 2);
+                } elseif ($params['discount_type'] === 'amount') {
+                    $operatorDiscountAmount = min(floatval($params['discount_value']), $totalBeforeDiscount);
+                }
+            }
+
+            // Rounding calculation (cash only)
+            $roundingAmount = 0;
+            if (($params['channel'] ?? 'cash') === 'cash' && !empty($params['rounding_mode']) && $params['rounding_mode'] !== 'none') {
+                $afterDiscount = $billingFinalAmount - $operatorDiscountAmount;
+                $afterRounding = self::applyRounding($afterDiscount, $params['rounding_mode']);
+                $roundingAmount = round($afterDiscount - $afterRounding, 2);
+            }
+
+            // Channel coupon verification
+            $verifyResult = null;
+            $channelService = null;
+            if (!empty($params['verify_code']) && !empty($params['channel']) && in_array($params['channel'], ['meituan', 'douyin', 'coupon'])) {
+                $channelService = new MockChannelService();
+                $verifyResult = $channelService->verify($params['verify_code'], $billingFinalAmount);
+                if (!$verifyResult['valid']) {
+                    return self::setError('券码核销失败: ' . $verifyResult['message']);
+                }
+            }
+
+            // Apply discount and rounding to final amount
+            $finalAmount = $billingFinalAmount - $operatorDiscountAmount - $roundingAmount;
+            $finalAmount = $finalAmount > 0 ? round($finalAmount, 2) : $paidAmount;
+
+            Db::startTrans();
+
+            try {
+                if ($balancePaid > 0 && !empty($order->member_id)) {
+                    $member = Member::where('id', $order->member_id)
+                        ->where('store_id', $storeId)
+                        ->whereNull('deleted_at')
+                        ->find();
+
+                    if (!$member) {
+                        throw new Exception('会员不存在');
+                    }
+
+                    if (floatval($member->balance) < $balancePaid) {
+                        throw new Exception('会员余额不足');
+                    }
+
+                    $balanceBefore = floatval($member->balance);
+                    $member->balance = $balanceBefore - $balancePaid;
+                    $member->total_consume = floatval($member->total_consume) + $balancePaid;
+                    $member->last_consume_time = date('Y-m-d H:i:s');
+                    $member->save();
+
+                    MemberConsume::create([
+                        'id' => self::generateId('csm'),
+                        'member_id' => $member->id,
+                        'store_id' => $storeId,
+                        'amount' => $balancePaid,
+                        'points_gained' => 0,
+                        'points_deduct' => 0,
+                        'balance_deduct' => $balancePaid,
+                        'discount_amount' => $bill['billing']['discount_amount'],
+                        'consume_type' => 'table_fee',
+                        'balance_before' => $balanceBefore,
+                        'balance_after' => $member->balance,
+                        'points_before' => $member->points,
+                        'points_after' => $member->points,
+                        'operator_id' => $params['operator_id'] ?? '',
+                        'operator_name' => $params['operator_name'] ?? '',
+                        'remark' => '订单结算扣款',
+                    ]);
+                }
+
+                $order->status = 'completed';
+                $order->payment_status = 'paid';
+                $order->end_time = date('Y-m-d H:i:s');
+
+                // 关联模式：同步完成所有并入的子订单
+                \think\facade\Db::name('busi_order')
+                    ->where('merged_to_order_id', $orderId)
+                    ->where('status', 'completed')
+                    ->update([
+                        'status' => 'completed',
+                        'payment_status' => 'paid',
+                        'end_time' => date('Y-m-d H:i:s'),
+                    ]);
+                $order->original_amount = $bill['billing']['original_amount'];
+                $order->discount_amount = round(floatval($bill['billing']['discount_amount'] ?? 0) + $operatorDiscountAmount, 2);
+                $order->discount_type = $params['discount_type'] ?? null;
+                $order->discount_value = isset($params['discount_value']) ? floatval($params['discount_value']) : null;
+                // 使用 billing 各项费用回填明细，而非 quantity×unit_price
+                $items = OrderItem::where('order_id', $orderId)->select();
+                $tableItems = []; $productItems = []; $assistantItems = []; $chargingItems = []; $mergeItems = [];
+                foreach ($items as $item) {
+                    if ($item->item_type === 'table') $tableItems[] = $item;
+                    elseif ($item->item_type === 'product') $productItems[] = $item;
+                    elseif ($item->item_type === 'assistant') $assistantItems[] = $item;
+                    elseif ($item->item_type === 'charging') $chargingItems[] = $item;
+                    elseif ($item->item_type === 'merge_fee') $mergeItems[] = $item;
+                }
+
+                $tf = floatval($bill['billing']['table_fee'] ?? 0);
+                $pf = floatval($bill['billing']['product_fee'] ?? 0);
+                $af = floatval($bill['billing']['assistant_fee'] ?? 0);
+                $cf = floatval($bill['billing']['charging_fee'] ?? 0);
+                $mf = floatval($bill['billing']['merge_fee'] ?? 0);
+
+                foreach ($tableItems as $item) {
+                    $share = count($tableItems) > 0 ? round($tf / count($tableItems), 2) : 0;
+                    $item->final_price = $share;
+                    $item->total_price = $share;
+                    $item->save();
+                }
+                foreach ($productItems as $item) {
+                    if (floatval($item->final_price) <= 0 && floatval($item->total_price) > 0) {
+                        $item->final_price = floatval($item->total_price);
+                        $item->save();
+                    }
+                }
+                foreach ($assistantItems as $item) {
+                    $share = count($assistantItems) > 0 ? round($af / count($assistantItems), 2) : 0;
+                    $item->final_price = $share;
+                    $item->total_price = $share;
+                    $item->save();
+                }
+                foreach ($mergeItems as $item) {
+                    $share = count($mergeItems) > 0 ? round($mf / count($mergeItems), 2) : 0;
+                    $item->final_price = $share;
+                    $item->total_price = $share;
+                    $item->save();
+                }
+                foreach ($chargingItems as $item) {
+                    $share = count($chargingItems) > 0 ? round($cf / count($chargingItems), 2) : 0;
+                    $item->final_price = $share;
+                    $item->total_price = $share;
+                    $item->save();
+                }
+
+                // 回填各项费用，确保与 billing 一致
+                $order->table_fee = round($tf, 2);
+                $order->product_fee = round($pf, 2);
+                $order->assistant_fee = round($af, 2);
+                $order->charging_fee = round($cf, 2);
+                $order->discount_fee = round(floatval($bill['billing']['discount_amount'] ?? 0), 2);
+                $order->total_fee = round($tf + $pf + $af + $cf, 2);
+                $order->final_amount = $finalAmount;
+                $order->balance_paid = $balancePaid;
+                $order->cash_paid = $cashPaid;
+                $order->wechat_paid = $wechatPaid;
+                $order->alipay_paid = $alipayPaid;
+                $order->card_paid = $cardPaid;
+                $order->duration_minutes = intval($bill['order']['duration_minutes'] ?? 0);
+                $order->points_deduct = $pointsDeduct;
+                $order->points_gained = intval($finalAmount);
+                $order->save();
+
+                // 结算后标记所有明细为完成 + 释放助教状态
+                $allItems = OrderItem::where('order_id', $orderId)->select();
+                foreach ($allItems as $ai) {
+                    if (in_array($ai->status, ['pending', 'processing', 'serving', 'active'])) {
+                        $ai->status = 'completed';
+                        $ai->ended_at = $ai->ended_at ?? date('Y-m-d H:i:s');
+                        $ai->save();
+                    }
+                    // 释放关联助教 + 计算提成
+                    if ($ai->item_type === 'assistant' && !empty($ai->assistant_id)) {
+                        \app\common\model\merchant\Assistant::where('id', $ai->assistant_id)
+                            ->update(['status' => 1]); // 1 = available/enabled
+                        // 计算助教提成
+                        try {
+                            \app\storeapi\logic\assistant\AssistantLogic::calculateCommission(
+                                $ai->assistant_id,
+                                $ai->id,
+                                floatval($ai->final_price ?? $ai->total_price ?? 0),
+                                $storeId
+                            );
+                        } catch (\Exception $e) {
+                            \think\facade\Log::error('[Checkout] 助教提成计算失败: assistant=' . $ai->assistant_id . ' ' . $e->getMessage());
+                        }
+                    }
+                }
+
+                $log = new \app\common\model\merchant\OrderTableLog();
+                $log->id = self::generateId();
+                $log->store_id = $storeId;
+                $log->order_id = $orderId;
+                $log->table_id = $order->table_id;
+                $log->action = 'checkout';
+                $log->operator_id = $params['operator_id'] ?? '';
+                $log->operator_name = $params['operator_name'] ?? '';
+                $log->remark = '结账 ¥' . number_format($finalAmount, 2);
+                $log->save();
+
+                // 多支付方式：每种支付方式创建一条独立记录
+                $paymentMethods = [];
+                if ($wechatPaid > 0) $paymentMethods[] = ['method' => 'wechat', 'channel' => 'wechat', 'amount' => $wechatPaid];
+                if ($cashPaid > 0)   $paymentMethods[] = ['method' => 'cash', 'channel' => 'cash', 'amount' => $cashPaid];
+                if ($balancePaid > 0) $paymentMethods[] = ['method' => 'balance', 'channel' => 'member_balance', 'amount' => $balancePaid];
+                if ($alipayPaid > 0) $paymentMethods[] = ['method' => 'alipay', 'channel' => 'alipay', 'amount' => $alipayPaid];
+                if ($cardPaid > 0)   $paymentMethods[] = ['method' => 'card', 'channel' => 'card', 'amount' => $cardPaid];
+
+                foreach ($paymentMethods as $pm) {
+                    OrderPayment::create([
+                        'id' => self::generateId('pay'),
+                        'order_id' => $orderId,
+                        'store_id' => $storeId,
+                        'order_no' => $order->order_no,
+                        'payment_method' => $pm['method'],
+                        'channel' => $pm['channel'],
+                        'amount' => $pm['amount'],
+                        'transaction_no' => $params['transaction_no'] ?? '',
+                        'status' => 'paid',
+                        'paid_at' => date('Y-m-d H:i:s'),
+                        'operator_id' => $params['operator_id'] ?? '',
+                        'operator_name' => $params['operator_name'] ?? '',
+                        'description' => $params['remark'] ?? '',
+                    ]);
+                }
+
+                // Save channel verification record
+                if ($verifyResult && $verifyResult['valid']) {
+                    $channelService->recordVerify($orderId, $params['verify_code'], $verifyResult['channel'], $verifyResult['amount']);
+                }
+
+                if (!empty($order->table_id)) {
+                    $table = Table::where('id', $order->table_id)
+                        ->where('store_id', $storeId)
+                        ->find();
+
+                    if ($table) {
+                        $table->status = TableStatus::IDLE;
+                        $table->total_usage_count = intval($table->total_usage_count) + 1;
+                        
+                        $durationHours = 0;
+                        if (!empty($order->start_time) && !empty($order->end_time)) {
+                            $startTime = strtotime($order->start_time);
+                            $endTime = strtotime($order->end_time);
+                            $durationHours = ($endTime - $startTime) / 3600;
+                        }
+                        
+                        $table->total_usage_hours = floatval($table->total_usage_hours) + $durationHours;
+                        $table->save();
+                    }
+                }
+
+                if (!empty($order->member_id)) {
+                    $member = Member::where('id', $order->member_id)
+                        ->where('store_id', $storeId)
+                        ->whereNull('deleted_at')
+                        ->find();
+
+                    if ($member) {
+                        $pointsToAdd = intval($finalAmount);
+                        if ($pointsToAdd > 0) {
+                            $member->points = intval($member->points) + $pointsToAdd;
+                            $member->save();
+                        }
+                    }
+                }
+
+                Db::commit();
+
+                // WebSocket 通知收银端关台，刷新台桌状态
+                try {
+                    \app\common\lib\WebSocketNotification::init();
+                    \app\common\lib\WebSocketNotification::sendToGroup("store_{$storeId}", [
+                        'type' => 'checkout_completed',
+                        'data' => [
+                            'order_id'   => $orderId,
+                            'table_id'   => $order->table_id ?? '',
+                            'table_name' => $table->name ?? '',
+                            'amount'     => round($finalAmount, 2),
+                        ]
+                    ]);
+                    // 同时通知平板清空界面
+                    if (!empty($order->table_id)) {
+                        \app\common\lib\WebSocketNotification::sendToGroup("table_{$order->table_id}", [
+                            'type' => 'table_released',
+                            'data' => [
+                                'table_id' => $order->table_id,
+                                'order_id' => $orderId,
+                                'reason'   => 'checkout',
+                                'timestamp' => time(),
+                            ]
+                        ]);
+                    }
+                } catch (\Exception $e) {
+                    \think\facade\Log::warning('[Checkout] WS推送失败: ' . $e->getMessage());
+                }
+
+                // 结账关灯
+                try {
+                    WebSocketNotification::sendLightControl($order->table_id, 'off');
+                } catch (\Exception $e) {
+                    // 灯控失败不影响结账流程
+                }
+
+                // 自动停止当前订单的活跃充电会话
+                try {
+                    $activeSessions = \app\common\model\merchant\ChargingSession::where('order_id', $orderId)
+                        ->where('status', 'active')->select();
+                    foreach ($activeSessions as $cs) {
+                        \app\storeapi\logic\order\ChargingLogic::stopSession($orderId, $cs->port);
+                    }
+                } catch (\Exception $e) {
+                    \think\facade\Log::warning('[Checkout] 自动停止充电失败: ' . $e->getMessage());
+                }
+
+                return [
+                    'success' => true,
+                    'message' => '结算成功',
+                    'data' => [
+                        'order_id' => $orderId,
+                        'order_no' => $order->order_no,
+                        'original_amount' => $bill['billing']['original_amount'],
+                        'discount_amount' => $bill['billing']['discount_amount'],
+                        'final_amount' => $finalAmount,
+                        'balance_paid' => $balancePaid,
+                        'cash_paid' => $cashPaid,
+                        'wechat_paid' => $wechatPaid,
+                        'alipay_paid' => $alipayPaid,
+                        'card_paid' => $cardPaid,
+                        'points_deduct' => $pointsDeduct,
+                        'points_gained' => intval($finalAmount),
+                        'completed_at' => $order->end_time,
+                    ],
+                ];
+            } catch (Exception $e) {
+                Db::rollback();
+                return self::setError('结算失败: ' . $e->getMessage());
+            }
+        } catch (Exception $e) {
+            return self::setError('结算失败: ' . $e->getMessage());
+        }
+    }
+
+    public static function calculateTableFee($order, $table = null)
+    {
+        // 预付订单：台费 = 预付金额
+        if (!empty($order->prepaid_amount) && floatval($order->prepaid_amount) > 0) {
+            return floatval($order->prepaid_amount);
+        }
+
+        if (empty($order->start_time)) {
+            return 0;
+        }
+
+        $startTime = strtotime($order->start_time);
+        $endTime = !empty($order->end_time) ? strtotime($order->end_time) : time();
+        $totalMinutes = max(0, intval(($endTime - $startTime) / 60));
+
+        // 读取券 OrderItem 的免费时长
+        $couponFreeMinutes = 0;
+        try {
+            $couponItems = \app\common\model\merchant\OrderItem::where('order_id', $order->id)
+                ->where('item_type', 'coupon')
+                ->where('status', '<>', 'cancelled')
+                ->select();
+            foreach ($couponItems as $ci) {
+                $meta = json_decode($ci->description ?? '{}', true);
+                $couponFreeMinutes += intval($meta['coupon_duration_minutes'] ?? 0);
+            }
+        } catch (\Exception $e) {
+            // 兼容无 coupon 类型或 description 格式异常的订单
+        }
+
+        // 扣除券免费时长
+        $billableMinutes = max(0, $totalMinutes - $couponFreeMinutes);
+
+        if ($billableMinutes <= 0) {
+            return 0;
+        }
+
+        $roundedMinutes = ceil($billableMinutes / 30) * 30;
+        $durationHours = $roundedMinutes / 60;
+
+        $hourlyRate = 0;
+        if ($table && !empty($table->hourly_rate)) {
+            $hourlyRate = floatval($table->hourly_rate);
+        } elseif ($table && !empty($table->pricing_id)) {
+            $pricing = Pricing::where('id', $table->pricing_id)
+                ->where('store_id', $table->store_id)
+                ->find();
+            if ($pricing) {
+                $hourlyRate = floatval($pricing->price);
+            }
+        }
+
+        $coefficient = self::getTimeCoefficient($startTime, $table);
+        $tableFee = $durationHours * $hourlyRate * $coefficient;
+
+        return round($tableFee, 2);
+    }
+
+    /**
+     * 计算商品费 — 仅统计已送达/已完成商品，排除待确认/已取消/已拒绝
+     */
+    public static function calculateProductFee(array $items)
+    {
+        $productFee = 0;
+
+        foreach ($items as $item) {
+            if (isset($item['item_type']) && $item['item_type'] === 'product') {
+                // 排除未确认、已取消、已拒绝的商品
+                $skipStatuses = ['preorder_pending', 'cancelled', 'rejected'];
+                if (in_array(($item['status'] ?? ''), $skipStatuses)) {
+                    continue;
+                }
+                $productFee += floatval($item['final_price'] ?? $item['total_price'] ?? 0);
+            }
+        }
+
+        return round($productFee, 2);
+    }
+
+    /**
+     * 计算助教费 — 排除待确认/已取消/已拒绝，serving 按实时计时计算
+     */
+    public static function calculateAssistantFee(array $items)
+    {
+        $assistantFee = 0;
+
+        foreach ($items as $item) {
+            if (($item['item_type'] ?? '') !== 'assistant') continue;
+            // 排除未确认、已取消、已拒绝的助教
+            $skipStatuses = ['preorder_pending', 'cancelled', 'rejected'];
+            if (in_array($item['status'] ?? '', $skipStatuses)) {
+                continue;
+            }
+            // 买断模式：费用已固定，直接取 total_price（不实时计算）
+            $billingMode = $item['billing_mode'] ?? 'realtime';
+            if ($billingMode === 'flat_rate') {
+                $assistantFee += floatval($item['final_price'] ?? $item['total_price'] ?? 0);
+                continue;
+            }
+            // For completed/cancelled items, use stored price
+            if (in_array($item['status'] ?? '', ['completed', 'cancelled'])) {
+                $assistantFee += floatval($item['final_price'] ?? $item['total_price'] ?? 0);
+                continue;
+            }
+            // 赠送时长（客户给助教加钟，同样计费+算提成）
+            $giftHours = max(0, floatval($item['gift_hours'] ?? 0));
+
+            // For running items, calculate real-time fee
+            if (($item['status'] ?? '') === 'serving' && !empty($item['started_at'])) {
+                $mins = max(1, intval((time() - strtotime($item['started_at'])) / 60));
+                $rate = floatval($item['unit_price'] ?? 0);
+                // 从助教档案读取计费规则
+                $rule = $item['billing_rule'] ?? 'half_hour';
+                if (empty($item['billing_rule']) && !empty($item['assistant_id'])) {
+                    $ast = \app\common\model\merchant\Assistant::where('id', $item['assistant_id'])
+                        ->whereNull('deleted_at')->find();
+                    $rule = $ast['billing_rule'] ?? 'half_hour';
+                }
+                if ($rule === 'minute' || $rule === 'hourly') {
+                    $assistantFee += round((($mins / 60) + $giftHours) * $rate, 2);
+                } else {
+                    $units = ceil($mins / 30);
+                    $assistantFee += round(($units * 0.5 + $giftHours) * $rate, 2);
+                }
+            }
+        }
+
+        return round($assistantFee, 2);
+    }
+
+    public static function calculatePrepaidTotal(array $items): float
+    {
+        $total = 0;
+        foreach ($items as $item) {
+            if (($item['item_type'] ?? '') === 'assistant' && ($item['is_paid'] ?? 0) == 1) {
+                $total += floatval($item['final_price'] ?? $item['total_price'] ?? 0);
+            }
+        }
+        return round($total, 2);
+    }
+
+    /**
+     * 计算充电费 — 从活跃充电 OrderItem 累加
+     */
+    public static function calculateChargingFee(array $items): float
+    {
+        $total = 0;
+        foreach ($items as $item) {
+            if (($item['item_type'] ?? '') !== 'charging') continue;
+            if (in_array($item['status'] ?? '', ['cancelled'])) continue;
+            // 已完成充电：使用 stored final_price
+            if (($item['status'] ?? '') === 'completed') {
+                $total += floatval($item['final_price'] ?? 0);
+                continue;
+            }
+            // 充电中：实时计费
+            if (($item['status'] ?? '') === 'active') {
+                $rate = floatval($item['unit_price'] ?? 0); // 时薪
+                if ($rate > 0) {
+                    $startedAt = $item['started_at'] ?? $item['created_at'] ?? '';
+                    $elapsedH = $startedAt ? max(0, (time() - strtotime($startedAt)) / 3600) : 0;
+                    $total += round($elapsedH * $rate, 2);
+                }
+            }
+        }
+        return round($total, 2);
+    }
+
+    /**
+     * 计算并台转入的台费
+     */
+    public static function calculateMergeFee(array $items): float
+    {
+        $mergeFee = 0;
+        foreach ($items as $item) {
+            if (isset($item['item_type']) && $item['item_type'] === 'merge_fee') {
+                $mergeFee += floatval($item['final_price'] ?? $item['total_price'] ?? 0);
+            }
+        }
+        return round($mergeFee, 2);
+    }
+
+    private static function getTimeCoefficient($timestamp, $table = null)
+    {
+        $hour = (int)date('H', $timestamp);
+        
+        if ($hour >= 22 || $hour < 6) {
+            return 1.5;
+        }
+        
+        if ($hour >= 6 && $hour < 14) {
+            return 0.8;
+        }
+        
+        return 1.0;
+    }
+
+    public static function previewCalculation(string $orderId, string $storeId)
+    {
+        try {
+            $bill = self::getBill($orderId, $storeId);
+            
+            if (self::hasError()) {
+                return false;
+            }
+
+            $originalAmount = $bill['billing']['original_amount'];
+            $discountAmount = $bill['billing']['discount_amount'];
+            $finalAmount = $bill['billing']['final_amount'];
+
+            return [
+                'success' => true,
+                'data' => [
+                    'original_amount' => $originalAmount,
+                    'discount_amount' => $discountAmount,
+                    'final_amount' => $finalAmount,
+                    'breakdown' => [
+                        'table_fee' => $bill['billing']['table_fee'],
+                        'product_fee' => $bill['billing']['product_fee'],
+                        'assistant_fee' => $bill['billing']['assistant_fee'],
+                    ],
+                    'member' => $bill['member'],
+                ],
+            ];
+        } catch (Exception $e) {
+            return self::setError('预览计算失败: ' . $e->getMessage());
+        }
+    }
+
+    public static function applyDiscount(string $orderId, string $storeId, array $params)
+    {
+        try {
+            $order = Order::where('id', $orderId)
+                ->where('store_id', $storeId)
+                ->whereNull('deleted_at')
+                ->find();
+
+            if (!$order) {
+                return self::setError('订单不存在');
+            }
+
+            if ($order->status !== 'in_progress') {
+                return self::setError('订单状态不允许修改折扣');
+            }
+
+            $discountType = $params['discount_type'] ?? 'rate';
+            $discountValue = floatval($params['discount_value'] ?? 100);
+
+            if ($discountType === 'rate' && ($discountValue < 0 || $discountValue > 100)) {
+                return self::setError('折扣率必须在0-100之间');
+            }
+
+            if ($discountType === 'amount' && $discountValue < 0) {
+                return self::setError('折扣金额不能为负数');
+            }
+
+            $bill = self::getBill($orderId, $storeId);
+            if (self::hasError()) {
+                return false;
+            }
+
+            $originalAmount = $bill['billing']['original_amount'];
+            $newDiscountAmount = 0;
+            $newDiscountRate = 100;
+
+            if ($discountType === 'rate') {
+                $newDiscountRate = $discountValue;
+                $newDiscountAmount = $originalAmount * (1 - $discountValue / 100);
+            } else {
+                $newDiscountAmount = min($discountValue, $originalAmount);
+                $newDiscountRate = $originalAmount > 0 ? (($originalAmount - $newDiscountAmount) / $originalAmount) * 100 : 0;
+            }
+
+            $newFinalAmount = $originalAmount - $newDiscountAmount;
+
+            return [
+                'success' => true,
+                'data' => [
+                    'order_id' => $orderId,
+                    'original_amount' => $originalAmount,
+                    'discount_amount' => $newDiscountAmount,
+                    'discount_rate' => round($newDiscountRate, 2),
+                    'final_amount' => round($newFinalAmount, 2),
+                ],
+            ];
+        } catch (Exception $e) {
+            return self::setError('应用折扣失败: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Apply rounding to amount
+     * @param float $amount Original amount
+     * @param string $mode Rounding mode: yuan/jiao/half_yuan
+     * @return float
+     */
+    public static function applyRounding(float $amount, string $mode): float
+    {
+        return match ($mode) {
+            'yuan' => floor($amount),
+            'jiao' => floor($amount * 10) / 10,
+            'half_yuan' => round($amount * 2) / 2,
+            default => $amount,
+        };
+    }
+
+    private static function generateId(string $prefix = 'order')
+    {
+        return $prefix . '_' . date('YmdHis') . '_' . str_pad((string)mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+    }
+}

@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>BilliardsHub 前端产品化重构设计方案</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #f59e0b;
+      --primary-dark: #d97706;
+      --primary-light: rgba(245, 158, 11, 0.1);
+      --bg-main: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(71, 85, 105, 0.4);
+      --text-primary: #f8fafc;
+      --text-secondary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius-lg: 32rpx;
+      --radius-md: 24rpx;
+      --radius-sm: 16rpx;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-secondary);
+      min-height: 100vh;
+      padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(234, 88, 12, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(71, 85, 105, 0.02) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+    
+    .page-header { text-align: center; margin-bottom: 50px; position: relative; }
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: 50%;
+      transform: translateX(-50%);
+      width: 80px; height: 4px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      border-radius: 2px;
+    }
+    h1 { 
+      font-size: 40px; font-weight: 900; margin-bottom: 12px; 
+      background: linear-gradient(135deg, #f59e0b, #fbbf24, #d97706); 
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 60px rgba(245, 158, 11, 0.3);
+      letter-spacing: 2px;
+    }
+    h2 { 
+      font-size: 28px; font-weight: 800; margin: 50px 0 24px; 
+      color: var(--text-primary);
+      display: flex; align-items: center; gap: 12px;
+      position: relative;
+    }
+    h2::before {
+      content: '';
+      width: 4px; height: 24px;
+      background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+      border-radius: 2px;
+    }
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px; left: 0;
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, var(--primary), transparent);
+      border-radius: 1px;
+    }
+    h3 { font-size: 20px; font-weight: 700; margin: 28px 0 16px; color: var(--text-secondary); }
+    .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 16px; font-size: 16px; }
+    .subtitle-highlight { color: var(--primary); font-weight: 600; }
+    
+    /* 设计原则 */
+    .principles { 
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 50px; 
+      position: relative;
+    }
+    .principles::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+      transform: translateY(-50%);
+      z-index: -1;
+    }
+    .principle-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .principle-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(245, 158, 11, 0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(245, 158, 11, 0.1);
+    }
+    .principle-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .principle-card:hover::before { opacity: 1; }
+    .principle-icon { 
+      font-size: 48px; margin-bottom: 16px; 
+      filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.2));
+    }
+    .principle-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+    .principle-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    
+    /* 颜色方案对比 */
+    .color-section { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .color-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+    .color-card::after {
+      content: '';
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(245, 158, 11, 0.05);
+    }
+    .color-title { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+    .color-title::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--border-color), transparent);
+    }
+    .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+    .color-item {
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm);
+      position: relative;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .color-item:hover {
+      transform: scale(1.1);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .color-item:hover .color-label { opacity: 1; transform: translateY(0); }
+    .color-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.9);
+      color: #fff;
+      font-size: 10px;
+      padding: 6px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: all 0.2s;
+    }
+    
+    /* 设计Tokens */
+    .tokens-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .token-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      position: relative;
+      transition: all 0.2s;
+    }
+    .token-card:hover { border-color: rgba(245, 158, 11, 0.3); }
+    .token-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(180deg, var(--primary), transparent);
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+      opacity: 0.5;
+    }
+    .token-name { font-size: 14px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .token-value { font-size: 18px; font-weight: 700; color: var(--text-primary); font-family: monospace; }
+    
+    /* 页面Mockup */
+    .mockup-section { margin: 50px 0; }
+    .mockup-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      align-items: start;
+    }
+    .mockup-phone {
+      background: #000;
+      border-radius: 56px;
+      padding: 16px;
+      width: 375px;
+      margin: 0 auto;
+      box-shadow: 0 30px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(71, 85, 105, 0.1);
+      position: relative;
+    }
+    .mockup-phone::after {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.1), transparent 50%);
+      border-radius: 58px;
+      z-index: -1;
+      opacity: 0.5;
+    }
+    .mockup-screen {
+      background: #f8fafc;
+      border-radius: 44px;
+      height: 812px;
+      overflow: hidden;
+      position: relative;
+    }
+    .mockup-notch {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 32px;
+      background: #000;
+      border-radius: 0 0 20px 20px;
+      z-index: 100;
+    }
+    
+    /* 旧版设计 */
+    .old-design { }
+    .old-bg { background: linear-gradient(180deg, #f3fcf8 0%, #f8fafc 24%, #f5f7f9 100%); }
+    .old-header {
+      background: linear-gradient(180deg, rgba(240, 253, 244, 0.96) 0%, rgba(248, 250, 252, 0.9) 100%);
+      padding: 60px 20px 20px;
+      backdrop-filter: blur(18px);
+    }
+    .old-store-selector {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.9);
+      padding: 14px 24px;
+      border-radius: 28px;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+    }
+    .old-store-icon { color: #059669; font-size: 20px; }
+    .old-store-name { font-size: 16px; font-weight: 700; color: #0f172a; }
+    .old-hero {
+      background: linear-gradient(135deg, #059669, #10b981);
+      border-radius: 24px;
+      padding: 28px;
+      margin: 20px;
+    }
+    .old-hero-title { color: #fff; font-size: 22px; font-weight: 800; }
+    .old-section-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      margin: 0 20px 16px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+    }
+    .old-section-title { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 16px; }
+    .old-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .old-kpi-item {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .old-kpi-val { font-size: 18px; font-weight: 700; color: #1e293b; display: block; }
+    .old-kpi-lbl { font-size: 12px; color: #64748b; margin-top: 2px; display: block; }
+    .old-tabbar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(18px);
+      padding: 12px 0 32px;
+      border-top: 1px solid rgba(226,232,240,0.88);
+    }
+    .old-tab-pill { display: flex; justify-content: space-around; }
+    .old-tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .old-tab-icon { font-size: 26px; }
+    .old-tab-text { font-size: 12px; color: #94a3b8; }
+    .old-tab-item.active .old-tab-text { color: #059669; font-weight: 700; }
+    
+    /* 新版设计 */
+    .new-design { }
+    .new-bg { 
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #1e293b 100%); 
+      position: relative;
+    }
+    .new-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(234, 88, 12, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .new-header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      padding: 60px 24px 24px;
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
+    }
+    .new-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3), transparent);
+    }
+    .new-store-selector {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-color);
+      padding: 20px 32px;
+      border-radius: var(--radius-md);
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .new-store-selector::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.5), transparent);
+    }
+    .new-store-selector:active { transform: scale(0.98); background: rgba(51, 65, 85, 0.8); }
+    .new-store-icon { color: var(--primary); font-size: 24px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); }
+    .new-store-name { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    .new-store-arrow { color: var(--text-muted); font-size: 14px; }
+    .new-hero {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      margin: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .new-hero::before {
+      content: '';
+      position: absolute;
+      top: -60%; right: -60%;
+      width: 120%; height: 120%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, transparent 70%);
+    }
+    .new-hero::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      opacity: 0.6;
+    }
+    .new-hero-eyebrow { 
+      font-size: 12px; color: rgba(245, 158, 11, 0.8); 
+      text-transform: uppercase; letter-spacing: 3px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .new-hero-eyebrow::before {
+      content: '';
+      width: 20px; height: 2px;
+      background: rgba(245, 158, 11, 0.6);
+      border-radius: 1px;
+    }
+    .new-hero-title { color: var(--text-primary); font-size: 30px; font-weight: 800; margin-top: 12px; display: block; }
+    .new-revenue-big { 
+      font-size: 52px; font-weight: 900; color: var(--text-primary); margin-top: 24px; display: block;
+      text-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+    }
+    .new-revenue-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
+    .new-rv-item { text-align: center; position: relative; }
+    .new-rv-item::after {
+      content: '';
+      position: absolute;
+      top: 50%; right: -8px;
+      width: 1px; height: 40px;
+      background: var(--border-color);
+      transform: translateY(-50%);
+    }
+    .new-rv-item:last-child::after { display: none; }
+    .new-rv-val { font-size: 20px; font-weight: 700; color: var(--text-primary); display: block; }
+    .new-rv-lbl { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: block; }
+    
+    .new-section-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin: 0 24px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .new-section-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.3), transparent);
+    }
+    .new-section-title { 
+      font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 24px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .new-section-title::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    }
+    .new-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .new-kpi-item {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(71, 85, 105, 0.2);
+      border-radius: var(--radius-md);
+      padding: 20px 14px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .new-kpi-item:active {
+      transform: scale(0.96);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .new-kpi-val { font-size: 22px; font-weight: 800; color: var(--text-primary); display: block; }
+    .new-kpi-lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; display: block; }
+    .new-kpi-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; display: block; }
+    
+    .new-tabbar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-color);
+      padding: 16px 0 48px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .new-tabbar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3), transparent);
+    }
+    .new-tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 0;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .new-tab-item.active {
+      background: rgba(245, 158, 11, 0.06);
+    }
+    .new-tab-item.active::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 24px; height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    }
+    .new-tab-icon { width: 44px; height: 44px; }
+    .new-tab-icon svg { width: 100%; height: 100%; }
+    .new-tab-item.active .new-tab-icon svg { fill: var(--primary); }
+    .new-tab-text { font-size: 11px; color: var(--text-dim); }
+    .new-tab-item.active .new-tab-text { color: var(--primary); font-weight: 600; }
+    
+    /* 对比说明 */
+    .compare-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .compare-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+    .compare-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 6px; height: 100%;
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    }
+    .compare-card.old-card::before { background: linear-gradient(180deg, #059669, #10b981); }
+    .compare-card.new-card::before { background: linear-gradient(180deg, var(--primary), var(--primary-dark)); }
+    .compare-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+    .compare-title.old { color: #059669; }
+    .compare-title.new { color: var(--primary); }
+    .compare-list { list-style: none; }
+    .compare-list li { 
+      padding: 12px 0; 
+      border-bottom: 1px solid rgba(71, 85, 105, 0.15); 
+      font-size: 14px; 
+      color: var(--text-secondary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .compare-list li:last-child { border-bottom: none; }
+    .compare-list li::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+    .compare-card.old-card .compare-list li::before { background: rgba(5, 150, 105, 0.5); }
+    .compare-card.new-card .compare-list li::before { background: rgba(245, 158, 11, 0.5); }
+    
+    /* 登录页 */
+    .old-login-screen { background: linear-gradient(180deg, #f4fffb 0%, #eefbf7 22%, #f7faf9 55%, #f8f8f6 100%); }
+    .old-login-form {
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(18px);
+      border-radius: 32px;
+      padding: 40px;
+      margin: 40px 24px;
+      box-shadow: 0 20px 70px rgba(18,57,45,0.12);
+    }
+    .old-login-input {
+      background: rgba(248,250,249,0.96);
+      border: 1px solid rgba(16,88,66,0.08);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+    .old-login-btn {
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(135deg, #10b981, #0f9f72 45%, #f1bd59 130%);
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      font-size: 20px;
+      font-weight: 800;
+      margin-top: 16px;
+    }
+    
+    .new-login-screen { 
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); 
+      position: relative;
+    }
+    .new-login-screen::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 30% 70%, rgba(234, 88, 12, 0.05) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .new-login-form {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 56px 36px;
+      margin: 60px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .new-login-form::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.4), rgba(234,88,12,0.1), rgba(245,158,11,0.4));
+      border-radius: calc(var(--radius-lg) + 4px);
+      z-index: -1;
+      opacity: 0.6;
+    }
+    .new-login-form::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+    .new-login-title { font-size: 32px; font-weight: 900; color: var(--text-primary); margin-bottom: 8px; }
+    .new-login-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 40px; display: block; }
+    .new-login-input {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 22px 28px;
+      margin-bottom: 20px;
+      font-size: 17px;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s;
+    }
+    .new-login-input:focus { 
+      border-color: var(--primary); 
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+    .new-login-input::placeholder { color: var(--text-dim); }
+    .new-login-btn {
+      width: 100%;
+      height: 88px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #1e293b;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 22px;
+      font-weight: 900;
+      margin-top: 32px;
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.35);
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .new-login-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .new-login-btn:hover::before { left: 100%; }
+    .new-login-btn:active { transform: scale(0.98); }
+    
+    /* 台桌管理 */
+    .old-table-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 0 20px 12px;
+      box-shadow: 0 4px 12px rgba(15,23,42,0.04);
+    }
+    .new-table-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      margin: 0 24px 20px;
+    }
+    
+    /* 按钮样式 */
+    .btn-showcase { display: flex; gap: 20px; flex-wrap: wrap; }
+    .btn {
+      padding: 16px 36px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.4s;
+    }
+    .btn:hover::before { left: 100%; }
+    .btn-primary { 
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+      color: #1e293b; 
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.35);
+    }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-secondary { 
+      background: rgba(71, 85, 105, 0.5); 
+      color: var(--text-secondary); 
+      border: 1px solid rgba(100, 116, 139, 0.4); 
+    }
+    .btn-secondary:active { background: rgba(71, 85, 105, 0.7); }
+    .btn-outline { 
+      background: transparent; 
+      color: var(--primary); 
+      border: 2px solid var(--primary); 
+    }
+    .btn-outline:active { background: rgba(245, 158, 11, 0.1); }
+    .btn-danger { 
+      background: rgba(239, 68, 68, 0.15); 
+      color: #ef4444; 
+      border: 1px solid rgba(239, 68, 68, 0.3); 
+    }
+    
+    /* 输入框样式 */
+    .input-showcase { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+    .input {
+      padding: 16px 24px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      outline: none;
+      transition: all 0.2s;
+      min-width: 220px;
+    }
+    .input-default {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+    .input-default:focus { 
+      border-color: var(--primary); 
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+    .input-default::placeholder { color: var(--text-dim); }
+    
+    /* 装饰元素 */
+    .decor-line {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+      margin: 40px 0;
+    }
+    
+    /* 底部信息 */
+    .footer { 
+      text-align: center; 
+      margin-top: 60px; 
+      padding: 30px; 
+      color: var(--text-dim); 
+      font-size: 14px;
+      border-top: 1px solid var(--border-color);
+      position: relative;
+    }
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 50%;
+      transform: translateX(-50%);
+      width: 100px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      border-radius: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1>BilliardsHub</h1>
+      <p class="subtitle">前端产品化重构设计方案</p>
+      <p class="subtitle"><span class="subtitle-highlight">颠覆性重构</span> · 现代简约风格 · 大组件大圆角</p>
+    </div>
+
+    <!-- 设计原则 -->
+    <h2>设计原则</h2>
+    <div class="principles">
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#f59e0b"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div>
+        <div class="principle-title">深色主题</div>
+        <div class="principle-desc">采用深色背景配合金色主色调，打造高端商务感，减少视觉疲劳</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#f59e0b"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+        <div class="principle-title">大圆角设计</div>
+        <div class="principle-desc">统一使用 20-32rpx 大圆角，现代感十足，柔和亲切</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#f59e0b"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></div>
+        <div class="principle-title">精致动效</div>
+        <div class="principle-desc">按钮点击缩放、弹窗动画、卡片悬浮效果，提升交互体验</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#f59e0b"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div>
+        <div class="principle-title">触控友好</div>
+        <div class="principle-desc">按钮最小点击区域 88rpx，卡片间距舒适，适合移动端操作</div>
+      </div>
+    </div>
+
+    <div class="decor-line"></div>
+
+    <!-- 颜色方案对比 -->
+    <h2>颜色方案对比</h2>
+    <div class="color-section">
+      <div class="color-card">
+        <div class="color-title">旧版 - 绿色主题</div>
+        <div class="color-grid">
+          <div class="color-item" style="background:#059669"><div class="color-label">#059669</div></div>
+          <div class="color-item" style="background:#10b981"><div class="color-label">#10b981</div></div>
+          <div class="color-item" style="background:#ecfdf5"><div class="color-label">#ecfdf5</div></div>
+          <div class="color-item" style="background:#f8fafc"><div class="color-label">#f8fafc</div></div>
+          <div class="color-item" style="background:#1e293b"><div class="color-label">#1e293b</div></div>
+          <div class="color-item" style="background:#64748b"><div class="color-label">#64748b</div></div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-title">新版 - 金色深色主题</div>
+        <div class="color-grid">
+          <div class="color-item" style="background:#f59e0b"><div class="color-label">#f59e0b</div></div>
+          <div class="color-item" style="background:#d97706"><div class="color-label">#d97706</div></div>
+          <div class="color-item" style="background:#0f172a"><div class="color-label">#0f172a</div></div>
+          <div class="color-item" style="background:#1e293b"><div class="color-label">#1e293b</div></div>
+          <div class="color-item" style="background:#334155"><div class="color-label">#334155</div></div>
+          <div class="color-item" style="background:#f1f5f9"><div class="color-label">#f1f5f9</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decor-line"></div>
+
+    <!-- 设计Tokens -->
+    <h2>设计Tokens</h2>
+    <div class="tokens-grid">
+      <div class="token-card">
+        <div class="token-name">主色 Primary</div>
+        <div class="token-value">#f59e0b</div>
+      </div>
+      <div class="token-card">
+        <div class="token-name">主色深 Primary Dark</div>
+        <div class="token-value">#d97706</div>
+      </div>
+      <div class="token-card">
+        <div class="token-name">页面背景 Background</div>
+        <div class="token-value">#0f172a</div>
+      </div>
+      <div class="token-card">
+        <div class="token-name">卡片背景 Card BG</div>
+        <div class="token-value">rgba(30,41,59,0.7)</div>
+      </div>
+      <div class="token-card">
+        <div class="token-name">大圆角 Large Radius</div>
+        <div class="token-value">32rpx</div>
+      </div>
+      <div class="token-card">
+        <div class="token-name">中圆角 Medium Radius</div>
+        <div class="token-value">24rpx</div>
+      </div>
+      <div class="token-card">
+        <div class="token-name">小圆角 Small Radius</div>
+        <div class="token-value">16rpx</div>
+      </div>
+      <div class="token-card">
+        <div class="token-name">卡片阴影 Card Shadow</div>
+        <div class="token-value">0 8px 32px rgba(0,0,0,0.3)</div>
+      </div>
+    </div>
+
+    <div class="decor-line"></div>
+
+    <!-- 首页对比 -->
+    <h2>首页设计对比</h2>
+    <div class="mockup-section">
+      <div class="mockup-container">
+        <div>
+          <h3 style="text-align:center; color:#059669">旧版设计 - 绿色清新</h3>
+          <div class="mockup-phone">
+            <div class="mockup-screen old-design old-bg">
+              <div class="mockup-notch"></div>
+              <div class="old-header">
+                <div class="old-store-selector">
+                  <span class="old-store-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16v-2"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></span>
+                  <span class="old-store-name">星耀台球俱乐部</span>
+                  <span style="color:#94a3b8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                </div>
+              </div>
+              <div class="old-hero">
+                <span class="old-hero-title">经营数据一目了然</span>
+              </div>
+              <div class="old-section-card">
+                <div class="old-section-title">收入总览</div>
+                <div style="font-size:40px; font-weight:800; color:#fff; margin-bottom:16px">¥12,840.00</div>
+                <div class="old-kpi-grid">
+                  <div class="old-kpi-item"><span class="old-kpi-val">¥8,200</span><span class="old-kpi-lbl">台费</span></div>
+                  <div class="old-kpi-item"><span class="old-kpi-val">¥2,400</span><span class="old-kpi-lbl">商品</span></div>
+                  <div class="old-kpi-item"><span class="old-kpi-val">¥1,800</span><span class="old-kpi-lbl">助教</span></div>
+                  <div class="old-kpi-item"><span class="old-kpi-val">¥440</span><span class="old-kpi-lbl">充电</span></div>
+                </div>
+              </div>
+              <div class="old-section-card">
+                <div class="old-section-title">运营指标</div>
+                <div class="old-kpi-grid">
+                  <div class="old-kpi-item"><span class="old-kpi-val">75%</span><span class="old-kpi-lbl">开台率</span></div>
+                  <div class="old-kpi-item"><span class="old-kpi-val">2.3</span><span class="old-kpi-lbl">翻台率</span></div>
+                  <div class="old-kpi-item"><span class="old-kpi-val">¥158</span><span class="old-kpi-lbl">客单价</span></div>
+                  <div class="old-kpi-item"><span class="old-kpi-val">86</span><span class="old-kpi-lbl">订单数</span></div>
+                </div>
+              </div>
+              <div class="old-tabbar">
+                <div class="old-tab-pill">
+                  <div class="old-tab-item active"><span class="old-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span><span class="old-tab-text">首页</span></div>
+                  <div class="old-tab-item"><span class="old-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></span><span class="old-tab-text">台桌</span></div>
+                  <div class="old-tab-item"><span class="old-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span><span class="old-tab-text">业绩</span></div>
+                  <div class="old-tab-item"><span class="old-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span><span class="old-tab-text">我</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 style="text-align:center; color:#f59e0b">新版设计 - 金色高端</h3>
+          <div class="mockup-phone">
+            <div class="mockup-screen new-design new-bg">
+              <div class="mockup-notch"></div>
+              <div class="new-header">
+                <div class="new-store-selector">
+                  <span class="new-store-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16v-2"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></span>
+                  <span class="new-store-name">星耀台球俱乐部</span>
+                  <span class="new-store-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                </div>
+              </div>
+              <div class="new-hero">
+                <span class="new-hero-eyebrow">门店总览</span>
+                <span class="new-hero-title">经营数据一目了然</span>
+                <span class="new-revenue-big">¥12,840.00</span>
+                <div class="new-revenue-grid">
+                  <div class="new-rv-item"><span class="new-rv-val">¥8,200</span><span class="new-rv-lbl">台费</span></div>
+                  <div class="new-rv-item"><span class="new-rv-val">¥2,400</span><span class="new-rv-lbl">商品</span></div>
+                  <div class="new-rv-item"><span class="new-rv-val">¥1,800</span><span class="new-rv-lbl">助教</span></div>
+                  <div class="new-rv-item"><span class="new-rv-val">¥440</span><span class="new-rv-lbl">充电</span></div>
+                </div>
+              </div>
+              <div class="new-section-card">
+                <div class="new-section-title">运营指标</div>
+                <div class="new-kpi-grid">
+                  <div class="new-kpi-item"><span class="new-kpi-val">75%</span><span class="new-kpi-lbl">开台率</span><span class="new-kpi-sub">15/20 桌</span></div>
+                  <div class="new-kpi-item"><span class="new-kpi-val">2.3</span><span class="new-kpi-lbl">翻台率</span></div>
+                  <div class="new-kpi-item"><span class="new-kpi-val">¥158</span><span class="new-kpi-lbl">客单价</span></div>
+                  <div class="new-kpi-item"><span class="new-kpi-val">86</span><span class="new-kpi-lbl">订单数</span></div>
+                </div>
+              </div>
+              <div class="new-section-card">
+                <div class="new-section-title">收入渠道</div>
+                <div class="new-kpi-grid">
+                  <div class="new-kpi-item"><span class="new-kpi-val">¥6,420</span><span class="new-kpi-lbl">微信</span></div>
+                  <div class="new-kpi-item"><span class="new-kpi-val">¥4,200</span><span class="new-kpi-lbl">现金</span></div>
+                  <div class="new-kpi-item"><span class="new-kpi-val">¥1,600</span><span class="new-kpi-lbl">会员卡</span></div>
+                  <div class="new-kpi-item"><span class="new-kpi-val">¥620</span><span class="new-kpi-lbl">美团</span></div>
+                </div>
+              </div>
+              <div class="new-tabbar">
+                  <div class="new-tab-item active">
+                    <span class="new-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#64748b"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span>
+                    <span class="new-tab-text">首页</span>
+                  </div>
+                  <div class="new-tab-item">
+                    <span class="new-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#64748b"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></span>
+                    <span class="new-tab-text">台桌</span>
+                  </div>
+                  <div class="new-tab-item">
+                    <span class="new-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#64748b"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>
+                    <span class="new-tab-text">业绩</span>
+                  </div>
+                  <div class="new-tab-item">
+                    <span class="new-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#64748b"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+                    <span class="new-tab-text">我</span>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decor-line"></div>
+
+    <!-- 登录页对比 -->
+    <h2>登录页设计对比</h2>
+    <div class="mockup-section">
+      <div class="mockup-container">
+        <div>
+          <h3 style="text-align:center; color:#059669">旧版设计</h3>
+          <div class="mockup-phone">
+            <div class="mockup-screen old-login-screen">
+              <div class="mockup-notch"></div>
+              <div style="text-align:center; padding:60px 20px 40px">
+                <div style="width:100px; height:100px; margin:0 auto 20px; background:linear-gradient(135deg,#f8d77a,#d8a739); border-radius:24px; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:800; color:#163128">8</div>
+                <div style="font-size:30px; font-weight:800; color:#12392d">客稻云</div>
+              </div>
+              <div class="old-login-form">
+                <div style="font-size:26px; font-weight:800; color:#163128; margin-bottom:8px">欢迎回来</div>
+                <div style="font-size:14px; color:#6b7d76; margin-bottom:24px">登录后台，查看门店动态</div>
+                <input class="old-login-input" placeholder="手机号" />
+                <input class="old-login-input" placeholder="密码" type="password" />
+                <button class="old-login-btn">登 录</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 style="text-align:center; color:#f59e0b">新版设计</h3>
+          <div class="mockup-phone">
+            <div class="mockup-screen new-login-screen">
+              <div class="mockup-notch"></div>
+              <div style="text-align:center; padding:80px 20px 40px">
+                <div style="width:120px; height:120px; margin:0 auto 24px; background:linear-gradient(135deg,#f59e0b,#d97706); border-radius:32px; display:flex; align-items:center; justify-content:center; font-size:40px; font-weight:800; color:#1e293b; box-shadow:0 20px 50px rgba(245,158,11,0.3)">8</div>
+                <div style="font-size:34px; font-weight:800; color:#f8fafc; letter-spacing:4px">客稻云</div>
+                <div style="font-size:12px; color:#64748b; letter-spacing:2px; margin-top:8px">PREMIUM BILLIARDS</div>
+              </div>
+              <div class="new-login-form">
+                <span class="new-login-title">欢迎回来</span>
+                <span class="new-login-desc">登录后台，查看门店、台桌与服务动态</span>
+                <input class="new-login-input" placeholder="手机号" />
+                <input class="new-login-input" placeholder="密码" type="password" />
+                <button class="new-login-btn">登 录</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decor-line"></div>
+
+    <!-- 组件样式展示 -->
+    <h2>新版组件样式</h2>
+    
+    <h3>按钮样式</h3>
+    <div class="btn-showcase">
+      <button class="btn btn-primary">主要按钮</button>
+      <button class="btn btn-secondary">次要按钮</button>
+      <button class="btn btn-outline">轮廓按钮</button>
+      <button class="btn btn-danger">危险按钮</button>
+    </div>
+    
+    <h3>输入框样式</h3>
+    <div class="input-showcase">
+      <input class="input input-default" placeholder="普通输入框" />
+      <input class="input input-default" placeholder="已聚焦状态" style="border-color:#f59e0b; box-shadow:0 0 0 4px rgba(245,158,11,0.1)" />
+    </div>
+
+    <div class="decor-line"></div>
+
+    <!-- 详细对比表 -->
+    <h2>详细对比</h2>
+    <div class="compare-grid">
+      <div class="compare-card old-card">
+        <div class="compare-title old">旧版设计特点</div>
+        <ul class="compare-list">
+          <li>绿色主色调 (#059669)</li>
+          <li>浅色背景 (#f8fafc)</li>
+          <li>中等圆角 (16-24rpx)</li>
+          <li>白色卡片 + 浅色阴影</li>
+          <li>传统移动端风格</li>
+          <li>扁平设计无层次感</li>
+          <li>简单的按钮反馈</li>
+          <li>标准列表式布局</li>
+        </ul>
+      </div>
+      <div class="compare-card new-card">
+        <div class="compare-title new">新版设计特点</div>
+        <ul class="compare-list">
+          <li>金色主色调 (#f59e0b)</li>
+          <li>深色背景 (#0f172a)</li>
+          <li>大圆角设计 (20-32rpx)</li>
+          <li>毛玻璃卡片 + 边框</li>
+          <li>现代SaaS产品风格</li>
+          <li>多层级阴影层次感</li>
+          <li>精致的交互动效</li>
+          <li>分块卡片按钮模式</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>BilliardsHub 前端产品化重构设计方案 · 深色主题 + 金色主色调 · 现代简约风格</p>
+    </div>
+  </div>
+</body>
+</html>

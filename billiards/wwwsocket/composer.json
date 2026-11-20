@@ -1,0 +1,18 @@
+{
+    "name"        : "billiards/socket-service",
+    "description" : "Billiards Room Real-time Communication Service",
+    "keywords"    : ["distributed","communication","websocket","tcp"],
+    "license"     : "MIT",
+    "require": {
+        "php" : ">=7.4",
+        "workerman/gateway-worker" : ">=3.0.0"
+    },
+    "suggest": {
+        "workerman/gatewayclient": "Required for external systems to push messages to this service"
+    },
+    "autoload": {
+        "psr-4": {
+            "Billiards\\" : "./Applications/Billiards/"
+        }
+    }
+}

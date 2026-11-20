@@ -1,0 +1,303 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/notification/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "通知"
+			}
+		},
+		{
+			"path": "pages/notification/detail",
+			"style": {
+				"navigationBarTitleText": "通知详情"
+			}
+		},
+		{
+			"path": "pages/approval/index",
+			"style": {
+				"navigationBarTitleText": "审批"
+			}
+		},
+		{
+			"path": "pages/approval/detail",
+			"style": {
+				"navigationBarTitleText": "审批详情"
+			}
+		},
+		{
+			"path": "pages/approval/create",
+			"style": {
+				"navigationBarTitleText": "发起申请"
+			}
+		},
+		{
+			"path": "pages/checkin/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "打卡签到"
+			}
+		},
+		{
+			"path": "pages/checkin/record",
+			"style": {
+				"navigationBarTitleText": "打卡记录"
+			}
+		},
+		{
+			"path": "pages/checkin/report",
+			"style": {
+				"navigationBarTitleText": "考勤报表"
+			}
+		},
+		{
+			"path": "pages/reports/channel-detail",
+			"style": { "navigationBarTitleText": "渠道明细" }
+		},
+		{
+			"path": "pages/reports/item-detail",
+			"style": { "navigationBarTitleText": "项目明细" }
+		},
+		{
+			"path": "pages/reports/recharge-detail",
+			"style": { "navigationBarTitleText": "充值明细" }
+		},
+		{
+			"path": "pages/recharge-report/index",
+			"style": {
+				"navigationBarTitleText": "员工充值报表"
+			}
+		},
+		{
+			"path": "pages/orders/index",
+			"style": {
+				"navigationBarTitleText": "订单管理"
+			}
+		},
+		{
+			"path": "pages/orders/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/performance/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "我的业绩"
+			}
+		},
+		{
+			"path": "pages/performance/orders",
+			"style": {
+				"navigationBarTitleText": "服务订单"
+			}
+		},
+		{
+			"path": "pages/assistant-orders/index",
+			"style": {
+				"navigationBarTitleText": "我的订单"
+			}
+		},
+		{
+			"path": "pages/schedule/index",
+			"style": {
+				"navigationBarTitleText": "排班查询"
+			}
+		},
+		{
+			"path": "pages/schedule/add",
+			"style": {
+				"navigationBarTitleText": "添加排班"
+			}
+		},
+		{
+			"path": "pages/schedule/edit",
+			"style": {
+				"navigationBarTitleText": "编辑排班"
+			}
+		},
+		{
+			"path": "pages/employee/list",
+			"style": {
+				"navigationBarTitleText": "员工列表"
+			}
+		},
+		{
+			"path": "pages/employee/detail",
+			"style": {
+				"navigationBarTitleText": "员工详情"
+			}
+		},
+		{
+			"path": "pages/employee/add",
+			"style": {
+				"navigationBarTitleText": "添加员工"
+			}
+		},
+		{
+			"path": "pages/employee/edit",
+			"style": {
+				"navigationBarTitleText": "编辑员工"
+			}
+		},
+		{
+			"path": "pages/approval/my-records",
+			"style": {
+				"navigationBarTitleText": "申请记录"
+			}
+		},
+		{
+			"path": "pages/profile/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "个人中心"
+			}
+		},
+		{
+			"path": "pages/profile/edit",
+			"style": {
+				"navigationBarTitleText": "编辑资料"
+			}
+		},
+		{
+			"path": "pages/profile/album",
+			"style": {
+				"navigationBarTitleText": "个人相册"
+			}
+		},
+		{
+			"path": "pages/profile/assistant",
+			"style": {
+				"navigationBarTitleText": "我的宣传页"
+			}
+		},
+		{
+			"path": "pages/profile/help",
+			"style": {
+				"navigationBarTitleText": "使用帮助"
+			}
+		},
+		{
+			"path": "pages/profile/help-detail",
+			"style": {
+				"navigationBarTitleText": "帮助详情"
+			}
+		},
+		{
+			"path": "pages/profile/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈"
+			}
+		},
+		{
+			"path": "pages/settings/index",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/settings/about",
+			"style": {
+				"navigationBarTitleText": "关于"
+			}
+		},
+		{
+			"path": "pages/legal/service-agreement",
+			"style": {
+				"navigationBarTitleText": "服务协议"
+			}
+		},
+		{
+			"path": "pages/legal/privacy-policy",
+			"style": {
+				"navigationBarTitleText": "隐私政策"
+			}
+		},
+		{
+			"path": "pages/work/index",
+			"style": {
+				"navigationBarTitleText": "工作台",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/table/index",
+			"style": {
+				"navigationBarTitleText": "台桌管理",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/table/detail",
+			"style": {
+				"navigationBarTitleText": "台桌详情"
+			}
+		},
+		{
+			"path": "pages/table/log",
+			"style": {
+				"navigationBarTitleText": "操作日志"
+			}
+		},
+		{
+			"path": "pages/coupon/verify",
+			"style": {
+				"navigationBarTitleText": "团购验券"
+			}
+		},
+		{
+			"path": "pages/coupon/records",
+			"style": {
+				"navigationBarTitleText": "核销记录"
+			}
+		},
+		{
+			"path": "pages/device/bind",
+			"style": {
+				"navigationBarTitleText": "设备管理"
+			}
+		},
+		{
+			"path": "pages/device/channel",
+			"style": {
+				"navigationBarTitleText": "通道管理"
+			}
+		},
+		{
+			"path": "pages/recharge/index",
+			"style": {
+				"navigationBarTitleText": "会员充值"
+			}
+		},
+		{
+			"path": "pages/assistant-sales/index",
+			"style": {
+				"navigationBarTitleText": "商品销售"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "客稻云",
+		"navigationBarBackgroundColor": "#0f172a",
+		"backgroundColor": "#0f172a",
+		"animationType": "slide-in-right",
+		"animationDuration": 300
+	},
+	"uniIdRouter": {}
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="button_marginTop">20dp</dimen>
+    <dimen name="button_height">80dp</dimen>
+    <dimen name="button_width">138dp</dimen>
+    <dimen name="button_font_size">20dp</dimen>
+    <dimen name="camera_tip_font_size">58dp</dimen>
+</resources>

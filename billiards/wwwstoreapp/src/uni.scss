@@ -1,0 +1,150 @@
+/* ====== 微信小程序风格设计系统 ====== */
+
+/* ---------- 主色调 ---------- */
+$color-primary: #07C160;
+$color-primary-dark: #06AD56;
+$color-primary-light: rgba(7, 193, 96, 0.1);
+
+/* ---------- 强调色 ---------- */
+$color-accent: #FF976A;
+$color-accent-light: rgba(255, 151, 106, 0.1);
+
+/* ---------- 中性色 ---------- */
+$color-bg-page: #f7f7f7;
+$color-bg-card: #ffffff;
+$color-bg-hover: rgba(0, 0, 0, 0.04);
+$color-text-primary: #000000;
+$color-text-secondary: #333333;
+$color-text-muted: #999999;
+$color-text-dim: #cccccc;
+$color-border-light: #e5e5e5;
+$color-border: #d9d9d9;
+
+/* ---------- 语义色 ---------- */
+$color-success: #07C160;
+$color-warning: #FF976A;
+$color-danger: #FF4D4F;
+$color-info: #1890FF;
+
+/* ---------- 阴影 ---------- */
+$shadow-card: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+$shadow-floating: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+$shadow-modal: 0 12rpx 32rpx rgba(0, 0, 0, 0.12);
+
+/* ---------- 圆角 ---------- */
+$radius-sm: 8rpx;
+$radius-md: 16rpx;
+$radius-lg: 20rpx;
+$radius-xl: 44rpx;
+
+/* ---------- 间距 ---------- */
+$space-xs: 8rpx;
+$space-sm: 16rpx;
+$space-md: 24rpx;
+$space-lg: 32rpx;
+$space-xl: 48rpx;
+$space-2xl: 64rpx;
+
+/* ---------- 字体 ---------- */
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+$font-display: 32px;
+$font-title: 20px;
+$font-subtitle: 16px;
+$font-body: 14px;
+$font-caption: 12px;
+$font-overline: 10px;
+
+$font-weight-bold: 700;
+$font-weight-semibold: 600;
+$font-weight-medium: 500;
+$font-weight-regular: 400;
+
+/* ---------- 全局重置 ---------- */
+page {
+  background: $color-bg-page;
+  font-family: $font-family;
+  font-size: $font-body;
+  color: $color-text-secondary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  padding: $space-lg;
+  margin-bottom: $space-md;
+}
+
+/* ---------- 文字工具类 ---------- */
+.text-primary { color: $color-primary; }
+.text-secondary { color: $color-text-secondary; }
+.text-muted { color: $color-text-muted; }
+.text-dim { color: $color-text-dim; }
+.text-black { color: #000000; }
+
+/* ---------- 按钮 ---------- */
+.btn {
+  height: 88rpx;
+  border-radius: $radius-xl;
+  font-size: $font-body;
+  font-weight: $font-weight-semibold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 48rpx;
+  transition: all 0.2s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.btn-primary {
+  @extend .btn;
+  background: $color-primary;
+  color: #ffffff;
+}
+
+.btn-secondary {
+  @extend .btn;
+  background: $color-bg-card;
+  color: $color-primary;
+  border: 2rpx solid $color-primary;
+}
+
+.btn-danger {
+  @extend .btn;
+  background: $color-bg-card;
+  color: $color-danger;
+  border: 2rpx solid $color-danger;
+}
+
+.btn-ghost {
+  @extend .btn;
+  background: transparent;
+  color: $color-primary;
+}
+
+/* ---------- Popup Animation ---------- */
+@keyframes popup-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popup-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.popup-overlay {
+  animation: popup-fade-in 0.25s ease-out;
+}
+
+.popup-panel {
+  animation: popup-slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,1092 @@
+openapi: "3.0.0"
+info:
+  version: 2.0.0
+  title: 台球厅 Tablet API
+  description: 台球厅大屏端API接口规范 V2.0
+  contact:
+    name: 开发团队
+    email: dev@example.com
+
+servers:
+  - url: http://127.0.0.1:8000/storeapi
+    description: 开发环境
+  - url: https://api.example.com/storeapi
+    description: 生产环境
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Response:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: 状态码，1表示成功，0表示失败
+          example: 1
+        message:
+          type: string
+          description: 提示信息
+          example: 操作成功
+        data:
+          description: 返回数据
+        timestamp:
+          type: integer
+          description: 时间戳
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: 状态码
+          example: 0
+        message:
+          type: string
+          description: 错误信息
+          example: 操作失败
+        data:
+          type: null
+          description: 空数据
+
+tags:
+  - name: 首页
+    description: 首页数据接口
+  - name: 订单
+    description: 订单管理接口
+  - name: 助教
+    description: 助教服务接口
+  - name: 商品
+    description: 商品点单接口
+  - name: 计分板
+    description: 计分板接口
+  - name: 账单
+    description: 账单结算接口
+
+paths:
+  # ==================== 首页模块 ====================
+  /tablet.Index/index:
+    get:
+      summary: 获取首页数据
+      tags:
+        - 首页
+      security: []
+      parameters:
+        - name: store_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 门店ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message:
+                    type: string
+                    example: 获取成功
+                  data:
+                    type: object
+
+  /tablet.Index/getTableStatus:
+    get:
+      summary: 获取桌台状态
+      tags:
+        - 首页
+      security: []
+      parameters:
+        - name: store_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # ==================== 订单模块 ====================
+  /tablet.Order/quickCreate:
+    post:
+      summary: 一键开台
+      tags:
+        - 订单
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table_id
+              properties:
+                table_id:
+                  type: string
+                  description: 桌台ID
+                  example: "table_001"
+                player_count:
+                  type: integer
+                  description: 玩家数量
+                  example: 2
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message:
+                    type: string
+                    example: 开台成功
+                  data:
+                    type: object
+                    properties:
+                      order_id:
+                        type: string
+                        description: 订单ID
+                      order_no:
+                        type: string
+                        description: 订单号
+                      start_time:
+                        type: string
+                        description: 开始时间
+                      hourly_rate:
+                        type: number
+                        description: 时单价
+
+  /tablet.Order/prepaidCreate:
+    post:
+      summary: 预付开台
+      tags:
+        - 订单
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table_id
+                - prepaid_hours
+              properties:
+                table_id:
+                  type: string
+                  description: 桌台ID
+                prepaid_hours:
+                  type: integer
+                  description: 预付时长(1-4)
+                  minimum: 1
+                  maximum: 4
+                player_count:
+                  type: integer
+                  description: 玩家数量
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  data:
+                    type: object
+                    properties:
+                      order_id:
+                        type: string
+                      order_no:
+                        type: string
+                      prepaid_hours:
+                        type: integer
+                      remaining_minutes:
+                        type: integer
+                      original_amount:
+                        type: number
+                      discount_amount:
+                        type: number
+                      final_amount:
+                        type: number
+                      discount_rate:
+                        type: number
+
+  /tablet.Order/getOrder:
+    get:
+      summary: 获取订单详情
+      tags:
+        - 订单
+      security: []
+      parameters:
+        - name: order_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 订单ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Order/addItem:
+    post:
+      summary: 添加商品到订单
+      tags:
+        - 订单
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+                - product_id
+              properties:
+                order_id:
+                  type: string
+                  description: 订单ID
+                product_id:
+                  type: string
+                  description: 商品ID
+                quantity:
+                  type: integer
+                  description: 数量
+                  default: 1
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Order/tick:
+    post:
+      summary: 订单计时更新
+      tags:
+        - 订单
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+              properties:
+                order_id:
+                  type: string
+                  description: 订单ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Order/getBill:
+    get:
+      summary: 获取账单详情
+      tags:
+        - 账单
+      security: []
+      parameters:
+        - name: order_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 订单ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  data:
+                    type: object
+                    properties:
+                      order:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          order_no:
+                            type: string
+                          start_time:
+                            type: string
+                          duration_minutes:
+                            type: integer
+                      table:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          hourly_rate:
+                            type: number
+                      member:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          level_name:
+                            type: string
+                          level_discount:
+                            type: number
+                      items:
+                        type: array
+                        items:
+                          type: object
+                      billing:
+                        type: object
+                        properties:
+                          table_fee:
+                            type: number
+                          product_fee:
+                            type: number
+                          assistant_fee:
+                            type: number
+                          original_amount:
+                            type: number
+                          discount_amount:
+                            type: number
+                          discount_rate:
+                            type: number
+                          final_amount:
+                            type: number
+
+  /tablet.Order/checkout:
+    post:
+      summary: 结算订单
+      tags:
+        - 账单
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+              properties:
+                order_id:
+                  type: string
+                  description: 订单ID
+                pay_type:
+                  type: string
+                  description: 支付方式
+                  enum: [wechat, alipay, member, cash, mix]
+                balance_paid:
+                  type: number
+                  description: 余额支付
+                cash_paid:
+                  type: number
+                  description: 现金支付
+                wechat_paid:
+                  type: number
+                  description: 微信支付
+                alipay_paid:
+                  type: number
+                  description: 支付宝支付
+                member_id:
+                  type: string
+                  description: 会员ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Order/cancel:
+    post:
+      summary: 取消订单
+      tags:
+        - 订单
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+              properties:
+                order_id:
+                  type: string
+                  description: 订单ID
+                reason:
+                  type: string
+                  description: 取消原因
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  data:
+                    type: object
+                    properties:
+                      order_id:
+                        type: string
+                      refund_amount:
+                        type: number
+                      cancel_time:
+                        type: string
+
+  /tablet.Order/merge:
+    post:
+      summary: 并台操作
+      tags:
+        - 订单
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_ids
+              properties:
+                order_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: 订单ID列表（至少2个）
+                  minItems: 2
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  data:
+                    type: object
+                    properties:
+                      main_order_id:
+                        type: string
+                      merged_order_ids:
+                        type: array
+                        items:
+                          type: string
+                      total_amount:
+                        type: number
+
+  /tablet.Order/changeTable:
+    post:
+      summary: 换台操作
+      tags:
+        - 订单
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+                - new_table_id
+              properties:
+                order_id:
+                  type: string
+                  description: 订单ID
+                new_table_id:
+                  type: string
+                  description: 新桌台ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  data:
+                    type: object
+                    properties:
+                      order_id:
+                        type: string
+                      old_table_id:
+                        type: string
+                      new_table_id:
+                        type: string
+                      new_table_number:
+                        type: string
+
+  # ==================== 助教模块 ====================
+  /tablet.Assistant/list:
+    get:
+      summary: 获取助教列表
+      tags:
+        - 助教
+      security: []
+      parameters:
+        - name: store_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Assistant/book:
+    post:
+      summary: 预约助教
+      tags:
+        - 助教
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+                - assistant_id
+              properties:
+                order_id:
+                  type: string
+                  description: 桌台订单ID
+                assistant_id:
+                  type: string
+                  description: 助教ID
+                hours:
+                  type: number
+                  description: 预约时长
+                  default: 1
+                student_name:
+                  type: string
+                  description: 学员姓名
+                student_phone:
+                  type: string
+                  description: 学员电话
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  data:
+                    type: object
+                    properties:
+                      assistant_order_id:
+                        type: string
+                      assistant_name:
+                        type: string
+                      hours:
+                        type: number
+                      total_price:
+                        type: number
+                      status:
+                        type: string
+
+  /tablet.Assistant/startService:
+    post:
+      summary: 开始助教服务
+      tags:
+        - 助教
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - assistant_order_id
+              properties:
+                assistant_order_id:
+                  type: string
+                  description: 助教订单ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  data:
+                    type: object
+                    properties:
+                      assistant_order_id:
+                        type: string
+                      order_id:
+                        type: string
+                      service_start_time:
+                        type: string
+                      estimated_amount:
+                        type: number
+                      main_order_amount:
+                        type: number
+
+  /tablet.Assistant/endService:
+    post:
+      summary: 结束助教服务
+      tags:
+        - 助教
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - assistant_order_id
+              properties:
+                assistant_order_id:
+                  type: string
+                  description: 助教订单ID
+                remark:
+                  type: string
+                  description: 备注
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  data:
+                    type: object
+                    properties:
+                      assistant_order_id:
+                        type: string
+                      order_id:
+                        type: string
+                      service_end_time:
+                        type: string
+                      actual_duration:
+                        type: number
+                      actual_amount:
+                        type: number
+                      price_difference:
+                        type: number
+                      main_order_amount:
+                        type: number
+
+  /tablet.Assistant/cancel:
+    post:
+      summary: 取消助教预约
+      tags:
+        - 助教
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - assistant_order_id
+              properties:
+                assistant_order_id:
+                  type: string
+                  description: 助教订单ID
+                reason:
+                  type: string
+                  description: 取消原因
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Assistant/getOrder:
+    get:
+      summary: 获取助教订单详情
+      tags:
+        - 助教
+      security: []
+      parameters:
+        - name: assistant_order_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 助教订单ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Assistant/levels:
+    get:
+      summary: 获取助教等级列表
+      tags:
+        - 助教
+      security: []
+      parameters:
+        - name: store_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # ==================== 商品模块 ====================
+  /tablet.Product/categories:
+    get:
+      summary: 获取商品分类列表
+      tags:
+        - 商品
+      security: []
+      parameters:
+        - name: store_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Product/list:
+    get:
+      summary: 获取商品列表
+      tags:
+        - 商品
+      security: []
+      parameters:
+        - name: store_id
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: category_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 分类ID
+        - name: keyword
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 搜索关键词
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Product/detail:
+    get:
+      summary: 获取商品详情
+      tags:
+        - 商品
+      security: []
+      parameters:
+        - name: product_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 商品ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # ==================== 计分板模块 ====================
+  /tablet.Score/gameConfigs:
+    get:
+      summary: 获取游戏配置列表
+      tags:
+        - 计分板
+      security: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Score/rules:
+    get:
+      summary: 获取游戏规则
+      tags:
+        - 计分板
+      security: []
+      parameters:
+        - name: game_type
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 游戏类型
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Score/create:
+    post:
+      summary: 创建计分板
+      tags:
+        - 计分板
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table_id
+                - game_type
+              properties:
+                table_id:
+                  type: string
+                  description: 桌台ID
+                game_type:
+                  type: string
+                  description: 游戏类型
+                  enum: [eight_ball, nine_ball, snooker, carom]
+                player1_name:
+                  type: string
+                  description: 玩家1姓名
+                player2_name:
+                  type: string
+                  description: 玩家2姓名
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Score/get:
+    get:
+      summary: 获取计分板
+      tags:
+        - 计分板
+      security: []
+      parameters:
+        - name: table_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 桌台ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Score/sinkBall:
+    post:
+      summary: 进球记录
+      tags:
+        - 计分板
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table_id
+                - ball_id
+              properties:
+                table_id:
+                  type: string
+                  description: 桌台ID
+                ball_id:
+                  type: integer
+                  description: 球编号
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Score/foul:
+    post:
+      summary: 犯规记录
+      tags:
+        - 计分板
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table_id
+              properties:
+                table_id:
+                  type: string
+                  description: 桌台ID
+                foul_type:
+                  type: string
+                  description: 犯规类型
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Score/endGame:
+    post:
+      summary: 结束游戏
+      tags:
+        - 计分板
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table_id
+              properties:
+                table_id:
+                  type: string
+                  description: 桌台ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tablet.Score/reset:
+    post:
+      summary: 重置计分板
+      tags:
+        - 计分板
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - table_id
+              properties:
+                table_id:
+                  type: string
+                  description: 桌台ID
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'

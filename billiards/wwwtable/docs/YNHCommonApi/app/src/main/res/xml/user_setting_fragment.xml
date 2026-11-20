@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        android:key="key_root"
+        android:title="Root" />
+
+
+    <SwitchPreferenceCompat
+        android:key="key_speaker"
+        android:title="@string/title_speaker_out" />
+
+    <SwitchPreferenceCompat
+        android:key="key_usb_mic"
+        android:title="USB Mic" />
+
+    <Preference
+        android:key="key_launcher"
+        android:title="Launcher" />
+
+
+    <ListPreference
+        android:entries="@array/dpi_entries"
+        android:entryValues="@array/dpi_values"
+        android:key="key_dpi"
+        android:title="@string/title_density"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreferenceCompat
+        android:key="key_log"
+        android:title="@string/title_log" />
+
+    <Preference
+        android:key="key_lcd_params"
+        android:title="@string/lcd_params" />
+
+
+    <PreferenceCategory
+        android:key="key_rotation_category"
+        android:title="@string/title_screen_rotation">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/rotation_degree_entries"
+            android:entryValues="@array/rotation_degree_values"
+            android:key="main_degree_list"
+            android:title="@string/title_main_degree"
+            app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/rotation_degree_entries"
+            android:entryValues="@array/rotation_degree_values"
+            android:key="aux_degree_list"
+            android:title="@string/title_aux_degree"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="key_camera_category"
+        android:title="@string/title_camera_category">
+        <Preference
+            android:key="camera_preview"
+            android:title="@string/camera_preview" />
+
+        <ListPreference
+            android:entries="@array/camera_preview_orientation_entries"
+            android:entryValues="@array/camera_preview_orientation_values"
+            android:key="key_camera_preview_orientation"
+            android:title="@string/camera_preview_orientation"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:key="key_camera1_flip"
+            android:title="@string/camera1_flip" />
+
+        <SwitchPreferenceCompat
+            android:key="key_camera2_flip"
+            android:title="@string/camera2_flip" />
+
+        <ListPreference
+            android:entries="@array/camera_ai_orientation_entries"
+            android:entryValues="@array/camera_ai_orientation_values"
+            android:key="key_ai_orientation"
+            android:title="@string/camera_ai_orientation"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

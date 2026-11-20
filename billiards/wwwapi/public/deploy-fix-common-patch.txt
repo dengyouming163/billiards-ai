@@ -1,0 +1,19 @@
+# In common.sh, replace the extract_project function to support optional subpath
+
+# Line to find: extract_project() {
+#   local git_dir="$1"
+#   local tag="$2"
+#   local project="$3"
+#   local dest="$4"
+
+# Add after local dest:   local subpath="${5:-}"  # PHP: only extract app/
+
+# Then change the tar line from:
+#   tar -xf "$tmp_tar" --strip-components=2 -C "$dest"
+# to:
+#   if [ -n "$subpath" ]; then
+#     mkdir -p "${dest}/${subpath}"
+#     tar -xf "$tmp_tar" --strip-components=3 -C "${dest}/${subpath}" "www/${project}/${subpath}/"
+#   else
+#     tar -xf "$tmp_tar" --strip-components=2 -C "$dest"
+#   fi

@@ -1,0 +1,99 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "账单",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/order/index",
+      "style": {
+        "navigationBarTitleText": "开台",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/product/index",
+      "style": {
+        "navigationBarTitleText": "商品",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/assistant/index",
+      "style": {
+        "navigationBarTitleText": "教练",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/score/index",
+      "style": {
+        "navigationBarTitleText": "计分",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/score/record",
+      "style": {
+        "navigationBarTitleText": "比赛记录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/settings/index",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/bill/index",
+      "style": {
+        "navigationBarTitleText": "账单详情",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/activity/index",
+      "style": {
+        "navigationBarTitleText": "活动中心",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "客稻云",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f7f7f7",
+    "backgroundColorTop": "#f7f7f7",
+    "backgroundColorBottom": "#f7f7f7"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "fontSize": "36rpx",
+    "padding": "24rpx 0",
+    "height": "140rpx",
+    "iconSize": "80rpx",
+    "selectedColor": "#07C160",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/product/index", "text": "点单", "iconPath": "static/tabbar/product.png", "selectedIconPath": "static/tabbar/product-active.png" },
+      { "pagePath": "pages/index/index", "text": "账单", "iconPath": "static/tabbar/home.png", "selectedIconPath": "static/tabbar/home-active.png" },
+      { "pagePath": "pages/score/index", "text": "计分", "iconPath": "static/tabbar/score.png", "selectedIconPath": "static/tabbar/score-active.png" }
+    ]
+  },
+  "uniIdRouter": {}
+}

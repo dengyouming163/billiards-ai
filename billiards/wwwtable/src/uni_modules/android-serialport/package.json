@@ -1,0 +1,106 @@
+{
+  "id": "android-serialport",
+  "displayName": "Android串口通信 串口开发 serialport  多串口(长期维护)",
+  "version": "1.0.16",
+  "description": "android/安卓平台串口通信uts，支持串口号、波特率、数据位、校验位、停止位、流控等参数设置（长期维护）",
+  "keywords": [
+    "串口",
+    "SerialPort",
+    "串口通信,233,485"
+],
+  "repository": "",
+  "engines": {
+    "HBuilderX": "^3.91",
+    "uni-app": "^4.31",
+    "uni-app-x": "^3.8.11"
+  },
+  "dcloudext": {
+    "type": "uts",
+    "sale": {
+      "regular": {
+        "price": "19.99"
+      },
+      "sourcecode": {
+        "price": "199.00"
+      }
+    },
+    "contact": {
+      "qq": "1530948626"
+    },
+    "declaration": {
+      "ads": "无",
+      "data": "插件不采集任何数据\n使用过程中有任何问题可以加qq 1530948626 联系，随时修复",
+      "permissions": "需要系统授权串口权限"
+    },
+    "npmurl": "",
+    "darkmode": "√",
+    "i18n": "√",
+    "widescreen": "√"
+  },
+  "uni_modules": {
+    "dependencies": [],
+    "encrypt": [],
+    "platforms": {
+      "client": {
+        "uni-app": {
+          "vue": {
+            "vue2": "√",
+            "vue3": "√"
+          },
+          "web": {
+            "safari": "-",
+            "chrome": "-"
+          },
+          "app": {
+            "vue": "√",
+            "nvue": "√",
+            "android": {
+              "extVersion": "",
+              "minVersion": "21"
+            },
+            "ios": "-",
+            "harmony": "-"
+          },
+          "mp": {
+            "weixin": "-",
+            "alipay": "-",
+            "toutiao": "-",
+            "baidu": "-",
+            "kuaishou": "-",
+            "jd": "-",
+            "harmony": "-",
+            "qq": "-",
+            "lark": "-",
+            "xhs": "-"
+          },
+          "quickapp": {
+            "huawei": "-",
+            "union": "-"
+          }
+        },
+        "uni-app-x": {
+          "web": {
+            "safari": "-",
+            "chrome": "-"
+          },
+          "app": {
+            "android": {
+              "extVersion": "",
+              "minVersion": "21"
+            },
+            "ios": "-",
+            "harmony": "-"
+          },
+          "mp": {
+            "weixin": "-"
+          }
+        }
+      },
+      "cloud": {
+        "tcb": "x",
+        "aliyun": "x",
+        "alipay": "x"
+      }
+    }
+  }
+}

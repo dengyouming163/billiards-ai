@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         bootstrap="bootstrap.php"
+         colors="true"
+         verbose="true"
+         failOnRisky="true"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="Logic Tests">
+            <directory>tests/logic</directory>
+        </testsuite>
+        <testsuite name="Controller Tests">
+            <directory>tests/controller</directory>
+        </testsuite>
+    </testsuites>
+    <coverage>
+        <include>
+            <directory suffix=".php">app/storeapi/logic</directory>
+            <directory suffix=".php">app/storeapi/controller</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">app/storeapi/controller/BaseController.php</directory>
+        </exclude>
+    </coverage>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+    </php>
+</phpunit>
