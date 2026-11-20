@@ -11,11 +11,16 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 
 try {
-    $host = getenv('BILLIARDS_DB_HOST') ?: '127.0.0.1';
-    $port = (int) (getenv('BILLIARDS_DB_PORT') ?: 3306);
-    $dbname = getenv('BILLIARDS_DB_NAME') ?: 'test_billiards';
-    $username = getenv('BILLIARDS_DB_USERNAME') ?: 'test_user';
-    $password = getenv('BILLIARDS_DB_PASSWORD') ?: 'test_password';
+    $host = getenv('BILLIARDS_DB_HOST');
+    $host = $host === false ? '127.0.0.1' : $host;
+    $port = getenv('BILLIARDS_DB_PORT');
+    $port = (int) ($port === false ? 3306 : $port);
+    $dbname = getenv('BILLIARDS_DB_NAME');
+    $dbname = $dbname === false ? 'test_billiards' : $dbname;
+    $username = getenv('BILLIARDS_DB_USERNAME');
+    $username = $username === false ? 'test_user' : $username;
+    $password = getenv('BILLIARDS_DB_PASSWORD');
+    $password = $password === false ? 'test_password' : $password;
 
     $db = new PDO(
         "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4",
