@@ -28,6 +28,6 @@ return [
     // v2 密钥（用于 MICROPAY / orderquery 等旧版 API）
     'v2_secret_key' => env('WECHATPAY_V2_SECRET_KEY', ''),
 
-    // 支付结果通知地址（留空则使用默认回调地址）
+    // 支付结果通知地址（必须配置 WECHATPAY_NOTIFY_URL，无默认回调地址）
     'notify_url' => env('WECHATPAY_NOTIFY_URL', ''),
 ];

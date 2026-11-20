@@ -24,7 +24,7 @@ Post-receive hook 会自动 checkout 到 `/www/wwwroot/wwwapi/`。
 ### 手动部署
 
 ```bash
-ssh root@132.232.166.40
+ssh root@192.0.2.10
 cd /www/wwwroot/wwwbilliards.git
 # 代码已通过 git push 自动同步
 ```
@@ -48,15 +48,15 @@ npx tsup src/server.ts --format cjs --platform node --target node20 --outDir dis
 
 # 2. 打包上传
 tar czf /tmp/wwwstore-deploy.tar.gz .next/ dist/ public/ package.json node_modules/
-scp /tmp/wwwstore-deploy.tar.gz root@132.232.166.40:/tmp/
+scp /tmp/wwwstore-deploy.tar.gz root@192.0.2.10:/tmp/
 
 # 3. 服务器端解压 + 重启
-ssh root@132.232.166.40 "cd /www/wwwroot/wwwstore && tar xzf /tmp/wwwstore-deploy.tar.gz && pm2 restart wwwstore"
+ssh root@192.0.2.10 "cd /www/wwwroot/wwwstore && tar xzf /tmp/wwwstore-deploy.tar.gz && pm2 restart wwwstore"
 ```
 
 ### PM2 状态
 ```bash
-ssh root@132.232.166.40 "pm2 show wwwstore"
+ssh root@192.0.2.10 "pm2 show wwwstore"
 ```
 - 入口：`/www/wwwroot/wwwstore/dist/server.js`
 - 端口：3000
