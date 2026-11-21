@@ -10,6 +10,7 @@ import { fetchEmployeePermissions, fetchEmployeeStores } from '@/lib/api/employe
 import { 
   LayoutDashboard,
   Gamepad2,
+  Bot,
   Receipt,
   ShoppingCart,
   Users,
@@ -54,6 +55,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { icon: LayoutDashboard, label: '数据概览', href: '/', permission: 'overview' },
+  { icon: Bot, label: 'Agent 运行', href: '/agent', permission: 'overview' },
   { icon: Gamepad2, label: '台桌管理', href: '/tables', permission: 'settings:table' },
   { icon: GraduationCap, label: '助教管理', href: '/assistants', permission: 'assistant:list' },
   { icon: Package2, label: '商品管理', href: '/products', permission: 'settings:product' },
