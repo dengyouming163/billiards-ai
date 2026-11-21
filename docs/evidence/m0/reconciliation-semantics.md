@@ -6,7 +6,7 @@
 - 动态被测入口为 `app/storeapi/logic/shift/ShiftLogic.php` 和 `MemberLogic::rechargeCash()`；本任务没有修改 `MemberLogic`、`ShiftLogic`、控制器或其他旧业务源码。
 - Schema 依据为 `deploy/mysql/init/001-schema.sql`，并通过 `INFORMATION_SCHEMA.COLUMNS` 复核了隔离库中相关表的列约束。factory 显式提供其合成行全部无默认值 `NOT NULL` 字段。
 - 数据库仅为 `127.0.0.1:13306/billiards_test`。会员、门店、操作员及 factory 主键均为显式合成值；生产路径生成的充值/流水 ID 和单号仅归属于该合成会员与门店。未查询或复制真实会员、员工、订单行。
-- 证据类型：充值记录和 cash_flow 由真实 `MemberLogic::rechargeCash()` 动态生成并回读，未使用 mock，factory 不再代写 cash_flow；`MemberLogic.php:268-283`、`:371-386` 仅作为源码静态交叉证据。时间边界由真实 `checkOut()` 及其持久化快照动态验证，源码阅读不替代动态结果。
+- 证据类型：充值记录和 cash_flow 由真实 `MemberLogic::rechargeCash()` 动态生成并回读，未使用 mock，factory 不再代写 cash_flow；legacy `rechargeTotal/rechargeCount` 由另一测试使用明确处于班次窗口内的受控 `created_at` 合成充值验证，不依赖生产刚写入的当前秒。`MemberLogic.php:268-283`、`:371-386` 仅作为源码静态交叉证据。时间边界由真实 `checkOut()` 及其持久化快照动态验证，源码阅读不替代动态结果。
 - 每个测试由 `DatabaseTestCase` 开启事务并在 `tearDown()` 回滚。没有执行 DDL、`TRUNCATE`、清表或真实行清理。
 - `recomputed_v1` 一节冻结的是后续重算必须遵守的口径；本任务没有实现证据 API 或 Task 5，也不把重算规则冒充为旧代码已有输出。
 
@@ -33,8 +33,14 @@
 | 生产充值路径 GREEN | 同上 | 0 | 补全合成会员后，由生产代码生成 recharge 和 cash_flow：`OK (1 test, 12 assertions)`。 |
 | 稳定边界动态验证 | `php vendor/bin/phpunit tests/Characterization/ShiftBehaviorTest.php --filter testCheckOutIncludesOrderExactlyAtPersistedEndBoundary` | 0 | 读取实际 `check_out_time` 后验证等值纳入、后一秒排除：`OK (1 test, 6 assertions)`。这是既有行为的表征强化，未通过错误断言或生产代码改动伪造 RED。 |
 | 两项修复组合 GREEN | `php vendor/bin/phpunit tests/Characterization/ShiftBehaviorTest.php` | 0 | 禁用结果缓存后：`OK (8 tests, 51 assertions)`。 |
-| 本轮最终连续验证（第 1 次） | `php vendor/bin/phpunit --testsuite Characterization` | 0 | `OK (8 tests, 51 assertions)`；耗时 `00:08.073`。 |
-| 本轮最终连续验证（第 2 次） | 同上 | 0 | `OK (8 tests, 51 assertions)`；耗时 `00:04.219`。两次均使用同一批合成 ID，事务回滚后重复运行通过，且未生成 `.phpunit.result.cache`。 |
+| 上轮历史运行（第 1 次，非稳定性证据） | `php vendor/bin/phpunit --testsuite Characterization` | 0 | 当时真实输出为 `OK (8 tests, 51 assertions)`、耗时 `00:08.073`；后续间歇失败复现已推翻其作为稳定性证据的解释。 |
+| 上轮历史运行（第 2 次，非稳定性证据） | 同上 | 0 | 当时真实输出为 `OK (8 tests, 51 assertions)`、耗时 `00:04.219`；只保留历史记录，不再据此声明测试稳定。 |
+| 即时充值汇总耦合 RED | `php vendor/bin/phpunit tests/Characterization/ShiftBehaviorTest.php --filter testProductionRechargeWritesReceivedGiftAndTotalCashFlow` | 1 | 复审独立重复执行时复现 `Failed asserting that 0.0 is identical to 200.0.`：`Tests: 1, Assertions: 11, Failures: 1.`，失败位于原 `ShiftBehaviorTest.php:169` 的即时 `rechargeTotal` 断言。 |
+| 生产充值解耦 GREEN | 同上 | 0 | 移除即时 `ShiftLogic` 汇总耦合，保留生产写入动态证据：`OK (1 test, 10 assertions)`。 |
+| 受控 legacy 充值汇总 GREEN | `php vendor/bin/phpunit tests/Characterization/ShiftBehaviorTest.php --filter testLegacySummaryCountsControlledRechargeInsideShiftWindow` | 0 | 合成充值 `created_at` 明确位于班次窗口内：`OK (1 test, 2 assertions)`。 |
+| 历史班次专属 ID GREEN | `php vendor/bin/phpunit tests/Characterization/ShiftBehaviorTest.php --filter testCurrentSummaryIgnoresHistoricalCheckedOutShift` | 0 | 改用 `t4-history-*`，行为断言不变：`OK (1 test, 1 assertion)`。 |
+| 拆分后最终连续验证（第 1 次） | `php vendor/bin/phpunit --testsuite Characterization` | 0 | `OK (9 tests, 51 assertions)`；耗时 `00:02.035`。 |
+| 拆分后最终连续验证（第 2 次） | 同上 | 0 | `OK (9 tests, 51 assertions)`；耗时 `00:02.846`。 |
 
 初次补 harness 后还出现过 `Class "Tests\Support\DatabaseTestCase" not found`，通过在测试文件显式加载支持基类修正。该次没有 PHPUnit 测试成功摘要，未被记作 GREEN。最终套件使用同一批合成 ID 再运行一次，仍为退出码 0、`OK (8 tests, 41 assertions)`，与事务回滚设计一致。
 
@@ -47,7 +53,7 @@
 | 3. 签退冻结缺失 | 80 元订单签退后冻结 `total_revenue=80`、`order_count=1`、`cash_paid=10`、`recharge_total=200`。原始 attendance 报告中 `alipay_paid`、`card_paid`、`recharge_count` 键缺失，并非数值 0。 | `testCheckOutLeavesUnsnapshottedPaymentAndRechargeFieldsMissing` |
 | 4. 订单级与项目级支付 | 同一订单分别列出 `order_item_id=NULL` 和 `order_item_id=t4-payment-item` 两条 40 元 payment。全表直接 SUM 得 80，而旧订单行及 `ShiftLogic` 均为 40，证明两层 payment 不能不加区分地求全表 SUM。 | `testOrderAndItemPaymentsAreListedSeparatelyFromLegacyOrderTotals` |
 | 5. 合并支付与父子订单 | 父订单聚合金额 100，子订单金额 40，只有父订单一条 100 元合并支付。旧汇总为 `totalRevenue=140`、`orderCount=2`、`cashPaid=100`：父行已聚合的 40 与子行再次相加，收入重复 40；支付没有重复。 | `testLegacySummaryCountsMergedParentAndChildIncludingAggregatedAmount` |
-| 6. 实收、赠送与入账 | **生产路径动态证据**：建立余额 100 的完整合成会员，真实调用 `MemberLogic::rechargeCash()`，回读其生成的 `member_recharge.amount=200`、`gift_amount=20` 和 `bi_busi_cash_flow.amount=220`，会员余额变为 320；factory 不再代写现金流。外部实际收款证据为 200，赠送为 20，总权益/入账为 220；**cash_flow 的 220 是包含赠送的内部流水字段值**，不能据此推断外部实收 220。旧 `rechargeTotal=200`、`rechargeCount=1` 仍只汇总充值 `amount`。`MemberLogic.php:268-283`、`:371-386` 的写法仅作源码静态交叉核对。 | `testProductionRechargeWritesReceivedGiftAndTotalCashFlow` |
+| 6. 实收、赠送与入账 | **生产路径动态证据**：建立余额 100 的完整合成会员，真实调用 `MemberLogic::rechargeCash()`，回读其生成的 `member_recharge.amount=200`、`gift_amount=20` 和 `bi_busi_cash_flow.amount=220`，会员余额变为 320；factory 不再代写现金流。外部实际收款证据为 200，赠送为 20，总权益/入账为 220；**cash_flow 的 220 是包含赠送的内部流水字段值**，不能据此推断外部实收 220。旧 `rechargeTotal=200`、`rechargeCount=1` 仍只汇总充值 `amount`，由另一测试以明确处于窗口内的受控 `created_at` 合成充值验证，不再与即时生产写入耦合。`MemberLogic.php:268-283`、`:371-386` 的写法仅作源码静态交叉核对。 | `testProductionRechargeWritesReceivedGiftAndTotalCashFlow`、`testLegacySummaryCountsControlledRechargeInsideShiftWindow` |
 | 7. 时间边界 | **持久化快照动态证据**：预建起点 30 元、起点前一秒 999 元及调用锚点前后各 10 秒的逐秒订单；真实 `checkOut()` 后读取 attendance 的实际 `check_out_time=T`，确认存在 `end_time=T` 和 `T+1` 的订单。快照总额和订单数精确等于按 `end_time >= check_in_time && end_time <= T` 重算的结果，且总额等于严格早于 T 的小计加上 T 等值订单金额；因此起点和终点等值均纳入，起点前及 T 后订单排除。无需睡眠，也不再依赖调用前猜测当前秒。 | `testCheckOutIncludesOrderExactlyAtPersistedEndBoundary` |
 
 ## `legacy_summary` 冻结规则
@@ -68,6 +74,12 @@
 6. 充值按门店、操作员和 `created_at` 闭区间过滤，`rechargeTotal=SUM(amount)`、`rechargeCount=COUNT(*)`；不加 `gift_amount`，也没有按 `status` 过滤。
 7. `ShiftLogic` 不读取 `busi_order_payment`。订单支付列与 payment 流水是不同证据源，不能宣称二者天然一致。
 8. `checkOut` 复用相同订单时间条件冻结 attendance，但只保存 total/orderCount/cash/wechat/balance/table/product/assistant/openTable/rechargeTotal。它不冻结 alipay、card、rechargeCount；模型和表中也没有对应 attendance 字段。
+
+### 即时充值与秒级汇总上界（复审新增）
+
+- **动态实测**：原测试在真实 `rechargeCash()` 后立即调用 `shiftSummary()`。独立重复执行时实际复现 `rechargeTotal=0` 而预期为 200，PHPUnit 输出为 `Tests: 1, Assertions: 11, Failures: 1.`；因此此前连续两次 8/51 通过只代表当次输出，不能证明该耦合测试稳定。
+- **源码静态交叉证据**：`MemberRecharge.php:13` 开启自动时间戳，ThinkORM `vendor/topthink/think-orm/src/model/concern/TimeStamp.php:159-180` 对 `datetime` 自动写入 `Y-m-d H:i:s.u`；隔离库 `busi_member_recharge.created_at` 为 `DATETIME(0)`，后半秒微秒可进位到下一秒。`ShiftLogic.php:424-467` 则以秒级 `date('Y-m-d H:i:s')` 作为 `created_at <= checkOutTime` 上界，所以进位后的即时充值会暂时落在窗口外，下一秒前不计入。这些源码和 Schema 事实用于解释动态失败，不替代动态实测。
+- **表征口径**：生产充值测试只验证生产生成的会员余额、recharge 200/20 和 cash_flow 220；legacy 常规充值汇总另用受控窗口内时间验证。未使用 sleep、retry、放宽断言或修改生产代码消绿。
 
 ## `recomputed_v1` 重算约束
 

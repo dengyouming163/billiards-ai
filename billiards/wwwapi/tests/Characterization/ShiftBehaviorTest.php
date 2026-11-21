@@ -15,8 +15,8 @@ final class ShiftBehaviorTest extends DatabaseTestCase
 {
     public function testCurrentSummaryIgnoresHistoricalCheckedOutShift(): void
     {
-        $this->makeShift('shift-old', 'emp-a', 'store-a', 'checked_out');
-        $result = ShiftLogic::shiftSummary('emp-a', 'store-a');
+        $this->makeShift('t4-history-shift', 't4-history-emp', 't4-history-store', 'checked_out');
+        $result = ShiftLogic::shiftSummary('t4-history-emp', 't4-history-store');
         self::assertFalse($result['isOnShift']);
     }
 
@@ -137,7 +137,6 @@ final class ShiftBehaviorTest extends DatabaseTestCase
         $employeeId = 't4-recharge-emp';
         $storeId = 't4-recharge-store';
         $memberId = 't4-recharge-member';
-        $this->makeShift('t4-recharge-shift', $employeeId, $storeId);
         reconciliation_make_member($memberId, $storeId, ['balance' => 100]);
 
         $rechargeResult = MemberLogic::rechargeCash($memberId, [
@@ -155,7 +154,6 @@ final class ShiftBehaviorTest extends DatabaseTestCase
         $stored = Db::name('busi_member_recharge')->where('id', $rechargeId)->find();
         $cashFlow = Db::name('busi_cash_flow')->where('order_id', $rechargeId)->find();
         $member = Db::name('busi_member')->where('id', $memberId)->find();
-        $result = ShiftLogic::shiftSummary($employeeId, $storeId);
 
         self::assertNotNull($stored);
         self::assertNotNull($cashFlow);
@@ -166,6 +164,26 @@ final class ShiftBehaviorTest extends DatabaseTestCase
         self::assertSame(220.0, (float)$stored['balance_after'] - (float)$stored['balance_before']);
         self::assertSame(220.0, (float)$cashFlow['amount']);
         self::assertSame(320.0, (float)$member['balance']);
+    }
+
+    public function testLegacySummaryCountsControlledRechargeInsideShiftWindow(): void
+    {
+        $employeeId = 't4-recharge-summary-emp';
+        $storeId = 't4-recharge-summary-store';
+        $checkInTime = date('Y-m-d H:i:s', strtotime('-2 hours'));
+        $insideWindow = date('Y-m-d H:i:s', strtotime('-30 minutes'));
+        $this->makeShift('t4-recharge-summary-shift', $employeeId, $storeId, 'checked_in', [
+            'check_in_time' => $checkInTime,
+        ]);
+        $this->makeRecharge('t4-recharge-summary-row', $employeeId, $storeId, $insideWindow, [
+            'amount' => 200,
+            'gift_amount' => 20,
+            'balance_before' => 100,
+            'balance_after' => 320,
+        ]);
+
+        $result = ShiftLogic::shiftSummary($employeeId, $storeId);
+
         self::assertSame(200.0, $result['rechargeTotal']);
         self::assertSame(1, $result['rechargeCount']);
     }
