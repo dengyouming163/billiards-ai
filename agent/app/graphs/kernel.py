@@ -16,6 +16,7 @@ async execution by moving its blocking calls onto a worker thread.
 
 import asyncio
 import json
+import logging
 import time
 from collections.abc import Mapping
 from typing import Any, Protocol, TypedDict
@@ -36,8 +37,10 @@ from langgraph.checkpoint.base import (
 from langgraph.graph import END
 
 from app.guard.identity import PermissionDenied
-from app.services.redaction import redact_payload
+from app.services.redaction import redact_long_text, redact_payload, sanitize_arguments
 from app.tools.registry import UnknownTool
+
+logger = logging.getLogger(__name__)
 
 MAX_MODEL_ROUNDS = 4
 MAX_MODEL_ROUNDS_CODE = "MAX_MODEL_ROUNDS"
@@ -207,19 +210,18 @@ async def call_model(state: KnowledgeState, config: RunnableConfig) -> dict[str,
     assistant = await adapter.complete(
         _to_langchain_messages(state), registry.langchain_tools(principal)
     )
+    content = redact_long_text(assistant.content or "")
 
     tool_calls = [
         {
             "id": call.id or f"call-{round_no}-{index}",
             "name": call.name,
-            "arguments": dict(call.arguments),
+            "arguments": sanitize_arguments(call.name, dict(call.arguments)),
         }
         for index, call in enumerate(assistant.tool_calls)
     ]
     messages = list(state.get("messages") or [])
-    messages.append(
-        {"role": "assistant", "content": assistant.content, "tool_calls": tool_calls}
-    )
+    messages.append({"role": "assistant", "content": content, "tool_calls": tool_calls})
     update: dict[str, Any] = {
         "round": round_no,
         "messages": messages,
@@ -236,7 +238,7 @@ async def call_model(state: KnowledgeState, config: RunnableConfig) -> dict[str,
         }
         return update
     if not tool_calls:
-        update["final_response"] = assistant.content
+        update["final_response"] = content
     return update
 
 
@@ -296,6 +298,40 @@ def _tool_error(exc: Exception) -> dict[str, Any]:
     return {"code": code, "status_code": status, "message": message}
 
 
+async def _trace_start(
+    trace: TracePort | None, name: str, arguments: Mapping[str, Any], fallback_id: str
+) -> str:
+    if trace is None:
+        return fallback_id
+    try:
+        return await trace.start_tool(name, arguments)
+    except Exception:
+        logger.warning("tool trace start failed for %s", name, exc_info=True)
+        return fallback_id
+
+
+async def _trace_emit(
+    trace: TracePort | None, event_type: str, payload: Mapping[str, Any]
+) -> None:
+    if trace is None:
+        return
+    try:
+        await trace.emit(event_type, payload)
+    except Exception:
+        logger.warning("trace emit failed for %s", event_type, exc_info=True)
+
+
+async def _trace_finish(
+    trace: TracePort | None, tool_call_id: str, **kwargs: Any
+) -> None:
+    if trace is None:
+        return
+    try:
+        await trace.finish_tool(tool_call_id, **kwargs)
+    except Exception:
+        logger.warning("tool trace finish failed for %s", tool_call_id, exc_info=True)
+
+
 async def tool_dispatch(state: KnowledgeState, config: RunnableConfig) -> dict[str, Any]:
     configurable = config["configurable"]
     registry = configurable["registry"]
@@ -305,45 +341,45 @@ async def tool_dispatch(state: KnowledgeState, config: RunnableConfig) -> dict[s
     messages = list(state.get("messages") or [])
     evidence = list(state.get("evidence") or [])
 
-    for call in state.get("tool_calls") or []:
+    for index, call in enumerate(state.get("tool_calls") or []):
         name = str(call.get("name") or "")
         arguments = dict(call.get("arguments") or {})
         model_call_id = str(call.get("id") or "")
+        fallback_id = model_call_id or f"tool-{index}"
         started = time.perf_counter()
-        tool_call_id = model_call_id
-
-        if trace is not None:
-            tool_call_id = await trace.start_tool(name, arguments)
-            await trace.emit(
-                "tool.started",
-                {
-                    "tool_call_id": tool_call_id,
-                    "name": name,
-                    "arguments": redact_payload(arguments),
-                },
-            )
+        tool_call_id = await _trace_start(trace, name, arguments, fallback_id)
+        await _trace_emit(
+            trace,
+            "tool.started",
+            {
+                "tool_call_id": tool_call_id,
+                "name": name,
+                "arguments": redact_payload(arguments),
+            },
+        )
 
         try:
             result = await registry.call(name, arguments, principal)
         except Exception as exc:  # noqa: BLE001 - every tool error becomes an observation
             latency_ms = int((time.perf_counter() - started) * 1000)
             error = _tool_error(exc)
-            if trace is not None:
-                await trace.finish_tool(
-                    tool_call_id,
-                    status="failed",
-                    latency_ms=latency_ms,
-                    error_code=error["code"],
-                )
-                await trace.emit(
-                    "tool.failed",
-                    {
-                        "tool_call_id": tool_call_id,
-                        "name": name,
-                        "error": error,
-                        "latency_ms": latency_ms,
-                    },
-                )
+            await _trace_finish(
+                trace,
+                tool_call_id,
+                status="failed",
+                latency_ms=latency_ms,
+                error_code=error["code"],
+            )
+            await _trace_emit(
+                trace,
+                "tool.failed",
+                {
+                    "tool_call_id": tool_call_id,
+                    "name": name,
+                    "error": error,
+                    "latency_ms": latency_ms,
+                },
+            )
             messages.append(
                 {
                     "role": "tool",
@@ -357,23 +393,24 @@ async def tool_dispatch(state: KnowledgeState, config: RunnableConfig) -> dict[s
         latency_ms = int((time.perf_counter() - started) * 1000)
         citations = _citations_of(name, result)
         observation = redact_payload(result)
-        if trace is not None:
-            await trace.finish_tool(
-                tool_call_id,
-                status="succeeded",
-                result=_persistable(result),
-                latency_ms=latency_ms,
-            )
-            await trace.emit(
-                "tool.completed",
-                {
-                    "tool_call_id": tool_call_id,
-                    "name": name,
-                    "status": "succeeded",
-                    "latency_ms": latency_ms,
-                    "citations": citations,
-                },
-            )
+        await _trace_finish(
+            trace,
+            tool_call_id,
+            status="succeeded",
+            result=_persistable(result),
+            latency_ms=latency_ms,
+        )
+        await _trace_emit(
+            trace,
+            "tool.completed",
+            {
+                "tool_call_id": tool_call_id,
+                "name": name,
+                "status": "succeeded",
+                "latency_ms": latency_ms,
+                "citations": citations,
+            },
+        )
         messages.append(
             {
                 "role": "tool",

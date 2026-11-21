@@ -171,6 +171,40 @@ async def test_unknown_tool_is_reported_as_structured_failure():
     assert failed[0]["error"]["code"] == "TOOL_NOT_FOUND"
 
 
+class BrokenTrace:
+    """Every trace write fails: the run must still produce its answer."""
+
+    def __init__(self) -> None:
+        self.calls: list[str] = []
+
+    async def emit(self, event_type: str, payload: dict[str, Any]) -> None:
+        self.calls.append(f"emit:{event_type}")
+        raise RuntimeError("trace storage is down")
+
+    async def start_tool(self, name: str, arguments: dict[str, Any]) -> str:
+        self.calls.append(f"start:{name}")
+        raise RuntimeError("trace storage is down")
+
+    async def finish_tool(self, tool_call_id: str, **kwargs: Any) -> None:
+        self.calls.append(f"finish:{tool_call_id}")
+        raise RuntimeError("trace storage is down")
+
+
+async def test_trace_failures_do_not_abort_tool_dispatch_or_answer():
+    async def handler(principal: Principal, *, query: str) -> list[dict[str, Any]]:
+        return [{"chunk_id": "c1", "doc_id": "d1", "score": 0.75, "text": "交班 SOP"}]
+
+    adapter = ScriptedAdapter([_assistant(tool_calls=[_rag_call()]), _assistant(content="按 SOP 执行。")])
+    trace = BrokenTrace()
+
+    result = await _invoke(adapter, _registry(handler), trace)
+
+    assert result["final_response"] == "按 SOP 执行。"
+    assert result["error"] is None
+    assert trace.calls  # every failed trace call was attempted but swallowed
+    assert result["evidence"][0]["citations"][0]["chunk_id"] == "c1"
+
+
 async def test_tool_success_records_citations_and_feeds_model():
     async def handler(principal: Principal, *, query: str) -> list[dict[str, Any]]:
         return [{"chunk_id": "c1", "doc_id": "d1", "score": 0.75, "text": "交班 SOP"}]

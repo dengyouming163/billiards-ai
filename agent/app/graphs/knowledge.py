@@ -17,14 +17,17 @@ from app.graphs.kernel import (
     route_after_model,
     tool_dispatch,
 )
+from app.services.redaction import redact_long_text
 
 
 def initial_knowledge_state(question: str, scene: str | None = None) -> KnowledgeState:
+    # The state is checkpointed verbatim, so secrets/PII are scrubbed first.
+    safe_question = redact_long_text(question)
     return {
-        "question": question,
+        "question": safe_question,
         "scene": scene,
         "round": 0,
-        "messages": [{"role": "user", "content": question}],
+        "messages": [{"role": "user", "content": safe_question}],
         "tool_calls": [],
         "evidence": [],
         "final_response": None,

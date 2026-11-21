@@ -4,6 +4,7 @@ from typing import Any
 
 from fastapi import FastAPI
 from langgraph.checkpoint.postgres import PostgresSaver
+from starlette.concurrency import run_in_threadpool
 
 from app.api import health, runs
 from app.config import settings
@@ -16,6 +17,26 @@ from app.tools.registry import default_registry
 
 _UNSET = object()
 
+# Arbitrary application-wide advisory lock key for LangGraph DDL migrations.
+CHECKPOINT_SETUP_LOCK_ID = 872_315_442
+
+
+def prepare_checkpointer(saver: Any) -> None:
+    """Run the checkpointer DDL under a PostgreSQL advisory lock.
+
+    Several workers may start at once; the lock makes ``setup()`` idempotent
+    instead of racing on ``CREATE TABLE IF NOT EXISTS``.
+    """
+    conn = getattr(saver, "conn", None)
+    if conn is None:
+        saver.setup()
+        return
+    conn.execute("SELECT pg_advisory_lock(%s)", (CHECKPOINT_SETUP_LOCK_ID,))
+    try:
+        saver.setup()
+    finally:
+        conn.execute("SELECT pg_advisory_unlock(%s)", (CHECKPOINT_SETUP_LOCK_ID,))
+
 
 def create_app(
     *,
@@ -26,6 +47,7 @@ def create_app(
     checkpointer: Any = None,
     knowledge_graph: Any = None,
     langgraph_database_url: Any = _UNSET,
+    sse_ping_interval: float = 15.0,
 ) -> FastAPI:
     """Build the agent app; every dependency can be injected for tests."""
     owns_engine = session_factory is None
@@ -47,7 +69,7 @@ def create_app(
                 and app.state.langgraph_database_url
             ):
                 with PostgresSaver.from_conn_string(app.state.langgraph_database_url) as saver:
-                    saver.setup()
+                    await run_in_threadpool(prepare_checkpointer, saver)
                     app.state.checkpointer = saver
                     app.state.knowledge_graph = build_knowledge_graph(saver)
                     app.state.runner.graph = app.state.knowledge_graph
@@ -80,6 +102,7 @@ def create_app(
         graph=knowledge_graph,
         model_adapter=resolved_model,
         registry=resolved_registry,
+        sse_ping_interval=sse_ping_interval,
     )
 
     app.include_router(health.router)

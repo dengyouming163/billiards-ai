@@ -12,6 +12,7 @@ from starlette.concurrency import run_in_threadpool
 
 EXPECTED_MIGRATION = "0001"
 CHECKPOINT_UNAVAILABLE = "CHECKPOINT_UNAVAILABLE"
+READY_PROBE_THREAD = "__ready_probe__"
 
 router = APIRouter()
 
@@ -19,6 +20,25 @@ router = APIRouter()
 @router.get("/health/live")
 def live() -> dict[str, str]:
     return {"status": "ok"}
+
+
+def _checkpoint_reachable(checkpointer) -> bool:
+    """Touch the checkpoint store so readiness reflects a real DB read."""
+    probe = getattr(checkpointer, "get_tuple", None)
+    if callable(probe):
+        try:
+            probe({"configurable": {"thread_id": READY_PROBE_THREAD}})
+            return True
+        except Exception:  # noqa: BLE001 - probe failures are reported, not raised
+            return False
+    conn = getattr(checkpointer, "conn", None)
+    if conn is None:
+        return False
+    try:
+        conn.execute("SELECT 1")
+        return True
+    except Exception:  # noqa: BLE001 - probe failures are reported, not raised
+        return False
 
 
 def _migration_revision(session_factory) -> str | None:
@@ -38,6 +58,18 @@ async def ready(request: Request):
         "checkpoint": "configured" if state.checkpointer is not None else "missing"
     }
     if state.checkpointer is None or state.knowledge_graph is None:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "not_ready",
+                "code": CHECKPOINT_UNAVAILABLE,
+                "checks": checks,
+            },
+        )
+
+    reachable = await run_in_threadpool(_checkpoint_reachable, state.checkpointer)
+    checks["checkpoint"] = "ok" if reachable else "unavailable"
+    if not reachable:
         return JSONResponse(
             status_code=503,
             content={

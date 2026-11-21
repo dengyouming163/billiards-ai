@@ -2,32 +2,46 @@
 
 The runner owns one run end to end: it creates the ``agent_runs`` row, feeds
 the compiled graph with a ``thread_id`` equal to the run id, persists tool
-calls and trace events, and streams the same events as SSE. A model or tool
-failure is recorded as a failed run; previously written trace rows are never
-deleted.
+calls and trace events, and streams the same events as SSE. Terminal state and
+terminal events are committed in one transaction; a client disconnect is
+recorded as ``cancelled`` so no run is left ``running`` forever.
 """
 
 import asyncio
+import logging
 import uuid
 from collections.abc import AsyncIterator, Mapping
-from contextlib import suppress
 from typing import Any
 
 from starlette.concurrency import run_in_threadpool
 
+from app.graphs import kernel
 from app.graphs.knowledge import citations_from_evidence, initial_knowledge_state
 from app.models.llm import ModelInvocationError
 from app.schemas import Principal
-from app.services.events import EventPublisher, format_sse
-from app.services.run_repository import RunRepository, ToolCallRepository
+from app.services.events import EventPublisher, format_sse, max_persisted_seq
+from app.services.redaction import redact_long_text
+from app.services.run_repository import (
+    RUN_TERMINAL_STATUSES,
+    RunRepository,
+    ToolCallRepository,
+)
+
+logger = logging.getLogger(__name__)
 
 _DONE = object()
 RUN_FAILED = "AGENT_RUN_FAILED"
+RUN_CANCELLED = "RUN_CANCELLED"
+TERMINAL_WRITE_FAILED = "TERMINAL_WRITE_FAILED"
+TRACE_WRITE_FAILED = "TRACE_WRITE_FAILED"
 DEFAULT_SCENE = "knowledge_qa"
+SSE_PING_FRAME = ": ping\n\n"
+
+_background_tasks: set[asyncio.Task[Any]] = set()
 
 
 class DatabaseTrace:
-    """TracePort implementation backed by the agent database."""
+    """TracePort implementation backed by the agent database (best effort)."""
 
     def __init__(
         self,
@@ -82,6 +96,25 @@ class DatabaseTrace:
         latency_ms: int | None,
         error_code: str | None,
     ) -> None:
+        try:
+            self._write_finish(tool_call_id, status, result, latency_ms, error_code)
+        except Exception:
+            logger.warning(
+                "tool trace finish failed for %s; retrying as failed", tool_call_id,
+                exc_info=True,
+            )
+            self._write_finish(
+                tool_call_id, "failed", None, latency_ms, TRACE_WRITE_FAILED
+            )
+
+    def _write_finish(
+        self,
+        tool_call_id: str,
+        status: str,
+        result: Any,
+        latency_ms: int | None,
+        error_code: str | None,
+    ) -> None:
         with self._session_factory() as session:
             ToolCallRepository(session).finish(
                 uuid.UUID(tool_call_id),
@@ -102,11 +135,13 @@ class KnowledgeRunner:
         graph: Any,
         model_adapter: Any,
         registry: Any,
+        sse_ping_interval: float = 15.0,
     ) -> None:
         self.session_factory = session_factory
         self.graph = graph
         self.model_adapter = model_adapter
         self.registry = registry
+        self.sse_ping_interval = sse_ping_interval
 
     async def create_run(self, principal: Principal, question: str, scene: str | None) -> uuid.UUID:
         return await run_in_threadpool(self._create_run, principal, question, scene)
@@ -133,26 +168,85 @@ class KnowledgeRunner:
         queue: asyncio.Queue[Any] = asyncio.Queue()
 
         def sink(envelope: dict[str, Any]) -> None:
-            loop.call_soon_threadsafe(queue.put_nowait, envelope)
+            try:
+                loop.call_soon_threadsafe(queue.put_nowait, envelope)
+            except RuntimeError:
+                logger.debug("event sink loop is closed for run %s", run_id)
 
-        publisher = EventPublisher(self.session_factory, run_id, sink=sink)
+        initial_seq = await run_in_threadpool(max_persisted_seq, self.session_factory, run_id)
+        publisher = EventPublisher(
+            self.session_factory, run_id, sink=sink, initial_seq=initial_seq
+        )
         trace = DatabaseTrace(self.session_factory, run_id, principal, publisher)
 
         await run_in_threadpool(publisher.emit, "run.started", {"scene": scene or DEFAULT_SCENE})
         producer = asyncio.create_task(
             self._execute(run_id, principal, question, scene, trace, publisher, queue)
         )
+        finished = False
+        ping_timeout = self.sse_ping_interval if self.sse_ping_interval > 0 else None
         try:
             while True:
-                item = await queue.get()
+                try:
+                    item = await asyncio.wait_for(queue.get(), timeout=ping_timeout)
+                except TimeoutError:
+                    yield SSE_PING_FRAME
+                    continue
                 if item is _DONE:
+                    finished = True
                     break
                 yield format_sse(item)
         finally:
             if not producer.done():
                 producer.cancel()
-            with suppress(BaseException):
+            try:
                 await producer
+            except asyncio.CancelledError:
+                pass
+            except Exception:
+                logger.exception("knowledge run producer failed for %s", run_id)
+            if not finished:
+                await self._mark_cancelled(run_id, principal, publisher)
+
+    async def _mark_cancelled(
+        self, run_id: uuid.UUID, principal: Principal, publisher: EventPublisher
+    ) -> None:
+        try:
+            task = asyncio.create_task(
+                self._write_cancelled(run_id, principal, publisher)
+            )
+        except Exception:
+            logger.warning("could not schedule cancellation for run %s", run_id, exc_info=True)
+            return
+        _background_tasks.add(task)
+        task.add_done_callback(_background_tasks.discard)
+        try:
+            await asyncio.shield(task)
+        except asyncio.CancelledError:
+            logger.info("cancellation write detached for run %s", run_id)
+        except Exception:
+            logger.warning("failed to mark run %s cancelled", run_id, exc_info=True)
+
+    async def _write_cancelled(
+        self, run_id: uuid.UUID, principal: Principal, publisher: EventPublisher
+    ) -> None:
+        error = {
+            "code": RUN_CANCELLED,
+            "message": "client disconnected before the run finished",
+            "status_code": 499,
+        }
+        try:
+            await run_in_threadpool(
+                self._write_terminal,
+                run_id,
+                principal,
+                "cancelled",
+                {"error": error},
+                [("run.cancelled", {"status": "cancelled", "error": error})],
+                publisher,
+            )
+        except Exception:
+            logger.warning("failed to persist cancelled run %s", run_id, exc_info=True)
 
     async def _execute(
         self,
@@ -174,7 +268,8 @@ class KnowledgeRunner:
                         "registry": self.registry,
                         "model_adapter": self.model_adapter,
                         "trace": trace,
-                    }
+                    },
+                    "recursion_limit": kernel.MAX_MODEL_ROUNDS * 3 + 5,
                 },
             )
             error = final_state.get("error") if isinstance(final_state, Mapping) else None
@@ -183,6 +278,7 @@ class KnowledgeRunner:
             else:
                 await self._finish_succeeded(run_id, principal, final_state or {}, publisher)
         except ModelInvocationError as exc:
+            logger.warning("model invocation failed for run %s: %s", run_id, exc.code)
             await self._finish_failed(
                 run_id,
                 principal,
@@ -193,7 +289,8 @@ class KnowledgeRunner:
                     "status_code": 502,
                 },
             )
-        except Exception:  # noqa: BLE001 - the trace must survive any failure
+        except Exception:
+            logger.exception("knowledge graph failed for run %s", run_id)
             await self._finish_failed(
                 run_id,
                 principal,
@@ -214,21 +311,36 @@ class KnowledgeRunner:
         final_state: Mapping[str, Any],
         publisher: EventPublisher,
     ) -> None:
-        answer = str(final_state.get("final_response") or "")
+        answer = redact_long_text(str(final_state.get("final_response") or ""))
         citations = citations_from_evidence(final_state.get("evidence"))
-        await run_in_threadpool(
-            self._finish_run,
-            run_id,
-            principal,
-            "succeeded",
-            {"answer": answer, "citations": citations},
-        )
-        await run_in_threadpool(publisher.emit, "message.delta", {"delta": answer})
-        await run_in_threadpool(
-            publisher.emit,
-            "run.completed",
-            {"status": "succeeded", "citations": citations},
-        )
+        events = [
+            ("message.delta", {"delta": answer}),
+            ("run.completed", {"status": "succeeded", "citations": citations}),
+        ]
+        try:
+            await run_in_threadpool(
+                self._write_terminal,
+                run_id,
+                principal,
+                "succeeded",
+                {"answer": answer, "citations": citations},
+                events,
+                publisher,
+            )
+        except Exception:
+            logger.warning(
+                "terminal write failed for run %s; marking it failed", run_id, exc_info=True
+            )
+            await self._finish_failed(
+                run_id,
+                principal,
+                publisher,
+                {
+                    "code": TERMINAL_WRITE_FAILED,
+                    "message": "terminal trace write failed",
+                    "status_code": 500,
+                },
+            )
 
     async def _finish_failed(
         self,
@@ -237,24 +349,69 @@ class KnowledgeRunner:
         publisher: EventPublisher,
         error: dict[str, Any],
     ) -> None:
-        await run_in_threadpool(
-            self._finish_run, run_id, principal, "failed", {"error": error}
-        )
-        await run_in_threadpool(
-            publisher.emit,
-            "run.failed",
-            {"status": "failed", "error": error},
-        )
+        try:
+            await run_in_threadpool(
+                self._write_terminal,
+                run_id,
+                principal,
+                "failed",
+                {"error": error},
+                [("run.failed", {"status": "failed", "error": error})],
+                publisher,
+            )
+        except Exception:
+            logger.exception("failed to persist failure for run %s", run_id)
 
-    def _finish_run(
+    def _write_terminal(
         self,
         run_id: uuid.UUID,
         principal: Principal,
         status: str,
         result: Mapping[str, Any],
-    ) -> None:
+        events: list[tuple[str, Mapping[str, Any]]],
+        publisher: EventPublisher,
+    ) -> bool:
+        """Commit the terminal status and its events in one transaction."""
+        envelopes = [publisher.build(event_type, payload) for event_type, payload in events]
         with self.session_factory() as session:
-            RunRepository(session).finish(
-                run_id, principal, status=status, result=result
-            )
+            repo = RunRepository(session)
+            run = repo.get(run_id, principal)
+            if run is None or run.status in RUN_TERMINAL_STATUSES:
+                logger.info("run %s is already terminal; skipping %s write", run_id, status)
+                return False
+            repo.finish(run_id, principal, status=status, result=result)
+            for envelope in envelopes:
+                publisher.add_to_session(session, envelope)
             session.commit()
+        for envelope in envelopes:
+            publisher.publish(envelope)
+        return True
+
+    async def replay(
+        self, run_id: uuid.UUID, principal: Principal, after_seq: int
+    ) -> AsyncIterator[str]:
+        events = await run_in_threadpool(
+            self._load_events, run_id, principal, after_seq
+        )
+        if events is None:
+            return
+        for envelope in events:
+            yield format_sse(envelope)
+
+    def _load_events(
+        self, run_id: uuid.UUID, principal: Principal, after_seq: int
+    ) -> list[dict[str, Any]] | None:
+        with self.session_factory() as session:
+            run = RunRepository(session).get(run_id, principal)
+            if run is None:
+                return None
+            return [
+                {
+                    "id": f"{run_id}:{event.seq}",
+                    "seq": event.seq,
+                    "type": event.event_type,
+                    "data": event.payload_json,
+                }
+                for event in sorted(run.events, key=lambda item: item.seq)
+                if event.seq > after_seq
+            ]

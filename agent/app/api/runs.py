@@ -24,6 +24,12 @@ CHECKPOINT_UNAVAILABLE = "CHECKPOINT_UNAVAILABLE"
 RUN_NOT_FOUND = "RUN_NOT_FOUND"
 UNAUTHENTICATED = "UNAUTHENTICATED"
 
+SSE_HEADERS = {
+    "Cache-Control": "no-cache",
+    "X-Accel-Buffering": "no",
+    "Connection": "keep-alive",
+}
+
 
 def _bearer_token(authorization: str | None) -> str:
     if not authorization:
@@ -50,6 +56,44 @@ async def _resolve_principal(request: Request, token: str, store_id: str) -> Pri
             status_code=exc.status_code,
             detail={"code": exc.code, "message": str(exc)},
         ) from None
+
+
+async def _resolve_run_principal(request: Request, token: str, store_id: str) -> Principal:
+    """Resolve identity for a run read, hiding context mismatches as 404."""
+    try:
+        return await _resolve_principal(request, token, store_id)
+    except HTTPException:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": RUN_NOT_FOUND, "message": "run not found"},
+        ) from None
+
+
+def _parse_last_event_id(value: str | None) -> tuple[uuid.UUID, int] | None:
+    """Parse the ``{run_id}:{seq}`` ids emitted by this service."""
+    if not value:
+        return None
+    run_part, separator, seq_part = value.rpartition(":")
+    if not separator:
+        return None
+    try:
+        run_id = uuid.UUID(run_part)
+        sequence = int(seq_part)
+    except (TypeError, ValueError):
+        return None
+    if sequence < 0:
+        return None
+    return run_id, sequence
+
+
+def _load_store_id(state: Any, run_id: uuid.UUID) -> str | None:
+    with state.session_factory() as session:
+        return RunRepository(session).get_store_id(run_id)
+
+
+def _run_is_owned(state: Any, run_id: uuid.UUID, principal: Principal) -> bool:
+    with state.session_factory() as session:
+        return RunRepository(session).get(run_id, principal) is not None
 
 
 def _isoformat(value: Any) -> str | None:
@@ -97,6 +141,7 @@ async def stream_knowledge_run(
     payload: KnowledgeRunRequest,
     request: Request,
     authorization: Annotated[str | None, Header()] = None,
+    last_event_id: Annotated[str | None, Header(alias="Last-Event-ID")] = None,
 ):
     token = _bearer_token(authorization)
     state = request.app.state
@@ -107,6 +152,28 @@ async def stream_knowledge_run(
                 "code": CHECKPOINT_UNAVAILABLE,
                 "message": "checkpoint storage is not configured",
             },
+        )
+
+    resume = _parse_last_event_id(last_event_id)
+    if resume is not None:
+        resume_run_id, after_seq = resume
+        store_id = await run_in_threadpool(_load_store_id, state, resume_run_id)
+        if store_id is None:
+            raise HTTPException(
+                status_code=404,
+                detail={"code": RUN_NOT_FOUND, "message": "run not found"},
+            )
+        principal = await _resolve_run_principal(request, token, store_id)
+        owned = await run_in_threadpool(_run_is_owned, state, resume_run_id, principal)
+        if not owned:
+            raise HTTPException(
+                status_code=404,
+                detail={"code": RUN_NOT_FOUND, "message": "run not found"},
+            )
+        return StreamingResponse(
+            state.runner.replay(resume_run_id, principal, after_seq),
+            media_type="text/event-stream",
+            headers=SSE_HEADERS,
         )
 
     principal = await _resolve_principal(request, token, payload.store_id)
@@ -129,7 +196,7 @@ async def stream_knowledge_run(
     return StreamingResponse(
         event_stream(),
         media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        headers=SSE_HEADERS,
     )
 
 
@@ -142,18 +209,14 @@ async def get_run(
     token = _bearer_token(authorization)
     state = request.app.state
 
-    def load_store_id() -> str | None:
-        with state.session_factory() as session:
-            return RunRepository(session).get_store_id(run_id)
-
-    store_id = await run_in_threadpool(load_store_id)
+    store_id = await run_in_threadpool(_load_store_id, state, run_id)
     if store_id is None:
         raise HTTPException(
             status_code=404,
             detail={"code": RUN_NOT_FOUND, "message": "run not found"},
         )
 
-    principal = await _resolve_principal(request, token, store_id)
+    principal = await _resolve_run_principal(request, token, store_id)
 
     def load_run() -> dict[str, Any] | None:
         with state.session_factory() as session:

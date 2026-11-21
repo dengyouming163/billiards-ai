@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.models.run import AgentRun, AuditLog, ToolCall
 from app.schemas import Principal
-from app.services.redaction import redact_payload, sanitize_arguments
+from app.services.redaction import redact_payload, redact_record, sanitize_arguments
 
 RUN_TERMINAL_STATUSES: frozenset[str] = frozenset({"succeeded", "failed", "cancelled"})
 
@@ -61,7 +61,7 @@ class RunRepository:
             store_id=principal.store_id,
             scene=scene,
             status="running",
-            input_json=redact_payload(dict(input_payload)) if input_payload else None,
+            input_json=redact_record(dict(input_payload)) if input_payload else None,
         )
         self._session.add(run)
         self._session.flush()
@@ -125,7 +125,7 @@ class RunRepository:
             raise ValueError(f"agent run {run_id} is already finished")
 
         run.status = status
-        run.result_json = redact_payload(result)
+        run.result_json = redact_record(result)
         run.completed_at = datetime.now(UTC)
         AuditLogRepository(self._session).record(
             principal,
