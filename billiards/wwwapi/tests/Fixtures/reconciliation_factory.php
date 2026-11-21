@@ -101,6 +101,22 @@ function reconciliation_make_recharge(
     ], $overrides);
 
     Db::name('busi_member_recharge')->insert($row);
+    Db::name('busi_cash_flow')->insert([
+        'id' => 'cf-' . $id,
+        'store_id' => $row['store_id'],
+        'order_id' => $row['id'],
+        'order_no' => $row['order_no'],
+        'type' => 'income',
+        'category' => 'member_recharge',
+        'amount' => $amount + $giftAmount,
+        'payment_method' => $row['payment_method'],
+        'balance_before' => $row['balance_before'],
+        'balance_after' => $row['balance_after'],
+        'description' => 'synthetic member recharge',
+        'operator_id' => $row['operator_id'],
+        'operator_name' => $row['operator_name'] ?? '',
+        'created_at' => $row['created_at'],
+    ]);
 
     return $row;
 }

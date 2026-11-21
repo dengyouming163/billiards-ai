@@ -150,12 +150,15 @@ final class ShiftBehaviorTest extends DatabaseTestCase
         );
 
         $stored = Db::name('busi_member_recharge')->where('id', 't4-recharge-row')->find();
+        $cashFlow = Db::name('busi_cash_flow')->where('order_id', 't4-recharge-row')->find();
         $result = ShiftLogic::shiftSummary($employeeId, $storeId);
 
         self::assertSame(200.0, (float)$stored['amount']);
         self::assertSame(20.0, (float)$stored['gift_amount']);
         self::assertSame(220.0, (float)$stored['amount'] + (float)$stored['gift_amount']);
         self::assertSame(220.0, (float)$stored['balance_after'] - (float)$stored['balance_before']);
+        self::assertNotNull($cashFlow);
+        self::assertSame(220.0, (float)$cashFlow['amount']);
         self::assertSame(200.0, $result['rechargeTotal']);
         self::assertSame(1, $result['rechargeCount']);
     }

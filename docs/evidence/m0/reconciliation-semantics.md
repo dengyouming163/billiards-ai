@@ -4,7 +4,7 @@
 
 - 执行基线：`5334ca00f4e28b0b7fbf145d9864fac59fb28cda`。
 - 被测旧代码仅为 `app/storeapi/logic/shift/ShiftLogic.php`；本任务没有修改 `ShiftLogic`、控制器或其他旧业务源码。
-- Schema 依据为 `deploy/mysql/init/001-schema.sql`，并通过 `INFORMATION_SCHEMA.COLUMNS` 复核了隔离库中五张相关表的列约束。factory 显式提供全部无默认值 `NOT NULL` 字段。
+- Schema 依据为 `deploy/mysql/init/001-schema.sql`，并通过 `INFORMATION_SCHEMA.COLUMNS` 复核了隔离库中六张相关表的列约束。factory 显式提供全部无默认值 `NOT NULL` 字段。
 - 数据库仅为 `127.0.0.1:13306/billiards_test`。所有主键、门店、操作员、会员和单号均为显式合成值；未查询或复制真实会员、员工、订单行。
 - 每个测试由 `DatabaseTestCase` 开启事务并在 `tearDown()` 回滚。没有执行 DDL、`TRUNCATE`、清表或真实行清理。
 - `recomputed_v1` 一节冻结的是后续重算必须遵守的口径；本任务没有实现证据 API 或 Task 5，也不把重算规则冒充为旧代码已有输出。
@@ -25,6 +25,9 @@
 | 支付/合并/边界组 RED | 同上 | 2 | `Tests: 8, Assertions: 30, Errors: 2.`；分别为 `makeOrderItem()`、`makePayment()` 尚不存在。 |
 | 七类行为 GREEN | 同上 | 0 | `OK (8 tests, 41 assertions)`。 |
 | 最终套件验证 | `php vendor/bin/phpunit --testsuite Characterization` | 0 | `OK (8 tests, 41 assertions)`。 |
+| 现金流补证 RED | `php vendor/bin/phpunit tests/Characterization/ShiftBehaviorTest.php` | 1 | 仅新增 cash_flow 查询/断言、factory 尚未生成现金流：`Tests: 8, Assertions: 40, Failures: 1.`；`ShiftBehaviorTest.php:160` 报 `Failed asserting that null is not null.`。 |
+| 现金流补证 GREEN | `php vendor/bin/phpunit tests/Characterization/ShiftBehaviorTest.php` | 0 | 最小扩展充值 factory，显式填充 cash_flow 无默认值 `NOT NULL` 字段并写入 `amount=220`：`OK (8 tests, 43 assertions)`。 |
+| 本轮最终套件验证 | `php vendor/bin/phpunit --testsuite Characterization` | 0 | `OK (8 tests, 43 assertions)`。 |
 
 初次补 harness 后还出现过 `Class "Tests\Support\DatabaseTestCase" not found`，通过在测试文件显式加载支持基类修正。该次没有 PHPUnit 测试成功摘要，未被记作 GREEN。最终套件使用同一批合成 ID 再运行一次，仍为退出码 0、`OK (8 tests, 41 assertions)`，与事务回滚设计一致。
 
@@ -37,7 +40,7 @@
 | 3. 签退冻结缺失 | 80 元订单签退后冻结 `total_revenue=80`、`order_count=1`、`cash_paid=10`、`recharge_total=200`。原始 attendance 报告中 `alipay_paid`、`card_paid`、`recharge_count` 键缺失，并非数值 0。 | `testCheckOutLeavesUnsnapshottedPaymentAndRechargeFieldsMissing` |
 | 4. 订单级与项目级支付 | 同一订单分别列出 `order_item_id=NULL` 和 `order_item_id=t4-payment-item` 两条 40 元 payment。全表直接 SUM 得 80，而旧订单行及 `ShiftLogic` 均为 40，证明两层 payment 不能不加区分地求全表 SUM。 | `testOrderAndItemPaymentsAreListedSeparatelyFromLegacyOrderTotals` |
 | 5. 合并支付与父子订单 | 父订单聚合金额 100，子订单金额 40，只有父订单一条 100 元合并支付。旧汇总为 `totalRevenue=140`、`orderCount=2`、`cashPaid=100`：父行已聚合的 40 与子行再次相加，收入重复 40；支付没有重复。 | `testLegacySummaryCountsMergedParentAndChildIncludingAggregatedAmount` |
-| 6. 实收、赠送与入账 | `amount=200`、`gift_amount=20`，余额从 100 到 320。**总入账/权益增加为 220，其中实收现金流为 200、赠送 20 不是现金收入**；旧 `rechargeTotal=200`、`rechargeCount=1`。若把“现金流 220”理解为现金收款，则与字段及旧代码实际语义不符。 | `testRechargeSeparatesReceivedAmountGiftAndTotalCredit` |
+| 6. 实收、赠送与入账 | `member_recharge.amount=200`、`gift_amount=20`，余额从 100 到 320；同一充值另建立并读取 `bi_busi_cash_flow`，其 `amount=220`。`MemberLogic.php:268-283`、`:371-386` 也分别按 `$amount + $giftAmount`、`$totalAdd` 写该字段，因此 **cash_flow 的 220 是包含赠送的内部流水字段值**。外部实际收款证据为 `member_recharge.amount=200`，赠送为 20，总权益/入账为 220；旧 `rechargeTotal=200`、`rechargeCount=1` 仍只汇总充值 `amount`。既不能由 `cash_flow.amount=220` 推断外部实收 220，也不能否定该字段值确为 220。 | `testRechargeSeparatesReceivedAmountGiftAndTotalCredit` |
 | 7. 时间边界 | `end_time=check_in_time` 的 30 元订单和等于调用时当前秒的 40 元订单都被计入，未来订单排除，结果为 70 元、2 单；对应实现的 `>= check_in_time` 与 `<= checkOutTime`。 | `testSummaryIncludesOrdersAtStartAndCurrentEndBoundaries` |
 
 ## `legacy_summary` 冻结规则
