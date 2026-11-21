@@ -6,6 +6,7 @@ namespace Tests\Characterization;
 
 require_once dirname(__DIR__) . '/Support/DatabaseTestCase.php';
 
+use app\storeapi\logic\member\MemberLogic;
 use app\storeapi\logic\shift\ShiftLogic;
 use Tests\Support\DatabaseTestCase;
 use think\facade\Db;
@@ -131,34 +132,40 @@ final class ShiftBehaviorTest extends DatabaseTestCase
         self::assertArrayNotHasKey('recharge_count', $result);
     }
 
-    public function testRechargeSeparatesReceivedAmountGiftAndTotalCredit(): void
+    public function testProductionRechargeWritesReceivedGiftAndTotalCashFlow(): void
     {
         $employeeId = 't4-recharge-emp';
         $storeId = 't4-recharge-store';
+        $memberId = 't4-recharge-member';
         $this->makeShift('t4-recharge-shift', $employeeId, $storeId);
-        $this->makeRecharge(
-            't4-recharge-row',
-            $employeeId,
-            $storeId,
-            date('Y-m-d H:i:s', strtotime('-30 minutes')),
-            [
-                'amount' => 200,
-                'gift_amount' => 20,
-                'balance_before' => 100,
-                'balance_after' => 320,
-            ]
-        );
+        reconciliation_make_member($memberId, $storeId, ['balance' => 100]);
 
-        $stored = Db::name('busi_member_recharge')->where('id', 't4-recharge-row')->find();
-        $cashFlow = Db::name('busi_cash_flow')->where('order_id', 't4-recharge-row')->find();
+        $rechargeResult = MemberLogic::rechargeCash($memberId, [
+            'amount' => 200,
+            'gift_amount' => 20,
+            'gift_points' => 0,
+            'operator_id' => $employeeId,
+            'operator_name' => 'Synthetic Operator',
+            'remark' => 'synthetic production recharge',
+        ], $storeId);
+
+        self::assertNotFalse($rechargeResult, MemberLogic::getError());
+
+        $rechargeId = $rechargeResult['record']['id'];
+        $stored = Db::name('busi_member_recharge')->where('id', $rechargeId)->find();
+        $cashFlow = Db::name('busi_cash_flow')->where('order_id', $rechargeId)->find();
+        $member = Db::name('busi_member')->where('id', $memberId)->find();
         $result = ShiftLogic::shiftSummary($employeeId, $storeId);
 
+        self::assertNotNull($stored);
+        self::assertNotNull($cashFlow);
+        self::assertSame($memberId, $stored['member_id']);
         self::assertSame(200.0, (float)$stored['amount']);
         self::assertSame(20.0, (float)$stored['gift_amount']);
         self::assertSame(220.0, (float)$stored['amount'] + (float)$stored['gift_amount']);
         self::assertSame(220.0, (float)$stored['balance_after'] - (float)$stored['balance_before']);
-        self::assertNotNull($cashFlow);
         self::assertSame(220.0, (float)$cashFlow['amount']);
+        self::assertSame(320.0, (float)$member['balance']);
         self::assertSame(200.0, $result['rechargeTotal']);
         self::assertSame(1, $result['rechargeCount']);
     }
@@ -249,32 +256,67 @@ final class ShiftBehaviorTest extends DatabaseTestCase
         self::assertSame(2, $result['orderCount']);
     }
 
-    public function testSummaryIncludesOrdersAtStartAndCurrentEndBoundaries(): void
+    public function testCheckOutIncludesOrderExactlyAtPersistedEndBoundary(): void
     {
         $employeeId = 't4-boundary-emp';
         $storeId = 't4-boundary-store';
         $checkInTime = date('Y-m-d H:i:s', strtotime('-2 hours'));
-        $endBoundary = date('Y-m-d H:i:s');
         $this->makeShift('t4-boundary-shift', $employeeId, $storeId, 'checked_in', [
             'check_in_time' => $checkInTime,
         ]);
         $this->makeOrder('t4-boundary-start', $employeeId, $storeId, $checkInTime, [
             'final_amount' => 30,
         ]);
-        $this->makeOrder('t4-boundary-end', $employeeId, $storeId, $endBoundary, [
-            'final_amount' => 40,
-        ]);
         $this->makeOrder(
-            't4-boundary-after',
+            't4-boundary-before',
             $employeeId,
             $storeId,
-            date('Y-m-d H:i:s', strtotime('+1 day')),
-            ['final_amount' => 50]
+            date('Y-m-d H:i:s', strtotime($checkInTime) - 1),
+            ['final_amount' => 999]
         );
 
-        $result = ShiftLogic::shiftSummary($employeeId, $storeId);
+        $anchor = time();
+        $boundaryOrders = [];
+        for ($offset = -10; $offset <= 10; $offset++) {
+            $endTime = date('Y-m-d H:i:s', $anchor + $offset);
+            $amount = (float)(100 + $offset);
+            $boundaryOrders[$endTime] = $amount;
+            $this->makeOrder(
+                't4-boundary-second-' . $offset,
+                $employeeId,
+                $storeId,
+                $endTime,
+                ['final_amount' => $amount]
+            );
+        }
 
-        self::assertSame(70.0, $result['totalRevenue']);
-        self::assertSame(2, $result['orderCount']);
+        $result = ShiftLogic::checkOut($employeeId, $storeId);
+
+        self::assertNotFalse($result);
+        $persisted = Db::name('busi_employee_attendance')->where('id', 't4-boundary-shift')->find();
+        $actualCheckOutTime = $persisted['check_out_time'];
+        $afterCheckOutTime = date('Y-m-d H:i:s', strtotime($actualCheckOutTime) + 1);
+        self::assertArrayHasKey($actualCheckOutTime, $boundaryOrders);
+        self::assertArrayHasKey($afterCheckOutTime, $boundaryOrders);
+
+        $expectedTotal = 30.0;
+        $expectedBeforeEndTotal = 30.0;
+        $expectedCount = 1;
+        foreach ($boundaryOrders as $endTime => $amount) {
+            if ($endTime < $actualCheckOutTime) {
+                $expectedBeforeEndTotal += $amount;
+            }
+            if ($endTime <= $actualCheckOutTime) {
+                $expectedTotal += $amount;
+                $expectedCount++;
+            }
+        }
+
+        self::assertSame($expectedTotal, (float)$persisted['total_revenue']);
+        self::assertSame($expectedCount, (int)$persisted['order_count']);
+        self::assertSame(
+            $expectedBeforeEndTotal + $boundaryOrders[$actualCheckOutTime],
+            (float)$persisted['total_revenue']
+        );
     }
 }

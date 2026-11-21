@@ -70,6 +70,30 @@ function reconciliation_make_order(
     return $row;
 }
 
+function reconciliation_make_member(string $id, string $storeId, array $overrides = []): array
+{
+    $row = array_merge([
+        'id' => $id,
+        'store_id' => $storeId,
+        'level_id' => null,
+        'name' => 'Synthetic Member',
+        'phone' => '13000000001',
+        'gender' => 'unknown',
+        'card_number' => 'T4CARD-' . $id,
+        'balance' => 0,
+        'points' => 0,
+        'total_consume' => 0,
+        'total_recharge' => 0,
+        'status' => 1,
+        'remark' => 'synthetic member',
+        'deleted_at' => null,
+    ], $overrides);
+
+    Db::name('busi_member')->insert($row);
+
+    return $row;
+}
+
 function reconciliation_make_recharge(
     string $id,
     string $employeeId,
@@ -101,22 +125,6 @@ function reconciliation_make_recharge(
     ], $overrides);
 
     Db::name('busi_member_recharge')->insert($row);
-    Db::name('busi_cash_flow')->insert([
-        'id' => 'cf-' . $id,
-        'store_id' => $row['store_id'],
-        'order_id' => $row['id'],
-        'order_no' => $row['order_no'],
-        'type' => 'income',
-        'category' => 'member_recharge',
-        'amount' => $amount + $giftAmount,
-        'payment_method' => $row['payment_method'],
-        'balance_before' => $row['balance_before'],
-        'balance_after' => $row['balance_after'],
-        'description' => 'synthetic member recharge',
-        'operator_id' => $row['operator_id'],
-        'operator_name' => $row['operator_name'] ?? '',
-        'created_at' => $row['created_at'],
-    ]);
 
     return $row;
 }
