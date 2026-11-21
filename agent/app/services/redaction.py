@@ -28,7 +28,7 @@ _ARGUMENT_ALLOWLIST: dict[str, frozenset[str]] = {
 _SECRET_PATTERNS = (
     re.compile(r"bearer\s+[A-Za-z0-9._~+/=-]+", re.IGNORECASE),
     re.compile(r"\bsk-[A-Za-z0-9_-]{8,}"),
-    re.compile(r"(?<!\d)1[3-9]\d{9}(?!\d)"),
+    re.compile(r"(?<!\d)(?:\+?86[\s-]?)?1[3-9]\d(?:[\s-]?\d){8}(?!\d)"),
 )
 _SENSITIVE_KEY = re.compile(
     r"(authorization|token|secret|password|passwd|api[_-]?key|phone|mobile|"
@@ -45,9 +45,19 @@ def _redact_string(value: str) -> str:
     return value
 
 
-def _redact_value(value: Any) -> Any:
+def _redact_scalar(value: Any) -> Any:
     if isinstance(value, str):
         return _redact_string(value)
+    if value is None or isinstance(value, (bool, float)):
+        return value
+    if isinstance(value, int):
+        text = str(value)
+        redacted = _redact_string(text)
+        return REDACTED if redacted != text else value
+    return _redact_string(str(value))
+
+
+def _redact_value(value: Any) -> Any:
     if isinstance(value, Mapping):
         return {
             str(key): _redact_value(item)
@@ -56,9 +66,7 @@ def _redact_value(value: Any) -> Any:
         }
     if isinstance(value, (list, tuple)):
         return [_redact_value(item) for item in value]
-    if value is None or isinstance(value, (bool, int, float)):
-        return value
-    return _redact_string(str(value))
+    return _redact_scalar(value)
 
 
 def redact_payload(value: Any) -> Any:
@@ -90,8 +98,6 @@ def sanitize_arguments(tool_name: str, arguments: Mapping[str, Any] | None) -> d
     for key, value in arguments.items():
         if key not in allowed:
             continue
-        if isinstance(value, str):
-            sanitized[key] = _redact_string(value)
-        elif value is None or isinstance(value, (bool, int, float)):
-            sanitized[key] = value
+        if value is None or isinstance(value, (str, bool, int, float)):
+            sanitized[key] = _redact_scalar(value)
     return sanitized
