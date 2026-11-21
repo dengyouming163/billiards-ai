@@ -4,7 +4,13 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
 from app.guard.identity import PermissionDenied, Principal
 
-__all__ = ["KnowledgeRunRequest", "PermissionDenied", "Principal"]
+__all__ = [
+    "KnowledgeRunRequest",
+    "PermissionDenied",
+    "Principal",
+    "ReconciliationFollowupRequest",
+    "ReconciliationRunRequest",
+]
 
 Question = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, max_length=2000)
@@ -24,3 +30,20 @@ class KnowledgeRunRequest(BaseModel):
     store_id: str = Field(min_length=1, max_length=64)
     question: Question
     scene: str | None = Field(default=None, max_length=64)
+
+
+class ReconciliationRunRequest(BaseModel):
+    """Fixed reconciliation payload: the model never chooses store or shift."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    store_id: str = Field(min_length=1, max_length=64)
+    shift_id: str = Field(min_length=1, max_length=64)
+
+
+class ReconciliationFollowupRequest(BaseModel):
+    """Explanatory follow-up: only the question, never identity or a store."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    question: Question

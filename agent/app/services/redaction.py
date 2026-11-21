@@ -36,9 +36,11 @@ _SECRET_PATTERNS = (
     re.compile(r"\bsk-[A-Za-z0-9_-]{8,}"),
     re.compile(r"(?<!\d)(?:\+?86[\s-]?)?1[3-9]\d(?:[\s-]?\d){8}(?!\d)"),
 )
+# Payment aggregates and payment method/id are reconciliation evidence, not
+# secrets. Only payment credentials are dropped by key name.
 _SENSITIVE_KEY = re.compile(
     r"(authorization|token|secret|password|passwd|api[_-]?key|phone|mobile|"
-    r"payment|card[_-]?no|id[_-]?card)",
+    r"card[_-]?no|id[_-]?card|payment[_-]?(?:token|secret|password|key|card|credential))",
     re.IGNORECASE,
 )
 
