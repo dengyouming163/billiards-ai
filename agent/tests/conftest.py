@@ -35,8 +35,16 @@ def principal(
     employee_id: str = "emp-1001",
     tenant_id: str = "tenant-1",
     store_id: str = "store-1",
+    role: str = "staff",
+    permissions: frozenset[str] = frozenset(),
 ) -> Principal:
-    return Principal(tenant_id=tenant_id, employee_id=employee_id, store_id=store_id)
+    return Principal(
+        tenant_id=tenant_id,
+        employee_id=employee_id,
+        store_id=store_id,
+        role=role,
+        permissions=permissions,
+    )
 
 
 @pytest.fixture(scope="session")

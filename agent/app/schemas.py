@@ -1,15 +1,20 @@
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.guard.identity import PermissionDenied, Principal
 
-class Principal(BaseModel):
-    """Verified caller identity.
+__all__ = ["KnowledgeRunRequest", "PermissionDenied", "Principal"]
 
-    Tenant, employee and store are resolved server-side; values supplied by the
-    browser or the model are never trusted for authorization.
+
+class KnowledgeRunRequest(BaseModel):
+    """Knowledge-scene run payload.
+
+    Identity fields are not part of the contract and must be rejected:
+    ``extra="forbid"`` turns spoofed ``tenant_id``/``employee_id``/``role``/
+    ``permissions`` into a 422 instead of silently ignoring them.
     """
 
-    model_config = ConfigDict(frozen=True)
+    model_config = ConfigDict(extra="forbid")
 
-    tenant_id: str = Field(min_length=1, max_length=64)
-    employee_id: str = Field(min_length=1, max_length=64)
     store_id: str = Field(min_length=1, max_length=64)
+    question: str = Field(min_length=1, max_length=2000)
+    scene: str | None = Field(default=None, max_length=64)
