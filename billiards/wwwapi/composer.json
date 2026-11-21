@@ -54,9 +54,6 @@
         "preferred-install": "dist",
         "allow-plugins": {
             "easywechat-composer/easywechat-composer": false
-        },
-        "audit": {
-            "ignore": ["PKSA-z3gr-8qht-p93v"]
         }
     },
     "scripts": {
@@ -68,6 +65,6 @@
     "repositories": [{
         "name": "packagist",
         "type": "composer",
-        "url": "https://mirrors.aliyun.com/composer/"
+        "url": "https://repo.packagist.org"
     }]
 }

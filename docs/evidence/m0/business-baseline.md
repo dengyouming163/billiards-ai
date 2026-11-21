@@ -4,7 +4,7 @@
 
 **状态：Task 3 已执行完成，但原业务基线不是全绿。**
 
-- PHP 与两个前端依赖均取得明确的成功安装结果；PHPUnit 9.6.19 可执行。
+- PHP 与两个前端依赖均取得明确的成功安装结果；最终修正后 PHPUnit 9.6.39 可执行，PHPUnit 高危公告不再被忽略。
 - 两轮完整合成业务冒烟均通过：共 14 个 HTTP 请求，全部为 HTTP 200 且应用响应 `code=1`，最终 harness 退出码为 0。
 - `wwwpos build:win` 通过；`wwwstore` 的 `ts-check`、`lint`、`build:win` 和 `wwwpos` 的 `ts-check`、`lint`、`test` 失败。这些失败均保留为 **pre-existing / 未修复**，本次没有修改对应业务源码来消除错误。
 - Agent 服务从未启动；最终 Compose 复查仍只有 MySQL 和 PostgreSQL 两个健康容器。
@@ -33,7 +33,7 @@
 
 ### PHP / Composer
 
-以下 Composer 命令均在 `billiards/wwwapi` 执行。`COMPOSER_PHAR` 表示本机 `C:\ProgramData\ComposerSetup\bin\composer.phar`，复现命令为 `php -d extension=gd -d extension=sodium -d extension=zip COMPOSER_PHAR <args>`。
+以下 Composer 命令均在 `billiards/wwwapi` 执行。`COMPOSER_PHAR` 表示本机 `C:\ProgramData\ComposerSetup\bin\composer.phar`，复现命令为 `php -d extension=gd -d extension=sodium -d extension=zip COMPOSER_PHAR <args>`。下表及紧随其后的安全边界是**初次搭建的历史记录**，其中 9.6.19 和有效 ignore 不代表现行状态；最终修正见“PHPUnit 高危公告复核与最终修正”。
 
 | 命令 / 阶段 | 实际退出码 | 结果 |
 | --- | ---: | --- |
@@ -45,7 +45,40 @@
 | 同一扩展环境下 `COMPOSER_PHAR validate` | 0 | 配置有效；仍有原有 autoload/psr-0 与 qiniu 精确版本警告。 |
 | `vendor\bin\phpunit --version` | 0 | `PHPUnit 9.6.19 by Sebastian Bergmann and contributors.` |
 
-安全边界：成功的 `require` 同时报告 `Found 1 ignored security vulnerability advisory affecting 1 package.` 和 `Found 89 security vulnerability advisories affecting 12 packages.`。因此本结果只证明依赖可安装，**不代表安全审计通过**。修正忽略规则是为了让既定 PHPUnit 安装命令能够执行，并未声称相关公告已修复。
+历史安全边界（初次安装时）：成功的 `require` 同时报告 `Found 1 ignored security vulnerability advisory affecting 1 package.` 和 `Found 89 security vulnerability advisories affecting 12 packages.`。当时的结果只证明依赖可安装，**不代表安全审计通过**。当时修正忽略规则只是为了让既定 PHPUnit 安装命令能够执行，并未声称相关公告已修复；该临时状态已被下述最终修正取代。
+
+### PHPUnit 高危公告复核与最终修正（2026-11-21）
+
+#### 独立核实
+
+- 当前 lock 初次为 `phpunit/phpunit 9.6.19`，`composer.json` 当时含 `config.audit.ignore = ["PKSA-z3gr-8qht-p93v"]`。
+- 在原阿里云镜像执行 `COMPOSER_PHAR show phpunit/phpunit --all`，退出码 0，可用列表最高只到 9.6.30；这仅说明镜像滞后，不能据此否定修复版存在（日志 `28-phpunit-metadata-before-review-fix.log`）。
+- 在没有项目 `composer.json` 的仓库外目录执行 `COMPOSER_PHAR show phpunit/phpunit 9.6.33 --all --no-cache --no-ansi`，Composer 明确输出 `No composer.json found ... showing available packages from packagist.org`，退出码 0。官方元数据返回版本 9.6.33、source reference `fea06253ecc0a32faf787bd31b261f56f351d049`，并要求 `php >=7.3`，因此兼容本项目 PHP 8.2.9（日志 `32-phpunit-9.6.33-official-metadata.log`）。
+- 修正前执行 `COMPOSER_PHAR audit --locked --format=json --no-ansi`，退出码 3。JSON 将目标公告列在 `ignored-advisories.phpunit/phpunit`，确认：
+  - `advisoryId`: `PKSA-z3gr-8qht-p93v`
+  - `cve`: `CVE-2026-24765`
+  - `link`: `https://github.com/sebastianbergmann/phpunit/security/advisories/GHSA-vvj3-c3rp-c85p`
+  - `affectedVersions`: `>=0,<8.5.52|>=9.0.0,<9.6.33|>=10.0.0,<10.5.62|>=11.0.0,<11.5.50|>=12.0.0,<12.5.8`
+  - `severity`: `high`
+
+因此审查意见属实：初次 9.6.19 落在受影响范围内，而有效 ignore 的确隐藏了该高危公告。
+
+#### 最小修正与源选择
+
+- 保持 `require-dev.phpunit/phpunit` 为 `^9.6`，完全删除本任务激活的 `config.audit.ignore` 配置块，没有添加其他公告忽略。
+- 使用官方 Packagist 执行 `COMPOSER_PHAR update phpunit/phpunit --with-all-dependencies --no-ansi`，退出码 0；未使用 `--ignore-platform-req`、`--no-security-blocking` 或任何新 ignore。Composer 实际选择当前兼容修复版 **9.6.39**，并更新 8 个锁包（日志 `33-composer-update-phpunit-fixed.log`）。
+- 除 PHPUnit 9.6.19 → 9.6.39 外，更新为：`myclabs/deep-copy` 1.13.3 → 1.14.0、`nikic/php-parser` 5.7.0 → 5.9.0、`phar-io/manifest` 2.0.3 → 2.0.4、`sebastian/comparator` 4.0.8 → 4.0.10、`sebastian/exporter` 4.0.8 → 4.0.9、`sebastian/recursion-context` 4.0.5 → 4.0.7，以及 `sebastian/resource-operations` 3.0.4 的同版本元数据刷新。
+- 恢复原阿里云镜像后，`validate` 曾因 content-hash 变化退出码 2；`COMPOSER_PHAR update --lock --no-install --no-ansi` 也以退出码 2 失败，明确报告镜像缺少 lock 所需的 9.6.39 和配套新版本（日志 `34-composer-validate-after-phpunit-fix.log`、`36-composer-refresh-lock-final-source.log`）。因此最终将唯一 Composer 仓库 URL 改为 `https://repo.packagist.org`，保证 lock 可解析、可重复安装。这是本次安全修正所需的可靠源变更，不是业务功能修改。
+
+#### 最终命令结果
+
+| 命令 | 最终退出码 | 实际结果 |
+| --- | ---: | --- |
+| `COMPOSER_PHAR validate --no-ansi` | 0 | manifest 与 lock 一致；只剩原有 autoload/psr-0 和 qiniu 精确版本警告，无 lock 错误（日志 `37-composer-validate-final.log`）。 |
+| `vendor\bin\phpunit --version` | 0 | `PHPUnit 9.6.39 by Sebastian Bergmann and contributors.`（日志 `39-phpunit-version-final.log`）。 |
+| `COMPOSER_PHAR audit --locked --no-ansi` | 1 | `Found 65 security vulnerability advisories affecting 12 packages.`；共 65 个 Package 行，完整输出中无 `phpunit/phpunit`、`PKSA-z3gr-8qht-p93v`、`CVE-2026-24765` 或 `GHSA-vvj3-c3rp-c85p`（日志 `38-composer-audit-locked-final.log`）。 |
+
+最终安全边界：PHPUnit 目标公告已因升级到 9.6.39 而从 locked audit 消失，且不再存在有效 ignore；其余 65 项既有公告未在本任务处理，audit 仍为非零，**不能宣称安全审计全绿**。
 
 ### 前端
 
