@@ -1,5 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fetchRunTrace, streamKnowledgeRun } from './agent';
+import {
+  fetchRunEvidence,
+  fetchRunTrace,
+  streamKnowledgeRun,
+  streamReconciliationFollowup,
+  streamReconciliationRun,
+  streamSqlAnalysis,
+} from './agent';
 
 function sseResponse(chunks: string[], status = 200): Response {
   const encoder = new TextEncoder();
@@ -112,5 +119,86 @@ describe('fetchRunTrace', () => {
         headers: expect.objectContaining({ Authorization: 'Bearer test-token' }),
       })
     );
+  });
+});
+
+describe('reconciliation client', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    vi.restoreAllMocks();
+  });
+
+  it('posts only store and shift to the reconciliation stream', async () => {
+    localStorage.setItem('token', 'test-token');
+    const fetchMock = vi.fn().mockResolvedValue(
+      sseResponse([
+        'id: run-9:1\nevent: run.started\ndata: {"run_id":"run-9"}\n\n',
+        'id: run-9:2\nevent: run.completed\ndata: {}\n\n',
+      ])
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const events = await streamReconciliationRun('store-a', 'shift-1');
+
+    expect(events.map((event) => event.type)).toEqual(['run.started', 'run.completed']);
+    const body = JSON.parse(
+      (fetchMock.mock.calls[0][1] as RequestInit).body as string
+    );
+    expect(body).toEqual({ store_id: 'store-a', shift_id: 'shift-1' });
+  });
+
+  it('sends follow-up questions without identity fields', async () => {
+    localStorage.setItem('token', 'test-token');
+    const fetchMock = vi.fn().mockResolvedValue(sseResponse(['data: {}\n\n']));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await streamReconciliationFollowup('run-9', '为什么需要复核？');
+
+    expect(fetchMock.mock.calls[0][0]).toContain(
+      '/v1/reconciliation/runs/run-9/messages/stream'
+    );
+    const body = JSON.parse(
+      (fetchMock.mock.calls[0][1] as RequestInit).body as string
+    );
+    expect(body).toEqual({ question: '为什么需要复核？' });
+  });
+
+  it('fetches evidence by kind and ids with the bearer token', async () => {
+    localStorage.setItem('token', 'test-token');
+    const payload = { kind: 'orders', items: [{ id: 'order-1' }] };
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify(payload), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchRunEvidence('run-9', 'orders', ['order-1']);
+
+    expect(result).toEqual(payload);
+    const url = String(fetchMock.mock.calls[0][0]);
+    expect(url).toContain('/v1/reconciliation/runs/run-9/evidence');
+    expect(url).toContain('kind=orders');
+    expect(url).toContain('ids=order-1');
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        headers: expect.objectContaining({ Authorization: 'Bearer test-token' }),
+      })
+    );
+  });
+
+  it('posts only store and question to the sql analysis stream', async () => {
+    localStorage.setItem('token', 'test-token');
+    const fetchMock = vi.fn().mockResolvedValue(sseResponse(['data: {}\n\n']));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await streamSqlAnalysis('store-a', '本月营业额');
+
+    const body = JSON.parse(
+      (fetchMock.mock.calls[0][1] as RequestInit).body as string
+    );
+    expect(body).toEqual({ store_id: 'store-a', question: '本月营业额' });
   });
 });

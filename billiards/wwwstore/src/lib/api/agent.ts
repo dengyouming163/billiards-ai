@@ -45,6 +45,84 @@ export interface AgentRunTrace {
   tool_calls: AgentToolCall[];
 }
 
+export interface ReconciliationMoneyValue {
+  value: string;
+  refs: string[];
+}
+
+export interface ReconciliationDifference {
+  code: string;
+  field: string;
+  legacy: string;
+  recomputed: string;
+  delta: string;
+  refs: string[];
+}
+
+export interface ReconciliationExplained {
+  code: string;
+  message: string;
+  value?: string | null;
+  refs: string[];
+}
+
+export interface ReconciliationUnknown {
+  code: string;
+  message: string;
+  attribution: string;
+  refs: string[];
+}
+
+export interface ReconciliationEvidenceRef {
+  ref_id: string;
+  rule_id: string;
+  source_endpoint: string;
+  source_ids: string[];
+}
+
+export type ReconciliationStatus = 'ok' | 'insufficient_data' | 'review_required';
+
+export interface ReconciliationReport {
+  schema_version: string;
+  status: ReconciliationStatus;
+  legacy_summary: Record<string, string | null>;
+  recomputed: Record<string, ReconciliationMoneyValue>;
+  differences: ReconciliationDifference[];
+  explained: ReconciliationExplained[];
+  unknowns: ReconciliationUnknown[];
+  evidence_refs: ReconciliationEvidenceRef[];
+  narrative?: string | null;
+  degraded?: boolean;
+}
+
+export interface ReconciliationResult {
+  scene: string;
+  shift_id?: string | null;
+  report: ReconciliationReport;
+  narrative?: Record<string, unknown> | null;
+  sop_citations?: AgentCitation[];
+  degraded?: boolean;
+  degraded_reason?: string | null;
+}
+
+export interface SqlAnalysisResult {
+  scene: string;
+  question?: string | null;
+  guarded_sql?: string | null;
+  columns: string[];
+  rows: Record<string, unknown>[];
+  row_count: number;
+  tool_call_id?: string | null;
+  explanation?: string | null;
+  degraded?: boolean;
+  degraded_reason?: string | null;
+}
+
+export interface RunEvidence {
+  kind: string;
+  items: Record<string, unknown>[];
+}
+
 export interface StreamRunOptions {
   signal?: AbortSignal;
   scene?: string;
@@ -222,4 +300,96 @@ export async function fetchRunTrace(runId: string): Promise<AgentRunTrace> {
   }
 
   return (await response.json()) as AgentRunTrace;
+}
+
+async function streamJsonRun(
+  path: string,
+  body: Record<string, unknown>,
+  onEvent?: (event: AgentStreamEvent) => void,
+  options: StreamRunOptions = {}
+): Promise<AgentStreamEvent[]> {
+  const response = await fetch(`${AGENT_BASE_URL}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'text/event-stream',
+      ...authHeaders(),
+    },
+    body: JSON.stringify(body),
+    signal: options.signal,
+  });
+
+  if (!response.ok) {
+    throw await readError(response);
+  }
+  if (!response.body) {
+    throw new Error('Agent 服务未返回事件流');
+  }
+
+  return readSseStream(response.body, onEvent);
+}
+
+export function streamReconciliationRun(
+  storeId: string,
+  shiftId: string,
+  onEvent?: (event: AgentStreamEvent) => void,
+  options: StreamRunOptions = {}
+): Promise<AgentStreamEvent[]> {
+  return streamJsonRun(
+    '/v1/reconciliation/runs/stream',
+    { store_id: storeId, shift_id: shiftId },
+    onEvent,
+    options
+  );
+}
+
+export function streamReconciliationFollowup(
+  runId: string,
+  question: string,
+  onEvent?: (event: AgentStreamEvent) => void,
+  options: StreamRunOptions = {}
+): Promise<AgentStreamEvent[]> {
+  return streamJsonRun(
+    `/v1/reconciliation/runs/${encodeURIComponent(runId)}/messages/stream`,
+    { question },
+    onEvent,
+    options
+  );
+}
+
+export function streamSqlAnalysis(
+  storeId: string,
+  question: string,
+  onEvent?: (event: AgentStreamEvent) => void,
+  options: StreamRunOptions = {}
+): Promise<AgentStreamEvent[]> {
+  return streamJsonRun(
+    '/v1/analysis/runs/stream',
+    { store_id: storeId, question },
+    onEvent,
+    options
+  );
+}
+
+export async function fetchRunEvidence(
+  runId: string,
+  kind: string,
+  ids: string[]
+): Promise<RunEvidence> {
+  const params = new URLSearchParams({ kind, ids: ids.join(',') });
+  const response = await fetch(
+    `${AGENT_BASE_URL}/v1/reconciliation/runs/${encodeURIComponent(
+      runId
+    )}/evidence?${params.toString()}`,
+    {
+      method: 'GET',
+      headers: { Accept: 'application/json', ...authHeaders() },
+    }
+  );
+
+  if (!response.ok) {
+    throw await readError(response);
+  }
+
+  return (await response.json()) as RunEvidence;
 }
