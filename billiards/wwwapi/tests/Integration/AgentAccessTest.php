@@ -283,6 +283,27 @@ final class AgentAccessTest extends AgentAccessTestCase
         self::assertSame(['*'], $data['permissions']);
     }
 
+    public function testBossCannotAccessDisabledStore(): void
+    {
+        $this->actingAs('boss-disabled', 'store-a', [], 'boss', 'merchant-a', false);
+        $this->makeStore('store-disabled-boss', 'merchant-a');
+        Db::name('busi_store')->where('id', 'store-disabled-boss')->update(['status' => 0]);
+
+        $response = $this->get('/storeapi/agent.Auth/context?store_id=store-disabled-boss');
+
+        self::assertSame(403, $response->getCode(), $response->getContent());
+    }
+
+    public function testEmployeeWithMembershipCannotAccessDisabledStore(): void
+    {
+        $this->actingAs('emp-disabled', 'store-disabled-employee', ['finance:cashflow']);
+        Db::name('busi_store')->where('id', 'store-disabled-employee')->update(['status' => 0]);
+
+        $response = $this->get('/storeapi/agent.Auth/context?store_id=store-disabled-employee');
+
+        self::assertSame(403, $response->getCode(), $response->getContent());
+    }
+
     public function testBossCannotAccessAnotherMerchantStore(): void
     {
         $this->actingAs('boss-cross', 'store-a', [], 'boss', 'merchant-a', false);

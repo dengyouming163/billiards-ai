@@ -55,6 +55,17 @@ class ReconciliationEvidenceLogic
             throw new HttpException(404, '班次不存在');
         }
 
+        if ($shift['status'] === 'checked_in'
+            || $shift['check_in_time'] === null
+            || $shift['check_out_time'] === null
+            || $shift['check_out_time'] < $shift['check_in_time']
+        ) {
+            throw new HttpResponseException(json([
+                'code' => 'invalid_shift_window',
+                'message' => 'Shift window must be complete and chronological',
+            ], 422));
+        }
+
         $checkInTime = (string)$shift['check_in_time'];
         $checkOutTime = (string)$shift['check_out_time'];
         $employeeId = (string)$shift['employee_id'];
@@ -82,8 +93,13 @@ class ReconciliationEvidenceLogic
             ->where('o.status', 'completed')
             ->where('o.end_time', '>=', $checkInTime)
             ->where('o.end_time', '<=', $checkOutTime)
-            ->where('p.paid_at', '>=', $checkInTime)
-            ->where('p.paid_at', '<=', $checkOutTime)
+            ->where(function ($query) use ($checkInTime, $checkOutTime) {
+                $query->whereNull('p.paid_at')
+                    ->whereOr(function ($query) use ($checkInTime, $checkOutTime) {
+                        $query->where('p.paid_at', '>=', $checkInTime)
+                            ->where('p.paid_at', '<=', $checkOutTime);
+                    });
+            })
             ->field($paymentFields)
             ->order('p.paid_at', 'asc')
             ->order('p.order_item_id', 'asc')
@@ -121,8 +137,31 @@ class ReconciliationEvidenceLogic
 
         [$orders, $merges, $exclusions] = self::resolveMerges($orders, $checkInTime, $checkOutTime);
         foreach ($payments as &$payment) {
-            $payment['classification'] = empty($payment['order_item_id']) ? 'order' : 'item';
+            if ($payment['order_item_id'] === null) {
+                $payment['classification'] = 'order';
+            } elseif ($payment['order_item_id'] === '') {
+                $payment['classification'] = 'unknown';
+                $exclusions[] = [
+                    'type' => 'payment_classification_excluded',
+                    'payment_id' => $payment['id'],
+                    'order_id' => $payment['order_id'],
+                    'reason' => 'invalid_order_item_id',
+                    'attribution' => 'unknown',
+                ];
+            } else {
+                $payment['classification'] = 'item';
+            }
+            $payment['paid_at_status'] = $payment['paid_at'] === null ? 'unknown' : 'known';
             $payment['merge'] = $merges[$payment['order_id']] ?? self::noMerge();
+            if ($payment['paid_at'] === null) {
+                $exclusions[] = [
+                    'type' => 'payment_time_excluded',
+                    'payment_id' => $payment['id'],
+                    'order_id' => $payment['order_id'],
+                    'reason' => 'paid_at_missing',
+                    'attribution' => 'unknown',
+                ];
+            }
         }
         unset($payment);
 

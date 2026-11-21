@@ -14,6 +14,79 @@ final class ReconciliationEvidenceTest extends AgentAccessTestCase
     private const CHECK_OUT = '2026-01-01 18:00:00';
     private const INSIDE = '2026-01-01 12:00:00';
 
+    /** @var string|false */
+    private $callerGitSha;
+
+    protected function setUp(): void
+    {
+        $this->callerGitSha = getenv('GIT_SHA');
+        putenv('GIT_SHA');
+        parent::setUp();
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->callerGitSha === false) {
+            putenv('GIT_SHA');
+        } else {
+            putenv('GIT_SHA=' . $this->callerGitSha);
+        }
+        parent::tearDown();
+    }
+
+    public function testCodeVersionUsesValidGitShaEnvironment(): void
+    {
+        putenv('GIT_SHA=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+        $this->actingAs('emp-code-version-env', 'store-a', ['finance:cashflow']);
+        $this->makeHistoricalShift('shift-code-version-env', 'emp-code-version-env', 'store-a');
+
+        $response = $this->get('/storeapi/agent.Reconciliation/shiftEvidence?shift_id=shift-code-version-env&store_id=store-a');
+
+        self::assertSame(200, $response->getCode(), $response->getContent());
+        $data = $this->responseData($response);
+        self::assertSame('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', $data['meta']['code_version']);
+    }
+
+    public function testCodeVersionRejectsInvalidGitShaWithoutApplicationVersionFallback(): void
+    {
+        putenv('GIT_SHA=not-a-full-git-sha');
+        $this->actingAs('emp-code-version-invalid', 'store-a', ['finance:cashflow']);
+        $this->makeHistoricalShift('shift-code-version-invalid', 'emp-code-version-invalid', 'store-a');
+
+        $response = $this->get('/storeapi/agent.Reconciliation/shiftEvidence?shift_id=shift-code-version-invalid&store_id=store-a');
+
+        self::assertSame(503, $response->getCode(), $response->getContent());
+        self::assertStringContainsString('GIT_SHA must be a full Git commit SHA', $response->getContent());
+        self::assertStringNotContainsString('1.9.4', $response->getContent());
+    }
+
+    public function testCodeVersionFailsExplicitlyWhenGitMetadataIsMissing(): void
+    {
+        $app = app();
+        $rootPath = new \ReflectionProperty($app, 'rootPath');
+        $rootPath->setAccessible(true);
+        $originalRootPath = $app->getRootPath();
+        $rootPath->setValue(
+            $app,
+            $originalRootPath . 'runtime' . DIRECTORY_SEPARATOR . 'missing-git' . DIRECTORY_SEPARATOR . 'wwwapi' . DIRECTORY_SEPARATOR
+        );
+
+        try {
+            $method = new \ReflectionMethod(
+                \app\storeapi\logic\agent\ReconciliationEvidenceLogic::class,
+                'resolveCodeVersion'
+            );
+            $method->setAccessible(true);
+            $method->invoke(null);
+            self::fail('Missing Git metadata must not fall back to the application version.');
+        } catch (\think\exception\HttpException $exception) {
+            self::assertSame(503, $exception->getStatusCode());
+            self::assertSame('Git metadata unavailable; configure GIT_SHA', $exception->getMessage());
+        } finally {
+            $rootPath->setValue($app, $originalRootPath);
+        }
+    }
+
     public function testHistoricalShiftReturnsCompleteRawEvidenceWithoutSensitiveFields(): void
     {
         $this->actingAs('emp-evidence', 'store-a', ['finance:cashflow']);
@@ -110,7 +183,7 @@ final class ReconciliationEvidenceTest extends AgentAccessTestCase
         self::assertSame('40.00', $data['payments'][1]['amount']);
         self::assertSame([
             'id', 'order_id', 'store_id', 'order_no', 'payment_method', 'channel', 'order_item_id',
-            'amount', 'status', 'paid_at', 'operator_id', 'created_at', 'classification', 'merge',
+            'amount', 'status', 'paid_at', 'operator_id', 'created_at', 'classification', 'paid_at_status', 'merge',
         ], array_keys($data['payments'][0]));
         self::assertArrayHasKey('merge', $data['payments'][1]);
 
@@ -133,7 +206,8 @@ final class ReconciliationEvidenceTest extends AgentAccessTestCase
         self::assertSame(['generated_at', 'limits', 'truncated', 'code_version'], array_keys($data['meta']));
         self::assertSame(1000, $data['meta']['limits']);
         self::assertFalse($data['meta']['truncated']);
-        $expectedCodeVersion = trim((string)shell_exec('git rev-parse HEAD'));
+        $projectRoot = dirname(app()->getRootPath(), 2);
+        $expectedCodeVersion = trim((string)shell_exec('git -C ' . escapeshellarg($projectRoot) . ' rev-parse HEAD'));
         self::assertMatchesRegularExpression('/^[0-9a-f]{40}$/', $expectedCodeVersion);
         self::assertSame($expectedCodeVersion, $data['meta']['code_version']);
         self::assertMatchesRegularExpression('/^[0-9a-f]{40}$/', $data['meta']['code_version']);
@@ -152,6 +226,176 @@ final class ReconciliationEvidenceTest extends AgentAccessTestCase
         $response = $this->get('/storeapi/agent.Reconciliation/shiftEvidence?shift_id=shift-foreign&store_id=store-a');
 
         self::assertSame(404, $response->getCode());
+    }
+
+    /**
+     * @dataProvider invalidShiftWindowProvider
+     */
+    public function testInvalidShiftWindowIsRejected(
+        string $case,
+        string $status,
+        ?string $checkInTime,
+        ?string $checkOutTime
+    ): void {
+        $employeeId = 'emp-invalid-window-' . $case;
+        $shiftId = 'shift-iw-' . $case;
+        $this->actingAs($employeeId, 'store-a', ['finance:cashflow']);
+        $this->makeShift($shiftId, $employeeId, 'store-a', $status, [
+            'work_date' => '2026-01-01',
+            'check_in_time' => $checkInTime,
+            'check_out_time' => $checkOutTime,
+        ]);
+
+        $response = $this->get('/storeapi/agent.Reconciliation/shiftEvidence?shift_id=' . $shiftId . '&store_id=store-a');
+
+        self::assertSame(422, $response->getCode(), $case . ': ' . $response->getContent());
+        $data = $this->responseData($response);
+        self::assertSame('invalid_shift_window', $data['code']);
+        self::assertArrayNotHasKey('schema_version', $data);
+    }
+
+    public static function invalidShiftWindowProvider(): array
+    {
+        return [
+            'missing check-in' => ['missing-check-in', 'checked_out', null, self::CHECK_OUT],
+            'ongoing shift' => ['ongoing', 'checked_in', self::CHECK_IN, null],
+            'reversed window' => ['reversed', 'checked_out', self::CHECK_OUT, self::CHECK_IN],
+        ];
+    }
+
+    public function testMissingPaidAtIsRetainedAsUnknownWithoutCreatedAtSubstitution(): void
+    {
+        $this->actingAs('emp-payment-window', 'store-a', ['finance:cashflow']);
+        $this->makeHistoricalShift('shift-payment-window', 'emp-payment-window', 'store-a');
+        $this->makeOrder('order-payment-window', 'emp-payment-window', 'store-a', self::INSIDE);
+        $this->makePayment('payment-null-paid', 'order-payment-window', null, [
+            'store_id' => 'store-a',
+            'status' => 'paid',
+            'paid_at' => null,
+            'created_at' => '2025-12-31 23:59:59',
+        ]);
+        $this->makePayment('payment-null-success', 'order-payment-window', null, [
+            'store_id' => 'store-a',
+            'status' => 'success',
+            'paid_at' => null,
+            'created_at' => '2025-12-31 23:59:58',
+        ]);
+        $this->makePayment('payment-boundary-start', 'order-payment-window', null, [
+            'store_id' => 'store-a',
+            'paid_at' => self::CHECK_IN,
+        ]);
+        $this->makePayment('payment-boundary-end', 'order-payment-window', null, [
+            'store_id' => 'store-a',
+            'status' => 'success',
+            'paid_at' => self::CHECK_OUT,
+        ]);
+        $this->makePayment('payment-before', 'order-payment-window', null, [
+            'store_id' => 'store-a',
+            'paid_at' => '2026-01-01 08:59:59',
+        ]);
+        $this->makePayment('payment-after', 'order-payment-window', null, [
+            'store_id' => 'store-a',
+            'paid_at' => '2026-01-01 18:00:01',
+        ]);
+
+        $this->makeOrder('order-payment-outside', 'emp-payment-window', 'store-a', '2026-01-01 18:00:01');
+        $this->makePayment('payment-null-outside', 'order-payment-outside', null, [
+            'store_id' => 'store-a',
+            'paid_at' => null,
+        ]);
+        $this->makePayment('payment-null-orphan', 'order-not-present', null, [
+            'store_id' => 'store-a',
+            'paid_at' => null,
+        ]);
+        $this->makeStore('store-b');
+        $this->makeOrder('order-payment-other-store', 'emp-payment-window', 'store-b', self::INSIDE);
+        $this->makePayment('payment-null-other-store', 'order-payment-other-store', null, [
+            'store_id' => 'store-b',
+            'paid_at' => null,
+        ]);
+
+        $response = $this->get('/storeapi/agent.Reconciliation/shiftEvidence?shift_id=shift-payment-window&store_id=store-a');
+
+        self::assertSame(200, $response->getCode(), $response->getContent());
+        $data = $this->responseData($response);
+        $payments = array_column($data['payments'], null, 'id');
+        $paymentIds = array_keys($payments);
+        sort($paymentIds);
+        self::assertSame([
+            'payment-boundary-end',
+            'payment-boundary-start',
+            'payment-null-paid',
+            'payment-null-success',
+        ], $paymentIds);
+        self::assertNull($payments['payment-null-paid']['paid_at']);
+        self::assertSame('2025-12-31 23:59:59', $payments['payment-null-paid']['created_at']);
+        self::assertSame('unknown', $payments['payment-null-paid']['paid_at_status']);
+        self::assertSame('unknown', $payments['payment-null-success']['paid_at_status']);
+        self::assertSame('known', $payments['payment-boundary-start']['paid_at_status']);
+        self::assertSame('known', $payments['payment-boundary-end']['paid_at_status']);
+
+        $timeExclusions = [];
+        foreach ($data['exclusions'] as $exclusion) {
+            if ($exclusion['type'] === 'payment_time_excluded') {
+                $timeExclusions[$exclusion['payment_id']] = $exclusion;
+            }
+        }
+        self::assertSame([
+            'type' => 'payment_time_excluded',
+            'payment_id' => 'payment-null-paid',
+            'order_id' => 'order-payment-window',
+            'reason' => 'paid_at_missing',
+            'attribution' => 'unknown',
+        ], $timeExclusions['payment-null-paid'] ?? null);
+        self::assertSame([
+            'type' => 'payment_time_excluded',
+            'payment_id' => 'payment-null-success',
+            'order_id' => 'order-payment-window',
+            'reason' => 'paid_at_missing',
+            'attribution' => 'unknown',
+        ], $timeExclusions['payment-null-success'] ?? null);
+        self::assertCount(2, $timeExclusions);
+    }
+
+    public function testEmptyOrderItemIdIsUnknownInsteadOfOrderLevel(): void
+    {
+        $this->actingAs('emp-item-classification', 'store-a', ['finance:cashflow']);
+        $this->makeHistoricalShift('shift-item-classification', 'emp-item-classification', 'store-a');
+        $this->makeOrder('order-item-classification', 'emp-item-classification', 'store-a', self::INSIDE);
+        $this->makeOrderItem('item-valid', 'order-item-classification');
+        $this->makePayment('payment-order-null', 'order-item-classification', null, [
+            'store_id' => 'store-a',
+            'paid_at' => self::INSIDE,
+        ]);
+        $this->makePayment('payment-item-valid', 'order-item-classification', 'item-valid', [
+            'store_id' => 'store-a',
+            'paid_at' => self::INSIDE,
+        ]);
+        $this->makePayment('payment-item-empty', 'order-item-classification', '', [
+            'store_id' => 'store-a',
+            'paid_at' => self::INSIDE,
+        ]);
+
+        $response = $this->get('/storeapi/agent.Reconciliation/shiftEvidence?shift_id=shift-item-classification&store_id=store-a');
+
+        self::assertSame(200, $response->getCode(), $response->getContent());
+        $data = $this->responseData($response);
+        $payments = array_column($data['payments'], null, 'id');
+        self::assertSame('order', $payments['payment-order-null']['classification']);
+        self::assertSame('item', $payments['payment-item-valid']['classification']);
+        self::assertSame('unknown', $payments['payment-item-empty']['classification']);
+
+        $classificationExclusions = array_values(array_filter(
+            $data['exclusions'],
+            static fn(array $exclusion): bool => $exclusion['type'] === 'payment_classification_excluded'
+        ));
+        self::assertSame([[
+            'type' => 'payment_classification_excluded',
+            'payment_id' => 'payment-item-empty',
+            'order_id' => 'order-item-classification',
+            'reason' => 'invalid_order_item_id',
+            'attribution' => 'unknown',
+        ]], $classificationExclusions);
     }
 
     public function testMergeEvidenceAllowsOnlySameShiftAttributionAndMarksCrossDomainUnknown(): void

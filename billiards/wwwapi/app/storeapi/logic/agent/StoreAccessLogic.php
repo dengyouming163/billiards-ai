@@ -16,7 +16,7 @@ class StoreAccessLogic
         $employee = $employeeId !== '' ? Employee::find($employeeId) : null;
         $store = $storeId !== '' ? Store::find($storeId) : null;
 
-        if (!$employee || !$store || $employee->status !== 1) {
+        if (!$employee || !$store || $employee->status !== 1 || $store->status !== 1) {
             throw new HttpException(403, '无权访问该门店');
         }
 
