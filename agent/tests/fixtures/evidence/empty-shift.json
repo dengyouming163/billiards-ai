@@ -1,0 +1,24 @@
+{
+  "schema_version": "reconciliation-evidence/v1",
+  "shift": {
+    "id": "shift-empty",
+    "store_id": "store-a",
+    "employee_id": "emp-a",
+    "status": "checked_out",
+    "check_in_time": "2026-01-01 09:00:00",
+    "check_out_time": "2026-01-01 18:00:00",
+    "snapshot": {},
+    "snapshot_fields_present": []
+  },
+  "orders": [],
+  "payments": [],
+  "recharges": [],
+  "cash_flows": [],
+  "exclusions": [],
+  "meta": {
+    "generated_at": "2026-01-01T18:05:00Z",
+    "limits": 1000,
+    "truncated": false,
+    "code_version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

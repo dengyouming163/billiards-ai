@@ -1,0 +1,2362 @@
+{
+  "cases": [
+    {
+      "id": "normal-single-channel",
+      "evidence_file": "normal-single-channel.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "ok",
+        "legacy_summary": {
+          "total_revenue": "80.00",
+          "order_count": "1",
+          "cash_paid": "80.00",
+          "wechat_paid": "0.00",
+          "balance_paid": "0.00",
+          "table_revenue": "50.00",
+          "product_revenue": "30.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "0.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "1",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "50.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "30.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-single"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-single"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-1"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-1"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "normal-mixed-channels",
+      "evidence_file": "normal-mixed-channels.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "ok",
+        "legacy_summary": {
+          "total_revenue": "100.00",
+          "order_count": "1",
+          "cash_paid": "20.00",
+          "wechat_paid": "30.00",
+          "balance_paid": "15.00",
+          "table_revenue": "60.00",
+          "product_revenue": "30.00",
+          "assistant_revenue": "10.00",
+          "open_table_count": "0",
+          "recharge_total": "0.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "1",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "20.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "30.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "25.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "10.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "15.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "60.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "30.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "10.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-mixed"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-mixed"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-mixed"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-mixed-cash",
+              "payment-mixed-wechat"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "order-channel-payment-mismatch",
+      "evidence_file": "order-channel-payment-mismatch.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "review_required",
+        "legacy_summary": {
+          "total_revenue": "100.00",
+          "order_count": "1",
+          "cash_paid": "100.00",
+          "wechat_paid": "0.00",
+          "balance_paid": "0.00",
+          "table_revenue": "60.00",
+          "product_revenue": "40.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "0.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "1",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "60.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "40.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "90.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [
+          {
+            "code": "ORDER_CHANNEL_PAYMENT_MISMATCH",
+            "field": "order_payment_total",
+            "legacy": "100.00",
+            "recomputed": "90.00",
+            "delta": "-10.00",
+            "refs": [
+              "ref-orders",
+              "ref-order-payments"
+            ]
+          }
+        ],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-payment-mismatch"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-payment-mismatch"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-mismatch"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-mismatch"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "item-payment-not-double-counted",
+      "evidence_file": "item-payment-not-double-counted.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "ok",
+        "legacy_summary": {
+          "total_revenue": "40.00",
+          "order_count": "1",
+          "cash_paid": "40.00",
+          "wechat_paid": "0.00",
+          "balance_paid": "0.00",
+          "table_revenue": "0.00",
+          "product_revenue": "40.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "0.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "40.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "1",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "40.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "40.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "40.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [
+          {
+            "code": "ITEM_PAYMENTS_NOT_DOUBLE_COUNTED",
+            "message": "item-level payments are recorded separately and are not added to order-level payment totals",
+            "value": "40.00",
+            "refs": [
+              "ref-item-payments"
+            ]
+          }
+        ],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-item"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-item"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-item"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-item-order"
+            ]
+          },
+          {
+            "ref_id": "ref-item-payments",
+            "rule_id": "item_payment_excluded",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-item-line"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "merge-parent-child-same-shift",
+      "evidence_file": "merge-parent-child-same-shift.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "ok",
+        "legacy_summary": {
+          "total_revenue": "140.00",
+          "order_count": "2",
+          "cash_paid": "100.00",
+          "wechat_paid": "0.00",
+          "balance_paid": "0.00",
+          "table_revenue": "60.00",
+          "product_revenue": "80.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "0.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "140.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "2",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "60.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [
+          {
+            "code": "MERGE_SAME_SHIFT",
+            "message": "order order-merge-child is merged into parent order-merge-parent within the same shift and is counted like the legacy summary",
+            "value": "40.00",
+            "refs": [
+              "ref-order-merge-same:order-merge-child"
+            ]
+          }
+        ],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-merge-same"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-merge-same"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-merge-child",
+              "order-merge-parent"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-merge-parent"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-order-merge-same:order-merge-child",
+            "rule_id": "merge_same_shift",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-merge-child"
+            ]
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "recharge-gift",
+      "evidence_file": "recharge-gift.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "ok",
+        "legacy_summary": {
+          "total_revenue": "0.00",
+          "order_count": "0",
+          "cash_paid": "0.00",
+          "wechat_paid": "0.00",
+          "balance_paid": "0.00",
+          "table_revenue": "0.00",
+          "product_revenue": "0.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "200.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "0",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "200.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "20.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "220.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [
+          {
+            "code": "RECHARGE_GIFT",
+            "message": "recharge gift amounts are bonus balance and are not external cash receipts",
+            "value": "20.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          }
+        ],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-gift"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-gift"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "recharge-gift"
+            ]
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "cash-flow-gift"
+            ]
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "cash-flow-without-gift",
+      "evidence_file": "cash-flow-without-gift.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "review_required",
+        "legacy_summary": {
+          "total_revenue": "0.00",
+          "order_count": "0",
+          "cash_paid": "0.00",
+          "wechat_paid": "0.00",
+          "balance_paid": "0.00",
+          "table_revenue": "0.00",
+          "product_revenue": "0.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "200.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "0",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "200.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "20.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "200.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [
+          {
+            "code": "CASH_FLOW_MISMATCH",
+            "field": "recharge_cash_flow_total",
+            "legacy": "220.00",
+            "recomputed": "200.00",
+            "delta": "-20.00",
+            "refs": [
+              "ref-recharges",
+              "ref-recharge-cashflow"
+            ]
+          }
+        ],
+        "explained": [
+          {
+            "code": "RECHARGE_GIFT",
+            "message": "recharge gift amounts are bonus balance and are not external cash receipts",
+            "value": "20.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          }
+        ],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-cash-flow-gift-missing"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-cash-flow-gift-missing"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "recharge-no-gift-flow"
+            ]
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "cash-flow-no-gift"
+            ]
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "historical-snapshot-partial",
+      "evidence_file": "historical-snapshot-partial.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "review_required",
+        "legacy_summary": {
+          "total_revenue": "80.00",
+          "order_count": "1",
+          "cash_paid": "80.00",
+          "wechat_paid": null,
+          "balance_paid": null,
+          "table_revenue": "50.00",
+          "product_revenue": "30.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": null,
+          "recharge_total": null
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "1",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "50.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "30.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "SNAPSHOT_FIELD_MISSING",
+            "message": "snapshot field wechat_paid is missing",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "SNAPSHOT_FIELD_MISSING",
+            "message": "snapshot field balance_paid is missing",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "SNAPSHOT_FIELD_MISSING",
+            "message": "snapshot field open_table_count is missing",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "SNAPSHOT_FIELD_MISSING",
+            "message": "snapshot field recharge_total is missing",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-partial-snapshot"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-partial-snapshot"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-partial"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-partial"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "handover-no-snapshot",
+      "evidence_file": "handover-no-snapshot.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "insufficient_data",
+        "legacy_summary": {
+          "total_revenue": null,
+          "order_count": null,
+          "cash_paid": null,
+          "wechat_paid": null,
+          "balance_paid": null,
+          "table_revenue": null,
+          "product_revenue": null,
+          "assistant_revenue": null,
+          "open_table_count": null,
+          "recharge_total": null
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "1",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "50.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "30.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "80.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "NO_LEGACY_SNAPSHOT",
+            "message": "the shift has no frozen financial snapshot (handover does not write one); only recomputed values are available",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-handover"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-handover"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-handover"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-handover"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "empty-shift",
+      "evidence_file": "empty-shift.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "insufficient_data",
+        "legacy_summary": {
+          "total_revenue": null,
+          "order_count": null,
+          "cash_paid": null,
+          "wechat_paid": null,
+          "balance_paid": null,
+          "table_revenue": null,
+          "product_revenue": null,
+          "assistant_revenue": null,
+          "open_table_count": null,
+          "recharge_total": null
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "0",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "NO_EVIDENCE",
+            "message": "the shift has no orders, payments, recharges or cash flows",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-empty"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "boundary-times",
+      "evidence_file": "boundary-times.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "ok",
+        "legacy_summary": {
+          "total_revenue": "50.00",
+          "order_count": "2",
+          "cash_paid": "50.00",
+          "wechat_paid": "0.00",
+          "balance_paid": "0.00",
+          "table_revenue": "20.00",
+          "product_revenue": "30.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "0.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "50.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "2",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "50.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "20.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "30.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "50.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-boundary"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-boundary"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-boundary-end",
+              "order-boundary-start"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-boundary-end",
+              "payment-boundary-start"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "external-confirmation-required",
+      "evidence_file": "external-confirmation-required.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "ok",
+        "legacy_summary": {
+          "total_revenue": "100.00",
+          "order_count": "1",
+          "cash_paid": "0.00",
+          "wechat_paid": "100.00",
+          "balance_paid": "0.00",
+          "table_revenue": "70.00",
+          "product_revenue": "30.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "0.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "1",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "70.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "30.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "100.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-external"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-external"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-external"
+            ]
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "payment-external"
+            ]
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    },
+    {
+      "id": "merge-attribution-unknown",
+      "evidence_file": "merge-attribution-unknown.json",
+      "expected": {
+        "schema_version": "reconciliation-report/v1",
+        "status": "review_required",
+        "legacy_summary": {
+          "total_revenue": "40.00",
+          "order_count": "1",
+          "cash_paid": "40.00",
+          "wechat_paid": "0.00",
+          "balance_paid": "0.00",
+          "table_revenue": "0.00",
+          "product_revenue": "40.00",
+          "assistant_revenue": "0.00",
+          "open_table_count": "0",
+          "recharge_total": "0.00"
+        },
+        "recomputed": {
+          "order_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "order_count": {
+            "value": "0",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "cash_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "wechat_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "alipay_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "card_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "balance_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "table_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "product_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "assistant_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-orders"
+            ]
+          },
+          "recharge_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "recharge_gift_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharges"
+            ]
+          },
+          "order_payment_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-order-payments"
+            ]
+          },
+          "recharge_cash_flow_total": {
+            "value": "0.00",
+            "refs": [
+              "ref-recharge-cashflow"
+            ]
+          }
+        },
+        "differences": [],
+        "explained": [],
+        "unknowns": [
+          {
+            "code": "OPEN_TABLE_COUNT_NOT_IN_EVIDENCE",
+            "message": "open table count cannot be recomputed because the evidence payload only contains completed orders",
+            "attribution": "unknown",
+            "refs": [
+              "ref-snapshot"
+            ]
+          },
+          {
+            "code": "MERGE_ATTRIBUTION_UNKNOWN",
+            "message": "order order-merge-unknown merged to order-merge-remote but attribution is cross_operator_merge",
+            "attribution": "unknown",
+            "refs": [
+              "ref-order-merge:order-merge-unknown"
+            ]
+          },
+          {
+            "code": "EXTERNAL_CONFIRMATION_REQUIRED",
+            "message": "cash count and external channel statements are required before financial sign-off; system totals alone are not proof of settlement",
+            "attribution": "unknown",
+            "refs": [
+              "ref-shift"
+            ]
+          }
+        ],
+        "evidence_refs": [
+          {
+            "ref_id": "ref-shift",
+            "rule_id": "shift_scope",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-merge-unknown"
+            ]
+          },
+          {
+            "ref_id": "ref-snapshot",
+            "rule_id": "legacy_snapshot",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "shift-merge-unknown"
+            ]
+          },
+          {
+            "ref_id": "ref-orders",
+            "rule_id": "order_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-order-payments",
+            "rule_id": "order_payment_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharges",
+            "rule_id": "recharge_totals",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-recharge-cashflow",
+            "rule_id": "recharge_cash_flow",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": []
+          },
+          {
+            "ref_id": "ref-order-merge:order-merge-unknown",
+            "rule_id": "merge_attribution",
+            "source_endpoint": "/storeapi/agent.Reconciliation/shiftEvidence",
+            "source_ids": [
+              "order-merge-unknown"
+            ]
+          }
+        ],
+        "narrative": null,
+        "degraded": false
+      }
+    }
+  ]
+}

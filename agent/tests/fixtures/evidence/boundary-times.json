@@ -1,0 +1,118 @@
+{
+  "schema_version": "reconciliation-evidence/v1",
+  "shift": {
+    "id": "shift-boundary",
+    "store_id": "store-a",
+    "employee_id": "emp-a",
+    "status": "checked_out",
+    "check_in_time": "2026-01-01 09:00:00",
+    "check_out_time": "2026-01-01 18:00:00",
+    "snapshot": {
+      "total_revenue": "50.00",
+      "order_count": 2,
+      "cash_paid": "50.00",
+      "wechat_paid": "0.00",
+      "balance_paid": "0.00",
+      "table_revenue": "20.00",
+      "product_revenue": "30.00",
+      "assistant_revenue": "0.00",
+      "open_table_count": 0,
+      "recharge_total": "0.00"
+    },
+    "snapshot_fields_present": [
+      "total_revenue",
+      "order_count",
+      "cash_paid",
+      "wechat_paid",
+      "balance_paid",
+      "table_revenue",
+      "product_revenue",
+      "assistant_revenue",
+      "open_table_count",
+      "recharge_total"
+    ]
+  },
+  "orders": [
+    {
+      "id": "order-boundary-start",
+      "store_id": "store-a",
+      "order_no": "SYN-BOUNDARY-START",
+      "status": "completed",
+      "end_time": "2026-01-01 09:00:00",
+      "final_amount": "30.00",
+      "cash_paid": "30.00",
+      "wechat_paid": "0.00",
+      "alipay_paid": "0.00",
+      "card_paid": "0.00",
+      "balance_paid": "0.00",
+      "table_fee": "20.00",
+      "product_fee": "10.00",
+      "assistant_fee": "0.00",
+      "merged_to_order_id": null,
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    },
+    {
+      "id": "order-boundary-end",
+      "store_id": "store-a",
+      "order_no": "SYN-BOUNDARY-END",
+      "status": "completed",
+      "end_time": "2026-01-01 18:00:00",
+      "final_amount": "20.00",
+      "cash_paid": "20.00",
+      "wechat_paid": "0.00",
+      "alipay_paid": "0.00",
+      "card_paid": "0.00",
+      "balance_paid": "0.00",
+      "table_fee": "0.00",
+      "product_fee": "20.00",
+      "assistant_fee": "0.00",
+      "merged_to_order_id": null,
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    }
+  ],
+  "payments": [
+    {
+      "id": "payment-boundary-start",
+      "order_id": "order-boundary-start",
+      "amount": "30.00",
+      "order_item_id": null,
+      "classification": "order",
+      "paid_at_status": "known",
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    },
+    {
+      "id": "payment-boundary-end",
+      "order_id": "order-boundary-end",
+      "amount": "20.00",
+      "order_item_id": null,
+      "classification": "order",
+      "paid_at_status": "known",
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    }
+  ],
+  "recharges": [],
+  "cash_flows": [],
+  "exclusions": [],
+  "meta": {
+    "generated_at": "2026-01-01T18:05:00Z",
+    "limits": 1000,
+    "truncated": false,
+    "code_version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

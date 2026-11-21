@@ -1,0 +1,96 @@
+{
+  "schema_version": "reconciliation-evidence/v1",
+  "shift": {
+    "id": "shift-item",
+    "store_id": "store-a",
+    "employee_id": "emp-a",
+    "status": "checked_out",
+    "check_in_time": "2026-01-01 09:00:00",
+    "check_out_time": "2026-01-01 18:00:00",
+    "snapshot": {
+      "total_revenue": "40.00",
+      "order_count": 1,
+      "cash_paid": "40.00",
+      "wechat_paid": "0.00",
+      "balance_paid": "0.00",
+      "table_revenue": "0.00",
+      "product_revenue": "40.00",
+      "assistant_revenue": "0.00",
+      "open_table_count": 0,
+      "recharge_total": "0.00"
+    },
+    "snapshot_fields_present": [
+      "total_revenue",
+      "order_count",
+      "cash_paid",
+      "wechat_paid",
+      "balance_paid",
+      "table_revenue",
+      "product_revenue",
+      "assistant_revenue",
+      "open_table_count",
+      "recharge_total"
+    ]
+  },
+  "orders": [
+    {
+      "id": "order-item",
+      "store_id": "store-a",
+      "order_no": "SYN-ITEM",
+      "status": "completed",
+      "end_time": "2026-01-01 14:30:00",
+      "final_amount": "40.00",
+      "cash_paid": "40.00",
+      "wechat_paid": "0.00",
+      "alipay_paid": "0.00",
+      "card_paid": "0.00",
+      "balance_paid": "0.00",
+      "table_fee": "0.00",
+      "product_fee": "40.00",
+      "assistant_fee": "0.00",
+      "merged_to_order_id": null,
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    }
+  ],
+  "payments": [
+    {
+      "id": "payment-item-order",
+      "order_id": "order-item",
+      "amount": "40.00",
+      "order_item_id": null,
+      "classification": "order",
+      "paid_at_status": "known",
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    },
+    {
+      "id": "payment-item-line",
+      "order_id": "order-item",
+      "amount": "40.00",
+      "order_item_id": "item-1",
+      "classification": "item",
+      "paid_at_status": "known",
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    }
+  ],
+  "recharges": [],
+  "cash_flows": [],
+  "exclusions": [],
+  "meta": {
+    "generated_at": "2026-01-01T18:05:00Z",
+    "limits": 1000,
+    "truncated": false,
+    "code_version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

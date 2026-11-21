@@ -1,0 +1,61 @@
+{
+  "schema_version": "reconciliation-evidence/v1",
+  "shift": {
+    "id": "shift-handover",
+    "store_id": "store-a",
+    "employee_id": "emp-a",
+    "status": "checked_out",
+    "check_in_time": "2026-01-01 09:00:00",
+    "check_out_time": "2026-01-01 18:00:00",
+    "snapshot": {},
+    "snapshot_fields_present": []
+  },
+  "orders": [
+    {
+      "id": "order-handover",
+      "store_id": "store-a",
+      "order_no": "SYN-HANDOVER",
+      "status": "completed",
+      "end_time": "2026-01-01 12:00:00",
+      "final_amount": "80.00",
+      "cash_paid": "80.00",
+      "wechat_paid": "0.00",
+      "alipay_paid": "0.00",
+      "card_paid": "0.00",
+      "balance_paid": "0.00",
+      "table_fee": "50.00",
+      "product_fee": "30.00",
+      "assistant_fee": "0.00",
+      "merged_to_order_id": null,
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    }
+  ],
+  "payments": [
+    {
+      "id": "payment-handover",
+      "order_id": "order-handover",
+      "amount": "80.00",
+      "order_item_id": null,
+      "classification": "order",
+      "paid_at_status": "known",
+      "merge": {
+        "state": "none",
+        "parent_order_id": null,
+        "attribution": "self"
+      }
+    }
+  ],
+  "recharges": [],
+  "cash_flows": [],
+  "exclusions": [],
+  "meta": {
+    "generated_at": "2026-01-01T18:05:00Z",
+    "limits": 1000,
+    "truncated": false,
+    "code_version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}
