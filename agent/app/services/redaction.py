@@ -29,6 +29,9 @@ _TEXT_KEYS = frozenset({"question", "answer", "final_response", "delta"})
 
 _ARGUMENT_ALLOWLIST: dict[str, frozenset[str]] = {
     "rag_search": frozenset({"query", "kb_id", "top_k", "audience"}),
+    "shift_evidence": frozenset({"shift_id"}),
+    # The guarded SQL is stored with literals already replaced by the caller.
+    "sql_execute": frozenset({"store_id", "sql"}),
 }
 
 _SECRET_PATTERNS = (

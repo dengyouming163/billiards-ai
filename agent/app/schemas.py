@@ -10,6 +10,7 @@ __all__ = [
     "Principal",
     "ReconciliationFollowupRequest",
     "ReconciliationRunRequest",
+    "SqlAnalysisRunRequest",
 ]
 
 Question = Annotated[
@@ -46,4 +47,13 @@ class ReconciliationFollowupRequest(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    question: Question
+
+
+class SqlAnalysisRunRequest(BaseModel):
+    """Open-ended analysis input; the model cannot choose account or limits."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    store_id: str = Field(min_length=1, max_length=64)
     question: Question

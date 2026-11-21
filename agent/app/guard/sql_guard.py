@@ -135,6 +135,12 @@ FORBIDDEN_NODES = (
 )
 
 _RESULT_ALIAS = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,63}$")
+_STRING_LITERAL = re.compile(r"'(?:[^'\\]|\\.)*'|\"(?:[^\"\\]|\\.)*\"")
+
+
+def redact_sql_literals(sql: str) -> str:
+    """Replace string literals before writing SQL into trace/log output."""
+    return _STRING_LITERAL.sub("'?'", sql)
 
 
 class SqlRejected(Exception):

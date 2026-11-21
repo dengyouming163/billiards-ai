@@ -6,15 +6,17 @@ from fastapi import FastAPI
 from langgraph.checkpoint.postgres import PostgresSaver
 from starlette.concurrency import run_in_threadpool
 
-from app.api import health, reconciliation, runs
+from app.api import analysis, health, reconciliation, runs
 from app.config import settings
 from app.db import SessionLocal, engine
 from app.graphs.knowledge import build_knowledge_graph
 from app.graphs.reconciliation import build_reconciliation_graph
+from app.graphs.sql_analysis import build_sql_analysis_graph
 from app.guard.identity import BilliardsIdentityClient
 from app.models.llm import LangChainModelAdapter
 from app.services.reconciliation_runner import ReconciliationRunner
 from app.services.runner import KnowledgeRunner
+from app.services.sql_analysis_runner import SqlAnalysisRunner
 from app.tools.billiards import shift_evidence
 from app.tools.rag import search_sop
 from app.tools.registry import default_registry
@@ -53,6 +55,8 @@ def create_app(
     reconciliation_graph: Any = None,
     reconciliation_evidence_loader: Any = None,
     reconciliation_sop_search: Any = None,
+    analysis_graph: Any = None,
+    analysis_executor: Any = None,
     langgraph_database_url: Any = _UNSET,
     sse_ping_interval: float = 15.0,
 ) -> FastAPI:
@@ -119,10 +123,18 @@ def create_app(
         sop_search=reconciliation_sop_search or search_sop,
         sse_ping_interval=sse_ping_interval,
     )
+    app.state.analysis_runner = SqlAnalysisRunner(
+        session_factory=resolved_session_factory,
+        graph=analysis_graph or build_sql_analysis_graph(),
+        model_adapter=resolved_model,
+        sql_executor=analysis_executor,
+        sse_ping_interval=sse_ping_interval,
+    )
 
     app.include_router(health.router)
     app.include_router(runs.router)
     app.include_router(reconciliation.router)
+    app.include_router(analysis.router)
     return app
 
 
