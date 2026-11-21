@@ -7,11 +7,14 @@
          failOnRisky="true"
          failOnWarning="true">
     <testsuites>
-        <testsuite name="Logic Tests">
-            <directory>tests/logic</directory>
+        <testsuite name="Characterization">
+            <directory>tests/Characterization</directory>
         </testsuite>
-        <testsuite name="Controller Tests">
-            <directory>tests/controller</directory>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
     <coverage>
@@ -24,6 +27,12 @@
         </exclude>
     </coverage>
     <php>
-        <env name="APP_ENV" value="testing"/>
+        <env name="APP_ENV" value="testing" force="true"/>
+        <env name="DATABASE_HOSTNAME" value="127.0.0.1" force="true"/>
+        <env name="DATABASE_HOSTPORT" value="13306" force="true"/>
+        <env name="DATABASE_DATABASE" value="billiards_test" force="true"/>
+        <env name="DATABASE_USERNAME" value="billiards" force="true"/>
+        <env name="DATABASE_PASSWORD" value="test-billiards-only" force="true"/>
+        <env name="DATABASE_PREFIX" value="bi_" force="true"/>
     </php>
 </phpunit>
