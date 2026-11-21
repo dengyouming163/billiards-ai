@@ -39,7 +39,8 @@
     },
     "require-dev": {
         "symfony/var-dumper": ">=4.2",
-        "topthink/think-trace":"^1.0"
+        "topthink/think-trace":"^1.0",
+        "phpunit/phpunit": "^9.6"
     },
     "autoload": {
         "psr-4": {
@@ -55,7 +56,7 @@
             "easywechat-composer/easywechat-composer": false
         },
         "audit": {
-            "ignore": ["[PKSA-z3gr-8qht-p93v]"]
+            "ignore": ["PKSA-z3gr-8qht-p93v"]
         }
     },
     "scripts": {
