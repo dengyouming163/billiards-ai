@@ -113,6 +113,23 @@ Route::post('storeapi/pos.Shift/checkOut',  '\app\storeapi\controller\pos\ShiftC
 Route::get('storeapi/pos.Order/pendingDeliveries',          '\app\storeapi\controller\pos\OrderController@pendingDeliveries')->middleware($P);
 Route::get('storeapi/pos.Order/pendingAssistantBookings',   '\app\storeapi\controller\pos\OrderController@pendingAssistantBookings')->middleware($P);
 
+// Agent 只读接口：沿用员工认证，仅将旧认证响应局部适配为 HTTP 401
+$agentLogin = \app\storeapi\http\middleware\LoginMiddleware::class;
+$agentHttpStatus = static function ($request, \Closure $next) {
+    $response = $next($request);
+    $payload = json_decode($response->getContent(), true);
+    if ($response->getCode() === 200 && is_array($payload) && in_array($payload['code'] ?? null, [2001, 2002], true)) {
+        return json($payload, 401);
+    }
+    return $response;
+};
+Route::get('storeapi/agent.Auth/context', '\app\storeapi\controller\agent\AuthController@context')
+    ->middleware($agentHttpStatus)
+    ->middleware($agentLogin);
+Route::get('storeapi/agent.Reconciliation/shiftEvidence', '\app\storeapi\controller\agent\ReconciliationController@shiftEvidence')
+    ->middleware($agentHttpStatus)
+    ->middleware($agentLogin);
+
 // 公开API - 图片上传到微信
 Route::rule('storeapi/setting.WechatApplyment/uploadImage', 'storeapi.setting.WechatApplyment/uploadImage', 'POST');
 
