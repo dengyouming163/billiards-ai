@@ -1,22 +1,90 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any
 
 from fastapi import FastAPI
+from langgraph.checkpoint.postgres import PostgresSaver
 
-from app.db import engine
+from app.api import health, runs
+from app.config import settings
+from app.db import SessionLocal, engine
+from app.graphs.knowledge import build_knowledge_graph
+from app.guard.identity import BilliardsIdentityClient
+from app.models.llm import LangChainModelAdapter
+from app.services.runner import KnowledgeRunner
+from app.tools.registry import default_registry
+
+_UNSET = object()
 
 
-@asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    try:
-        yield
-    finally:
-        engine.dispose()
+def create_app(
+    *,
+    identity_client: Any = None,
+    model_adapter: Any = None,
+    registry: Any = None,
+    session_factory: Any = None,
+    checkpointer: Any = None,
+    knowledge_graph: Any = None,
+    langgraph_database_url: Any = _UNSET,
+) -> FastAPI:
+    """Build the agent app; every dependency can be injected for tests."""
+    owns_engine = session_factory is None
+    resolved_session_factory = session_factory or SessionLocal
+    resolved_url = (
+        settings.langgraph_database_url
+        if langgraph_database_url is _UNSET
+        else langgraph_database_url
+    )
+    if knowledge_graph is None and checkpointer is not None:
+        knowledge_graph = build_knowledge_graph(checkpointer)
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        try:
+            if (
+                app.state.checkpointer is None
+                and app.state.knowledge_graph is None
+                and app.state.langgraph_database_url
+            ):
+                with PostgresSaver.from_conn_string(app.state.langgraph_database_url) as saver:
+                    saver.setup()
+                    app.state.checkpointer = saver
+                    app.state.knowledge_graph = build_knowledge_graph(saver)
+                    app.state.runner.graph = app.state.knowledge_graph
+                    yield
+            else:
+                yield
+        finally:
+            if app.state.owns_engine:
+                engine.dispose()
+
+    app = FastAPI(
+        title="Billiards AI Agent",
+        version="0.1.0",
+        lifespan=lifespan,
+    )
+
+    resolved_model = model_adapter or LangChainModelAdapter()
+    resolved_registry = registry or default_registry()
+
+    app.state.identity_client = identity_client or BilliardsIdentityClient()
+    app.state.model_adapter = resolved_model
+    app.state.registry = resolved_registry
+    app.state.session_factory = resolved_session_factory
+    app.state.checkpointer = checkpointer
+    app.state.knowledge_graph = knowledge_graph
+    app.state.langgraph_database_url = resolved_url
+    app.state.owns_engine = owns_engine
+    app.state.runner = KnowledgeRunner(
+        session_factory=resolved_session_factory,
+        graph=knowledge_graph,
+        model_adapter=resolved_model,
+        registry=resolved_registry,
+    )
+
+    app.include_router(health.router)
+    app.include_router(runs.router)
+    return app
 
 
-app = FastAPI(title="Billiards AI Agent", version="0.1.0", lifespan=lifespan)
-
-
-@app.get("/health/live")
-def live() -> dict[str, str]:
-    return {"status": "ok"}
+app = create_app()

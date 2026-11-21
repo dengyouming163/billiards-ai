@@ -79,6 +79,17 @@ class RunRepository:
         )
         return self._session.execute(stmt).scalar_one_or_none()
 
+    def get_store_id(self, run_id: uuid.UUID) -> str | None:
+        """Resolve only the store context of a run.
+
+        Identity resolution needs the store before the caller is known. This
+        value is never used for authorization: ownership is checked afterwards
+        with ``get(run_id, principal)``.
+        """
+        return self._session.execute(
+            select(AgentRun.store_id).where(AgentRun.id == run_id)
+        ).scalar_one_or_none()
+
     def list(self, principal: Principal, *, limit: int = 50, offset: int = 0) -> list[AgentRun]:
         stmt = (
             select(AgentRun)
