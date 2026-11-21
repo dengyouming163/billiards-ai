@@ -28,7 +28,28 @@ class ShiftEvidenceError(Exception):
         self.status_code = status_code
 
 
-def _error_for_status(status_code: int) -> ShiftEvidenceError:
+_EVIDENCE_REJECTION_CODES = {
+    "invalid_evidence_context": "SHIFT_EVIDENCE_REJECTED",
+    "invalid_shift_window": "SHIFT_WINDOW_INVALID",
+    "evidence_too_large": "SHIFT_EVIDENCE_TOO_LARGE",
+}
+
+
+def _rejection_code_for(response: httpx.Response) -> str:
+    """Map the PHP 422 body ``code`` to a stable agent error code."""
+    try:
+        payload = response.json()
+    except ValueError:
+        return "SHIFT_EVIDENCE_REJECTED"
+    if isinstance(payload, dict):
+        code = payload.get("code")
+        if isinstance(code, str):
+            return _EVIDENCE_REJECTION_CODES.get(code, "SHIFT_EVIDENCE_REJECTED")
+    return "SHIFT_EVIDENCE_REJECTED"
+
+
+def _error_for_status(response: httpx.Response) -> ShiftEvidenceError:
+    status_code = response.status_code
     if status_code == 401:
         return ShiftEvidenceError(
             "shift evidence is not authenticated",
@@ -44,6 +65,12 @@ def _error_for_status(status_code: int) -> ShiftEvidenceError:
     if status_code == 404:
         return ShiftEvidenceError(
             "shift evidence not found", code="SHIFT_EVIDENCE_NOT_FOUND", status_code=404
+        )
+    if status_code == 422:
+        return ShiftEvidenceError(
+            "shift evidence request was rejected",
+            code=_rejection_code_for(response),
+            status_code=422,
         )
     return ShiftEvidenceError("shift evidence service unavailable")
 
@@ -77,7 +104,7 @@ async def shift_evidence(
         raise ShiftEvidenceError("shift evidence service unavailable") from None
 
     if response.status_code != 200:
-        raise _error_for_status(response.status_code)
+        raise _error_for_status(response)
 
     try:
         payload = response.json()

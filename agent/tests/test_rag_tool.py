@@ -119,6 +119,7 @@ async def test_rag_transport_failure_maps_to_rag_unavailable():
         await search_sop("交班", _principal())
 
     assert excinfo.value.code == "RAG_UNAVAILABLE"
+    assert excinfo.value.__cause__ is None
 
 
 @respx.mock
@@ -131,3 +132,20 @@ async def test_malformed_rag_response_is_unavailable_not_empty():
         await search_sop("交班", _principal())
 
     assert excinfo.value.code == "RAG_UNAVAILABLE"
+    assert excinfo.value.__cause__ is None
+
+
+@respx.mock
+async def test_hits_are_truncated_to_server_side_top_k():
+    hits = [
+        {"chunk_id": f"chunk-{index}", "doc_id": "doc-1", "text": "交班制度"}
+        for index in range(8)
+    ]
+    respx.post("http://rag.test/v1/kbs/billiards-sop-test/search").mock(
+        return_value=httpx.Response(200, json={"hits": hits})
+    )
+
+    result = await search_sop("交班", _principal())
+
+    assert len(result) == 5
+    assert [hit.chunk_id for hit in result] == [f"chunk-{index}" for index in range(5)]

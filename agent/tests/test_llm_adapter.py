@@ -15,11 +15,17 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
 from openai import APITimeoutError, BadRequestError, InternalServerError, RateLimitError
-from pydantic import Field
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from app.config import settings
-from app.models.llm import AssistantMessage, LangChainModelAdapter, ModelInvocationError
-from app.tools.registry import default_registry
+from app.guard.identity import Principal
+from app.models.llm import (
+    AssistantMessage,
+    LangChainModelAdapter,
+    ModelInvocationError,
+    build_chat_model,
+)
+from app.tools.registry import ToolRegistry, ToolSpec, UnknownTool, default_registry
 
 VALID_TOOL_CALL = {
     "name": "rag_search",
@@ -179,14 +185,50 @@ async def test_usage_model_and_latency_are_recorded():
     assert result.tool_calls[0].arguments == {"query": "交班差异怎么核对"}
 
 
-async def test_api_key_is_never_logged(monkeypatch, caplog):
+def test_build_chat_model_reads_model_and_key_from_settings(monkeypatch):
     monkeypatch.setattr(settings, "model_api_key", "sk-super-secret-key")
+    monkeypatch.setattr(settings, "model_name", "test-tool-model")
+    monkeypatch.setattr(settings, "model_base_url", "http://model.test/v1")
+
+    model = build_chat_model()
+
+    assert model.model_name == "test-tool-model"
+    assert model.openai_api_base == "http://model.test/v1"
+    assert model.openai_api_key.get_secret_value() == "sk-super-secret-key"
+
+
+def test_build_chat_model_requires_server_side_key(monkeypatch):
+    monkeypatch.setattr(settings, "model_api_key", None)
+
+    with pytest.raises(ModelInvocationError) as excinfo:
+        build_chat_model()
+
+    assert excinfo.value.code == "MODEL_NOT_CONFIGURED"
+
+
+async def test_failure_path_does_not_chain_or_log_api_key(monkeypatch, caplog):
+    secret = "sk-super-secret-key"
+    monkeypatch.setattr(settings, "model_api_key", secret)
     caplog.set_level(logging.DEBUG)
 
-    result = await _complete(ScriptedChatModel(responses=[_tool_message()]))
+    def authorized_timeout() -> APITimeoutError:
+        request = httpx.Request(
+            "POST",
+            "http://model.test/v1/chat/completions",
+            headers={"Authorization": f"Bearer {secret}"},
+        )
+        return APITimeoutError(request=request)
 
-    assert "sk-super-secret-key" not in caplog.text
-    assert "sk-super-secret-key" not in repr(result)
+    model = ScriptedChatModel(responses=[authorized_timeout(), authorized_timeout()])
+
+    with pytest.raises(ModelInvocationError) as excinfo:
+        await _complete(model)
+
+    assert excinfo.value.code == "MODEL_UNAVAILABLE"
+    assert excinfo.value.__cause__ is None
+    assert secret not in str(excinfo.value)
+    assert secret not in caplog.text
+    assert model.calls == 2
 
 
 def test_registry_only_exposes_read_only_m0_tools():
@@ -195,3 +237,58 @@ def test_registry_only_exposes_read_only_m0_tools():
     assert registry.names() == ("rag_search", "shift_evidence")
     for write_tool in ("reconcile_shift", "sql_analysis", "write_report"):
         assert write_tool not in registry.names()
+
+
+def _principal() -> Principal:
+    return Principal(
+        employee_id="emp-a",
+        tenant_id="merchant-a",
+        store_id="store-a",
+        role="finance",
+        permissions=frozenset({"finance:cashflow"}),
+    )
+
+
+async def test_registry_rejects_unknown_tool():
+    with pytest.raises(UnknownTool) as excinfo:
+        await default_registry().call("sql_analysis", {}, _principal())
+
+    assert excinfo.value.name == "sql_analysis"
+
+
+@pytest.mark.parametrize(
+    ("name", "arguments"),
+    [
+        ("rag_search", {"query": "交班", "store_id": "store-b"}),
+        ("shift_evidence", {"shift_id": "shift-a", "tenant_id": "merchant-b"}),
+    ],
+)
+async def test_registry_rejects_extra_tool_arguments(name, arguments):
+    with pytest.raises(ValidationError):
+        await default_registry().call(name, arguments, _principal())
+
+
+class EchoArgs(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    value: int
+
+
+async def test_registry_binds_verified_principal_to_langchain_tools():
+    seen: list[Principal] = []
+
+    async def handler(principal: Principal, *, value: int) -> dict[str, int]:
+        seen.append(principal)
+        return {"value": value}
+
+    registry = ToolRegistry(
+        [ToolSpec(name="echo", description="echo", args_schema=EchoArgs, handler=handler)]
+    )
+    principal = _principal()
+
+    tools = registry.langchain_tools(principal)
+    result = await tools[0].ainvoke({"value": 3})
+
+    assert [tool.name for tool in tools] == ["echo"]
+    assert result == {"value": 3}
+    assert seen == [principal]

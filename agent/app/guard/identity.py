@@ -133,9 +133,19 @@ class BilliardsIdentityClient:
             raise _identity_error_for_status(response.status_code)
 
         try:
-            context = _IdentityContext.model_validate(response.json())
-        except (ValueError, TypeError) as exc:
-            raise IdentityError("identity service returned an invalid payload") from exc
+            payload = response.json()
+            context = _IdentityContext.model_validate(payload)
+        except (ValueError, TypeError):
+            # Do not chain: ValidationError echoes the raw PHP payload, which
+            # may contain the bearer token or employee contact details.
+            raise IdentityError("identity service returned an invalid payload") from None
+
+        if context.store_id != store_id:
+            raise IdentityError(
+                "identity store does not match the requested store",
+                code="IDENTITY_MISMATCH",
+                status_code=403,
+            )
 
         return Principal(
             tenant_id=context.merchant_id,

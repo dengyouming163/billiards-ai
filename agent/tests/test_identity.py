@@ -165,6 +165,7 @@ async def test_identity_client_maps_unauthorized_without_leaking_token(monkeypat
 
     assert excinfo.value.status_code == 401
     assert excinfo.value.code == "UNAUTHENTICATED"
+    assert excinfo.value.__cause__ is None
     assert "super-secret-token" not in str(excinfo.value)
 
 
@@ -179,3 +180,69 @@ async def test_identity_client_rejects_unavailable_service(monkeypatch):
         await BilliardsIdentityClient().resolve("token-abc", "store-a")
 
     assert excinfo.value.code == "IDENTITY_UNAVAILABLE"
+    assert excinfo.value.__cause__ is None
+
+
+@respx.mock
+async def test_identity_client_invalid_payload_does_not_chain_php_response(monkeypatch):
+    monkeypatch.setattr(settings, "billiards_base_url", "http://php.test/storeapi")
+    respx.get("http://php.test/storeapi/agent.Auth/context").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "employee_id": "emp-a",
+                "merchant_id": "merchant-a",
+                "store_id": "store-a",
+                "role": "finance",
+                "permissions": "finance:cashflow",
+                "phone": "13800138000",
+            },
+        )
+    )
+
+    with pytest.raises(IdentityError) as excinfo:
+        await BilliardsIdentityClient().resolve("super-secret-token", "store-a")
+
+    assert excinfo.value.code == "IDENTITY_UNAVAILABLE"
+    assert excinfo.value.__cause__ is None
+    assert "13800138000" not in str(excinfo.value)
+    assert "super-secret-token" not in str(excinfo.value)
+
+
+@respx.mock
+async def test_identity_client_rejects_store_mismatch(monkeypatch):
+    monkeypatch.setattr(settings, "billiards_base_url", "http://php.test/storeapi")
+    respx.get("http://php.test/storeapi/agent.Auth/context").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "employee_id": "emp-a",
+                "merchant_id": "merchant-a",
+                "store_id": "store-b",
+                "role": "finance",
+                "permissions": ["finance:cashflow"],
+            },
+        )
+    )
+
+    with pytest.raises(IdentityError) as excinfo:
+        await BilliardsIdentityClient().resolve("token-abc", "store-a")
+
+    assert excinfo.value.code == "IDENTITY_MISMATCH"
+    assert excinfo.value.status_code == 403
+    assert excinfo.value.__cause__ is None
+
+
+def test_request_rejects_blank_question(client):
+    response = client.post(
+        "/v1/knowledge/runs/stream",
+        json={"store_id": "store-a", "question": "   "},
+    )
+
+    assert response.status_code == 422
+
+
+def test_request_strips_question_whitespace():
+    payload = KnowledgeRunRequest(store_id="store-a", question="  今天交班差异  ")
+
+    assert payload.question == "今天交班差异"

@@ -59,14 +59,16 @@ async def search_sop(
         else:
             async with httpx.AsyncClient(timeout=settings.rag_timeout_seconds) as http:
                 response = await http.post(url, json=payload, headers=headers)
-    except httpx.HTTPError as exc:
-        raise RagUnavailable("rag service unavailable") from exc
+    except httpx.HTTPError:
+        raise RagUnavailable("rag service unavailable") from None
 
     if response.status_code != 200:
         raise RagUnavailable(f"rag service returned status {response.status_code}")
 
     try:
         hits = response.json()["hits"]
-        return [RagHit.model_validate(hit) for hit in hits]
-    except (KeyError, TypeError, ValueError, ValidationError) as exc:
-        raise RagUnavailable("rag service returned an invalid payload") from exc
+        if not isinstance(hits, list):
+            raise TypeError("hits must be a list")
+        return [RagHit.model_validate(hit) for hit in hits[:RAG_TOP_K]]
+    except (KeyError, TypeError, ValueError, ValidationError):
+        raise RagUnavailable("rag service returned an invalid payload") from None

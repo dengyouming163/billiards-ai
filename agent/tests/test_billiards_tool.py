@@ -129,3 +129,53 @@ async def test_php_unauthenticated_response_is_mapped():
 
     assert excinfo.value.code == "SHIFT_EVIDENCE_UNAUTHENTICATED"
     assert excinfo.value.status_code == 401
+
+
+@pytest.mark.parametrize(
+    ("php_code", "expected_code"),
+    [
+        ("invalid_evidence_context", "SHIFT_EVIDENCE_REJECTED"),
+        ("invalid_shift_window", "SHIFT_WINDOW_INVALID"),
+        ("evidence_too_large", "SHIFT_EVIDENCE_TOO_LARGE"),
+        ("unexpected_code", "SHIFT_EVIDENCE_REJECTED"),
+    ],
+)
+@respx.mock
+async def test_php_422_maps_to_explicit_error_code(php_code, expected_code):
+    respx.get("http://php.test/storeapi/agent.Reconciliation/shiftEvidence").mock(
+        return_value=httpx.Response(422, json={"code": php_code, "message": "rejected"})
+    )
+
+    with access_token_scope("token-abc"), pytest.raises(ShiftEvidenceError) as excinfo:
+        await shift_evidence("shift-a", _principal())
+
+    assert excinfo.value.status_code == 422
+    assert excinfo.value.code == expected_code
+
+
+@respx.mock
+async def test_php_422_without_json_body_is_rejected():
+    respx.get("http://php.test/storeapi/agent.Reconciliation/shiftEvidence").mock(
+        return_value=httpx.Response(422, text="not-json")
+    )
+
+    with access_token_scope("token-abc"), pytest.raises(ShiftEvidenceError) as excinfo:
+        await shift_evidence("shift-a", _principal())
+
+    assert excinfo.value.status_code == 422
+    assert excinfo.value.code == "SHIFT_EVIDENCE_REJECTED"
+
+
+@respx.mock
+async def test_php_422_message_is_not_leaked():
+    respx.get("http://php.test/storeapi/agent.Reconciliation/shiftEvidence").mock(
+        return_value=httpx.Response(
+            422,
+            json={"code": "invalid_shift_window", "message": "employee 13800138000"},
+        )
+    )
+
+    with access_token_scope("token-abc"), pytest.raises(ShiftEvidenceError) as excinfo:
+        await shift_evidence("shift-a", _principal())
+
+    assert "13800138000" not in str(excinfo.value)

@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from langchain_core.tools import BaseTool, StructuredTool
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.guard.identity import Principal
 from app.tools.billiards import shift_evidence
@@ -24,10 +24,14 @@ class UnknownTool(Exception):
 
 
 class RagSearchArgs(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     query: str = Field(min_length=1, max_length=2000)
 
 
 class ShiftEvidenceArgs(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     shift_id: str = Field(min_length=1, max_length=64)
 
 

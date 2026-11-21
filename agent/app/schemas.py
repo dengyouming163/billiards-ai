@@ -1,8 +1,14 @@
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Annotated
+
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
 from app.guard.identity import PermissionDenied, Principal
 
 __all__ = ["KnowledgeRunRequest", "PermissionDenied", "Principal"]
+
+Question = Annotated[
+    str, StringConstraints(strip_whitespace=True, min_length=1, max_length=2000)
+]
 
 
 class KnowledgeRunRequest(BaseModel):
@@ -16,5 +22,5 @@ class KnowledgeRunRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     store_id: str = Field(min_length=1, max_length=64)
-    question: str = Field(min_length=1, max_length=2000)
+    question: Question
     scene: str | None = Field(default=None, max_length=64)
