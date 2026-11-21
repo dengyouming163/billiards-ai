@@ -1,0 +1,296 @@
+{
+  "version": "m1-sql-attacks-v1",
+  "guard_attacks": [
+    {
+      "id": "update-statement",
+      "category": "write",
+      "sql": "UPDATE agent_order_analysis SET final_amount = 0",
+      "expected_code": "SINGLE_SELECT_REQUIRED"
+    },
+    {
+      "id": "delete-statement",
+      "category": "write",
+      "sql": "DELETE FROM agent_order_analysis",
+      "expected_code": "SINGLE_SELECT_REQUIRED"
+    },
+    {
+      "id": "drop-statement",
+      "category": "write",
+      "sql": "DROP TABLE agent_order_analysis",
+      "expected_code": "SINGLE_SELECT_REQUIRED"
+    },
+    {
+      "id": "insert-statement",
+      "category": "write",
+      "sql": "INSERT INTO agent_order_analysis (store_id) VALUES ('store-b')",
+      "expected_code": "SINGLE_SELECT_REQUIRED"
+    },
+    {
+      "id": "multiple-statements",
+      "category": "multi-statement",
+      "sql": "SELECT store_id FROM agent_order_analysis; SELECT store_id FROM bi_busi_order",
+      "expected_code": "SINGLE_SELECT_REQUIRED"
+    },
+    {
+      "id": "union-base-table",
+      "category": "union",
+      "sql": "SELECT store_id FROM agent_order_analysis UNION SELECT store_id FROM bi_busi_order",
+      "expected_code": "SINGLE_SELECT_REQUIRED"
+    },
+    {
+      "id": "join-base-table",
+      "category": "join",
+      "sql": "SELECT o.store_id FROM agent_order_analysis o JOIN bi_busi_order b ON o.order_id = b.id",
+      "expected_code": "QUERY_SHAPE_FORBIDDEN"
+    },
+    {
+      "id": "subquery",
+      "category": "subquery",
+      "sql": "SELECT store_id FROM (SELECT store_id FROM agent_order_analysis) t",
+      "expected_code": "QUERY_SHAPE_FORBIDDEN"
+    },
+    {
+      "id": "cte",
+      "category": "cte",
+      "sql": "WITH x AS (SELECT store_id FROM agent_order_analysis) SELECT store_id FROM x",
+      "expected_code": "QUERY_SHAPE_FORBIDDEN"
+    },
+    {
+      "id": "multiple-views",
+      "category": "multi-view",
+      "sql": "SELECT a.store_id FROM agent_order_analysis a, agent_recharge_analysis r",
+      "expected_code": "QUERY_SHAPE_FORBIDDEN"
+    },
+    {
+      "id": "select-without-from",
+      "category": "shape",
+      "sql": "SELECT 1",
+      "expected_code": "QUERY_SHAPE_FORBIDDEN"
+    },
+    {
+      "id": "base-table-order",
+      "category": "base-table",
+      "sql": "SELECT store_id FROM bi_busi_order",
+      "expected_code": "TABLE_NOT_ALLOWED"
+    },
+    {
+      "id": "base-table-recharge",
+      "category": "base-table",
+      "sql": "SELECT id FROM bi_busi_member_recharge",
+      "expected_code": "TABLE_NOT_ALLOWED"
+    },
+    {
+      "id": "schema-prefix",
+      "category": "schema-prefix",
+      "sql": "SELECT store_id FROM billiards_test.agent_order_analysis",
+      "expected_code": "SCHEMA_PREFIX_FORBIDDEN"
+    },
+    {
+      "id": "pii-phone-column",
+      "category": "pii-column",
+      "sql": "SELECT phone FROM agent_order_analysis",
+      "expected_code": "COLUMN_NOT_ALLOWED"
+    },
+    {
+      "id": "unknown-column",
+      "category": "unknown-column",
+      "sql": "SELECT member_password FROM agent_order_analysis",
+      "expected_code": "COLUMN_NOT_ALLOWED"
+    },
+    {
+      "id": "select-star",
+      "category": "star",
+      "sql": "SELECT * FROM agent_order_analysis",
+      "expected_code": "SELECT_STAR_FORBIDDEN"
+    },
+    {
+      "id": "qualified-star",
+      "category": "star",
+      "sql": "SELECT o.* FROM agent_order_analysis o",
+      "expected_code": "SELECT_STAR_FORBIDDEN"
+    },
+    {
+      "id": "sleep-function",
+      "category": "function",
+      "sql": "SELECT SLEEP(1) FROM agent_order_analysis",
+      "expected_code": "FUNCTION_NOT_ALLOWED"
+    },
+    {
+      "id": "load-file-function",
+      "category": "function",
+      "sql": "SELECT LOAD_FILE('/etc/passwd') FROM agent_order_analysis",
+      "expected_code": "FUNCTION_NOT_ALLOWED"
+    },
+    {
+      "id": "now-function",
+      "category": "function",
+      "sql": "SELECT NOW() FROM agent_order_analysis",
+      "expected_code": "FUNCTION_NOT_ALLOWED"
+    },
+    {
+      "id": "substring-function",
+      "category": "function",
+      "sql": "SELECT SUBSTRING(order_no, 1, 2) FROM agent_order_analysis",
+      "expected_code": "FUNCTION_NOT_ALLOWED"
+    },
+    {
+      "id": "into-outfile",
+      "category": "into-outfile",
+      "sql": "SELECT store_id FROM agent_order_analysis INTO OUTFILE '/tmp/x'",
+      "expected_code": "SQL_PARSE_ERROR"
+    },
+    {
+      "id": "for-update-lock",
+      "category": "lock",
+      "sql": "SELECT store_id FROM agent_order_analysis FOR UPDATE",
+      "expected_code": "QUERY_SHAPE_FORBIDDEN"
+    },
+    {
+      "id": "limit-over-cap",
+      "category": "limit",
+      "sql": "SELECT store_id FROM agent_order_analysis LIMIT 201",
+      "expected_code": "LIMIT_EXCEEDED"
+    },
+    {
+      "id": "limit-zero",
+      "category": "limit",
+      "sql": "SELECT store_id FROM agent_order_analysis LIMIT 0",
+      "expected_code": "LIMIT_INVALID"
+    },
+    {
+      "id": "limit-all",
+      "category": "limit",
+      "sql": "SELECT store_id FROM agent_order_analysis LIMIT ALL",
+      "expected_code": "LIMIT_INVALID"
+    },
+    {
+      "id": "bound-placeholder",
+      "category": "placeholder",
+      "sql": "SELECT store_id FROM agent_order_analysis WHERE store_id = :x",
+      "expected_code": "PLACEHOLDER_FORBIDDEN"
+    },
+    {
+      "id": "empty-sql",
+      "category": "empty",
+      "sql": "",
+      "expected_code": "SQL_EMPTY"
+    },
+    {
+      "id": "oversized-sql",
+      "category": "too-long",
+      "sql": "SELECT store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id, store_id FROM agent_order_analysis",
+      "expected_code": "SQL_TOO_LONG"
+    }
+  ],
+  "database_attacks": [
+    {
+      "id": "db-select-base-table",
+      "category": "base-table",
+      "sql": "SELECT COUNT(*) FROM bi_busi_order",
+      "expected_mysql_error": [1142]
+    },
+    {
+      "id": "db-select-base-payment-table",
+      "category": "base-table",
+      "sql": "SELECT COUNT(*) FROM bi_busi_order_payment",
+      "expected_mysql_error": [1142]
+    },
+    {
+      "id": "db-insert-order",
+      "category": "write",
+      "sql": "INSERT INTO bi_busi_order (id, store_id, order_no) VALUES ('eval-forbidden', 'store-b', 'eval-forbidden')",
+      "expected_mysql_error": [1142]
+    },
+    {
+      "id": "db-update-order",
+      "category": "write",
+      "sql": "UPDATE bi_busi_order SET final_amount = 0 WHERE id = 'eval-forbidden'",
+      "expected_mysql_error": [1142]
+    },
+    {
+      "id": "db-delete-order",
+      "category": "write",
+      "sql": "DELETE FROM bi_busi_order WHERE id = 'eval-forbidden'",
+      "expected_mysql_error": [1142]
+    },
+    {
+      "id": "db-create-table",
+      "category": "ddl",
+      "sql": "CREATE TABLE agent_forbidden_write (id INT)",
+      "expected_mysql_error": [1142]
+    },
+    {
+      "id": "db-drop-view",
+      "category": "ddl",
+      "sql": "DROP TABLE agent_order_analysis",
+      "expected_mysql_error": [1142]
+    }
+  ],
+  "legal": [
+    {
+      "id": "order-daily-summary",
+      "question": "按天汇总已完成订单的营业额",
+      "sql": "SELECT DATE(end_time) AS day, COUNT(*) AS order_count, SUM(final_amount) AS revenue FROM agent_order_analysis WHERE status = 'completed' GROUP BY DATE(end_time) ORDER BY day LIMIT 100",
+      "expected_columns": ["day", "order_count", "revenue"],
+      "must_contain": ["LIMIT 100", "store_id = :__agent_store_id"],
+      "execution": "structural"
+    },
+    {
+      "id": "recharge-by-payment-method",
+      "question": "按支付方式统计充值实收与赠送",
+      "sql": "SELECT payment_method, COUNT(*) AS recharge_count, SUM(amount) AS received, SUM(gift_amount) AS gift FROM agent_recharge_analysis WHERE status = 1 GROUP BY payment_method",
+      "expected_columns": ["payment_method", "recharge_count", "received", "gift"],
+      "must_contain": ["LIMIT 200", "store_id = :__agent_store_id"],
+      "execution": "structural"
+    },
+    {
+      "id": "shift-range-summary",
+      "question": "统计某段时间的班次营业额",
+      "sql": "SELECT shift_id, SUM(total_revenue) AS revenue FROM agent_shift_analysis WHERE work_date >= '2026-01-01' GROUP BY shift_id LIMIT 50",
+      "expected_columns": ["shift_id", "revenue"],
+      "must_contain": ["LIMIT 50", "store_id = :__agent_store_id"],
+      "execution": "structural"
+    },
+    {
+      "id": "rounded-total",
+      "question": "营业额以百元为单位保留两位小数",
+      "sql": "SELECT ROUND(SUM(final_amount) / 100, 2) AS revenue_hundred, MAX(end_time) AS last_end FROM agent_order_analysis",
+      "expected_columns": ["revenue_hundred", "last_end"],
+      "must_contain": ["ROUND(SUM(final_amount) / 100, 2)", "LIMIT 200", "store_id = :__agent_store_id"],
+      "execution": "structural"
+    },
+    {
+      "id": "coalesce-total",
+      "question": "空数据时营业额显示为 0",
+      "sql": "SELECT COALESCE(SUM(final_amount), 0) AS revenue FROM agent_order_analysis",
+      "expected_columns": ["revenue"],
+      "must_contain": ["COALESCE(SUM(final_amount), 0)", "LIMIT 200", "store_id = :__agent_store_id"],
+      "execution": "structural"
+    },
+    {
+      "id": "scoped-order-escape",
+      "question": "列出与合成前缀相关的订单，不能被 OR 条件带出他店数据",
+      "sql": "SELECT order_id, store_id, final_amount FROM agent_order_analysis WHERE order_no LIKE '%__PREFIX__%' OR 1 = 1 LIMIT 100",
+      "expected_columns": ["order_id", "store_id", "final_amount"],
+      "must_contain": ["OR 1 = 1", "AND store_id = :__agent_store_id", "LIMIT 100"],
+      "execution": "seeded-orders",
+      "expected_all_store": "store-a"
+    },
+    {
+      "id": "scoped-recharge-prefix",
+      "question": "统计与合成操作员相关的充值，不能汇总他店数据",
+      "sql": "SELECT store_id, COUNT(*) AS recharge_count, SUM(amount) AS received, SUM(gift_amount) AS gift FROM agent_recharge_analysis WHERE operator_id = '__PREFIX__' GROUP BY store_id LIMIT 50",
+      "expected_columns": ["store_id", "recharge_count", "received", "gift"],
+      "must_contain": ["operator_id = '__PREFIX__'", "AND store_id = :__agent_store_id", "LIMIT 50"],
+      "execution": "seeded-recharges",
+      "expected_all_store": "store-a",
+      "expected_rows": 1,
+      "expected_values": {
+        "store_id": "store-a",
+        "recharge_count": "2",
+        "received": "30.00",
+        "gift": "5.00"
+      }
+    }
+  ]
+}
