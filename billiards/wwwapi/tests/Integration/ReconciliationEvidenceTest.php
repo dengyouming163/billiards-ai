@@ -133,7 +133,10 @@ final class ReconciliationEvidenceTest extends AgentAccessTestCase
         self::assertSame(['generated_at', 'limits', 'truncated', 'code_version'], array_keys($data['meta']));
         self::assertSame(1000, $data['meta']['limits']);
         self::assertFalse($data['meta']['truncated']);
-        self::assertNotSame('', $data['meta']['code_version']);
+        $expectedCodeVersion = trim((string)shell_exec('git rev-parse HEAD'));
+        self::assertMatchesRegularExpression('/^[0-9a-f]{40}$/', $expectedCodeVersion);
+        self::assertSame($expectedCodeVersion, $data['meta']['code_version']);
+        self::assertMatchesRegularExpression('/^[0-9a-f]{40}$/', $data['meta']['code_version']);
         self::assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/', $data['meta']['generated_at']);
 
         $this->assertSensitiveFieldsAbsent($data);

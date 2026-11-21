@@ -7,7 +7,6 @@ namespace app\storeapi\logic\agent;
 use stdClass;
 use think\exception\HttpException;
 use think\exception\HttpResponseException;
-use think\facade\Config;
 use think\facade\Db;
 
 class ReconciliationEvidenceLogic
@@ -157,9 +156,33 @@ class ReconciliationEvidenceLogic
                 'generated_at' => gmdate('Y-m-d\TH:i:s\Z'),
                 'limits' => self::ROW_LIMIT,
                 'truncated' => false,
-                'code_version' => (string)Config::get('project.version', 'unknown'),
+                'code_version' => self::resolveCodeVersion(),
             ],
         ];
+    }
+
+    private static function resolveCodeVersion(): string
+    {
+        $gitSha = getenv('GIT_SHA');
+        if ($gitSha !== false) {
+            $gitSha = strtolower(trim($gitSha));
+            if (preg_match('/^[0-9a-f]{40}$/', $gitSha)) {
+                return $gitSha;
+            }
+            throw new HttpException(503, 'GIT_SHA must be a full Git commit SHA');
+        }
+
+        $projectRoot = dirname(app()->getRootPath(), 2);
+        if (!is_dir($projectRoot . DIRECTORY_SEPARATOR . '.git') && !is_file($projectRoot . DIRECTORY_SEPARATOR . '.git')) {
+            throw new HttpException(503, 'Git metadata unavailable; configure GIT_SHA');
+        }
+
+        $gitSha = strtolower(trim((string)shell_exec('git -C ' . escapeshellarg($projectRoot) . ' rev-parse HEAD')));
+        if (!preg_match('/^[0-9a-f]{40}$/', $gitSha)) {
+            throw new HttpException(503, 'Unable to resolve Git HEAD; configure GIT_SHA');
+        }
+
+        return $gitSha;
     }
 
     private static function rejectOversized(array $rows, string $category): void
