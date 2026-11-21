@@ -1,16 +1,21 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
 
 
 class Settings(BaseSettings):
-    """Runtime configuration loaded from environment variables or ``.env``."""
+    """Runtime configuration; the database URL is intentionally required.
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    A missing ``AGENT_DATABASE_URL`` fails fast instead of silently falling
+    back to the test database.
+    """
 
-    app_env: str = "test"
-    agent_database_url: str = (
-        "postgresql+psycopg://agent:test-agent-only@127.0.0.1:15432/agent_test"
-    )
-    langgraph_database_url: str = "postgresql://agent:test-agent-only@127.0.0.1:15432/agent_test"
+    model_config = SettingsConfigDict(env_file=_ENV_FILE, env_file_encoding="utf-8", extra="ignore")
+
+    agent_database_url: str
+    langgraph_database_url: str | None = None
 
 
 settings = Settings()

@@ -38,7 +38,11 @@ def upgrade() -> None:
         ),
         sa.Column("completed_at", sa.DateTime(timezone=True), nullable=True),
     )
-    op.create_index("ix_agent_runs_employee_id", "agent_runs", ["employee_id"])
+    op.create_index(
+        "ix_agent_runs_tenant_employee_created",
+        "agent_runs",
+        ["tenant_id", "employee_id", "created_at"],
+    )
 
     op.create_table(
         "agent_events",
@@ -60,7 +64,6 @@ def upgrade() -> None:
         ),
         sa.UniqueConstraint("run_id", "seq", name="uq_agent_events_run_id_seq"),
     )
-    op.create_index("ix_agent_events_run_id", "agent_events", ["run_id"])
 
     op.create_table(
         "tool_calls",
@@ -96,6 +99,7 @@ def upgrade() -> None:
             sa.ForeignKey("agent_runs.id", ondelete="SET NULL"),
             nullable=True,
         ),
+        sa.Column("tenant_id", sa.String(length=64), nullable=False),
         sa.Column("employee_id", sa.String(length=64), nullable=False),
         sa.Column("store_id", sa.String(length=64), nullable=False),
         sa.Column("action", sa.String(length=64), nullable=False),
@@ -110,14 +114,19 @@ def upgrade() -> None:
         ),
     )
     op.create_index("ix_audit_logs_run_id", "audit_logs", ["run_id"])
+    op.create_index(
+        "ix_audit_logs_tenant_employee_created",
+        "audit_logs",
+        ["tenant_id", "employee_id", "created_at"],
+    )
 
 
 def downgrade() -> None:
+    op.drop_index("ix_audit_logs_tenant_employee_created", table_name="audit_logs")
     op.drop_index("ix_audit_logs_run_id", table_name="audit_logs")
     op.drop_table("audit_logs")
     op.drop_index("ix_tool_calls_run_id", table_name="tool_calls")
     op.drop_table("tool_calls")
-    op.drop_index("ix_agent_events_run_id", table_name="agent_events")
     op.drop_table("agent_events")
-    op.drop_index("ix_agent_runs_employee_id", table_name="agent_runs")
+    op.drop_index("ix_agent_runs_tenant_employee_created", table_name="agent_runs")
     op.drop_table("agent_runs")

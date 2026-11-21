@@ -10,6 +10,6 @@ class Principal(BaseModel):
 
     model_config = ConfigDict(frozen=True)
 
-    tenant_id: str = Field(min_length=1)
-    employee_id: str = Field(min_length=1)
-    store_id: str = Field(min_length=1)
+    tenant_id: str = Field(min_length=1, max_length=64)
+    employee_id: str = Field(min_length=1, max_length=64)
+    store_id: str = Field(min_length=1, max_length=64)

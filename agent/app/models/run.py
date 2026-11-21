@@ -5,6 +5,7 @@ from sqlalchemy import (
     BigInteger,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     String,
     UniqueConstraint,
@@ -22,10 +23,18 @@ def utcnow() -> datetime:
 
 class AgentRun(Base):
     __tablename__ = "agent_runs"
+    __table_args__ = (
+        Index(
+            "ix_agent_runs_tenant_employee_created",
+            "tenant_id",
+            "employee_id",
+            "created_at",
+        ),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     tenant_id: Mapped[str] = mapped_column(String(64), nullable=False)
-    employee_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    employee_id: Mapped[str] = mapped_column(String(64), nullable=False)
     store_id: Mapped[str] = mapped_column(String(64), nullable=False)
     scene: Mapped[str] = mapped_column(String(64), nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="running")
@@ -58,7 +67,6 @@ class AgentEvent(Base):
         UUID(as_uuid=True),
         ForeignKey("agent_runs.id", ondelete="CASCADE"),
         nullable=False,
-        index=True,
     )
     seq: Mapped[int] = mapped_column(Integer, nullable=False)
     event_type: Mapped[str] = mapped_column(String(64), nullable=False)
@@ -96,6 +104,14 @@ class ToolCall(Base):
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"
+    __table_args__ = (
+        Index(
+            "ix_audit_logs_tenant_employee_created",
+            "tenant_id",
+            "employee_id",
+            "created_at",
+        ),
+    )
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     run_id: Mapped[uuid.UUID | None] = mapped_column(
@@ -104,6 +120,7 @@ class AuditLog(Base):
         nullable=True,
         index=True,
     )
+    tenant_id: Mapped[str] = mapped_column(String(64), nullable=False)
     employee_id: Mapped[str] = mapped_column(String(64), nullable=False)
     store_id: Mapped[str] = mapped_column(String(64), nullable=False)
     action: Mapped[str] = mapped_column(String(64), nullable=False)

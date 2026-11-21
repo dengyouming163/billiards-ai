@@ -12,18 +12,23 @@ from sqlalchemy import create_engine, inspect
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import Session
 
-from app.schemas import Principal
-
 DEFAULT_TEST_DATABASE_URL = "postgresql+psycopg://agent:test-agent-only@127.0.0.1:15432/agent_test"
 TEST_DATABASE_NAME = "agent_test"
 
 
-def test_database_url() -> str:
+def resolve_test_database_url() -> str:
     return (
         os.environ.get("AGENT_TEST_DATABASE_URL")
         or os.environ.get("DATABASE_URL")
         or DEFAULT_TEST_DATABASE_URL
     )
+
+
+# Application settings are required and validated at import time. Inject the
+# test database explicitly instead of relying on an ambient value or default.
+os.environ["AGENT_DATABASE_URL"] = resolve_test_database_url()
+
+from app.schemas import Principal
 
 
 def principal(
@@ -36,7 +41,7 @@ def principal(
 
 @pytest.fixture(scope="session")
 def engine():
-    url = test_database_url()
+    url = resolve_test_database_url()
     parsed = make_url(url)
     if parsed.database != TEST_DATABASE_NAME:
         pytest.fail(
