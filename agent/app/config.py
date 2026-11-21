@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
@@ -19,6 +20,11 @@ class Settings(BaseSettings):
     langgraph_database_url: str | None = None
 
     billiards_base_url: str = "http://127.0.0.1:10002/storeapi"
+
+    # Dedicated MySQL read-only identity that only sees agent_* views.
+    billiards_mysql_ro_url: str | None = None
+    sql_timeout_ms: int = Field(default=2000, ge=1, le=60000)
+    sql_max_rows: int = Field(default=200, ge=1, le=500)
 
     rag_base_url: str = "http://127.0.0.1:8000"
     rag_kb_id: str = "billiards-sop-test"
