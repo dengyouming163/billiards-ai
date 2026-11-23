@@ -36,10 +36,17 @@ cd /opt/billiards-ai
 # Secrets are read from the shell environment, never committed.
 export LLM_API_KEY=<deepseek-key>
 export EMBED_API_KEY=<embedding-key>
+export GIT_SHA=$(git rev-parse HEAD)
 
 docker compose -f deploy/docker/compose.prod.yml up -d --build
 docker compose -f deploy/docker/compose.prod.yml ps
 ```
+
+`GIT_SHA` is read by the business API. Without a full commit SHA the evidence endpoint answers
+`503`, because an unattributable evidence payload is not accepted.
+
+The agent runs `alembic upgrade head` before it starts serving, so the run tables exist on first
+boot.
 
 The business API reads `apps/api/.env`, which is not tracked. Create it on the host with the
 database host `mysql` and port `3306`.
@@ -60,6 +67,10 @@ The site matches on `server_name 132.232.166.40`, so existing domain-based sites
 | Business tables | `deploy/mysql/init/001-schema.sql` runs on first MySQL start; demo rows are imported separately |
 | Analysis views and read-only account | `deploy/mysql/init/002` and `003`, applied automatically on first start |
 | SOP documents | Uploaded through the knowledge base API after the tenant and knowledge base exist |
+
+Copying an existing knowledge base between hosts requires a strict order because of foreign keys:
+`tenants` first, then `knowledge_bases`, `users`, `documents`, `chunks`. Copy through `\copy ... WITH
+CSV` inside the container; PowerShell redirection corrupts UTF-8 in this environment.
 
 ## Verification
 

@@ -108,6 +108,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    environment:
+      GIT_SHA: ${GIT_SHA:-}
     volumes:
       - ../../apps/api/.env:/app/.env:ro
     ports:
@@ -144,6 +146,10 @@ services:
       SQL_MAX_ROWS: "200"
       NO_PROXY: 127.0.0.1,localhost,::1
       no_proxy: 127.0.0.1,localhost,::1
+    command:
+      - sh
+      - -c
+      - alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8100 --root-path /agent
     ports:
       - "127.0.0.1:28100:8100"
 

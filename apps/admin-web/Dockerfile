@@ -19,9 +19,14 @@ RUN pnpm run build
 
 FROM docker.m.daocloud.io/library/node:20-slim
 
+RUN npm config set registry https://registry.npmmirror.com && npm install -g pnpm@9
+
 WORKDIR /app
 
 COPY --from=builder /app /app
+
+# A stray zero-byte `pnpm` file in the project root shadows the pnpm binary at runtime.
+RUN rm -f /app/pnpm
 
 ENV NODE_ENV=production
 
