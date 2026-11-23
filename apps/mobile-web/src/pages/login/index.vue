@@ -10,9 +10,9 @@
 				<view class="logo-glow"></view>
 				<view class="logo-box">8</view>
 			</view>
-			<text class="brand-name">台屏智联</text>
+			<text class="brand-name">VenueIQ</text>
 			<view class="brand-line"></view>
-			<text class="brand-sub">PREMIUM BILLIARDS</text>
+			<text class="brand-sub">SMART VENUE OPERATIONS</text>
 		</view>
 
 		<!-- Form -->

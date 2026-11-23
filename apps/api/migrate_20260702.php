@@ -1,6 +1,6 @@
 <?php
 /**
- * BilliardsHub - 2026-07-02 数据库迁移
+ * VenueIQ - 2026-07-02 数据库迁移
  * 执行方式: php migrate_20260702.php
  */
 
@@ -15,7 +15,7 @@ $prefix = 'bi_';
 // 解析命令行参数
 $dryRun = in_array('--dry-run', $argv ?? []);
 
-echo "=== BilliardsHub DB Migration 2026-07-02 ===\n";
+echo "=== VenueIQ DB Migration 2026-07-02 ===\n";
 echo "Host: $host:$port  DB: $db  Prefix: {$prefix}\n";
 echo ($dryRun ? "[DRY RUN — 仅检查，不执行]\n\n" : "\n");
 

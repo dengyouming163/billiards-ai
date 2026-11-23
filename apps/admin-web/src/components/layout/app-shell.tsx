@@ -194,8 +194,8 @@ export function AppShell({ children }: AppShellProps) {
               </div>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-base font-bold text-black">客稻云</h1>
-              <p className="text-xs text-[#999999] -mt-0.5">台球房管理系统</p>
+              <h1 className="text-base font-bold text-black">VenueIQ</h1>
+              <p className="text-xs text-[#999999] -mt-0.5">场馆智能运营平台</p>
             </div>
             
             <div className="hidden md:flex items-center gap-3 text-[#333333] border-l border-[#e5e5e5] pl-4">

@@ -3,7 +3,7 @@
 		<view class="about-content">
 			<view class="logo-section">
 				<view class="app-logo">🎱</view>
-				<text class="app-name">球房管理</text>
+				<text class="app-name">场馆智能运营平台</text>
 				<text class="app-version">版本 1.0.0</text>
 			</view>
 			<view class="desc-section">

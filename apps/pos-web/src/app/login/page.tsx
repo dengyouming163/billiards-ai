@@ -50,7 +50,7 @@ function LoginForm() {
             <Waves className="w-16 h-16 text-white" />
           </div>
           <h1 className="text-6xl font-bold text-slate-800 mb-6 tracking-tight">
-            台屏智联
+            VenueIQ
           </h1>
           <p className="text-2xl text-slate-600 mb-10 font-light">
             台球行业 SaaS 管理平台
@@ -89,7 +89,7 @@ function LoginForm() {
               <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-3xl shadow-xl mb-4">
                 <Waves className="w-12 h-12 text-white" />
               </div>
-              <h1 className="text-3xl font-bold text-slate-800">台屏智联</h1>
+              <h1 className="text-3xl font-bold text-slate-800">VenueIQ</h1>
             </div>
 
             <div className="mb-6">
@@ -148,7 +148,7 @@ function LoginForm() {
           </div>
 
           <p className="text-center text-base text-slate-400 mt-10">
-            © 2026 台屏智联 · 台球行业数字化管理平台
+            © 2026 VenueIQ · 多业态场馆智能运营平台
           </p>
         </div>
       </div>

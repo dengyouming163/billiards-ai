@@ -124,7 +124,7 @@ export default function SelectStorePage() {
         </div>
 
         <p className="text-center text-base text-slate-400 mt-10">
-          © 2026 台屏智联 · 台球行业数字化管理平台
+          © 2026 VenueIQ · 多业态场馆智能运营平台
         </p>
       </div>
     </div>

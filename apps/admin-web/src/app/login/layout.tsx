@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '登录 | 台屏智联',
+  title: '登录 | VenueIQ',
   description: '商家管理中心登录',
 };
 

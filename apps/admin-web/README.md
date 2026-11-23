@@ -1,4 +1,4 @@
-# BilliardsHub - 台球厅商业管理系统
+# VenueIQ - 台球厅商业管理系统
 
 面向台球球房商家的 SaaS 管理平台，支持多门店管理、灵活计费、员工管理、商品库存等核心功能。
 
@@ -17,7 +17,7 @@
 ## 项目结构
 
 ```
-BilliardsHub/
+VenueIQ/
 ├── src/
 │   ├── app/                    # Next.js App Router 页面
 │   │   ├── layout.tsx         # 根布局

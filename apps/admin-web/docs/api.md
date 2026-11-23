@@ -1,4 +1,4 @@
-# BilliardsHub 台球厅管理系统 - API 接口清单
+# VenueIQ 台球厅管理系统 - API 接口清单
 
 > 接口版本: v1.0.0
 > 基础路径: `/api/v1`
@@ -2299,4 +2299,4 @@
 
 **文档版本**: v1.0.0
 **最后更新**: 2024年
-**维护团队**: BilliardsHub Team
+**维护团队**: VenueIQ Team

@@ -520,7 +520,7 @@ CREATE TABLE `bi_config` (
 INSERT INTO `bi_config` (`id`, `type`, `name`, `value`, `create_time`, `update_time`) VALUES
 (1, 'admin_token', 'expire_duration', '86400', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
 (2, 'admin_token', 'be_expire_duration', '3600', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(3, 'project', 'name', '台屏智联', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(3, 'project', 'name', 'VenueIQ', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
 (4, 'project', 'version', '1.0.0', UNIX_TIMESTAMP(), UNIX_TIMESTAMP());
 
 SET FOREIGN_KEY_CHECKS = 1;

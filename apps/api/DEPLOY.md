@@ -1,7 +1,7 @@
 # 部署说明文档
 
 ## 项目信息
-- 项目名称：台球房管理系统（BilliardsHub）
+- 项目名称：台球房管理系统（VenueIQ）
 - 后端框架：ThinkPHP 8
 - 前端：Next.js 16 (wwwpos/wwwstore/wwwplatform) + UniApp (wwwtable)
 - 日期：2026-06-22

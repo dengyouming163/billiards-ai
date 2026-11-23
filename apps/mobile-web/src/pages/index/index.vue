@@ -16,7 +16,7 @@
 			<EmployeeHome v-else-if="authStore.canCheckin || authStore.canApprove" />
 			<view v-else class="empty-home">
 				<text class="empty-icon">🏠</text>
-				<text class="empty-title">欢迎使用球房管理系统</text>
+				<text class="empty-title">欢迎使用场馆智能运营平台</text>
 				<text class="empty-desc">请登录后查看您的专属功能</text>
 				<button class="login-btn" @click="goToLogin">去登录</button>
 			</view>
