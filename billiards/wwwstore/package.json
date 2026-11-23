@@ -2,11 +2,17 @@
   "name": "projects",
   "version": "0.1.0",
   "private": true,
+  "browserslist": [
+    "chrome >= 110",
+    "firefox >= 110",
+    "safari >= 16",
+    "edge >= 110"
+  ],
   "scripts": {
     "build": "bash ./scripts/build.sh",
     "dev": "bash ./scripts/dev.sh",
-    "dev:win": "next dev -p 3000",
-    "build:win": "next build && tsup src/server.ts --format cjs --platform node --target node20 --outDir dist --no-splitting --no-minify",
+    "dev:win": "next dev --webpack -p 3000",
+    "build:win": "next build --webpack && tsup src/server.ts --format cjs --platform node --target node20 --outDir dist --no-splitting --no-minify",
     "preinstall": "npx only-allow pnpm",
     "lint": "eslint",
     "start": "bash ./scripts/start.sh",

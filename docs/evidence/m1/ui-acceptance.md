@@ -61,14 +61,14 @@ pnpm vitest run
 |---|---|---|
 | `pnpm ts-check` | 2 | 13 个 TypeScript 错误，与基线逐条一致；新增文件无错误 |
 | `pnpm lint` | 1 | `403 problems (205 errors, 198 warnings)`，与基线一致 |
-| `pnpm build:win` | 1 | 17 个 `@radix-ui/*` Module not found，与基线一致 |
+| `pnpm build:win` | 1 → 0 | M1 验收时为 17 个 `@radix-ui/*` Module not found；**2026-11-23 已修复并通过**（24/24 静态页预渲染成功），详见 [acceptance.md 附录 A](acceptance.md#附录-am1-后构建修复2026-11-23) |
 
 ## 4. 浏览器验收状态
 
-浏览器级验收被既有 `@radix-ui/*` 依赖缺失阻塞（`pnpm build:win` 在 import 阶段失败，与 Task 3/M0 相同）。因此本任务：
+浏览器级验收在 M1 验收时被既有 `@radix-ui/*` 依赖缺失阻塞（`pnpm build:win` 在 import 阶段失败，与 Task 3/M0 相同）。因此本任务当时：
 
 - 未伪造截图、run id 或浏览器结果
 - 以组件测试覆盖状态文案、降级数值、证据点击与请求体
 - 不宣称完成真实浏览器端到端验证
 
-限制与 M0 一致：修复该依赖属于既有前端构建问题，不在本任务范围内改写。
+**2026-11-23 更新：** 该构建阻塞已修复（`build:win` 通过、24/24 页预渲染成功，详见 [acceptance.md 附录 A](acceptance.md#附录-am1-后构建修复2026-11-23)）；完整登录后端到端截图待后续补跑，本次未伪造任何浏览器结果。

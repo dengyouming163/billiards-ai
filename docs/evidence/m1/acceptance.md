@@ -100,7 +100,7 @@ pnpm vitest run
 |---|---|---|
 | `pnpm ts-check` | 2 | 13 个 TypeScript 错误，全部位于 `coupon-reports`、`finance-income-tab`、`reports`、`settings-discount-tab` 等既有文件，新增文件无错误 |
 | `pnpm lint` | 1 | `403 problems (205 errors, 198 warnings)`，与基线数字一致 |
-| `pnpm build:win` | 1 | 17 个 `@radix-ui/*` Module not found，与 Task 3/M0 完全一致 |
+| `pnpm build:win` | 1 → 0 | M1 验收时为 17 个 `@radix-ui/*` Module not found；**2026-11-23 已修复并通过**，见 [附录 A](#附录-am1-后构建修复2026-11-23) |
 
 ## 3. 故障注入
 
@@ -129,15 +129,15 @@ pnpm vitest run
 
 ## 6. 浏览器证据
 
-浏览器级验收仍被既有 `@radix-ui/*` 依赖缺失阻塞（`pnpm build:win` 在 import 阶段失败），详见 [ui-acceptance.md](ui-acceptance.md)。本任务未伪造截图、run id 或浏览器结果；页面的状态文案、降级数值、证据下钻与请求体由 13 个前端单元/组件测试覆盖。
+浏览器级验收在 M1 验收时被既有 `@radix-ui/*` 依赖缺失阻塞（`pnpm build:win` 在 import 阶段失败），详见 [ui-acceptance.md](ui-acceptance.md)。**2026-11-23 该构建阻塞已修复**（见 [附录 A](#附录-am1-后构建修复2026-11-23)），`pnpm build:win` 通过、24/24 静态页预渲染成功。本任务未伪造截图、run id 或浏览器结果；页面的状态文案、降级数值、证据下钻与请求体由 13 个前端单元/组件测试覆盖。
 
 RAG 真实检索（Task 11/14 记录）：`search_sop("交班对账流程")` 返回 3 条 internal 命中；上传的合成 SOP `billiards-sop-test-e4706387` 因默认 `audience=public` 不被 internal 检索命中，已如实记录，未修改 RAG 仓库。
 
 ## 7. 已知限制
 
 1. 无授权历史数据与人工耗时样本，无法给出生产准确率与效率结论。
-2. 浏览器端到端验收被既有 `@radix-ui/*` 依赖缺失阻塞。
-3. `ts-check`、`lint`、`build:win` 维持既有失败，均未由本任务新增。
+2. 浏览器端到端验收曾被既有 `@radix-ui/*` 依赖缺失阻塞；2026-11-23 构建已修复（见附录 A），完整端到端执行待后续补跑。
+3. `ts-check`、`lint` 维持既有失败，均未由本任务新增；`build:win` 已于 2026-11-23 修复（见附录 A）。
 4. SQL 评测只针对 3 个 `agent_*` 视图与本地测试库；生产部署需重复授权与网络隔离检查。
 5. 弱模型生成的 SQL 质量、真实模型成本与延迟未在本任务测量。
 
@@ -148,3 +148,35 @@ RAG 真实检索（Task 11/14 记录）：`search_sop("交班对账流程")` 返
 - 模型、RAG、MySQL、PostgreSQL 故障不改变确定性数值；应用对持久层不可用快速失败。
 - Text-to-SQL 经 AST 与独立只读 MySQL 账号双层阻断，不能访问 base table、他店或写数据；固定对账不经过该工具。
 - 全部命令与评测可复现；M0/M1 可以按“只读交班对账”能力投递，不宣称 M2/M3/M4 能力。
+
+## 附录 A：M1 后构建修复（2026-11-23）
+
+`pnpm build:win` 在 M1 验收时报告 17 个 `@radix-ui/*` Module not found，并掩盖了另外两个潜伏的构建阻塞。修复全部限定在构建配置层，未改动任何路由、入口或业务代码。
+
+### A.1 根因与修复
+
+| 阻塞 | 根因 | 修复 |
+|---|---|---|
+| 17 个 `@radix-ui/*` Module not found | Next 16 默认 Turbopack 在当前 Windows 长路径下无法解析 pnpm 虚拟 store（`.pnpm/@radix-ui+...@.../node_modules`）中的包；webpack 能正确解析 | `package.json` 的 `build:win` 改为 `next build --webpack` |
+| `Failed to recognize value 'undefined' for property ID_Start` | 存在自定义 `.babelrc` → Next 弃用 SWC 改用 Babel，Babel 打包的旧版 unicode 数据缺 `ID_Start`，转换 `estree-util-is-identifier-name` 的 `\p{ID_Start}` 正则时报错 | `package.json` 新增现代浏览器 `browserslist`，让 Babel 跳过原生已支持的 unicode 属性转义 |
+| `TypeError: e.jsxDEV is not a function` 预渲染崩溃 | `.babelrc` 硬编码 `"preset-react": { "development": true }`，生产构建也走 dev JSX 转换，而生产 React 不导出 `jsxDEV` | 删除 `.babelrc`，新建 `babel.config.js`，按 `NODE_ENV` 分支：生产关闭 dev JSX 与 `@react-dev-inspector` 插件，开发态保留 |
+
+### A.2 变更文件
+
+- `billiards/wwwstore/package.json`：`build:win` 与 `dev:win` 均加 `--webpack`（Next 16 默认 Turbopack 无法解析当前 Windows 长路径下的 pnpm 虚拟 store）；新增 `browserslist`
+- `billiards/wwwstore/babel.config.js`：新增（按环境分支的 Babel 配置）
+- `billiards/wwwstore/.babelrc`：删除
+
+### A.3 验证结果（2026-11-23 真实执行）
+
+- `pnpm build:win`：`✓ Compiled successfully in 41s`，`Generating static pages (24/24)` 预渲染成功，`tsup` 产出 `dist/server.js`（2.21 KB）
+- `pnpm vitest run`：`13 passed (13)`，与基线一致，无回归
+- `pnpm ts-check`：仍 13 个错误，文件与数量与 M1 基线逐条一致，0 新增
+- 生产服务冒烟（`NODE_ENV=production node dist/server.js`，PORT=5002）：`GET /login` → 200（11 KB HTML，无编译错误），`GET /finance` → 307（未登录重定向，鉴权正常）
+- 开发模式验证（`next dev --webpack -p 3003`）：`✓ Ready in 10.9s`，`GET /login` → 200，webpack 成功编译所有 `@radix-ui/*` 组件，无 Module not found
+
+### A.4 说明
+
+- 本次只打通构建阻塞；`ts-check` 与 `lint` 的既有错误不在本次范围，仍为 pre-existing。
+- 完整登录后浏览器端到端截图尚未补跑；构建与开发编译均已不再阻塞，待后续执行。
+- `pnpm start` 走 `bash ./scripts/start.sh`，当前环境 WSL 的 `ext4.vhdx` 损坏导致 bash 无法启动，故生产冒烟直接用 `NODE_ENV=production node dist/server.js`、开发冒烟用 `next dev --webpack`；该 WSL 环境问题与本次构建修复无关。

@@ -64,7 +64,7 @@
 ## 9. 原业务回归
 
 - `billiards/wwwapi`：`php vendor/bin/phpunit` → `OK (34 tests, 344 assertions)`；Characterization 固化交班/签退/支付/充值/合并单现状，未修改旧业务语义。
-- Agent 停止或故障不影响原手工交班与对账；前端既有 `ts-check`/`lint`/`build:win` 失败与基线一致，未新增错误。
+- Agent 停止或故障不影响原手工交班与对账；前端既有 `ts-check`/`lint` 失败与基线一致，未新增错误；`build:win` 的 `@radix-ui/*` 构建阻塞已于 2026-11-23 修复（详见 [acceptance.md 附录 A](acceptance.md#附录-am1-后构建修复2026-11-23)），`vitest` 仍 13 passed。
 
 ## 10. 未实现，不在 M1 宣称
 
