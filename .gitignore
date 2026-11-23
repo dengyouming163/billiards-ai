@@ -27,6 +27,8 @@
 **/.venv/
 **/*.egg-info/
 # Agent data and evaluation output with sensitive content
-agent/data/
-eval/results/*.json
-!eval/results/.gitkeep
+services/agent/data/
+benchmarks/results/*.json
+!benchmarks/results/.gitkeep
+# IDE
+**/.idea/

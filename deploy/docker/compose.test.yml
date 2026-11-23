@@ -10,7 +10,7 @@ services:
     ports: ["127.0.0.1:13306:3306"]
     volumes:
       - mysql-test-data:/var/lib/mysql
-      - ./mysql/init:/docker-entrypoint-initdb.d:ro
+      - ../mysql/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ptest-root-only"]
       interval: 5s
