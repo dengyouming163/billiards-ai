@@ -36,7 +36,7 @@ export default function TablesPage() {
     <div className="space-y-6">
       <PageHeader
         title="台桌管理"
-        description="管理球房台桌、分区、台型、时段和计费规则配置"
+        description="管理场馆台桌、分区、台型、时段和计费规则配置"
         icon={Gamepad2}
       />
 

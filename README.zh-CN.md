@@ -117,6 +117,18 @@
 [助教](docs/screenshots/admin-web/assistants.png)、
 [报表](docs/screenshots/admin-web/reports.png)。
 
+### 收银端
+
+`apps/pos-web` 面向 16:9 触屏收银机：开台/关台、商品与助教加点、组合支付、交接班一屏完成。
+
+| 登录 | 选择门店 |
+| --- | --- |
+| <img src="docs/screenshots/pos-web/pos-login.png" width="420" alt="收银端登录" /> | <img src="docs/screenshots/pos-web/pos-select-store.png" width="420" alt="收银端选择门店" /> |
+
+| 收银台 | 开台 |
+| --- | --- |
+| <img src="docs/screenshots/pos-web/pos-cashier.png" width="420" alt="收银台" /> | <img src="docs/screenshots/pos-web/pos-open-table.png" width="420" alt="开台弹窗" /> |
+
 ### 移动端员工 App
 
 `apps/mobile-web` 基于 uni-app，可编译为微信小程序与 H5。以下截图取自 H5 版本，390×844 视口，

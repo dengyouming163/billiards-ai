@@ -64,8 +64,8 @@ export function HeaderBar({ onShiftClick }: HeaderBarProps) {
             </svg>
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">台球厅收银系统</h1>
-            <p className="text-sm text-slate-300">Billiards POS</p>
+            <h1 className="text-xl font-bold text-white">VenueIQ 收银台</h1>
+            <p className="text-sm text-slate-300">VENUE POS</p>
           </div>
         </div>
 

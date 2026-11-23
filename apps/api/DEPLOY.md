@@ -1,7 +1,7 @@
 # 部署说明文档
 
 ## 项目信息
-- 项目名称：台球房管理系统（VenueIQ）
+- 项目名称：VenueIQ 多业态场馆智能运营平台
 - 后端框架：ThinkPHP 8
 - 前端：Next.js 16 (wwwpos/wwwstore/wwwplatform) + UniApp (wwwtable)
 - 日期：2026-06-22

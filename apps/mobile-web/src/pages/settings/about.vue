@@ -7,7 +7,7 @@
 				<text class="app-version">版本 1.0.0</text>
 			</view>
 			<view class="desc-section">
-				<text class="desc-text">让球房管理更简单、更高效</text>
+				<text class="desc-text">让场馆管理更简单、更高效</text>
 			</view>
 		</view>
 	</view>

@@ -122,6 +122,19 @@ More screenshots: [login](docs/screenshots/admin-web/login.png),
 [assistants](docs/screenshots/admin-web/assistants.png),
 [reports](docs/screenshots/admin-web/reports.png).
 
+### POS terminal
+
+`apps/pos-web` is the cashier terminal for 16:9 touch screens: open and close tables, add products
+and assistants, take split payments, and hand over shifts.
+
+| Sign in | Choose store |
+| --- | --- |
+| <img src="docs/screenshots/pos-web/pos-login.png" width="420" alt="POS sign in" /> | <img src="docs/screenshots/pos-web/pos-select-store.png" width="420" alt="POS store selection" /> |
+
+| Cashier board | Open table |
+| --- | --- |
+| <img src="docs/screenshots/pos-web/pos-cashier.png" width="420" alt="Cashier board" /> | <img src="docs/screenshots/pos-web/pos-open-table.png" width="420" alt="Open table" /> |
+
 ### Mobile staff app
 
 `apps/mobile-web` is a uni-app build that runs as a WeChat mini program and as H5. Screenshots below

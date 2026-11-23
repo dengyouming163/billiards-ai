@@ -46,7 +46,7 @@ export function StatusBar() {
 
       {/* Right - Info */}
       <div className="flex items-center gap-8 text-base text-slate-400">
-        <span suppressHydrationWarning>台球厅收银系统 v{process.env.npm_package_version || '0.1.0'}</span>
+        <span suppressHydrationWarning>VenueIQ 收银端 v{process.env.npm_package_version || '0.1.0'}</span>
         <span>|</span>
         <span>技术支持</span>
       </div>

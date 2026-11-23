@@ -375,7 +375,7 @@ export function TablesManagementTab() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-slate-900">台桌管理</h2>
-          <p className="text-sm text-slate-500">管理和配置球房台桌信息</p>
+          <p className="text-sm text-slate-500">管理和配置场馆台桌信息</p>
         </div>
         <Button
           onClick={() => setAddTableOpen(true)}

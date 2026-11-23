@@ -1,7 +1,7 @@
 {
 	"name": "wwwstoreapp",
 	"version": "1.0.0",
-	"description": "球房管理系统移动端",
+	"description": "VenueIQ 移动端 · 多业态场馆智能运营平台",
 	"scripts": {
 		"dev:h5": "uni",
 		"build:h5": "uni build",

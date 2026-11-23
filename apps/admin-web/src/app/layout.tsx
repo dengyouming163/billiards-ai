@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     default: 'VenueIQ - 场馆智能运营平台',
     template: '%s | VenueIQ',
   },
-  description: '多商户商业台球球房管理系统，助您高效管理门店经营',
+  description: '多业态场馆智能运营平台，覆盖台球、KTV、棋牌等场景的门店经营、计费与结算',
   icons: {
     icon: '/favicon.ico',
   },

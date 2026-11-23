@@ -53,10 +53,10 @@ function LoginForm() {
             VenueIQ
           </h1>
           <p className="text-2xl text-slate-600 mb-10 font-light">
-            台球行业 SaaS 管理平台
+            多业态场馆智能运营平台
           </p>
           <p className="text-lg text-slate-500 leading-relaxed max-w-md mx-auto">
-            一站式球房运营管理解决方案，助力台球行业数字化转型
+            台费、助教、商品统一结算，台球 / KTV / 棋牌一套系统管好
           </p>
 
           <div className="flex gap-12 mt-16 justify-center">
