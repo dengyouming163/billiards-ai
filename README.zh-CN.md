@@ -1,8 +1,10 @@
-# billiards-ai
+# VenueIQ
 
-**面向台球门店的 AI 运营层：确定性交班对账、只读 SQL 分析、基于 RAG 的制度检索。**
+**多业态场馆智能运营平台**
 
-[English](README.md) · [架构说明](docs/architecture/overview.md) · [快速开始](docs/guides/quickstart.md) · [API 参考](docs/reference/api.md)
+**面向台球、KTV、棋牌等计时与服务型场馆的 AI 运营平台。**
+
+[English](README.md) · [架构说明](docs/architecture/overview.md) · [使用场景](docs/architecture/use-cases.md) · [快速开始](docs/guides/quickstart.md) · [API 参考](docs/reference/api.md)
 
 [![agent-ci](https://github.com/dengyouming163/billiards-ai/actions/workflows/agent-ci.yml/badge.svg)](https://github.com/dengyouming163/billiards-ai/actions/workflows/agent-ci.yml)
 [![web-ci](https://github.com/dengyouming163/billiards-ai/actions/workflows/web-ci.yml/badge.svg)](https://github.com/dengyouming163/billiards-ai/actions/workflows/web-ci.yml)
@@ -12,7 +14,9 @@
 
 ## 为什么做这个项目
 
-店长交班时同时需要三件事：**数字必须准确**、**差异必须能解释**、**处置必须依据制度**。
+一家多业态运营商可能同时经营台球俱乐部、KTV 包厢与棋牌桌游区：收入来自时间（台费、包厢费）、
+来自人（助教费、服务费）、也来自商品（酒水、茶水、零食），三笔钱由不同人在不同时点分别结算。
+交班时店长需要三件事：**数字必须准确**、**差异必须能解释**、**处置必须依据制度**。
 
 常见的做法是把三件事都塞进一个对话框。本项目刻意把它们分开：
 
@@ -23,6 +27,18 @@
 | 处置必须可溯源 | 混合检索 + 租户与文档级 ACL | 只能引用本次真实召回的片段 |
 
 模型变慢、出错或不可用时，报告依然生成，只是被标记为 `degraded`，并在界面明确提示说明缺失——**金额永远不会因此改变**。
+
+## 使用场景
+
+| 业态 | 时间计费 | 服务计费 | 商品计费 | 预付与卡券 | 对账重点 |
+| --- | --- | --- | --- | --- | --- |
+| 台球俱乐部 | 台费按小时、包段或会员价 | 助教陪练费、计时分成 | 饮品、器材、零食 | 会员储值、次卡 | 台费时长 × 单价、助教单量 |
+| KTV·量贩 | 包厢费按时段，常与最低消费绑定 | 服务费按人头、包厢服务人员 | 酒水、果盘、小食 | 储值、存酒 | 包厢时长、最低消费补差、服务人头 |
+| 棋牌·桌游 | 桌费按小时或包场 | 服务费、陪打费 | 茶水、零食 | 储值、月卡 | 包场时段归属、茶水加钟、月卡抵扣 |
+
+三类业态共用同一套计费模型：计时、计服务、计商品、预收。最低消费规则、存酒台账、跨零点包场
+切分等属于行业配置与扩展，而不是另一套产品。计费原语、差异成因与当前边界见
+[使用场景](docs/architecture/use-cases.md)。
 
 ## 能力矩阵
 
@@ -178,6 +194,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8100
 | 文档 | 内容 |
 | --- | --- |
 | [架构总览](docs/architecture/overview.md) | 组件边界与请求生命周期 |
+| [使用场景](docs/architecture/use-cases.md) | 三类业态、统一计费抽象、差异成因 |
 | [Agent](docs/architecture/agent.md) | 节点、说明合约、失败模式 |
 | [知识库](docs/architecture/rag.md) | 检索契约、ACL、入库流程 |
 | [安全模型](docs/architecture/security.md) | 身份、SQL 守卫、提示注入 |

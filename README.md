@@ -1,9 +1,10 @@
-# billiards-ai
+# VenueIQ
 
-**AI-first operations layer for billiards venues: deterministic shift reconciliation, read-only SQL
-analysis and RAG-grounded SOP retrieval.**
+**Smart Venue Operations**
 
-[中文说明](README.zh-CN.md) · [Architecture](docs/architecture/overview.md) · [Quickstart](docs/guides/quickstart.md) · [API](docs/reference/api.md)
+**AI-first operations platform for timed and serviced venues — billiards clubs, KTV and board-game lounges.**
+
+[中文说明](README.zh-CN.md) · [Architecture](docs/architecture/overview.md) · [Use cases](docs/architecture/use-cases.md) · [Quickstart](docs/guides/quickstart.md) · [API](docs/reference/api.md)
 
 [![agent-ci](https://github.com/dengyouming163/billiards-ai/actions/workflows/agent-ci.yml/badge.svg)](https://github.com/dengyouming163/billiards-ai/actions/workflows/agent-ci.yml)
 [![web-ci](https://github.com/dengyouming163/billiards-ai/actions/workflows/web-ci.yml/badge.svg)](https://github.com/dengyouming163/billiards-ai/actions/workflows/web-ci.yml)
@@ -13,8 +14,11 @@ analysis and RAG-grounded SOP retrieval.**
 
 ## Why this project exists
 
-A venue manager closing a shift needs three things at once: numbers that are exactly right, an
-explanation of what went wrong, and the standard procedure that says what to do about it.
+A multi-venue operator often runs billiards clubs, KTV rooms and board-game lounges on the same
+books: money is earned by time (table fee, room fee), by people (assistant and service fees) and by
+goods (drinks, tea, snacks), and each stream is settled separately. At shift handover the manager
+needs three things at once: numbers that are exactly right, an explanation of what went wrong, and
+the standard procedure that says what to do about it.
 
 Most "AI features" in this space put all three in a chat box. This project separates them on purpose:
 
@@ -26,6 +30,19 @@ Most "AI features" in this space put all three in a chat box. This project separ
 
 If the model is slow, wrong or unavailable, the report is still produced. It is marked `degraded`
 and the explanation area says so — the figures never change.
+
+## Use cases
+
+| Venue type | Time fee | Service fee | Goods fee | Prepaid and cards | Reconciliation focus |
+| --- | --- | --- | --- | --- | --- |
+| Billiards club | Table fee by hour, package or member rate | Assistant coaching fee, timed share | Drinks, cues, snacks | Stored value, session cards | Table hours × rate, assistant order count |
+| KTV / karaoke box | Room fee by session, often tied to a minimum spend | Service fee per head, room service staff | Drinks, fruit platters, snacks | Stored value, bottle keep | Room hours, minimum-spend top-up, headcount |
+| Board-game lounge | Table fee by hour or flat package | Service fee, companion play | Tea, snacks | Stored value, monthly card | Package time attribution, tea add-ons, card deduction |
+
+All three run on the same billing model: time, service, goods and prepaid. Industry-specific
+packaging — minimum-spend rules, bottle-keep ledgers, cross-midnight package splitting — is a
+configuration and extension matter, not an additional product. The mechanics, difference examples
+and current boundaries are in [use cases](docs/architecture/use-cases.md).
 
 ## Capabilities
 
@@ -183,6 +200,7 @@ See [evaluation](docs/guides/evaluation.md) for what each gate is protecting.
 | Document | Purpose |
 | --- | --- |
 | [Architecture](docs/architecture/overview.md) | Component boundaries and request lifecycle |
+| [Use cases](docs/architecture/use-cases.md) | Venue types, shared billing primitives, how differences arise |
 | [Agent](docs/architecture/agent.md) | Graph nodes, narrative contract, failure modes |
 | [Knowledge base](docs/architecture/rag.md) | Retrieval contract, ACL, ingestion |
 | [Security](docs/architecture/security.md) | Identity, SQL guard, prompt injection |

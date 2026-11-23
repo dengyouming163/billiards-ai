@@ -1,7 +1,8 @@
 # Architecture Overview
 
-billiards-ai is an AI layer for a billiards venue management system. It has three capability
-lines, each with a different correctness requirement.
+VenueIQ is an AI-first operations platform for multi-venue operators — billiards clubs, KTV rooms
+and board-game lounges — where revenue comes from time, from people and from goods. It has three
+capability lines, each with a different correctness requirement.
 
 | Capability | Service | Correctness requirement | Model role |
 | --- | --- | --- | --- |

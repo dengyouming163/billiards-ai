@@ -31,6 +31,8 @@ First public release.
 - Repository reorganised from a mixed layout into `services/`, `apps/`, `benchmarks/`,
   `deploy/` and `docs/`.
 - Business applications moved under `apps/` with descriptive names.
+- Product renamed to **VenueIQ**; positioning broadened from billiards venues to multi-venue
+  operations covering billiards clubs, KTV rooms and board-game lounges.
 
 ### Security
 
