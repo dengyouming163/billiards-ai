@@ -25,7 +25,7 @@ from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-AGENT_ROOT = REPO_ROOT / "agent"
+AGENT_ROOT = REPO_ROOT / "services" / "agent"
 FIXTURES_DIR = AGENT_ROOT / "tests" / "fixtures" / "evidence"
 sys.path.insert(0, str(AGENT_ROOT))
 
@@ -187,8 +187,8 @@ def percentile(values: list[float], ratio: float) -> float:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", default="eval/datasets/reconciliation_golden.json")
-    parser.add_argument("--output", default="eval/results/m1-reconciliation.json")
+    parser.add_argument("--dataset", default="benchmarks/datasets/reconciliation_golden.json")
+    parser.add_argument("--output", default="benchmarks/results/m1-reconciliation.json")
     parser.add_argument("--repeats", type=int, default=20)
     args = parser.parse_args()
 

@@ -34,7 +34,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.exc import DBAPIError, SQLAlchemyError
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-AGENT_ROOT = REPO_ROOT / "agent"
+AGENT_ROOT = REPO_ROOT / "services" / "agent"
 sys.path.insert(0, str(AGENT_ROOT))
 
 from app.guard.sql_guard import SqlRejected, validate_and_scope  # noqa: E402
@@ -343,8 +343,8 @@ def _count_by(items: list[dict[str, Any]], key: str) -> dict[str, int]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", default="eval/datasets/sql_attacks.json")
-    parser.add_argument("--output", default="eval/results/m1-sql-security.json")
+    parser.add_argument("--dataset", default="benchmarks/datasets/sql_attacks.json")
+    parser.add_argument("--output", default="benchmarks/results/m1-sql-security.json")
     parser.add_argument(
         "--skip-database",
         action="store_true",
