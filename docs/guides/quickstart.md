@@ -83,7 +83,8 @@ pnpm run dev:win        # Windows
 pnpm run dev            # Linux / macOS
 ```
 
-Open `http://127.0.0.1:3001` and sign in with the demo credentials listed in the README.
+Open the URL printed by Next (3000 by default; use `pnpm exec next dev --webpack -p 3001` if that
+port is already taken) and sign in with the demo credentials listed in the README.
 
 ## 5. Run one reconciliation
 

@@ -15,7 +15,7 @@ import pytest
 from app.domain.reconciliation import Evidence, reconcile
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures" / "evidence"
-GOLDEN_PATH = Path(__file__).resolve().parents[2] / "eval" / "datasets" / "reconciliation_golden.json"
+GOLDEN_PATH = Path(__file__).resolve().parents[3] / "benchmarks" / "datasets" / "reconciliation_golden.json"
 
 
 def load_golden() -> list[dict]:

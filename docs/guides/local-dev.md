@@ -4,8 +4,7 @@
 
 | Port | Component | Notes |
 | --- | --- | --- |
-| 3000 | `apps/admin-web` production start | `next start` default |
-| 3001 | `apps/admin-web` dev server | `pnpm run dev:win` |
+| 3000 | `apps/admin-web` dev and start | `dev:win` / `start:win` default; pass `-p 3001` if occupied |
 | 3306 / 13306 | MySQL | Compose maps 13306 on the host |
 | 5432 / 15432 | PostgreSQL | Compose maps 15432 on the host |
 | 8100 | `services/agent` | FastAPI |
@@ -95,7 +94,7 @@ in `.env` and create the target directory before the first upload.
 
 ```bash
 cd apps/admin-web
-pnpm run dev:win   # Windows, port 3001
+pnpm run dev:win   # Windows, port 3000
 pnpm run dev       # Linux / macOS
 pnpm run ts-check
 pnpm exec vitest run

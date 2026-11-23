@@ -36,6 +36,13 @@ export default function AgentPage() {
     }
   }, [isLoading, permissionCodes, router]);
 
+  useEffect(() => {
+    const requestedRunId = new URLSearchParams(window.location.search).get('run_id');
+    if (requestedRunId) {
+      setRunId(requestedRunId);
+    }
+  }, []);
+
   const currentStore = state.currentStore;
 
   const handleEvent = (event: AgentStreamEvent) => {

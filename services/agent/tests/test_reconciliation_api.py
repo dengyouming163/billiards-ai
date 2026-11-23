@@ -21,7 +21,7 @@ from app.tools.billiards import ShiftEvidenceError
 from app.tools.rag import RagUnavailable
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures" / "evidence"
-GOLDEN_PATH = Path(__file__).resolve().parents[2] / "eval" / "datasets" / "reconciliation_golden.json"
+GOLDEN_PATH = Path(__file__).resolve().parents[3] / "benchmarks" / "datasets" / "reconciliation_golden.json"
 
 NARRATIVE = json.dumps(
     {

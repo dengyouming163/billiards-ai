@@ -29,6 +29,19 @@ function errorText(detail: unknown, fallback: string): string {
   return fallback;
 }
 
+async function fetchRunTraceWithRetry(runId: string) {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      return await fetchRunTrace(runId);
+    } catch (err) {
+      lastError = err;
+      await new Promise((resolve) => setTimeout(resolve, 400 * (attempt + 1)));
+    }
+  }
+  throw lastError;
+}
+
 export function AgentReconciliationTab() {
   const { state } = useApp();
   const store = state.currentStore;
@@ -79,7 +92,7 @@ export function AgentReconciliationTab() {
       setRunId(currentRunId);
 
       if (currentRunId) {
-        const trace = await fetchRunTrace(currentRunId);
+        const trace = await fetchRunTraceWithRetry(currentRunId);
         const result = (trace.result ?? null) as unknown as ReconciliationResult | null;
         if (result?.report) setReport(result.report);
         setCitations(result?.sop_citations ?? []);
