@@ -105,6 +105,32 @@ More screenshots: [login](docs/screenshots/admin-web/login.png),
 [assistants](docs/screenshots/admin-web/assistants.png),
 [reports](docs/screenshots/admin-web/reports.png).
 
+### Mobile staff app
+
+`apps/mobile-web` is a uni-app build that runs as a WeChat mini program and as H5. Screenshots below
+are captured from the H5 build at a 390×844 viewport, signed in as the demo manager.
+
+| Sign in | Store overview |
+| --- | --- |
+| <img src="docs/screenshots/mobile-web/login.png" width="240" alt="Mobile sign in" /> | <img src="docs/screenshots/mobile-web/home.png" width="240" alt="Store overview" /> |
+
+| Workbench | Table board |
+| --- | --- |
+| <img src="docs/screenshots/mobile-web/work.png" width="240" alt="Workbench" /> | <img src="docs/screenshots/mobile-web/table.png" width="240" alt="Table board" /> |
+
+| Orders | Attendance |
+| --- | --- |
+| <img src="docs/screenshots/mobile-web/orders.png" width="240" alt="Orders" /> | <img src="docs/screenshots/mobile-web/checkin.png" width="240" alt="Attendance" /> |
+
+More mobile screenshots: [monthly dashboard](docs/screenshots/mobile-web/home-month.png),
+[approvals](docs/screenshots/mobile-web/approval.png),
+[notifications](docs/screenshots/mobile-web/notification.png),
+[schedules](docs/screenshots/mobile-web/schedule.png),
+[team](docs/screenshots/mobile-web/employees.png),
+[performance](docs/screenshots/mobile-web/performance.png),
+[profile](docs/screenshots/mobile-web/profile.png),
+[settings](docs/screenshots/mobile-web/settings.png).
+
 ## Repository layout
 
 ```text

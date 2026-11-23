@@ -101,6 +101,32 @@
 [助教](docs/screenshots/admin-web/assistants.png)、
 [报表](docs/screenshots/admin-web/reports.png)。
 
+### 移动端员工 App
+
+`apps/mobile-web` 基于 uni-app，可编译为微信小程序与 H5。以下截图取自 H5 版本，390×844 视口，
+使用演示店长账号登录。
+
+| 登录 | 门店总览 |
+| --- | --- |
+| <img src="docs/screenshots/mobile-web/login.png" width="240" alt="移动端登录" /> | <img src="docs/screenshots/mobile-web/home.png" width="240" alt="门店总览" /> |
+
+| 工作台 | 台桌看板 |
+| --- | --- |
+| <img src="docs/screenshots/mobile-web/work.png" width="240" alt="工作台" /> | <img src="docs/screenshots/mobile-web/table.png" width="240" alt="台桌看板" /> |
+
+| 订单中心 | 打卡签到 |
+| --- | --- |
+| <img src="docs/screenshots/mobile-web/orders.png" width="240" alt="订单中心" /> | <img src="docs/screenshots/mobile-web/checkin.png" width="240" alt="打卡签到" /> |
+
+更多移动端截图：[本月经营](docs/screenshots/mobile-web/home-month.png)、
+[审批中心](docs/screenshots/mobile-web/approval.png)、
+[消息通知](docs/screenshots/mobile-web/notification.png)、
+[排班查询](docs/screenshots/mobile-web/schedule.png)、
+[员工列表](docs/screenshots/mobile-web/employees.png)、
+[我的业绩](docs/screenshots/mobile-web/performance.png)、
+[个人中心](docs/screenshots/mobile-web/profile.png)、
+[设置](docs/screenshots/mobile-web/settings.png)。
+
 ## 目录结构
 
 ```text
