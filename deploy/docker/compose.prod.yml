@@ -1,0 +1,170 @@
+name: billiards-ai
+
+services:
+  mysql:
+    image: docker.m.daocloud.io/library/mysql:8.0
+    container_name: billiards-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: test-root-only
+      MYSQL_DATABASE: billiards_test
+      MYSQL_USER: billiards
+      MYSQL_PASSWORD: test-billiards-only
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    volumes:
+      - billiards-mysql-data:/var/lib/mysql
+      - ../mysql/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:13307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-ptest-root-only"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  agent-pg:
+    image: docker.m.daocloud.io/library/postgres:16
+    container_name: billiards-agent-pg
+    restart: always
+    environment:
+      POSTGRES_DB: agent_test
+      POSTGRES_USER: agent
+      POSTGRES_PASSWORD: test-agent-only
+    volumes:
+      - billiards-agent-pg-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:25432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "agent", "-d", "agent_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  rag-pg:
+    image: docker.m.daocloud.io/pgvector/pgvector:pg16
+    container_name: billiards-rag-pg
+    restart: always
+    environment:
+      POSTGRES_DB: kb
+      POSTGRES_USER: kb
+      POSTGRES_PASSWORD: kb
+    volumes:
+      - billiards-rag-pg-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:35432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kb", "-d", "kb"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  rag-api:
+    build:
+      context: ../../services/knowledge-base
+      dockerfile: Dockerfile
+    image: billiards-rag-api
+    container_name: billiards-rag-api
+    restart: always
+    depends_on:
+      rag-pg:
+        condition: service_healthy
+    environment:
+      DB_HOST: rag-pg
+      DB_PORT: "5432"
+      DB_NAME: kb
+      DB_USER: kb
+      DB_PASSWORD: kb
+      DB_APP_USER: kb
+      DB_APP_PASSWORD: kb
+      DEFAULT_TENANT: demo
+      EMBED_MODE: mock
+      EMBED_MODEL: BAAI/bge-m3
+      EMBED_BASE_URL: https://api.siliconflow.cn/v1
+      EMBED_API_KEY: ${EMBED_API_KEY:-}
+      LLM_BASE_URL: https://api.deepseek.com/v1
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: deepseek-chat
+      REFUSAL_MIN_SIMILARITY: "0.18"
+      STORAGE_BACKEND: local
+    command:
+      - sh
+      - -c
+      - alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --root-path /rag
+    volumes:
+      - billiards-rag-uploads:/app/data/uploads
+    ports:
+      - "127.0.0.1:28000:8000"
+
+  api:
+    build:
+      context: ../../apps/api
+      dockerfile: Dockerfile
+    image: billiards-api
+    container_name: billiards-api
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ../../apps/api/.env:/app/.env:ro
+    ports:
+      - "127.0.0.1:21002:10002"
+
+  agent:
+    build:
+      context: ../../services/agent
+      dockerfile: Dockerfile
+    image: billiards-agent
+    container_name: billiards-agent
+    restart: always
+    depends_on:
+      agent-pg:
+        condition: service_healthy
+      api:
+        condition: service_started
+      rag-api:
+        condition: service_started
+    environment:
+      APP_ENV: prod
+      AGENT_DATABASE_URL: postgresql+psycopg://agent:test-agent-only@agent-pg:5432/agent_test
+      LANGGRAPH_DATABASE_URL: postgresql://agent:test-agent-only@agent-pg:5432/agent_test
+      BILLIARDS_BASE_URL: http://api:10002/storeapi
+      BILLIARDS_MYSQL_RO_URL: mysql+mysqlconnector://bi_agent_ro:test-readonly-only@mysql:3306/billiards_test
+      RAG_BASE_URL: http://rag-api:8000
+      RAG_KB_ID: billiards-sop-kd
+      RAG_AUDIENCE: internal
+      MODEL_BASE_URL: https://api.deepseek.com/v1
+      MODEL_API_KEY: ${LLM_API_KEY:-}
+      MODEL_NAME: deepseek-chat
+      MODEL_TIMEOUT_SECONDS: "40"
+      SQL_TIMEOUT_MS: "2000"
+      SQL_MAX_ROWS: "200"
+      NO_PROXY: 127.0.0.1,localhost,::1
+      no_proxy: 127.0.0.1,localhost,::1
+    ports:
+      - "127.0.0.1:28100:8100"
+
+  web:
+    build:
+      context: ../../apps/admin-web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://132.232.166.40/storeapi
+        NEXT_PUBLIC_AGENT_BASE_URL: http://132.232.166.40/agent
+    image: billiards-web
+    container_name: billiards-web
+    restart: always
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "127.0.0.1:23001:3000"
+
+volumes:
+  billiards-mysql-data:
+  billiards-agent-pg-data:
+  billiards-rag-pg-data:
+  billiards-rag-uploads:
