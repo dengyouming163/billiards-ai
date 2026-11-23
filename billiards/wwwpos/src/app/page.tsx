@@ -161,7 +161,7 @@ function POSContent() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-[#f0fdf4] via-[#f7f7f7] to-[#f0f9ff]">
+    <div className="h-screen flex flex-col bg-[var(--color-bg-primary)]">
       {/* Network banner */}
       <NetworkBanner />
 
@@ -169,9 +169,14 @@ function POSContent() {
       <HeaderBar onShiftClick={handleShift} />
 
       {/* Main content */}
-      <div className="flex-1 flex overflow-hidden p-4 gap-4">
-        {/* Left - Quick panel */}
-        <div className="w-[340px] bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#e5e5e5]/40 overflow-hidden">
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left - Table board */}
+        <div className="flex-1 p-4 overflow-hidden">
+          <TableBoard onRefresh={refreshTables} />
+        </div>
+
+        {/* Right - Quick panel */}
+        <div className="w-[340px] border-l border-[var(--color-border-subtle)]">
           <QuickPanel
             onMember={handleMember}
             onShift={handleShift}
@@ -184,11 +189,6 @@ function POSContent() {
             onCouponVerify={() => setActiveModal('couponVerify')}
             onOpenTableRequests={() => setShowOpenTableRequests(true)}
           />
-        </div>
-
-        {/* Right - Table board */}
-        <div className="flex-1 bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#e5e5e5]/40 p-6 overflow-hidden">
-          <TableBoard onRefresh={refreshTables} />
         </div>
       </div>
 

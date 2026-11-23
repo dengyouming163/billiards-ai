@@ -223,7 +223,7 @@ export default function CouponReportsPage() {
       </Card>
 
       {/* Platform Summary Table */}
-      {summary?.platform_summary?.length > 0 && (
+      {summary && summary.platform_summary?.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>平台汇总</CardTitle>

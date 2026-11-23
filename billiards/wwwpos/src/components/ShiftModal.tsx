@@ -111,26 +111,26 @@ export function ShiftModal({ onClose }: ShiftModalProps) {
         )}
 
         {/* 员工选择 */}
-        <div className="bg-white rounded-3xl p-5 border border-[#e5e5e5]">
+        <div className="bg-slate-50 rounded-3xl p-5">
           <div className="flex items-center gap-2 mb-4">
-            <User className="w-5 h-5 text-[#999999]" />
-            <span className="text-base font-bold text-[#333333]">{isOnDuty ? '选择接班员工' : '选择上班员工'}</span>
+            <User className="w-5 h-5 text-slate-500" />
+            <span className="text-base font-bold text-slate-700">{isOnDuty ? '选择接班员工' : '选择上班员工'}</span>
           </div>
           {loadingEmployees ? (
-            <div className="flex items-center gap-2 text-[#999999] py-4"><Loader2 className="w-5 h-5 animate-spin" />加载中...</div>
+            <div className="flex items-center gap-2 text-slate-400 py-4"><Loader2 className="w-5 h-5 animate-spin" />加载中...</div>
           ) : (
             <div className="grid grid-cols-2 gap-3 max-h-[360px] overflow-y-auto">
               {employees.map(emp => (
                 <button key={emp.id} onClick={() => setSelectedEmployeeId(emp.id)}
                   className={`p-4 rounded-2xl border-2 text-left transition-all ${
-                    selectedEmployeeId === emp.id ? 'border-[#07C160] bg-[#07C160]/5 shadow-sm' : 'border-[#e5e5e5] bg-white hover:border-gray-300'
+                    selectedEmployeeId === emp.id ? 'border-emerald-400 bg-emerald-50 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'
                   } ${isOnDuty && emp.id === currentOperator?.id ? 'opacity-40' : ''}`}
                   disabled={isOnDuty && emp.id === currentOperator?.id}>
-                  <p className="text-base font-bold text-[#333333]">{emp.name}</p>
-                  <p className="text-sm text-[#999999] mt-0.5">{emp.phone}</p>
+                  <p className="text-base font-bold text-slate-800">{emp.name}</p>
+                  <p className="text-sm text-slate-400 mt-0.5">{emp.phone}</p>
                 </button>
               ))}
-              {employees.length === 0 && <p className="text-[#999999] col-span-2 py-4 text-center">暂无员工数据</p>}
+              {employees.length === 0 && <p className="text-slate-400 col-span-2 py-4 text-center">暂无员工数据</p>}
             </div>
           )}
         </div>
@@ -138,18 +138,18 @@ export function ShiftModal({ onClose }: ShiftModalProps) {
         {/* 密码 + 备用金 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="flex items-center gap-2 text-sm font-bold text-[#333333] mb-3">
-              <Lock className="w-5 h-5 text-[#999999]" />登录密码
+            <label className="flex items-center gap-2 text-sm font-bold text-slate-600 mb-3">
+              <Lock className="w-5 h-5" />登录密码
             </label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-              placeholder="输入密码" className="w-full h-14 px-5 rounded-2xl border-2 border-[#e5e5e5] text-base outline-none focus:border-[#07C160] transition-colors" />
+              placeholder="输入密码" className="w-full h-14 px-5 rounded-2xl border-2 border-slate-200 text-base outline-none focus:border-emerald-400 transition-colors" />
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-bold text-[#333333] mb-3">
-              <DollarSign className="w-5 h-5 text-[#999999]" />{isOnDuty ? '清点现金' : '备用金'}
+            <label className="flex items-center gap-2 text-sm font-bold text-slate-600 mb-3">
+              <DollarSign className="w-5 h-5" />{isOnDuty ? '清点现金' : '备用金'}
             </label>
             <input type="number" value={openingCash} onChange={(e) => setOpeningCash(e.target.value)}
-              placeholder="0.00" className="w-full h-14 px-5 rounded-2xl border-2 border-[#e5e5e5] text-base outline-none focus:border-[#07C160] transition-colors" />
+              placeholder="0.00" className="w-full h-14 px-5 rounded-2xl border-2 border-slate-200 text-base outline-none focus:border-emerald-400 transition-colors" />
           </div>
         </div>
 
@@ -157,18 +157,18 @@ export function ShiftModal({ onClose }: ShiftModalProps) {
         <div className="flex gap-4">
           {isOnDuty && selectedEmployeeId && selectedEmployeeId !== currentOperator?.id ? (
             <button onClick={handleHandover} disabled={isProcessing || !password}
-              className="flex-1 h-14 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50">
+              className="flex-1 h-14 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50">
               {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRightLeft className="w-5 h-5" />}交接班
             </button>
           ) : (
             <button onClick={handleStartWork} disabled={isProcessing || !password}
-              className="flex-1 h-14 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50">
+              className="flex-1 h-14 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50">
               {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
               {isOnDuty ? '确认交班' : '开始上班'}
             </button>
           )}
           <button onClick={handleLogout}
-            className="h-14 px-6 rounded-full border-2 border-red-400 text-red-500 font-medium hover:bg-red-50 transition-colors flex items-center justify-center gap-2">
+            className="h-14 px-6 rounded-2xl border-2 border-red-200 text-red-500 font-medium hover:bg-red-50 transition-colors flex items-center justify-center gap-2">
             <LogOut className="w-5 h-5" />退出
           </button>
         </div>

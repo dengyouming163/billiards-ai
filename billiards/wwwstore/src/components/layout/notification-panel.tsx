@@ -75,17 +75,17 @@ export function NotificationPanel({ onClose, onUnreadChange }: NotificationPanel
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'system': return 'bg-[#06B6D4]/10 text-[#0891B2]';
-      case 'order': return 'bg-[#07C160]/10 text-[#06AD56]';
-      case 'finance': return 'bg-[#FF976A]/10 text-[#FF7A45]';
-      case 'alert': return 'bg-[#FF5252]/10 text-[#FF3B3B]';
-      default: return 'bg-[#f7f7f7] text-[#999999]';
+      case 'system': return 'bg-blue-100 text-blue-700';
+      case 'order': return 'bg-emerald-100 text-emerald-700';
+      case 'finance': return 'bg-amber-100 text-amber-700';
+      case 'alert': return 'bg-rose-100 text-rose-700';
+      default: return 'bg-slate-100 text-slate-700';
     }
   };
 
   return (
     <div className="absolute right-0 top-full mt-2 w-96 bg-white rounded-2xl shadow-2xl border border-slate-200/50 overflow-hidden z-50">
-      <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[#07C160] to-[#06AD56]">
+      <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-500">
         <div className="flex items-center gap-2 text-white">
           <Bell className="w-5 h-5" />
           <span className="font-semibold">通知中心</span>
@@ -113,7 +113,7 @@ export function NotificationPanel({ onClose, onUnreadChange }: NotificationPanel
       <div className="max-h-96 overflow-y-auto">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="w-6 h-6 border-2 border-[#07C160] border-t-transparent rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : notifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-slate-400">
@@ -126,7 +126,7 @@ export function NotificationPanel({ onClose, onUnreadChange }: NotificationPanel
               <div
                 key={notification.id}
                 className={`p-4 hover:bg-slate-50 transition-colors ${
-                  !notification.isRead ? 'bg-[#07C160]/5' : ''
+                  !notification.isRead ? 'bg-emerald-50/50' : ''
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
@@ -136,7 +136,7 @@ export function NotificationPanel({ onClose, onUnreadChange }: NotificationPanel
                         {notification.typeText}
                       </span>
                       {!notification.isRead && (
-                        <span className="w-2 h-2 bg-[#07C160] rounded-full" />
+                        <span className="w-2 h-2 bg-emerald-500 rounded-full" />
                       )}
                     </div>
                     <p className="text-sm font-medium text-slate-800 truncate">
@@ -153,7 +153,7 @@ export function NotificationPanel({ onClose, onUnreadChange }: NotificationPanel
                     {!notification.isRead && (
                       <button
                         onClick={() => handleMarkRead(notification.id)}
-                        className="p-1.5 rounded-lg hover:bg-[#07C160]/10 text-slate-400 hover:text-[#07C160] transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-emerald-100 text-slate-400 hover:text-emerald-600 transition-colors"
                         title="标记已读"
                       >
                         <Check className="w-4 h-4" />

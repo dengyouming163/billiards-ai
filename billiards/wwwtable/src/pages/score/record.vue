@@ -145,9 +145,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+$gold: #c9a962;
+
 .record-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f0fdf4 0%, #f7f7f7 40%, #f0fdf4 100%);
+  background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 40%, #16162a 70%, #0f0f1f 100%);
 }
 
 .sticky-header {
@@ -161,11 +163,11 @@ onMounted(() => {
 }
 
 .header-card {
-  background: rgba(255,255,255,0.95);
-  border-radius: 40rpx;
-  padding: 32rpx 36rpx;
-  border: 2rpx solid rgba(7,193,96,0.08);
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.05), 0 0 20rpx rgba(7,193,96,0.04);
+  background: linear-gradient(145deg, rgba(26, 26, 46, 0.9), rgba(20, 20, 40, 0.95));
+  border-radius: 48rpx;
+  padding: 36rpx 40rpx;
+  border: 3rpx solid rgba($gold, 0.15);
+  box-shadow: 0 12rpx 48rpx rgba(0, 0, 0, 0.35), 0 0 40rpx rgba($gold, 0.08), inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
 }
 
 .header-row {
@@ -185,37 +187,39 @@ onMounted(() => {
   justify-content: flex-end;
 }
 
+
+
 .back-btn {
   width: 80rpx;
   height: 80rpx;
-  background: rgba(7,193,96,0.06);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
-  color: #07C160;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 64rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2rpx solid rgba(7,193,96,0.1);
+  border: 2rpx solid rgba(255, 255, 255, 0.12);
   
   &:active {
-    background: rgba(7,193,96,0.12);
+    background: rgba($gold, 0.1);
   }
 }
 
 .header-title {
   font-size: 52rpx;
   font-weight: 700;
-  color: #333333;
+  color: #f1f5f9;
 }
 
 .clear-btn {
   padding: 20rpx 32rpx;
-  background: rgba(239, 68, 68, 0.06);
+  background: rgba(239, 68, 68, 0.15);
   border-radius: 24rpx;
   color: #ef4444;
   font-size: 36rpx;
   font-weight: 600;
-  border: 2rpx solid rgba(239, 68, 68, 0.12);
+  border: 2rpx solid rgba(239, 68, 68, 0.25);
   
   &:active {
     opacity: 0.7;
@@ -242,17 +246,16 @@ onMounted(() => {
   
   .empty-text {
     font-size: 44rpx;
-    color: #999999;
+    color: rgba(255, 255, 255, 0.4);
   }
 }
 
 .record-group {
-  background: #ffffff;
-  border-radius: 40rpx;
+  background: linear-gradient(145deg, rgba(26, 26, 50, 0.95), rgba(18, 18, 38, 0.98));
+  border-radius: 48rpx;
   padding: 40rpx;
   margin-bottom: 32rpx;
-  border: 2rpx solid rgba(7,193,96,0.06);
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 2rpx solid rgba($gold, 0.1);
   
   .group-header {
     display: flex;
@@ -263,12 +266,12 @@ onMounted(() => {
     .group-title {
       font-size: 48rpx;
       font-weight: 700;
-      color: #333333;
+      color: #f1f5f9;
     }
     
     .group-date {
       font-size: 36rpx;
-      color: #999999;
+      color: rgba(255, 255, 255, 0.4);
     }
   }
   
@@ -277,8 +280,8 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     padding: 32rpx;
-    background: rgba(7,193,96,0.04);
-    border-radius: 28rpx;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 32rpx;
     margin-bottom: 32rpx;
     
     .summary-item {
@@ -293,12 +296,12 @@ onMounted(() => {
       .player-name {
         font-size: 40rpx;
         font-weight: 600;
-        color: #333333;
+        color: rgba(255, 255, 255, 0.7);
       }
       
       .win-count {
         font-size: 36rpx;
-        color: #999999;
+        color: rgba(255, 255, 255, 0.4);
       }
     }
     
@@ -314,7 +317,7 @@ onMounted(() => {
       
       .total-rounds {
         font-size: 36rpx;
-        color: #999999;
+        color: rgba(255, 255, 255, 0.4);
       }
     }
   }
@@ -325,7 +328,7 @@ onMounted(() => {
       justify-content: space-between;
       align-items: center;
       padding: 28rpx 0;
-      border-bottom: 2rpx solid rgba(7,193,96,0.04);
+      border-bottom: 2rpx solid rgba(255, 255, 255, 0.04);
       
       &:last-child {
         border-bottom: none;
@@ -333,7 +336,7 @@ onMounted(() => {
       
       .round-number {
         font-size: 40rpx;
-        color: #999999;
+        color: rgba(255, 255, 255, 0.5);
       }
       
       .round-scores {
@@ -344,18 +347,18 @@ onMounted(() => {
         .score {
           font-size: 56rpx;
           font-weight: 900;
-          color: #333333;
+          color: #f1f5f9;
         }
         
         .separator {
           font-size: 40rpx;
-          color: #cccccc;
+          color: rgba(255, 255, 255, 0.3);
         }
       }
       
       .round-time {
         font-size: 36rpx;
-        color: #999999;
+        color: rgba(255, 255, 255, 0.3);
       }
     }
   }

@@ -367,21 +367,21 @@ export function TableDrawer({
       />
 
       {/* Drawer */}
-      <div className="fixed right-0 top-0 h-full w-[65%] max-w-2xl bg-white z-50 animate-slide-in-right flex flex-col shadow-2xl rounded-l-3xl">
+      <div className="fixed right-0 top-0 h-full w-[65%] max-w-2xl bg-white z-50 animate-slide-in-right flex flex-col shadow-2xl">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-[#e5e5e5] bg-gradient-to-r from-[#07C160] to-[#06AD56]">
+        <div className="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-900 to-slate-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <h2 className="text-xl font-bold text-white">台球桌 {table.name}</h2>
               {zoneName && (
-                <span className="px-2 py-1 rounded-full text-xs font-medium bg-white/20 text-white">
+                <span className="px-2 py-1 rounded-lg text-xs font-medium bg-slate-700 text-slate-300">
                   {zoneName}
                 </span>
               )}
             </div>
           </div>
           {memberInfo && (
-            <div className="mt-3 flex items-center gap-4 bg-white/10 rounded-2xl px-4 py-2.5">
+            <div className="mt-3 flex items-center gap-4 bg-white/10 rounded-xl px-4 py-2.5">
               <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div className="w-9 h-9 rounded-full bg-amber-400/20 flex items-center justify-center shrink-0">
                   <UserPlus className="w-5 h-5 text-amber-400" />
@@ -399,18 +399,18 @@ export function TableDrawer({
                       {memberInfo.levelName as string}
                     </span>
                   </div>
-                  <div className="text-white/70 text-xs mt-0.5">
+                  <div className="text-slate-300 text-xs mt-0.5">
                     {memberInfo.phone as string}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-4 shrink-0">
                 <div className="text-right">
-                  <div className="text-white/60 text-xs">余额</div>
-                  <div className="text-amber-300 font-bold text-sm">¥{(memberInfo.balance as number) || 0}</div>
+                  <div className="text-slate-400 text-xs">余额</div>
+                  <div className="text-amber-400 font-bold text-sm">¥{(memberInfo.balance as number) || 0}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-white/60 text-xs">积分</div>
+                  <div className="text-slate-400 text-xs">积分</div>
                   <div className="text-white font-bold text-sm">{(memberInfo.points as number) || 0}</div>
                 </div>
               </div>
@@ -419,7 +419,7 @@ export function TableDrawer({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-6 space-y-4 bg-[#f5f5f5]">
+        <div className="flex-1 overflow-auto p-6 space-y-4 bg-slate-50">
           {/* Skeleton Loading */}
           {isLoading && isInUse && !billData && (
             <>
@@ -434,47 +434,47 @@ export function TableDrawer({
           {isInUse && (table.currentSession || billData) && (
             <>
               {/* Real-time Fee Card — 使用服务端权威账单 */}
-              <div className="bg-gradient-to-br from-[#07C160] to-[#06AD56] rounded-3xl p-7 text-white shadow-xl">
+              <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-7 text-white shadow-xl">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-white/80 text-sm">实时费用（服务端计费）</span>
-                  <div className="flex items-center gap-2 text-white/80">
+                  <span className="text-emerald-100 text-sm">实时费用（服务端计费）</span>
+                  <div className="flex items-center gap-2 text-emerald-100">
                     <Timer className="w-4 h-4" />
                     <span className="text-sm">{elapsedTime}</span>
                   </div>
                 </div>
                 <div className="flex items-baseline gap-2 mb-4">
                   <span className="text-4xl font-bold">¥{displayTotalFee.toFixed(2)}</span>
-                  <span className="text-white/80 text-sm">
+                  <span className="text-emerald-100 text-sm">
                     （台费¥{billTableFee.toFixed(2)}{billMergeFee > 0 ? ` + 并入台费¥${billMergeFee.toFixed(2)}` : ''} + 商品¥{billProductFee.toFixed(2)} + 助教¥{billAssistantFee.toFixed(2)}{billChargingFee > 0 ? ` + 充电¥${billChargingFee.toFixed(2)}` : ''}）
                   </span>
                 </div>
-                <div className="flex items-center gap-4 text-sm text-white/80">
+                <div className="flex items-center gap-4 text-sm text-emerald-100">
                   {coefficient !== 1.0 && (
-                    <span className={`px-2 py-1 rounded-full ${coefficient > 1 ? 'bg-amber-400/20' : 'bg-blue-400/20'}`}>
+                    <span className={`px-2 py-1 rounded ${coefficient > 1 ? 'bg-amber-400/20' : 'bg-blue-400/20'}`}>
                       {periodLabel}
                     </span>
                   )}
                   {billDiscountRate < 100 && (
-                    <span className="px-2 py-1 rounded-full bg-rose-400/20">会员{(billDiscountRate / 10).toFixed(1)}折</span>
+                    <span className="px-2 py-1 rounded bg-rose-400/20">会员{(billDiscountRate / 10).toFixed(1)}折</span>
                   )}
                   {billPrepaidHours > 0 && (
-                    <span className="px-2 py-1 rounded-full bg-white/20">预付{billPrepaidHours}h</span>
+                    <span className="px-2 py-1 rounded bg-white/20">预付{billPrepaidHours}h</span>
                   )}
                 </div>
               </div>
 
               {/* Pause Controls — 仅台费暂停，助教暂停在下方助教服务列表中逐条操作 */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5e5]">
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-3 h-3 rounded-full ${tablePaused ? 'bg-amber-500 animate-pulse' : 'bg-[#07C160]'}`} />
-                  <p className="text-sm text-[#999999] font-medium">
-                    台费状态: {tablePaused ? <span className="text-amber-600 font-bold">⏸ 已暂停</span> : <span className="text-[#07C160] font-bold">▶ 计费中</span>}
+                  <div className={`w-3 h-3 rounded-full ${tablePaused ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
+                  <p className="text-sm text-slate-500 font-medium">
+                    台费状态: {tablePaused ? <span className="text-amber-600 font-bold">⏸ 已暂停</span> : <span className="text-emerald-600 font-bold">▶ 计费中</span>}
                   </p>
                 </div>
                 <button
                   onClick={handlePauseTable}
-                  className={`w-full py-4 px-5 rounded-full text-base font-medium transition-colors ${
-                    tablePaused ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] hover:opacity-90 text-white' : 'bg-gradient-to-r from-[#07C160] to-[#06AD56] hover:opacity-90 text-white'
+                  className={`w-full py-4 px-5 rounded-2xl text-base font-medium transition-colors ${
+                    tablePaused ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-orange-500 hover:bg-orange-600 text-white'
                   }`}
                 >
                   {tablePaused ? `▶ 恢复台费（已暂停${pauseMinutes.table}分钟）` : '⏸ 暂停台费'}
@@ -482,61 +482,61 @@ export function TableDrawer({
               </div>
 
               {/* 台费明细 */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5e5]">
-                <h3 className="text-lg font-medium text-[#333333] flex items-center gap-3 mb-4">
-                  <Clock className="w-5 h-5 text-[#07C160]" />
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                <h3 className="text-lg font-medium text-slate-900 flex items-center gap-3 mb-4">
+                  <Clock className="w-5 h-5 text-emerald-500" />
                   台费明细
                 </h3>
                 <div className="space-y-3 text-base">
                   <div className="flex justify-between">
-                    <span className="text-[#999999]">开台时间</span>
-                    <span className="font-medium text-[#333333]">{((billData?.startTime as string) || (billData?.start_time as string)) ? formatDateTime((billData?.startTime as string) || (billData?.start_time as string) || '') : table.currentSession?.startTime ? formatDateTime(table.currentSession.startTime) : '-'}</span>
+                    <span className="text-slate-500">开台时间</span>
+                    <span className="font-medium text-slate-900">{((billData?.startTime as string) || (billData?.start_time as string)) ? formatDateTime((billData?.startTime as string) || (billData?.start_time as string) || '') : table.currentSession?.startTime ? formatDateTime(table.currentSession.startTime) : '-'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#999999]">已用时长</span>
-                    <span className="font-medium text-[#333333]">{((billData?.durationMinutes as number) || (billData?.duration_minutes as number)) ? formatMinutes((billData?.durationMinutes as number) || (billData?.duration_minutes as number) || 0) : elapsedTime}</span>
+                    <span className="text-slate-500">已用时长</span>
+                    <span className="font-medium text-slate-900">{((billData?.durationMinutes as number) || (billData?.duration_minutes as number)) ? formatMinutes((billData?.durationMinutes as number) || (billData?.duration_minutes as number) || 0) : elapsedTime}</span>
                   </div>
                   {billPrepaidHours > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-[#999999]">预付时长</span>
-                      <span className="font-medium text-[#07C160]">{billPrepaidHours}小时 ¥{billPrepaidAmount.toFixed(2)}</span>
+                      <span className="text-slate-500">预付时长</span>
+                      <span className="font-medium text-emerald-600">{billPrepaidHours}小时 ¥{billPrepaidAmount.toFixed(2)}</span>
                     </div>
                   )}
                   {coefficient !== 1.0 && (
                     <div className="flex justify-between">
-                      <span className="text-[#999999]">时段系数</span>
+                      <span className="text-slate-500">时段系数</span>
                       <span className={`font-medium ${coefficient > 1 ? 'text-amber-600' : 'text-blue-600'}`}>{periodLabel}</span>
                     </div>
                   )}
                   {billMergeFee > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-[#999999]">并台转入台费</span>
+                      <span className="text-slate-500">并台转入台费</span>
                       <span className="font-medium text-amber-600">+¥{billMergeFee.toFixed(2)}</span>
                     </div>
                   )}
                   {billDiscountAmount > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-[#999999]">会员折扣</span>
+                      <span className="text-slate-500">会员折扣</span>
                       <span className="font-medium text-rose-500">-¥{billDiscountAmount}</span>
                     </div>
                   )}
-                  <div className="flex justify-between pt-2 border-t border-[#e5e5e5]">
-                    <span className="text-[#333333] font-medium">台费合计</span>
-                    <span className="text-[#07C160] font-bold">¥{(billTableFee + billMergeFee).toFixed(2)}</span>
+                  <div className="flex justify-between pt-2 border-t border-slate-100">
+                    <span className="text-slate-700 font-medium">台费合计</span>
+                    <span className="text-emerald-600 font-bold">¥{(billTableFee + billMergeFee).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
 
               {/* 商品点单明细 */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5e5]">
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium text-[#333333] flex items-center gap-3">
-                    <Receipt className="w-5 h-5 text-[#07C160]" />
+                  <h3 className="text-lg font-medium text-slate-900 flex items-center gap-3">
+                    <Receipt className="w-5 h-5 text-blue-500" />
                     商品点单明细
                   </h3>
                   <button
                     onClick={onOrder}
-                    className="text-base text-[#07C160] hover:text-[#06AD56] font-medium"
+                    className="text-base text-blue-600 hover:text-blue-700 font-medium"
                   >
                     + 商品点单
                   </button>
@@ -560,33 +560,33 @@ export function TableDrawer({
                           {displayItems.map((item: Record<string, unknown>, index: number) => {
                             const status = item.status as string;
                             return (
-                        <div key={item.id as string || index} className="flex items-center justify-between text-base py-3 border-b border-[#f5f5f5] last:border-0">
+                        <div key={item.id as string || index} className="flex items-center justify-between text-base py-3 border-b border-slate-50 last:border-0">
                           <div className="flex items-center gap-3 min-w-0">
-                            <span className="text-[#333333] truncate">
+                            <span className="text-slate-600 truncate">
                               {(item.itemName as string) || (item.name as string) || (item.productName as string)}
-                              <span className="text-[#999999] ml-2">x{item.quantity as number}</span>
+                              <span className="text-slate-400 ml-2">x{item.quantity as number}</span>
                             </span>
-                            {status === 'preorder_pending' && <span className="text-sm text-[#999999] shrink-0">⏳待确认</span>}
-                            {status === 'pending' && <span className="text-sm text-[#07C160] shrink-0">待接单</span>}
+                            {status === 'preorder_pending' && <span className="text-sm text-slate-400 shrink-0">⏳待确认</span>}
+                            {status === 'pending' && <span className="text-sm text-blue-600 shrink-0">待接单</span>}
                             {status === 'processing' && <span className="text-sm text-amber-600 shrink-0">处理中</span>}
-                            {status === 'delivered' && <span className="text-sm text-[#07C160] shrink-0">✅已送达</span>}
-                            {status === 'cancelled' && <span className="text-sm text-[#999999] shrink-0">已取消</span>}
+                            {status === 'delivered' && <span className="text-sm text-emerald-600 shrink-0">✅已送达</span>}
+                            {status === 'cancelled' && <span className="text-sm text-slate-400 shrink-0">已取消</span>}
                           </div>
                           <div className="flex items-center gap-3 shrink-0">
-                            <span className="text-[#333333] font-medium text-lg">¥{(item.finalPrice as number) || (item.price as number) || 0}</span>
+                            <span className="text-slate-900 font-medium text-lg">¥{(item.finalPrice as number) || (item.price as number) || 0}</span>
                             {(status === 'pending' || status === 'preorder_pending') && (
                               <>
                                 <button
                                   onClick={() => handleProductAction(item)}
                                   disabled={loadingItemId === (item.id as string)}
-                                  className="text-sm px-4 py-2 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90 font-medium disabled:opacity-50 transition-colors"
+                                  className="text-sm px-3 py-2 rounded-xl bg-blue-100 text-blue-700 hover:bg-blue-200 font-medium disabled:opacity-50 transition-colors"
                                 >
                                   {loadingItemId === (item.id as string) ? '...' : '确认接单'}
                                 </button>
                                 <button
                                   onClick={() => handleCancelItem(item)}
                                   disabled={loadingItemId === (item.id as string)}
-                                  className="text-sm px-4 py-2 rounded-full bg-white border border-red-500 text-red-500 hover:bg-red-50 font-medium disabled:opacity-50 transition-colors"
+                                  className="text-sm px-3 py-2 rounded-xl bg-red-100 text-red-700 hover:bg-red-200 font-medium disabled:opacity-50 transition-colors"
                                 >
                                   {loadingItemId === (item.id as string) ? '...' : '取消'}
                                 </button>
@@ -596,7 +596,7 @@ export function TableDrawer({
                               <button
                                 onClick={() => handleProductAction(item)}
                                 disabled={loadingItemId === (item.id as string)}
-                                className="text-sm px-4 py-2 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90 font-medium disabled:opacity-50 transition-colors"
+                                className="text-sm px-3 py-2 rounded-xl bg-emerald-100 text-emerald-700 hover:bg-emerald-200 font-medium disabled:opacity-50 transition-colors"
                               >
                                 {loadingItemId === (item.id as string) ? '...' : '送达'}
                               </button>
@@ -608,7 +608,7 @@ export function TableDrawer({
                           {hasMore && (
                             <button
                               onClick={() => setProductExpanded(!productExpanded)}
-                              className="w-full text-sm text-[#07C160] hover:text-[#06AD56] font-medium py-3 transition-colors"
+                              className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium py-3 transition-colors"
                             >
                               {productExpanded ? '收起 ▲' : `展开全部 ${productItems.length} 项 ▼`}
                             </button>
@@ -623,44 +623,44 @@ export function TableDrawer({
                     <p className="text-slate-400 text-base mb-4">暂未点单</p>
                     <button
                       onClick={onOrder}
-                      className="px-6 py-3 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white text-base font-medium hover:opacity-90 transition-colors"
+                      className="px-6 py-3 rounded-xl bg-blue-500 text-white text-base font-medium hover:bg-blue-600 transition-colors"
                     >
                       去点单
                     </button>
                   </div>
                 )}
                 {detailItems.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-[#e5e5e5] flex justify-between">
-                    <span className="text-[#333333] font-medium text-lg">商品小计</span>
-                    <span className="text-[#07C160] font-bold text-xl">¥{billProductFee.toFixed(2)}</span>
+                  <div className="mt-4 pt-4 border-t border-slate-100 flex justify-between">
+                    <span className="text-slate-700 font-medium text-lg">商品小计</span>
+                    <span className="text-emerald-600 font-bold text-xl">¥{billProductFee.toFixed(2)}</span>
                   </div>
                 )}
               </div>
 
               {/* 充电费用明细 */}
               {billChargingFee > 0 && (
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5e5]">
-                  <h3 className="text-lg font-medium text-[#333333] flex items-center gap-3 mb-4">
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                  <h3 className="text-lg font-medium text-slate-900 flex items-center gap-3 mb-4">
                     <span className="text-xl">⚡</span>
                     充电费用明细
                   </h3>
-                  <div className="flex justify-between pt-3 border-t border-[#e5e5e5]">
-                    <span className="text-[#333333] font-medium text-lg">充电小计</span>
-                    <span className="text-[#07C160] font-bold text-xl">¥{billChargingFee.toFixed(2)}</span>
+                  <div className="flex justify-between pt-3 border-t border-slate-100">
+                    <span className="text-slate-700 font-medium text-lg">充电小计</span>
+                    <span className="text-emerald-600 font-bold text-xl">¥{billChargingFee.toFixed(2)}</span>
                   </div>
                 </div>
               )}
 
               {/* 助教服务明细 */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5e5]">
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium text-[#333333] flex items-center gap-3">
-                    <UserCog className="w-5 h-5 text-[#07C160]" />
+                  <h3 className="text-lg font-medium text-slate-900 flex items-center gap-3">
+                    <UserCog className="w-5 h-5 text-purple-500" />
                     助教服务明细
                   </h3>
                   <button
                     onClick={onAssignAssistant}
-                    className="text-base text-[#07C160] hover:text-[#06AD56] font-medium"
+                    className="text-base text-purple-600 hover:text-purple-700 font-medium"
                   >
                     + 助教服务
                   </button>
@@ -681,21 +681,21 @@ export function TableDrawer({
                         // 买断记录: 一口价，无计时/暂停/结束，但可加钟
                         if ((item.billingMode || item.billing_mode) === 'flat_rate' && itemType === 'assistant') {
                           return (
-                            <div key={item.id as string} className="flex items-center justify-between py-3 border-b border-[#f5f5f5] last:border-0">
+                            <div key={item.id as string} className="flex items-center justify-between py-3 border-b border-slate-50 last:border-0">
                               <div className="flex items-center gap-3 min-w-0">
-                                <span className="text-[#333333] truncate text-base">{(item.assistantName as string) || (item.itemName as string) || (item.name as string)}</span>
-                                <span className="text-sm text-[#07C160] shrink-0">买断{(item.quantity as number) || 0}h</span>
+                                <span className="text-slate-600 truncate text-base">{(item.assistantName as string) || (item.itemName as string) || (item.name as string)}</span>
+                                <span className="text-sm text-purple-600 shrink-0">买断{(item.quantity as number) || 0}h</span>
                                 {(item.isPaid || item.is_paid) ? (
-                                  <span className="text-sm text-[#07C160] shrink-0">✅已支付</span>
+                                  <span className="text-sm text-emerald-600 shrink-0">✅已支付</span>
                                 ) : (
-                                  <span className="text-sm text-[#999999] shrink-0">已生效</span>
+                                  <span className="text-sm text-slate-400 shrink-0">已生效</span>
                                 )}
                               </div>
                               <div className="flex items-center gap-2 shrink-0">
-                                <span className="text-[#333333] font-medium text-lg">¥{((item.price as number) || 0).toFixed(2)}</span>
+                                <span className="text-slate-900 font-medium text-lg">¥{((item.price as number) || 0).toFixed(2)}</span>
                                 <button
                                   onClick={(e) => { e.stopPropagation(); setOvertimeItem(item); }}
-                                  className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90 text-xs font-medium cursor-pointer transition-colors"
+                                  className="px-2 py-1 rounded-lg bg-amber-500 text-white hover:bg-amber-600 text-xs font-medium cursor-pointer transition-colors"
                                 >+加钟</button>
                               </div>
                             </div>
@@ -705,13 +705,13 @@ export function TableDrawer({
                         // 加钟记录: 已完成状态, 无操作按钮
                         if (itemType === 'assistant_overtime') {
                           return (
-                            <div key={item.id as string} className="flex items-center justify-between py-3 border-b border-[#f5f5f5] last:border-0">
+                            <div key={item.id as string} className="flex items-center justify-between py-3 border-b border-slate-50 last:border-0">
                               <div className="flex items-center gap-3 min-w-0">
-                                <span className="text-[#333333] truncate text-base">{(item.assistantName as string) || (item.itemName as string)}</span>
+                                <span className="text-slate-600 truncate text-base">{(item.assistantName as string) || (item.itemName as string)}</span>
                                 <span className="text-sm text-amber-600 shrink-0">+加钟{(item.quantity as number) || 0}h</span>
-                                <span className="text-sm text-[#07C160] shrink-0">已生效</span>
+                                <span className="text-sm text-emerald-600 shrink-0">已生效</span>
                               </div>
-                              <span className="text-[#333333] font-medium text-lg">¥{((item.price as number) || 0).toFixed(2)}</span>
+                              <span className="text-slate-900 font-medium text-lg">¥{((item.price as number) || 0).toFixed(2)}</span>
                             </div>
                           );
                         }
@@ -734,31 +734,31 @@ export function TableDrawer({
                         const s = diff % 60;
                         const servingDuration = startedAt ? `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}` : '00:00:00';
                         return (
-                          <div key={item.id as string} className="flex items-center justify-between py-3 border-b border-[#f5f5f5] last:border-0">
+                          <div key={item.id as string} className="flex items-center justify-between py-3 border-b border-slate-50 last:border-0">
                             <div className="flex items-center gap-3 min-w-0">
-                              <span className="text-[#333333] truncate text-base">{(item.assistantName as string) || (item.itemName as string) || (item.name as string)}</span>
+                              <span className="text-slate-600 truncate text-base">{(item.assistantName as string) || (item.itemName as string) || (item.name as string)}</span>
                               {(status === 'serving' && (item.isPaused || item.is_paused)) && <span className="text-sm text-amber-600 shrink-0">⏸已暂停 {servingDuration}</span>}
-                              {status === 'serving' && !(item.isPaused || item.is_paused) && <span className="text-sm text-[#07C160] shrink-0">⏱{servingDuration}</span>}
-                              {status === 'pending' && <span className="text-sm text-[#07C160] shrink-0">待确认</span>}
-                              {status === 'processing' && <span className="text-sm text-[#07C160] shrink-0">已确认</span>}
-                              {status === 'completed' && <span className="text-sm text-[#07C160] shrink-0">✅已完成 ¥{((item.finalPrice as number) || (item.price as number) || 0).toFixed(2)}</span>}
-                              {status === 'cancelled' && <span className="text-sm text-[#999999] shrink-0">已取消</span>}
+                              {status === 'serving' && !(item.isPaused || item.is_paused) && <span className="text-sm text-emerald-600 shrink-0">⏱{servingDuration}</span>}
+                              {status === 'pending' && <span className="text-sm text-blue-600 shrink-0">待确认</span>}
+                              {status === 'processing' && <span className="text-sm text-emerald-600 shrink-0">已确认</span>}
+                              {status === 'completed' && <span className="text-sm text-emerald-600 shrink-0">✅已完成 ¥{((item.finalPrice as number) || (item.price as number) || 0).toFixed(2)}</span>}
+                              {status === 'cancelled' && <span className="text-sm text-slate-400 shrink-0">已取消</span>}
                             </div>
                             <div className="flex items-center gap-3 shrink-0">
-                              <span className="text-[#333333] font-medium text-lg">¥{((item.price as number) || (item.finalPrice as number) || 0).toFixed(2)}</span>
+                              <span className="text-slate-900 font-medium text-lg">¥{((item.price as number) || (item.finalPrice as number) || 0).toFixed(2)}</span>
                               {status === 'pending' && (
                                 <>
                                   <button
                                     onClick={() => handleAssistantAction(item)}
                                     disabled={loadingItemId === (item.id as string)}
-                                    className="text-sm px-4 py-2 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90 font-medium disabled:opacity-50 transition-colors"
+                                    className="text-sm px-3 py-2 rounded-xl bg-blue-100 text-blue-700 hover:bg-blue-200 font-medium disabled:opacity-50 transition-colors"
                                   >
                                     {loadingItemId === (item.id as string) ? '...' : '确认接单'}
                                   </button>
                                   <button
                                     onClick={() => handleCancelAssistant(item)}
                                     disabled={loadingItemId === (item.id as string)}
-                                    className="text-sm px-4 py-2 rounded-full bg-white border border-red-500 text-red-500 hover:bg-red-50 font-medium disabled:opacity-50 transition-colors"
+                                    className="text-sm px-3 py-2 rounded-xl bg-red-100 text-red-700 hover:bg-red-200 font-medium disabled:opacity-50 transition-colors"
                                   >
                                     {loadingItemId === (item.id as string) ? '...' : '取消'}
                                   </button>
@@ -768,7 +768,7 @@ export function TableDrawer({
                                 <button
                                   onClick={() => handleAssistantAction(item)}
                                   disabled={loadingItemId === (item.id as string)}
-                                  className="text-sm px-4 py-2 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90 font-medium disabled:opacity-50 transition-colors"
+                                  className="text-sm px-3 py-2 rounded-xl bg-emerald-100 text-emerald-700 hover:bg-emerald-200 font-medium disabled:opacity-50 transition-colors"
                                 >
                                   {loadingItemId === (item.id as string) ? '...' : '开始服务'}
                                 </button>
@@ -777,22 +777,22 @@ export function TableDrawer({
                                 <div className="flex items-center gap-1">
                                   <button
                                     onClick={(e) => { e.stopPropagation(); handleToggleAssistantPause(item); }}
-                                    className={`px-3 py-2 rounded-full text-xs font-medium cursor-pointer transition-colors ${
+                                    className={`px-3 py-2 rounded-xl text-xs font-medium cursor-pointer transition-colors ${
                                       (item.isPaused || item.is_paused)
-                                        ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90'
-                                        : 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90'
+                                        ? 'bg-green-500 text-white hover:bg-green-600'
+                                        : 'bg-yellow-500 text-white hover:bg-yellow-600'
                                     }`}
                                   >
                                     {(item.isPaused || item.is_paused) ? '▶恢复' : '⏸暂停'}
                                   </button>
                                   <button
                                     onClick={(e) => { e.stopPropagation(); setOvertimeItem(item); }}
-                                    className="px-3 py-2 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90 text-xs font-medium cursor-pointer transition-colors"
+                                    className="px-3 py-2 rounded-xl bg-amber-500 text-white hover:bg-amber-600 text-xs font-medium cursor-pointer transition-colors"
                                   >+加钟</button>
                                   <button
                                     onClick={(e) => { e.stopPropagation(); handleAssistantAction(item); }}
                                     disabled={loadingItemId === (item.id as string)}
-                                    className="px-3 py-2 rounded-full bg-white border border-red-500 text-red-500 hover:bg-red-50 text-xs font-medium disabled:opacity-50 cursor-pointer transition-colors"
+                                    className="px-3 py-2 rounded-xl bg-rose-500 text-white hover:bg-rose-600 text-xs font-medium disabled:opacity-50 cursor-pointer transition-colors"
                                   >
                                     {loadingItemId === (item.id as string) ? '...' : '结束'}
                                   </button>
@@ -801,7 +801,7 @@ export function TableDrawer({
                               {status === 'completed' && (
                                 <button
                                   onClick={(e) => { e.stopPropagation(); setOvertimeItem(item); }}
-                                  className="px-3 py-2 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white hover:opacity-90 text-xs font-medium cursor-pointer transition-colors"
+                                  className="px-3 py-2 rounded-xl bg-amber-500 text-white hover:bg-amber-600 text-xs font-medium cursor-pointer transition-colors"
                                 >+加钟</button>
                               )}
                             </div>
@@ -811,7 +811,7 @@ export function TableDrawer({
                             {hasMore && (
                               <button
                                 onClick={() => setAssistantExpanded(!assistantExpanded)}
-                                className="w-full text-sm text-[#07C160] hover:text-[#06AD56] font-medium py-3 transition-colors"
+                                className="w-full text-sm text-purple-600 hover:text-purple-700 font-medium py-3 transition-colors"
                               >
                                 {assistantExpanded ? '收起 ▲' : `展开全部 ${assistantItems.length} 项 ▼`}
                               </button>
@@ -820,28 +820,28 @@ export function TableDrawer({
                         );
                       })()}
                     </div>
-                    <div className="mt-4 pt-4 border-t border-[#e5e5e5] flex justify-between">
-                      <span className="text-[#333333] font-medium text-lg">助教小计</span>
-                      <span className="text-[#07C160] font-bold text-xl">¥{billAssistantFee.toFixed(2)}</span>
+                    <div className="mt-4 pt-4 border-t border-slate-100 flex justify-between">
+                      <span className="text-slate-700 font-medium text-lg">助教小计</span>
+                      <span className="text-emerald-600 font-bold text-xl">¥{billAssistantFee.toFixed(2)}</span>
                     </div>
                   </>
                 ) : table.currentSession?.assistantName ? (
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <UserCog className="w-5 h-5 text-[#07C160]" />
-                      <span className="text-[#333333] text-base">{table.currentSession.assistantName}</span>
-                      <span className="text-sm text-[#07C160]">服务中</span>
+                      <UserCog className="w-5 h-5 text-purple-500" />
+                      <span className="text-slate-600 text-base">{table.currentSession.assistantName}</span>
+                      <span className="text-sm text-emerald-600">服务中</span>
                     </div>
                   </div>
                 ) : (
                   <div className="text-center py-6">
                     {availableAssistants.length > 0 ? (
-                      <button onClick={onAssignAssistant} className="px-8 py-4 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-medium text-lg shadow-lg shadow-[#07C160]/20 hover:shadow-xl hover:opacity-90 transition-all">
+                      <button onClick={onAssignAssistant} className="px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium text-lg shadow-lg shadow-purple-200 hover:shadow-xl transition-shadow">
                         <UserPlus className="w-5 h-5 inline mr-2" />
                         选择助教上桌
                       </button>
                     ) : (
-                      <p className="text-[#999999] text-base">暂无助教服务</p>
+                      <p className="text-slate-400 text-base">暂无助教服务</p>
                     )}
                   </div>
                 )}
@@ -852,25 +852,25 @@ export function TableDrawer({
           {/* Idle Status */}
           {isIdle && (
             <>
-              <div className="bg-gradient-to-br from-[#07C160] to-[#06AD56] rounded-3xl p-7 text-white">
+              <div className="bg-gradient-to-br from-slate-600 to-slate-700 rounded-3xl p-7 text-white">
                 <div className="flex items-center gap-6">
                   <div className="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center">
                     <Sparkles className="w-10 h-10" />
                   </div>
                   <div>
-                    <p className="text-white/80 text-base">台球桌空闲中</p>
+                    <p className="text-slate-300 text-base">台球桌空闲中</p>
                     <p className="text-3xl font-bold">¥{table.hourlyRate}/小时</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5e5]">
-                <h3 className="text-lg font-medium text-[#333333] mb-4">台球桌信息</h3>
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                <h3 className="text-lg font-medium text-slate-900 mb-4">台球桌信息</h3>
                 <div className="grid grid-cols-2 gap-6 text-base">
                   
                   <div>
-                    <p className="text-[#999999]">台球桌区域</p>
-                    <p className="font-medium text-[#333333] text-lg">{zoneName || '默认区域'}</p>
+                    <p className="text-slate-500">台球桌区域</p>
+                    <p className="font-medium text-slate-900 text-lg">{zoneName || '默认区域'}</p>
                   </div>
                 </div>
               </div>
@@ -881,10 +881,10 @@ export function TableDrawer({
           {/* Other Status */}
           {!isIdle && !isInUse && (
             <div className="text-center py-16">
-              <div className="w-20 h-20 rounded-full bg-[#f5f5f5] flex items-center justify-center mx-auto mb-6">
-                <AlertCircle className="w-10 h-10 text-[#999999]" />
+              <div className="w-20 h-20 rounded-3xl bg-slate-100 flex items-center justify-center mx-auto mb-6">
+                <AlertCircle className="w-10 h-10 text-slate-400" />
               </div>
-              <p className="text-[#999999] text-lg">
+              <p className="text-slate-500 text-lg">
                 {table.status === 'reserved' ? '该台球桌已被预约' : '该台球桌正在维护中'}
               </p>
             </div>
@@ -892,9 +892,9 @@ export function TableDrawer({
         </div>
 
         {/* Bottom Actions */}
-        <div className="p-7 border-t border-[#e5e5e5] bg-white space-y-4">
+        <div className="p-7 border-t border-slate-200 bg-white space-y-4">
           {isIdle && (
-            <button onClick={onOpenTable} className="w-full py-5 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold text-xl shadow-lg shadow-[#07C160]/20 hover:shadow-xl hover:opacity-90 transition-all">
+            <button onClick={onOpenTable} className="w-full py-5 rounded-3xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-xl shadow-lg shadow-emerald-200 hover:shadow-xl transition-all">
               <CheckCircle className="w-6 h-6 inline mr-3" />
               开台
             </button>
@@ -905,21 +905,21 @@ export function TableDrawer({
               <div className="grid grid-cols-3 gap-3">
                 <button 
                   onClick={onTransfer} 
-                  className="py-4 rounded-full bg-white border border-[#e5e5e5] text-[#07C160] font-medium hover:bg-[#f5f5f5] transition-colors flex items-center justify-center gap-3"
+                  className="py-4 rounded-2xl bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-3"
                 >
                   <ArrowRightLeft className="w-5 h-5" />
                   换台
                 </button>
                 <button 
                   onClick={onMerge} 
-                  className="py-4 rounded-full bg-white border border-[#e5e5e5] text-[#07C160] font-medium hover:bg-[#f5f5f5] transition-colors flex items-center justify-center gap-3"
+                  className="py-4 rounded-2xl bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-3"
                 >
                   <Merge className="w-5 h-5" />
                   并台
                 </button>
                 <button 
                   onClick={onMember} 
-                  className="py-4 rounded-full bg-white border border-[#07C160] text-[#07C160] font-medium hover:bg-[#f5f5f5] transition-colors flex items-center justify-center gap-3"
+                  className="py-4 rounded-2xl bg-amber-100 text-amber-700 font-medium hover:bg-amber-200 transition-colors flex items-center justify-center gap-3"
                 >
                   <UserPlus className="w-5 h-5" />
                   会员
@@ -928,7 +928,7 @@ export function TableDrawer({
 
               <button 
                 onClick={onCheckout} 
-                className="w-full py-5 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold text-xl shadow-lg shadow-[#07C160]/20 hover:shadow-xl hover:opacity-90 transition-all flex items-center justify-center gap-3"
+                className="w-full py-5 rounded-3xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xl shadow-lg shadow-rose-200 hover:shadow-xl transition-all flex items-center justify-center gap-3"
               >
                 <CreditCard className="w-6 h-6" />
                 {(() => {

@@ -46,7 +46,7 @@ class UploadController extends BaseStoreController
             return JsonService::fail('图片保存失败，请重试');
         }
 
-        $url = 'https://poolapi.kyyp.cn/uploads/' . $type . '/' . $filename;
+        $url = 'https://api.tpzl88.com/uploads/' . $type . '/' . $filename;
 
         return JsonService::success('上传成功', [
             'url' => $url,

@@ -67,7 +67,6 @@ import { onShow } from '@dcloudio/uni-app'
 import { getEmployeeList } from '@/api/modules/employee'
 import type { Employee } from '@/types'
 import StateView from '@/components/StateView.vue'
-''
 
 const ROLE_LABELS: Record<string, string> = {
   boss: '老板', manager: '经理', finance: '财务',
@@ -149,7 +148,7 @@ function goAdd() {
   max-width: 100vw;
   overflow-x: hidden;
   box-sizing: border-box;
-  background: #f7f7f7;
+  background: #f5f5f5;
   display: flex;
   flex-direction: column;
 }
@@ -157,32 +156,31 @@ function goAdd() {
 /* Search */
 .search-bar {
   padding: 16rpx 24rpx;
-  background: #ffffff;
-  border-bottom: 1rpx solid #e5e5e5;
+  background: #fff;
   flex-shrink: 0;
 }
 
 .search-inner {
   display: flex;
   align-items: center;
-  background: #f7f7f7;
+  background: #f3f4f6;
   border-radius: 40rpx;
   padding: 0 24rpx;
   height: 72rpx;
 }
 
-.search-icon { font-size: 28rpx; margin-right: 12rpx; color: #999999; }
+.search-icon { font-size: 28rpx; margin-right: 12rpx; }
 
 .search-input {
   flex: 1;
   font-size: 28rpx;
-  color: #333333;
+  color: #1a1a1a;
   height: 72rpx;
 }
 
 .search-clear {
   font-size: 28rpx;
-  color: #999999;
+  color: #9ca3af;
   padding: 8rpx;
 }
 
@@ -205,9 +203,8 @@ function goAdd() {
   align-items: center;
   gap: 20rpx;
   padding: 24rpx;
-  background: #ffffff;
-  border: 1rpx solid #e5e5e5;
-  border-radius: 16rpx;
+  background: #fff;
+  border-radius: 20rpx;
   transition: transform .15s;
 
   &:active { transform: scale(.98); }
@@ -226,7 +223,7 @@ function goAdd() {
 .avatar-text {
   font-size: 34rpx;
   font-weight: 700;
-  color: #333333;
+  color: #374151;
 }
 
 .card-info {
@@ -246,7 +243,7 @@ function goAdd() {
 .emp-name {
   font-size: 30rpx;
   font-weight: 700;
-  color: #333333;
+  color: #1a1a1a;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -262,12 +259,12 @@ function goAdd() {
 
 .emp-phone {
   font-size: 24rpx;
-  color: #999999;
+  color: #6b7280;
 }
 
 .emp-extra {
   font-size: 22rpx;
-  color: #999999;
+  color: #9ca3af;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -279,8 +276,8 @@ function goAdd() {
   border-radius: 50%;
   flex-shrink: 0;
 
-  &.on { background: #07C160; box-shadow: 0 0 8rpx rgba(7,193,96,.4); }
-  &.off { background: #cccccc; }
+  &.on { background: #10b981; box-shadow: 0 0 8rpx rgba(16,185,129,.4); }
+  &.off { background: #d1d5db; }
 }
 
 /* FAB */
@@ -290,12 +287,12 @@ function goAdd() {
   bottom: calc(env(safe-area-inset-bottom) + 48rpx);
   width: 96rpx;
   height: 96rpx;
-  background: linear-gradient(135deg, #07C160, #06AD56);
+  background: linear-gradient(135deg, #059669, #047857);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8rpx 24rpx rgba(7,193,96,.3);
+  box-shadow: 0 8rpx 24rpx rgba(5,150,105,.35);
   z-index: 100;
 
   &:active { transform: scale(.9); }

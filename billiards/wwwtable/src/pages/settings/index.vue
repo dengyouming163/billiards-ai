@@ -74,12 +74,8 @@ async function handleLogout() {
 <style lang="scss" scoped>
 @use '@/styles/layout-system.scss';
 
-$primary: #07C160;
-$primary-dark: #06AD56;
-$bg: #f7f7f7;
-$card-bg: #ffffff;
-$text-primary: #333333;
-$text-secondary: #999999;
+$gold: #c9a962;
+$bg: #0f0f16;
 
 .back-btn {
   display: flex;
@@ -87,26 +83,26 @@ $text-secondary: #999999;
   justify-content: center;
   min-height: 88rpx;
   padding: 0 36rpx;
-  background: rgba($primary, 0.06);
+  background: rgba($gold, 0.1);
   border-radius: 44rpx;
-  border: 2rpx solid rgba($primary, 0.2);
+  border: 2rpx solid rgba($gold, 0.25);
   transition: all 0.3s;
 
   text {
     font-size: 40rpx;
     font-weight: 600;
-    color: $primary;
+    color: $gold;
   }
 
   &:active {
     transform: scale(0.95);
-    background: rgba($primary, 0.1);
+    background: rgba($gold, 0.2);
   }
 }
 
 .container {
   min-height: 100vh;
-  background: $bg;
+  background: linear-gradient(180deg, $bg 0%, #12121a 30%, #1a1a2e 70%, $bg 100%);
 }
 
 .content {
@@ -116,19 +112,20 @@ $text-secondary: #999999;
 }
 
 .info-card {
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba(35, 35, 65, 0.95), rgba(25, 25, 50, 0.98));
   border-radius: 48rpx;
   padding: 64rpx;
-  border: 3rpx solid rgba($primary, 0.08);
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 3rpx solid rgba($gold, 0.2);
+  box-shadow: 0 16rpx 60rpx rgba(0, 0, 0, 0.4), 0 0 40rpx rgba($gold, 0.08);
 }
 
 .card-title {
   font-size: 64rpx;
   font-weight: 700;
-  color: $primary;
+  color: $gold;
   margin-bottom: 48rpx;
   letter-spacing: 3rpx;
+  text-shadow: 0 0 30rpx rgba($gold, 0.3);
 }
 
 .info-row {
@@ -136,7 +133,7 @@ $text-secondary: #999999;
   justify-content: space-between;
   align-items: center;
   padding: 40rpx 0;
-  border-bottom: 2rpx solid rgba($primary, 0.06);
+  border-bottom: 2rpx solid rgba(255, 255, 255, 0.06);
 
   &:last-child {
     border-bottom: none;
@@ -145,25 +142,25 @@ $text-secondary: #999999;
 
 .info-label {
   font-size: 48rpx;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .info-value {
   font-size: 48rpx;
-  color: $text-primary;
+  color: #f1f5f9;
   font-weight: 600;
 
   &.status {
-    color: $primary;
+    color: #4ade80;
   }
 }
 
 .action-card {
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba(35, 35, 65, 0.95), rgba(25, 25, 50, 0.98));
   border-radius: 48rpx;
   padding: 40rpx;
-  border: 3rpx solid rgba(239, 68, 68, 0.1);
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 3rpx solid rgba(239, 68, 68, 0.25);
+  box-shadow: 0 16rpx 60rpx rgba(0, 0, 0, 0.4);
 }
 
 .logout-btn {
@@ -172,14 +169,14 @@ $text-secondary: #999999;
   justify-content: center;
   gap: 28rpx;
   min-height: 140rpx;
-  background: rgba(239, 68, 68, 0.06);
+  background: rgba(239, 68, 68, 0.12);
   border-radius: 36rpx;
-  border: 3rpx solid rgba(239, 68, 68, 0.15);
+  border: 3rpx solid rgba(239, 68, 68, 0.3);
   transition: all 0.3s;
 
   &:active {
     transform: scale(0.97);
-    background: rgba(239, 68, 68, 0.12);
+    background: rgba(239, 68, 68, 0.22);
   }
 }
 

@@ -18,7 +18,7 @@ function MemberBindInner() {
     if (!phone.trim()) { setError('请输入手机号'); return }
     setLoading(true); setError('')
     try {
-      const res = await fetch(`http://poolapi.kyyp.cn/storeapi/pos.Member/search?keyword=${encodeURIComponent(phone)}&store_id=${storeId}`)
+      const res = await fetch(`http://api.tpzl88.com/storeapi/pos.Member/search?keyword=${encodeURIComponent(phone)}&store_id=${storeId}`)
       const data = await res.json()
       if (data.code === 1 && data.data?.length > 0) {
         setMember(data.data[0])
@@ -36,7 +36,7 @@ function MemberBindInner() {
       const formData = new URLSearchParams()
       formData.append('order_id', orderId)
       formData.append('phone', member.phone || phone)
-      const res = await fetch(`http://poolapi.kyyp.cn/storeapi/tablet.Order/bindMember`, {
+      const res = await fetch(`http://api.tpzl88.com/storeapi/tablet.Order/bindMember`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData.toString(),

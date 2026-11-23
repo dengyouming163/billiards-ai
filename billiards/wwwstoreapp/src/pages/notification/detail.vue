@@ -4,7 +4,7 @@
 			<view class="notification-card">
 				<view class="notification-header">
 					<view class="notification-icon-wrapper">
-						<Icon class="notification-icon" :name="getIcon(notification.type)" size="48" />
+						<text class="notification-icon">{{ getIcon(notification.type) }}</text>
 					</view>
 					<view class="notification-info">
 						<text class="notification-title">{{ notification.title }}</text>
@@ -25,7 +25,7 @@
 		</view>
 
 		<view class="empty-state" v-else>
-			<Icon class="empty-icon" name="bell" size="140" />
+			<text class="empty-icon">🔔</text>
 			<text class="empty-text">通知不存在</text>
 			<view class="back-btn" @click="goBack">
 				<text>返回列表</text>
@@ -38,7 +38,6 @@
 import { ref, onMounted } from 'vue'
 import { getNotificationDetail, markRead } from '@/api/modules/notification'
 import Header from '@/components/Header.vue'
-import Icon from '@/components/Icon.vue'
 
 const notification = ref<any>(null)
 
@@ -65,13 +64,13 @@ async function loadNotification(id: string) {
 
 function getIcon(type: string): string {
 	const icons: Record<string, string> = {
-		order: 'fileText',
-		checkin: 'mapPin',
-		approval: 'check',
-		approval_result: 'edit',
-		system: 'bell'
+		order: '📋',
+		checkin: '📍',
+		approval: '✅',
+		approval_result: '📝',
+		system: '🔔'
 	}
-	return icons[type] || 'bell'
+	return icons[type] || '🔔'
 }
 
 function formatTime(timeStr: string): string {
@@ -87,7 +86,7 @@ function goBack() {
 <style lang="scss">
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #fafafa;
 }
 
 .page-content {
@@ -96,9 +95,9 @@ function goBack() {
 
 .notification-card {
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	border-radius: 32rpx;
 	padding: 32rpx;
+	box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
 .notification-header {
@@ -111,7 +110,7 @@ function goBack() {
 .notification-icon-wrapper {
 	width: 96rpx;
 	height: 96rpx;
-	background: rgba(7, 193, 96, 0.1);
+	background: linear-gradient(135deg, #f0fdf4, #dcfce7);
 	border-radius: 24rpx;
 	display: flex;
 	align-items: center;
@@ -121,7 +120,6 @@ function goBack() {
 
 .notification-icon {
 	font-size: 48rpx;
-	color: #07C160;
 }
 
 .notification-info {
@@ -134,14 +132,14 @@ function goBack() {
 .notification-title {
 	font-size: 34rpx;
 	font-weight: 600;
-	color: #000000;
+	color: #09090b;
 }
 
 .notification-tag {
 	font-size: 24rpx;
 	padding: 6rpx 16rpx;
-	background: rgba(7, 193, 96, 0.1);
-	color: #07C160;
+	background: #dc2626;
+	color: #ffffff;
 	border-radius: 20rpx;
 	display: inline-block;
 	width: fit-content;
@@ -149,17 +147,17 @@ function goBack() {
 
 .notification-time {
 	font-size: 26rpx;
-	color: #999999;
+	color: #a1a1aa;
 	display: block;
 	margin-bottom: 24rpx;
 }
 
 .notification-content {
 	font-size: 30rpx;
-	color: #333333;
+	color: #374151;
 	line-height: 1.8;
 	padding: 24rpx;
-	background: #f7f7f7;
+	background: #f9fafb;
 	border-radius: 16rpx;
 	margin-bottom: 24rpx;
 	white-space: pre-wrap;
@@ -167,7 +165,7 @@ function goBack() {
 
 .notification-meta {
 	padding-top: 24rpx;
-	border-top: 1rpx solid #e5e5e5;
+	border-top: 1rpx solid #f0f0f0;
 }
 
 .meta-item {
@@ -178,12 +176,12 @@ function goBack() {
 
 .meta-label {
 	font-size: 28rpx;
-	color: #999999;
+	color: #71717a;
 }
 
 .meta-value {
 	font-size: 28rpx;
-	color: #07C160;
+	color: #059669;
 }
 
 .empty-state {
@@ -198,19 +196,18 @@ function goBack() {
 	font-size: 140rpx;
 	margin-bottom: 32rpx;
 	opacity: 0.4;
-	color: #999999;
 }
 
 .empty-text {
 	font-size: 32rpx;
-	color: #999999;
+	color: #71717a;
 	margin-bottom: 40rpx;
 }
 
 .back-btn {
 	width: 320rpx;
 	height: 88rpx;
-	background: #07C160;
+	background: linear-gradient(135deg, #059669, #059669);
 	border-radius: 44rpx;
 	display: flex;
 	align-items: center;

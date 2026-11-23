@@ -280,7 +280,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 ```typescript
   production: {
-    BASE_URL: 'https://poolapi.kyyp.cn/storeapi',
+    BASE_URL: 'https://api.tpzl88.com/storeapi',
     APP_VERSION: '1.0.0',
     DEBUG: false
   }
@@ -290,7 +290,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 ```bash
 git add src/config/env.ts
-git commit -m "fix(wwwstoreapp): set production BASE_URL to poolapi.kyyp.cn
+git commit -m "fix(wwwstoreapp): set production BASE_URL to api.tpzl88.com
 
 Was hardcoded to 127.0.0.1:10002 which would fail in production builds.
 
@@ -931,7 +931,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 - [ ] `profile/feedback.vue`: 填写反馈 → 提交 → API 调用 → 成功 toast
 - [ ] `table/pending-products.vue`: 页面正常渲染，价格正确显示 2 位小数，有返回按钮
 - [ ] `table/pending-assistants.vue`: 页面有返回按钮可返回上一页
-- [ ] 生产构建 `BASE_URL` 指向 `poolapi.kyyp.cn`
+- [ ] 生产构建 `BASE_URL` 指向 `api.tpzl88.com`
 
 ### Round 2 验证
 - [ ] `checkin/record.vue`: 缺勤天数正确显示非零值

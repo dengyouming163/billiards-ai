@@ -298,7 +298,7 @@ onShow(() => {
 <style lang="scss" scoped>
 .table-page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: transparent;
   display: flex;
   flex-direction: column;
 }
@@ -322,14 +322,14 @@ onShow(() => {
 
 .summary-item {
   font-size: 22rpx;
-  color: #333333;
+  color: #64748b;
   font-weight: 600;
 }
 
 .summary-dot {
   margin: 0 12rpx;
   font-size: 20rpx;
-  color: #999999;
+  color: #cbd5e1;
 }
 
 .status-filter {
@@ -349,16 +349,15 @@ onShow(() => {
   border-radius: 999rpx;
   font-size: 24rpx;
   font-weight: 600;
-  color: #999999;
-  background: #ffffff;
+  color: #64748b;
+  background: #f3f6f5;
   flex-shrink: 0;
   transition: all 0.2s;
-  border: 1rpx solid #e5e5e5;
 
   &.active {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
-    border-color: #07C160;
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: #fff;
+    box-shadow: 0 10rpx 24rpx rgba(5,150,105,.22);
   }
 }
 
@@ -374,28 +373,28 @@ onShow(() => {
   bottom: calc(env(safe-area-inset-bottom) + 160rpx);
   width: 92rpx;
   height: 92rpx;
-  background: #07C160;
+  background: linear-gradient(135deg, #059669, #10b981);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8rpx 20rpx rgba(7, 193, 96, 0.3);
+  box-shadow: 0 12rpx 28rpx rgba(5,150,105,.3);
   z-index: 500;
 }
 .refresh-fab:active { transform: scale(.9); }
-.refresh-icon { font-size: 36rpx; color: #ffffff; font-weight: 700; }
+.refresh-icon { font-size: 36rpx; color: #fff; font-weight: 700; }
 
 .loading-hint {
   text-align: center;
   padding: 40rpx 0;
-  color: #999999;
+  color: #94a3b8;
   font-size: 26rpx;
 }
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(15, 23, 42, 0.34);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -403,7 +402,7 @@ onShow(() => {
 }
 
 .popup {
-  background: #ffffff;
+  background: #fff;
   border-radius: 36rpx 36rpx 0 0;
   padding: 32rpx 28rpx;
   padding-bottom: calc(env(safe-area-inset-bottom) + 144rpx);
@@ -421,12 +420,12 @@ onShow(() => {
 .popup-title {
   font-size: 34rpx;
   font-weight: 700;
-  color: #000000;
+  color: #09090b;
 }
 
 .popup-close {
   font-size: 32rpx;
-  color: #999999;
+  color: #a1a1aa;
   padding: 8rpx;
 }
 
@@ -443,7 +442,7 @@ onShow(() => {
 
 .form-label {
   font-size: 30rpx;
-  color: #000000;
+  color: #374151;
   font-weight: 600;
 }
 
@@ -457,12 +456,11 @@ onShow(() => {
   width: 68rpx;
   height: 68rpx;
   border-radius: 50%;
-  background: #f7f7f7;
+  background: #f3f6f5;
   text-align: center;
   line-height: 68rpx;
   font-size: 32rpx;
-  color: #000000;
-  border: 1rpx solid #e5e5e5;
+  color: #374151;
 }
 
 .nc-value {
@@ -470,14 +468,14 @@ onShow(() => {
   font-weight: 700;
   min-width: 60rpx;
   text-align: center;
-  color: #000000;
+  color: #09090b;
 }
 
 .btn-open {
   width: 100%;
   padding: 24rpx;
-  background: #07C160;
-  color: #ffffff;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
   border-radius: 36rpx;
   font-size: 30rpx;
   font-weight: 700;
@@ -490,22 +488,23 @@ onShow(() => {
 
 .btn-open-coupon {
   margin-top: 18rpx;
-  background: #ffffff;
-  color: #07C160;
-  border: 2rpx solid #07C160;
+  background: #fff;
+  color: #059669;
+  border: 2rpx solid #059669;
 }
 
 .btn-open-temp {
   margin-top: 18rpx;
-  background: #f7f7f7;
-  color: #666666;
-  border: 2rpx solid #e5e5e5;
+  background: #fff;
+  color: #64748b;
+  border: 2rpx solid #e2e8f0;
 }
 
+/* 套餐券弹窗 */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 1100;
   display: flex;
   flex-direction: column;
@@ -513,7 +512,7 @@ onShow(() => {
 }
 
 .modal-content {
-  background: #ffffff;
+  background: #fff;
   border-radius: 24rpx 24rpx 0 0;
   padding: 24rpx;
   padding-bottom: calc(env(safe-area-inset-bottom) + 48rpx);
@@ -532,12 +531,12 @@ onShow(() => {
 .modal-title {
   font-size: 30rpx;
   font-weight: 700;
-  color: #000000;
+  color: #09090b;
 }
 
 .modal-close {
   font-size: 32rpx;
-  color: #999999;
+  color: #a1a1aa;
   padding: 8rpx;
 }
 
@@ -553,7 +552,7 @@ onShow(() => {
 .empty-tip {
   text-align: center;
   padding: 60rpx 0;
-  color: #999999;
+  color: #a1a1aa;
   font-size: 28rpx;
 }
 
@@ -561,13 +560,13 @@ onShow(() => {
   padding: 24rpx;
   margin-bottom: 16rpx;
   border-radius: 12rpx;
-  background: #f7f7f7;
+  background: #f9fafb;
   border: 2rpx solid transparent;
   transition: all 0.2s;
 
   &.selected {
-    border-color: #07C160;
-    background: rgba(7, 193, 96, 0.06);
+    border-color: #059669;
+    background: #ecfdf5;
   }
 }
 
@@ -575,14 +574,14 @@ onShow(() => {
   display: block;
   font-size: 28rpx;
   font-weight: 600;
-  color: #000000;
+  color: #09090b;
   margin-bottom: 8rpx;
 }
 
 .coupon-desc {
   display: block;
   font-size: 24rpx;
-  color: #999999;
+  color: #71717a;
 }
 
 .stats-grid {
@@ -596,20 +595,19 @@ onShow(() => {
   flex-direction: column;
   align-items: center;
   padding: 24rpx;
-  background: #ffffff;
-  border-radius: 16rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+  background: linear-gradient(180deg, #f8fafc 0%, #f4f8f7 100%);
+  border-radius: 24rpx;
 }
 
 .stat-value {
   font-size: 36rpx;
   font-weight: 700;
-  color: #000000;
+  color: #09090b;
   margin-bottom: 8rpx;
 }
 
 .stat-label {
   font-size: 22rpx;
-  color: #999999;
+  color: #a1a1aa;
 }
 </style>

@@ -111,6 +111,8 @@ function selectMode(mode: GameMode) {
 </script>
 
 <style lang="scss" scoped>
+$gold: #c9a962;
+
 .game-selector {
   position: relative;
   
@@ -119,27 +121,26 @@ function selectMode(mode: GameMode) {
     align-items: center;
     gap: 20rpx;
     padding: 28rpx 36rpx;
-    background: #ffffff;
-    border-radius: 36rpx;
-    border: 2rpx solid rgba(7,193,96,0.1);
-    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+    background: linear-gradient(145deg, rgba(35, 35, 80, 0.95), rgba(25, 25, 55, 0.98));
+    border-radius: 40rpx;
+    border: 4rpx solid rgba($gold, 0.2);
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
     transition: all 0.3s;
     
     &:active {
       transform: scale(0.98);
-      border-color: rgba(7,193,96,0.25);
-      box-shadow: 0 4rpx 12rpx rgba(7,193,96,0.1);
+      border-color: rgba($gold, 0.4);
     }
     
     .btn-icon {
       width: 80rpx;
       height: 80rpx;
       border-radius: 24rpx;
-      background: rgba(7,193,96,0.08);
+      background: rgba($gold, 0.15);
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2rpx solid rgba(7,193,96,0.12);
+      border: 2rpx solid rgba($gold, 0.3);
       
       .icon-text {
         font-size: 44rpx;
@@ -150,7 +151,7 @@ function selectMode(mode: GameMode) {
       flex: 1;
       font-size: 44rpx;
       font-weight: 700;
-      color: #333333;
+      color: #fff;
       letter-spacing: 2rpx;
     }
     
@@ -158,14 +159,14 @@ function selectMode(mode: GameMode) {
       width: 64rpx;
       height: 64rpx;
       border-radius: 50%;
-      background: rgba(7,193,96,0.06);
+      background: rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
       
       .arrow-text {
         font-size: 32rpx;
-        color: #07C160;
+        color: rgba(255, 255, 255, 0.6);
         font-weight: 700;
       }
     }
@@ -177,24 +178,25 @@ function selectMode(mode: GameMode) {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.7);
     z-index: 1000;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     padding-top: 280rpx;
-    backdrop-filter: blur(10rpx);
+    backdrop-filter: blur(20rpx);
   }
   
   .selector-panel {
     position: relative;
     width: 50vw;
-    background: #ffffff;
-    border-radius: 48rpx;
-    border: 2rpx solid rgba(7,193,96,0.08);
+    background: linear-gradient(180deg, rgba(26, 26, 46, 0.98), rgba(20, 20, 40, 0.99));
+    border-radius: 56rpx;
+    border: 4rpx solid rgba($gold, 0.25);
     box-shadow: 
-      0 24rpx 80rpx rgba(0, 0, 0, 0.1),
-      0 0 30rpx rgba(7,193,96,0.05);
+      0 32rpx 96rpx rgba(0, 0, 0, 0.6),
+      0 0 60rpx rgba($gold, 0.15),
+      inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
     overflow: hidden;
     
     .panel-glow-bg {
@@ -203,7 +205,7 @@ function selectMode(mode: GameMode) {
       left: -100rpx;
       width: 300rpx;
       height: 300rpx;
-      background: radial-gradient(circle, rgba(7,193,96,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba($gold, 0.3) 0%, transparent 70%);
       pointer-events: none;
       animation: panelGlow 4s ease-in-out infinite;
     }
@@ -213,14 +215,14 @@ function selectMode(mode: GameMode) {
       justify-content: space-between;
       align-items: center;
       padding: 44rpx 48rpx 32rpx;
-      border-bottom: 2rpx solid rgba(7,193,96,0.06);
+      border-bottom: 2rpx solid rgba(255, 255, 255, 0.08);
       position: relative;
       z-index: 1;
       
       .panel-title {
         font-size: 52rpx;
         font-weight: 700;
-        color: #333333;
+        color: #fff;
         letter-spacing: 4rpx;
       }
       
@@ -228,19 +230,19 @@ function selectMode(mode: GameMode) {
         width: 72rpx;
         height: 72rpx;
         border-radius: 50%;
-        background: rgba(0,0,0,0.04);
+        background: rgba(255, 255, 255, 0.08);
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2rpx solid rgba(0,0,0,0.06);
+        border: 2rpx solid rgba(255, 255, 255, 0.12);
         
         &:active {
-          background: rgba(239, 68, 68, 0.1);
+          background: rgba(239, 68, 68, 0.2);
         }
         
         .close-icon {
           font-size: 36rpx;
-          color: #999999;
+          color: rgba(255, 255, 255, 0.6);
         }
       }
     }
@@ -255,35 +257,34 @@ function selectMode(mode: GameMode) {
         align-items: center;
         gap: 28rpx;
         padding: 36rpx;
-        border-radius: 32rpx;
-        margin-bottom: 16rpx;
+        border-radius: 40rpx;
+        margin-bottom: 20rpx;
         transition: all 0.3s;
         animation: slideIn 0.4s ease-out forwards;
         opacity: 0;
         transform: translateY(20rpx);
-        border: 2rpx solid rgba(7,193,96,0.04);
         
         &:last-child {
           margin-bottom: 0;
         }
         
         &:active {
-          background: rgba(7,193,96,0.04);
+          background: rgba(255, 255, 255, 0.06);
         }
         
         &.active {
-          background: rgba(7,193,96,0.06);
-          border-color: rgba(7,193,96,0.15);
+          background: linear-gradient(145deg, rgba($gold, 0.18), rgba($gold, 0.08));
+          border: 2rpx solid rgba($gold, 0.3);
         }
         
         .item-icon {
           width: 96rpx;
           height: 96rpx;
-          border-radius: 28rpx;
+          border-radius: 32rpx;
           display: flex;
           align-items: center;
           justify-content: center;
-          border: 2rpx solid rgba(7,193,96,0.08);
+          border: 2rpx solid rgba(255, 255, 255, 0.15);
           flex-shrink: 0;
           
           .icon-emoji {
@@ -298,13 +299,13 @@ function selectMode(mode: GameMode) {
             display: block;
             font-size: 44rpx;
             font-weight: 700;
-            color: #333333;
+            color: #fff;
             margin-bottom: 8rpx;
           }
           
           .item-desc {
             font-size: 30rpx;
-            color: #999999;
+            color: rgba(255, 255, 255, 0.5);
           }
         }
         
@@ -312,15 +313,15 @@ function selectMode(mode: GameMode) {
           width: 64rpx;
           height: 64rpx;
           border-radius: 50%;
-          background: rgba(7,193,96,0.08);
+          background: rgba($gold, 0.2);
           display: flex;
           align-items: center;
           justify-content: center;
-          border: 2rpx solid rgba(7,193,96,0.2);
+          border: 2rpx solid rgba($gold, 0.5);
           
           .check-icon {
             font-size: 36rpx;
-            color: #07C160;
+            color: $gold;
             font-weight: 700;
           }
         }

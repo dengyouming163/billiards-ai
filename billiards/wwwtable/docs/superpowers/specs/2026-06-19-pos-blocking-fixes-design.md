@@ -49,7 +49,7 @@
 **根因**：`notification-service.ts` 中 WS URL 和 HTTP fetch URL 硬编码，不读取环境变量。
 
 **修复**：
-- WS URL 从 `process.env.NEXT_PUBLIC_WS_URL` 读取，fallback `wss://poolapi.kyyp.cn:8282`
+- WS URL 从 `process.env.NEXT_PUBLIC_WS_URL` 读取，fallback `wss://api.tpzl88.com:8282`
 - HTTP fetch 统一使用 API client 的 `API_BASE_URL` 拼接路径
 - 使用 `client.ts` 中的 `getStoreId()` + token header
 

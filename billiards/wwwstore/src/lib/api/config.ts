@@ -5,7 +5,7 @@
 
 // API 基础地址，通过环境变量配置
 // 开发: .env.development 中设置 NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:10002/storeapi
-// 生产: .env 中设置 NEXT_PUBLIC_API_BASE_URL=http://poolapi.kyyp.cn/storeapi
+// 生产: .env 中设置 NEXT_PUBLIC_API_BASE_URL=http://api.tpzl88.com/storeapi
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/storeapi';
 
 // API 端点配置

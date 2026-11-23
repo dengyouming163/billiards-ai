@@ -53,12 +53,11 @@ function handleStatClick() {
 
 <style lang="scss" scoped>
 .section-card {
-	background: rgba(30, 41, 59, 0.7);
+	background: #ffffff;
 	border-radius: 24rpx;
 	padding: 24rpx;
 	margin-bottom: 20rpx;
-	border: 1rpx solid rgba(71, 85, 105, 0.3);
-	box-shadow: 0 4rpx 20rpx rgba(0,0,0,.2);
+	box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
 .section-header {
@@ -75,13 +74,13 @@ function handleStatClick() {
 .section-title {
 	font-size: 32rpx;
 	font-weight: 600;
-	color: #f8fafc;
+	color: #1f2937;
 	flex: 1;
 }
 
 .section-link {
 	font-size: 26rpx;
-	color: #f59e0b;
+	color: #10B981;
 }
 
 .stats-grid {
@@ -101,18 +100,18 @@ function handleStatClick() {
 .stat-value {
 	font-size: 40rpx;
 	font-weight: 700;
-	color: #f8fafc;
+	color: #1f2937;
 }
 
 .stat-label {
 	font-size: 24rpx;
-	color: #94a3b8;
+	color: #6b7280;
 	margin-top: 8rpx;
 }
 
 .stat-divider {
 	width: 1rpx;
 	height: 60rpx;
-	background: rgba(71, 85, 105, 0.3);
+	background: #e5e7eb;
 }
 </style>

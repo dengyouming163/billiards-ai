@@ -33,13 +33,13 @@ export default function ProductsPage() {
       />
 
       {/* Tab bar — exact match with employees/page.tsx */}
-      <div className="flex flex-wrap gap-2 p-2 bg-[#f7f7f7] backdrop-blur-sm rounded-xl">
+      <div className="flex flex-wrap gap-2 p-2 bg-slate-100/80 backdrop-blur-sm rounded-xl">
         <Button
           variant={activeTab === 'management' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'management'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('management')}
@@ -50,9 +50,9 @@ export default function ProductsPage() {
         <Button
           variant={activeTab === 'categories' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'categories'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('categories')}
@@ -63,9 +63,9 @@ export default function ProductsPage() {
         <Button
           variant={activeTab === 'inventory' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'inventory'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('inventory')}
@@ -76,7 +76,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Content container — exact match with employees/page.tsx */}
-      <div className="rounded-[24px] border border-[#e5e5e5] bg-white shadow-sm overflow-hidden">
+      <div className="rounded-2xl border border-slate-200/60 bg-white/95 backdrop-blur-xl shadow-lg overflow-hidden">
         {activeTab === 'management' && <ProductsManagementTab />}
         {activeTab === 'categories' && <ProductsCategoriesTab />}
         {activeTab === 'inventory' && <ProductsInventoryTab />}

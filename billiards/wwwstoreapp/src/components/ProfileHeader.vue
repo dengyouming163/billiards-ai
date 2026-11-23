@@ -3,10 +3,10 @@
 		<view class="header-bg"></view>
 		<view class="header-content">
 			<view class="avatar-box" @click="handleAvatarUpload">
-				<Icon v-if="!user.avatar" name="user" :size="70" class="avatar-icon" />
+				<Icon v-if="!user.avatar" name="user" :size="70" />
 				<image v-else :src="user.avatar" class="avatar-image" mode="aspectFill" />
 				<view class="avatar-edit">
-					<Icon name="camera" :size="22" class="edit-icon" />
+					<Icon name="camera" :size="22" />
 				</view>
 			</view>
 			<view class="user-info">
@@ -17,7 +17,7 @@
 				</view>
 			</view>
 			<view class="edit-btn" @click="goToEdit">
-				<Icon name="edit" :size="24" class="edit-btn-icon" /> <text>编辑</text>
+				<Icon name="edit" :size="24" /> <text>编辑</text>
 			</view>
 		</view>
 	</view>
@@ -112,9 +112,9 @@ function goToEdit() {
 	right: 0;
 	bottom: 0;
 	background:
-		radial-gradient(circle at top right, rgba(245, 158, 11, 0.2) 0, rgba(245, 158, 11, 0) 34%),
-		radial-gradient(circle at left bottom, rgba(245, 158, 11, 0.14) 0, rgba(245, 158, 11, 0) 28%),
-		linear-gradient(135deg, #92400e 0%, #f59e0b 52%, #d97706 100%);
+		radial-gradient(circle at top right, rgba(255, 255, 255, 0.18) 0, rgba(255, 255, 255, 0) 34%),
+		radial-gradient(circle at left bottom, rgba(255, 255, 255, 0.14) 0, rgba(255, 255, 255, 0) 28%),
+		linear-gradient(135deg, #0f766e 0%, #059669 52%, #047857 100%);
 	border-bottom-left-radius: 48rpx;
 	border-bottom-right-radius: 48rpx;
 }
@@ -131,7 +131,7 @@ function goToEdit() {
 	backdrop-filter: blur(18rpx);
 	-webkit-backdrop-filter: blur(18rpx);
 	border: 1rpx solid rgba(255, 255, 255, 0.22);
-	box-shadow: 0 18rpx 36rpx rgba(245, 158, 11, 0.2);
+	box-shadow: 0 18rpx 36rpx rgba(4, 120, 87, 0.18);
 }
 
 .avatar-box {
@@ -145,11 +145,11 @@ function goToEdit() {
 	justify-content: center;
 	overflow: hidden;
 	border: 4rpx solid rgba(255, 255, 255, 0.34);
-	box-shadow: 0 14rpx 28rpx rgba(15, 23, 42, 0.2);
+	box-shadow: 0 14rpx 28rpx rgba(15, 23, 42, 0.12);
 }
 
 .avatar-icon {
-	color: #ffffff;
+	font-size: 70rpx;
 }
 
 .avatar-image {
@@ -163,17 +163,13 @@ function goToEdit() {
 	right: 10rpx;
 	width: 48rpx;
 	height: 48rpx;
-	background: rgba(71, 85, 105, 0.8);
+	background: #ffffff;
 	border-radius: 18rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.2);
-	border: 1rpx solid rgba(148, 163, 184, 0.3);
-}
-
-.edit-icon {
-	color: #f97316;
+	font-size: 22rpx;
+	color: #0f766e;
 }
 
 .user-info {
@@ -221,15 +217,5 @@ function goToEdit() {
 	border-radius: 999rpx;
 	border: 2rpx solid rgba(255, 255, 255, 0.3);
 	flex-shrink: 0;
-	transition: all 0.22s ease;
-
-	&:active {
-		transform: scale(0.96);
-		background: rgba(255, 255, 255, 0.2);
-	}
-}
-
-.edit-btn-icon {
-	color: rgba(255, 255, 255, 0.9);
 }
 </style>

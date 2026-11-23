@@ -21,22 +21,22 @@
       <view class="filter-row">
         <picker mode="selector" :range="dateOptions" range-key="label" @change="onDateChange">
           <view class="filter-chip">
-            <Icon name="calendar" :size="20" class="chip-icon" />
+            <text class="chip-icon">📅</text>
             <text>{{ currentDateLabel }}</text>
-            <Icon name="chevronDown" :size="16" class="chip-arrow" />
+            <text class="chip-arrow">▼</text>
           </view>
         </picker>
         <picker mode="selector" :range="typeOptions" range-key="label" @change="onTypeChange">
           <view class="filter-chip">
-            <Icon name="tag" :size="20" class="chip-icon" />
+            <text class="chip-icon">🏷️</text>
             <text>{{ currentTypeLabel }}</text>
-            <Icon name="chevronDown" :size="16" class="chip-arrow" />
+            <text class="chip-arrow">▼</text>
           </view>
         </picker>
       </view>
       <view class="search-row">
         <view class="search-wrap">
-          <Icon name="search" :size="22" class="search-icon" />
+          <text class="search-icon">🔍</text>
           <input
             class="search-input"
             v-model="searchKeyword"
@@ -87,19 +87,19 @@
                 <view class="card-info">
                   <view class="info-row">
                     <view class="info-icon-wrap">
-                      <Icon name="table" :size="18" class="info-icon" />
+                      <text class="info-icon">🎱</text>
                     </view>
                     <text class="info-value">{{ item.table_name || '-' }}</text>
                   </view>
                   <view class="info-row">
                     <view class="info-icon-wrap">
-                      <Icon name="clipboardList" :size="18" class="info-icon" />
+                      <text class="info-icon">📋</text>
                     </view>
                     <text class="info-value">{{ typeLabel(item.type) }}</text>
                   </view>
                   <view class="info-row">
                     <view class="info-icon-wrap">
-                      <Icon name="clock" :size="18" class="info-icon" />
+                      <text class="info-icon">⏰</text>
                     </view>
                     <text class="info-value">{{ formatTime(item.start_time) }} → {{ item.end_time ? formatTime(item.end_time) : '进行中' }}</text>
                   </view>
@@ -108,7 +108,7 @@
                   <template v-if="item.status === 'in_progress'">
                     <text class="amount-duration">{{ elapsedText(item) }}</text>
                     <text class="amount-label" v-if="item.items && item.items.length">
-                      <Icon name="shoppingCart" :size="16" />{{ item.items.filter((i:any) => i.item_type === 'product').length }}件<text v-if="item.items.some((i:any) => i.item_type === 'assistant')"> · <Icon name="user" :size="14" />助教</text>
+                      🛒{{ item.items.filter((i:any) => i.item_type === 'product').length }}件<text v-if="item.items.some((i:any) => i.item_type === 'assistant')"> · 👤助教</text>
                     </text>
                     <text class="amount-label estimated-label">进行中</text>
                   </template>
@@ -145,7 +145,6 @@ import type { MainOrder } from '@/types'
 import Header from '@/components/Header.vue'
 import TabBar from '@/components/TabBar.vue'
 import StateView from '@/components/StateView.vue'
-import Icon from '@/components/Icon.vue'
 import { formatDateTimeFixed } from '@/utils/date'
 
 const list = ref<MainOrder[]>([])
@@ -326,11 +325,12 @@ async function loadData(reset: boolean) {
 </script>
 
 <style lang="scss" scoped>
+/* ========== Page Layout ========== */
 .page {
   min-height: 100vh;
   max-width: 100vw;
   overflow-x: hidden;
-  background: #f7f7f7;
+  background: #f2f3f5;
   display: flex;
   flex-direction: column;
   padding: 16rpx 24rpx calc(env(safe-area-inset-bottom) + 120rpx);
@@ -339,9 +339,10 @@ async function loadData(reset: boolean) {
 
 .hero-card,
 .filter-bar {
-  background: #ffffff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 100%);
   border-radius: 34rpx;
-  box-shadow: 0 12rpx 36rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+  border: 1rpx solid rgba(255, 255, 255, 0.82);
 }
 
 .hero-card {
@@ -360,7 +361,7 @@ async function loadData(reset: boolean) {
 
 .hero-eyebrow {
   font-size: 22rpx;
-  color: #07C160;
+  color: #059669;
   font-weight: 700;
   letter-spacing: 2rpx;
 }
@@ -369,13 +370,13 @@ async function loadData(reset: boolean) {
   font-size: 42rpx;
   line-height: 1.24;
   font-weight: 800;
-  color: #000000;
+  color: #0f172a;
 }
 
 .hero-desc {
   font-size: 24rpx;
   line-height: 1.7;
-  color: #999999;
+  color: #64748b;
 }
 
 .hero-stats {
@@ -387,30 +388,30 @@ async function loadData(reset: boolean) {
 .hero-stat {
   padding: 24rpx;
   border-radius: 28rpx;
-  background: #f7f7f7;
+  background: #f7faf9;
   display: flex;
   flex-direction: column;
   gap: 12rpx;
 
   &.accent {
-    background: #07C160;
+    background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
 
     .hero-stat-label,
     .hero-stat-value {
-      color: #ffffff;
+      color: #fff;
     }
   }
 }
 
 .hero-stat-label {
   font-size: 22rpx;
-  color: #999999;
+  color: #64748b;
 }
 
 .hero-stat-value {
   font-size: 40rpx;
   line-height: 1.1;
-  color: #000000;
+  color: #0f172a;
   font-weight: 800;
 
   &.small {
@@ -427,8 +428,8 @@ async function loadData(reset: boolean) {
 .hero-tag {
   padding: 12rpx 20rpx;
   border-radius: 999rpx;
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
+  background: #eef7f3;
+  color: #0f766e;
   font-size: 22rpx;
   font-weight: 600;
 }
@@ -454,23 +455,23 @@ async function loadData(reset: boolean) {
   border-radius: 999rpx;
   font-size: 25rpx;
   font-weight: 500;
-  color: #999999;
-  background: #f7f7f7;
+  color: #64748b;
+  background: #f4f7f6;
   border: 2rpx solid transparent;
   transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
   flex-shrink: 0;
 
   &.active {
-    background: #07C160;
-    color: #ffffff;
+    background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
+    color: #fff;
     font-weight: 600;
-    box-shadow: 0 12rpx 24rpx rgba(7, 193, 96, 0.3);
+    box-shadow: 0 12rpx 24rpx rgba(5, 150, 105, 0.22);
   }
 
   &:active:not(.active) {
     transform: scale(0.95);
-    background: #e5e5e5;
+    background: #edf2f0;
   }
 }
 
@@ -486,25 +487,29 @@ async function loadData(reset: boolean) {
   gap: 8rpx;
   padding: 14rpx 24rpx;
   border-radius: 999rpx;
-  background: #f7f7f7;
-  border: 1.5rpx solid #e5e5e5;
+  background: #f7faf9;
+  border: 1.5rpx solid #e5ece8;
   font-size: 24rpx;
-  color: #333333;
+  color: #64748b;
   font-weight: 500;
   transition: all 0.2s ease;
 
   &:active {
     transform: scale(0.96);
-    background: #e5e5e5;
+    background: #eef3f1;
+    border-color: #d6dfda;
   }
 }
 
 .chip-icon {
-  color: #999999;
+  font-size: 24rpx;
+  line-height: 1;
 }
 
 .chip-arrow {
-  color: #999999;
+  font-size: 16rpx;
+  color: #94a3b8;
+  margin-left: 2rpx;
 }
 
 .search-row {
@@ -520,30 +525,30 @@ async function loadData(reset: boolean) {
 .search-icon {
   position: absolute;
   left: 24rpx;
+  font-size: 26rpx;
   z-index: 1;
   pointer-events: none;
-  color: #cccccc;
 }
 
 .search-input {
-  background: #f7f7f7;
+  background: #f7faf9;
   border-radius: 999rpx;
   height: 84rpx;
   padding: 0 28rpx 0 64rpx;
   font-size: 26rpx;
-  color: #000000;
+  color: #0f172a;
   width: 100%;
   border: 1.5rpx solid transparent;
   transition: all 0.25s ease;
 
   &::placeholder {
-    color: #cccccc;
+    color: #94a3b8;
   }
 
   &:focus {
-    background: #ffffff;
-    border-color: #07C160;
-    box-shadow: 0 0 0 6rpx rgba(7, 193, 96, 0.06);
+    background: #fff;
+    border-color: rgba(5, 150, 105, 0.24);
+    box-shadow: 0 0 0 6rpx rgba(5, 150, 105, 0.06);
   }
 }
 
@@ -577,11 +582,16 @@ async function loadData(reset: boolean) {
   overflow: hidden;
   width: 100%;
   transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s ease;
-  box-shadow: 0 10rpx 28rpx rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 10rpx 28rpx rgba(15, 23, 42, 0.06),
+    0 0 0 1rpx rgba(255, 255, 255, 0.7);
 
   &:active {
     transform: scale(0.97);
-    box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 1rpx 4rpx rgba(0, 0, 0, 0.03),
+      0 3rpx 10rpx rgba(0, 0, 0, 0.02),
+      0 0 0 1rpx rgba(0, 0, 0, 0.03);
   }
 }
 
@@ -616,6 +626,8 @@ async function loadData(reset: boolean) {
   gap: 6rpx;
   padding: 8rpx 18rpx;
   border-radius: 999rpx;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   flex-shrink: 0;
 }
 
@@ -657,7 +669,7 @@ async function loadData(reset: boolean) {
   width: 42rpx;
   height: 42rpx;
   border-radius: 12rpx;
-  background: #f7f7f7;
+  background: rgba(255, 255, 255, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -665,7 +677,8 @@ async function loadData(reset: boolean) {
 }
 
 .info-icon {
-  color: inherit;
+  font-size: 19rpx;
+  line-height: 1;
 }
 
 .info-value {
@@ -688,19 +701,22 @@ async function loadData(reset: boolean) {
 .amount-duration {
   font-size: 30rpx;
   font-weight: 700;
-  color: #07C160;
+  color: #d97706;
 }
 
 .amount-value {
   font-size: 36rpx;
   font-weight: 800;
-  color: #000000;
+  background: linear-gradient(135deg, $color-primary 0%, #0d9488 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   letter-spacing: -0.5rpx;
 }
 
 .amount-label {
   font-size: 22rpx;
-  color: #999999;
+  color: #94a3b8;
   max-width: 160rpx;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -708,134 +724,134 @@ async function loadData(reset: boolean) {
 }
 
 .card-in_progress {
-  background: rgba(7, 193, 96, 0.05);
+  background: linear-gradient(160deg, #ecfdf5 0%, #d1fae5 50%, #ccfbf1 100%);
 
   .card-accent {
-    background: linear-gradient(90deg, #07C160, #10B981);
+    background: linear-gradient(90deg, #34d399, #2dd4bf);
   }
 
   .card-no {
-    color: #07C160;
+    color: #047857;
   }
 
   .card-status {
-    background: rgba(7, 193, 96, 0.1);
-    border: 1.5rpx solid rgba(7, 193, 96, 0.2);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1.5rpx solid #6ee7b7;
   }
 
   .status-dot {
-    background: #07C160;
+    background: #059669;
   }
 
   .status-text {
-    color: #07C160;
+    color: #065f46;
   }
 
   .info-value {
-    color: #000000;
+    color: #047857;
   }
 
   .info-icon-wrap {
-    background: rgba(7, 193, 96, 0.1);
+    background: rgba(209, 250, 229, 0.7);
   }
 }
 
 .card-completed {
-  background: #ffffff;
+  background: linear-gradient(160deg, #f8fafc 0%, #f1f5f9 50%, #eef2f6 100%);
 
   .card-accent {
-    background: linear-gradient(90deg, #cccccc, #e5e5e5);
+    background: linear-gradient(90deg, #94a3b8, #cbd5e1);
   }
 
   .card-no {
-    color: #333333;
+    color: #334155;
   }
 
   .card-status {
-    background: rgba(153, 153, 153, 0.1);
-    border: 1.5rpx solid rgba(153, 153, 153, 0.2);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1.5rpx solid #cbd5e1;
   }
 
   .status-dot {
-    background: #999999;
+    background: #64748b;
   }
 
   .status-text {
-    color: #999999;
+    color: #475569;
   }
 
   .info-value {
-    color: #333333;
+    color: #475569;
   }
 
   .info-icon-wrap {
-    background: #f7f7f7;
+    background: rgba(241, 245, 249, 0.9);
   }
 }
 
 .card-cancelled {
-  background: rgba(255, 59, 48, 0.05);
+  background: linear-gradient(160deg, #fef2f2 0%, #fee2e2 50%, #fef0f0 100%);
 
   .card-accent {
-    background: linear-gradient(90deg, #FF3B30, #FF6B6B);
+    background: linear-gradient(90deg, #fca5a5, #fecaca);
   }
 
   .card-no {
-    color: #FF3B30;
+    color: #991b1b;
   }
 
   .card-status {
-    background: rgba(255, 59, 48, 0.1);
-    border: 1.5rpx solid rgba(255, 59, 48, 0.2);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1.5rpx solid #fecaca;
   }
 
   .status-dot {
-    background: #FF3B30;
+    background: #dc2626;
   }
 
   .status-text {
-    color: #FF3B30;
+    color: #b91c1c;
   }
 
   .info-value {
-    color: #FF3B30;
+    color: #991b1b;
   }
 
   .info-icon-wrap {
-    background: rgba(255, 59, 48, 0.1);
+    background: rgba(254, 226, 226, 0.7);
   }
 }
 
 .order-card:not(.card-in_progress):not(.card-completed):not(.card-cancelled) {
-  background: #ffffff;
+  background: linear-gradient(160deg, #ffffff 0%, #fafafa 100%);
 
   .card-accent {
-    background: linear-gradient(90deg, #cccccc, #e5e5e5);
+    background: linear-gradient(90deg, #d1d5db, #e5e7eb);
   }
 
   .card-no {
-    color: #000000;
+    color: $color-text-primary;
   }
 
   .card-status {
-    background: rgba(153, 153, 153, 0.1);
-    border: 1.5rpx solid rgba(153, 153, 153, 0.2);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1.5rpx solid #e5e7eb;
   }
 
   .status-dot {
-    background: #999999;
+    background: #9ca3af;
   }
 
   .status-text {
-    color: #999999;
+    color: #6b7280;
   }
 
   .info-value {
-    color: #000000;
+    color: $color-text-primary;
   }
 
   .info-icon-wrap {
-    background: #f7f7f7;
+    background: rgba(243, 244, 246, 0.9);
   }
 }
 
@@ -851,8 +867,8 @@ async function loadData(reset: boolean) {
 .load-spinner {
   width: 28rpx;
   height: 28rpx;
-  border: 3rpx solid rgba(153, 153, 153, 0.4);
-  border-top-color: #07C160;
+  border: 3rpx solid #e5e7eb;
+  border-top-color: $color-primary;
   border-radius: 50%;
   animation: spin 0.75s linear infinite;
 }
@@ -860,13 +876,13 @@ async function loadData(reset: boolean) {
 .load-line {
   width: 48rpx;
   height: 2rpx;
-  background: linear-gradient(90deg, transparent, #e5e5e5, transparent);
+  background: linear-gradient(90deg, transparent, #d4d4d8, transparent);
   border-radius: 1rpx;
 }
 
 .load-text {
   font-size: 23rpx;
-  color: #999999;
+  color: $color-text-muted;
   font-weight: 400;
   white-space: nowrap;
 }

@@ -1,6 +1,6 @@
 <template>
   <view class="tabbar-area">
-    <view class="tabbar-inner">
+    <view class="tabbar-pill">
       <view
         v-for="(item, index) in tabs"
         :key="index"
@@ -8,8 +8,8 @@
         :class="{ active: currentPath === item.path }"
         @click="handleTabClick(item.path)"
       >
-        <view class="tab-icon" :style="{ color: currentPath === item.path ? '#07C160' : '#999999' }">
-          <Icon :name="item.iconName" :size="44" :color="currentPath === item.path ? '#07C160' : '#999999'" />
+        <view class="tab-icon">
+          <text class="tab-emoji">{{ item.icon }}</text>
         </view>
         <text class="tab-text">{{ item.text }}</text>
         <view class="badge" v-if="item.badgeKey === 'notification' && notificationStore.unreadCount > 0">
@@ -24,22 +24,23 @@
 import { ref, computed, onMounted } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { notificationStore, authStore } from '@/stores'
-import Icon from './Icon.vue'
 
 const tabs = computed(() => {
   const perms = new Set(authStore.permissionCodes)
 
   const allTabs = [
-    { path: '/pages/index/index',       iconName: 'home',      text: '首页',   visible: perms.has('mobile:dashboard') || perms.has('mobile:orders') || perms.has('mobile:checkin') },
-    { path: '/pages/table/index',       iconName: 'table',     text: '台桌',   visible: perms.has('mobile:table') },
-    { path: '/pages/work/index',        iconName: 'briefcase', text: '工作台', visible: perms.has('mobile:work') },
-    { path: '/pages/checkin/index',     iconName: 'mapPin',    text: '打卡',   visible: perms.has('mobile:checkin') },
-    { path: '/pages/performance/index', iconName: 'barChart',  text: '业绩',   visible: perms.has('mobile:performance') },
-    { path: '/pages/profile/index',     iconName: 'user',      text: '我',     visible: perms.has('mobile:profile') },
+    { path: '/pages/index/index',       icon: '🏠', text: '首页',   visible: perms.has('mobile:dashboard') || perms.has('mobile:orders') || perms.has('mobile:checkin') },
+    { path: '/pages/table/index',       icon: '🎱', text: '台桌',   visible: perms.has('mobile:table') },
+    { path: '/pages/work/index',        icon: '💼', text: '工作台', visible: perms.has('mobile:work') },
+    { path: '/pages/checkin/index',     icon: '📍', text: '打卡',   visible: perms.has('mobile:checkin') },
+    { path: '/pages/performance/index', icon: '📊', text: '业绩',   visible: perms.has('mobile:performance') },
+    { path: '/pages/notification/index',icon: '🔔', text: '消息',   visible: perms.has('mobile:notification') },
+    { path: '/pages/profile/index',     icon: '👤', text: '我',     visible: perms.has('mobile:profile') },
   ]
 
   return allTabs.filter(t => t.visible).map(item => ({
     ...item,
+    iconName: '',
     badgeKey: item.path.includes('notification') ? 'notification' : '',
   }))
 })
@@ -92,15 +93,20 @@ onShow(() => { updateCurrentPath() })
   left: 0;
   right: 0;
   z-index: 999;
-  background: #ffffff;
-  padding: 24rpx 0 calc(32rpx + env(safe-area-inset-bottom));
-  border-top: 1rpx solid #e5e5e5;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(18rpx);
+  -webkit-backdrop-filter: blur(18rpx);
+  padding: 0 0 env(safe-area-inset-bottom);
+  border-top: 1rpx solid rgba(226, 232, 240, 0.88);
+  box-shadow: 0 -10rpx 30rpx rgba(15, 23, 42, 0.06);
 }
 
-.tabbar-inner {
+.tabbar-pill {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  min-height: 112rpx;
+  background: transparent;
 }
 
 .tab-item {
@@ -110,20 +116,13 @@ onShow(() => { updateCurrentPath() })
   align-items: center;
   justify-content: center;
   position: relative;
-  gap: 8rpx;
-  padding: 12rpx 0;
-  transition: all 0.2s;
-  
-  &.active {    
-    .tab-icon {
-      color: #07C160;
-    }
-    
-    .tab-text {
-      color: #07C160;
-      font-weight: 600;
-    }
-  }
+  gap: 6rpx;
+  min-height: 92rpx;
+}
+
+.tab-item.active .tab-text {
+  color: #059669;
+  font-weight: 700;
 }
 
 .tab-icon {
@@ -132,22 +131,28 @@ onShow(() => { updateCurrentPath() })
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999999;
-  transition: color 0.2s;
+  border-radius: 18rpx;
+  transition: all 0.2s ease;
+}
+.tab-emoji { font-size: 42rpx; line-height: 1; }
+
+.tab-item.active .tab-icon {
+  color: #059669;
+  background: #ecfdf5;
+  box-shadow: 0 10rpx 18rpx rgba(5,150,105,.14);
 }
 
 .tab-text {
   font-size: 22rpx;
-  color: #999999;
+  color: #94a3b8;
   line-height: 1;
-  transition: color 0.2s;
 }
 
 .badge {
   position: absolute;
   top: 0;
   right: calc(50% - 48rpx);
-  background: #ef4444;
+  background: #dc2626;
   color: #fff;
   font-size: 18rpx;
   padding: 4rpx 10rpx;

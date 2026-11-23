@@ -2,120 +2,100 @@
   <view class="main-content">
     <view class="hero-section">
       <view class="hero-bg"></view>
-      <view class="hero-decoration"></view>
+      <view class="hero-bg-glow-1"></view>
+      <view class="hero-bg-glow-2"></view>
+      <view class="hero-grid"></view>
       <view class="hero-content">
-        <view class="hero-greeting">
-          <text class="greeting-text">欢迎光临</text>
-          <text class="greeting-sub">桌台已就绪，随时可以开始</text>
+        <view class="hero-icon">
+          <view class="icon-ring"></view>
+          <view class="icon-ring-outer"></view>
+          <text class="icon-text">🎱</text>
         </view>
+        <text class="hero-title">欢迎光临</text>
+        <text class="hero-subtitle">桌台已就绪，随时可以开始</text>
 
-        <view class="hero-icon-container">
-          <view class="hero-icon-ring"></view>
-          <view class="hero-icon-inner">
-            <text class="hero-emoji">🎱</text>
+        <!-- 3列信息网格 -->
+        <view class="info-grid">
+          <view class="info-card">
+            <text class="info-icon">🏷️</text>
+            <text class="info-label">桌台</text>
+            <text class="info-value">{{ tableNumber }}</text>
           </view>
-          <view class="hero-icon-particles">
-            <view class="particle p1"></view>
-            <view class="particle p2"></view>
-            <view class="particle p3"></view>
-            <view class="particle p4"></view>
+          <view class="info-card">
+            <text class="info-icon">💰</text>
+            <text class="info-label">台费</text>
+            <text class="info-value">¥{{ tableHourlyRate }}/时</text>
           </view>
-        </view>
-
-        <!-- 桌台信息卡片 -->
-        <view class="table-info-card">
-          <view class="table-info-item">
-            <text class="table-info-icon">🏷️</text>
-            <text class="table-info-label">桌台</text>
-            <text class="table-info-value">{{ tableNumber }}</text>
-          </view>
-          <view class="table-info-divider"></view>
-          <view class="table-info-item">
-            <text class="table-info-icon">💰</text>
-            <text class="table-info-label">台费</text>
-            <text class="table-info-value">¥{{ tableHourlyRate }}/时</text>
-          </view>
-          <view class="table-info-divider"></view>
-          <view class="table-info-item status-item">
-            <view class="status-indicator">
+          <view class="info-card">
+            <view class="status-badge-idle">
               <view class="status-dot"></view>
+              <text class="status-text">空闲</text>
             </view>
-            <text class="table-info-label">状态</text>
-            <text class="table-info-value status-text">空闲</text>
           </view>
         </view>
 
-        <!-- 快捷入口网格 -->
+        <!-- 2x2快捷入口网格 -->
         <view class="quick-grid">
-          <view class="quick-card" @click="$emit('product')">
-            <view class="quick-card-bg bg-product"></view>
-            <view class="quick-card-content">
-              <view class="quick-icon-wrap">
-                <text class="quick-icon">🍷</text>
-              </view>
+          <view class="quick-item" @click="$emit('product')">
+            <view class="quick-icon">🍷</view>
+            <view class="quick-info">
               <text class="quick-title">点单</text>
               <text class="quick-desc">酒水饮料</text>
             </view>
           </view>
-          <view class="quick-card" @click="$emit('assistant')">
-            <view class="quick-card-bg bg-assistant"></view>
-            <view class="quick-card-content">
-              <view class="quick-icon-wrap">
-                <text class="quick-icon">👨‍🏫</text>
-              </view>
+          <view class="quick-item" @click="$emit('assistant')">
+            <view class="quick-icon">👨‍🏫</view>
+            <view class="quick-info">
               <text class="quick-title">助教</text>
               <text class="quick-desc">专业指导</text>
             </view>
           </view>
-          <view class="quick-card" @click="$emit('score')">
-            <view class="quick-card-bg bg-score"></view>
-            <view class="quick-card-content">
-              <view class="quick-icon-wrap">
-                <text class="quick-icon">📊</text>
-              </view>
+          <view class="quick-item" @click="$emit('score')">
+            <view class="quick-icon">📊</view>
+            <view class="quick-info">
               <text class="quick-title">计分</text>
               <text class="quick-desc">比赛记录</text>
             </view>
           </view>
-          <view class="quick-card" @click="$emit('service')">
-            <view class="quick-card-bg bg-service"></view>
-            <view class="quick-card-content">
-              <view class="quick-icon-wrap">
-                <text class="quick-icon">🛎️</text>
-              </view>
+          <view class="quick-item" @click="$emit('service')">
+            <view class="quick-icon">🛎️</view>
+            <view class="quick-info">
               <text class="quick-title">服务</text>
               <text class="quick-desc">呼叫服务员</text>
             </view>
           </view>
         </view>
 
-        <!-- 一键开台按钮 -->
-        <view class="quick-start-btn" @click="$emit('quick-create')">
-          <view class="btn-wave wave-1"></view>
-          <view class="btn-wave wave-2"></view>
-          <view class="btn-content">
-            <text class="btn-icon">⚡</text>
-            <view class="btn-text">
-              <text class="btn-title">一键开台</text>
-              <text class="btn-subtitle">立即开始计时计费</text>
+        <view class="action-btn quick" @click="$emit('quick-create')">
+          <view class="btn-bg"></view>
+          <view class="btn-glow"></view>
+          <view class="btn-shine"></view>
+          <view class="btn-inner">
+            <view class="action-icon-wrap">
+              <view class="icon-pulse-ring"></view>
+              <text class="action-icon">⚡</text>
             </view>
-            <text class="btn-arrow">›</text>
+            <view class="action-info">
+              <text class="action-title">一键开台</text>
+              <text class="action-desc">立即开始计时计费</text>
+            </view>
+            <view class="action-arrow">
+              <text class="arrow-icon">›</text>
+            </view>
           </view>
         </view>
       </view>
     </view>
 
-    <view class="tips-card">
+    <view class="idle-tips-card">
       <view class="tips-header">
-        <view class="tips-badge">
-          <text class="tips-icon">💡</text>
-        </view>
+        <text class="tips-icon">💡</text>
         <text class="tips-title">温馨提示</text>
       </view>
-      <view class="tips-content">
-        <text class="tip-text">开台后将自动开始计时计费</text>
-        <text class="tip-text">可随时点单商品或预约助教服务</text>
-        <text class="tip-text">如需帮助请点击左侧服务按钮</text>
+      <view class="tips-list">
+        <view class="tip-item"><text class="tip-dot">·</text><text class="tip-text">开台后将自动开始计时计费</text></view>
+        <view class="tip-item"><text class="tip-dot">·</text><text class="tip-text">可随时点单商品或预约助教服务</text></view>
+        <view class="tip-item"><text class="tip-dot">·</text><text class="tip-text">如需帮助请点击右侧"服务"按钮</text></view>
       </view>
     </view>
   </view>
@@ -139,153 +119,90 @@ defineEmits<{
 <style lang="scss" scoped>
 .main-content {
   flex: 1; display: flex; flex-direction: column; overflow-y: auto;
-  padding-top: 200rpx; padding-bottom: 20rpx;
+  padding-top: 220rpx; padding-bottom: 16rpx;
 }
 
 .hero-section {
   position: relative; flex: 1; display: flex; flex-direction: column;
-  border-radius: 56rpx; overflow: hidden; margin: 0 24rpx 24rpx;
-  background: rgba(255,255,255,0.85);
-  border: 2rpx solid rgba(7,193,96,0.06);
-  box-shadow: 0 16rpx 60rpx rgba(0,0,0,0.05), 0 0 40rpx rgba(7,193,96,0.05);
-  backdrop-filter: blur(30rpx);
+  border-radius: 56rpx; overflow: hidden; margin: 0 20rpx; backdrop-filter: blur(40rpx);
+  background: linear-gradient(145deg, rgba(26, 26, 46, 0.95), rgba(22, 22, 42, 0.98));
+  border: 3rpx solid rgba(201, 169, 98, 0.2);
+  box-shadow: 0 16rpx 64rpx rgba(0, 0, 0, 0.5), 0 0 100rpx rgba(201, 169, 98, 0.08);
+  max-height: 90vh;
 
-  .hero-bg { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,193,96,0.02) 0%, rgba(7,193,96,0.01) 100%); }
-  .hero-decoration {
-    position: absolute; inset: 0; overflow: hidden;
-    &::before { content: ''; position: absolute; top: -300rpx; left: -300rpx; width: 800rpx; height: 800rpx; background: radial-gradient(circle, rgba(7,193,96,0.06) 0%, transparent 70%); animation: floatGlow 10s ease-in-out infinite; }
-    &::after { content: ''; position: absolute; bottom: -200rpx; right: -200rpx; width: 600rpx; height: 600rpx; background: radial-gradient(circle, rgba(6,182,212,0.04) 0%, transparent 70%); animation: floatGlow 10s ease-in-out infinite 3s; }
-  }
+  .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,169,98,.15), rgba(138,109,59,.08), rgba(201,169,98,.03)); backdrop-filter: blur(80rpx); }
+  .hero-bg-glow-1 { position: absolute; top: -200rpx; left: -200rpx; width: 600rpx; height: 600rpx; background: radial-gradient(circle, rgba(0,212,255,.3) 0%, rgba(0,212,255,.08) 40%, transparent 70%); animation: glowPulse 5s ease-in-out infinite; }
+  .hero-bg-glow-2 { position: absolute; bottom: -150rpx; right: -150rpx; width: 500rpx; height: 500rpx; background: radial-gradient(circle, rgba(201,169,98,.25) 0%, rgba(201,169,98,.08) 40%, transparent 70%); animation: glowPulse 5s ease-in-out infinite 2.5s; }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,212,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,.03) 1px, transparent 1px); background-size: 80rpx 80rpx; animation: gridPulse 4s ease-in-out infinite; }
 
   .hero-content {
     position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column;
-    align-items: center; padding: 60rpx 32rpx 48rpx;
+    align-items: center; justify-content: center; padding: 32rpx 32rpx 24rpx;
 
-    .hero-greeting { text-align: center; margin-bottom: 32rpx;
-      .greeting-text { display: block; font-size: 96rpx; font-weight: 900; color: #333333; letter-spacing: 12rpx; margin-bottom: 16rpx; }
-      .greeting-sub { font-size: 40rpx; color: #999999; letter-spacing: 4rpx; }
+    .hero-icon { position: relative; width: 320rpx; height: 320rpx; display: flex; align-items: center; justify-content: center; margin-bottom: 32rpx;
+      .icon-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, rgba(0,212,255,.25), rgba(201,169,98,.15)); animation: ringPulse 3s ease-in-out infinite;
+        &::before { content: ''; position: absolute; top: -10rpx; left: -10rpx; right: -10rpx; bottom: -10rpx; border-radius: 50%; border: 3rpx solid rgba(0,212,255,.3); animation: ringExpand 3s ease-out infinite; }
+      }
+      .icon-ring-outer { position: absolute; width: 120%; height: 120%; border-radius: 50%; border: 2rpx solid rgba(201,169,98,.2); animation: ringRotate 8s linear infinite;
+        &::before { content: ''; position: absolute; top: 0; left: 50%; width: 16rpx; height: 16rpx; border-radius: 50%; background: rgba(201,169,98,.6); transform: translateX(-50%); box-shadow: 0 0 20rpx rgba(201,169,98,.8); }
+      }
+      .icon-text { position: relative; z-index: 1; font-size: 180rpx; animation: float 4s ease-in-out infinite; }
     }
 
-    .hero-icon-container { position: relative; width: 320rpx; height: 320rpx; display: flex; align-items: center; justify-content: center; margin-bottom: 40rpx;
-      .hero-icon-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, rgba(7,193,96,0.15), rgba(7,193,96,0.04)); animation: iconRingPulse 4s ease-in-out infinite; }
-      .hero-icon-inner { position: relative; width: 220rpx; height: 220rpx; background: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.06), inset 0 0 20rpx rgba(7,193,96,0.04); border: 3rpx solid rgba(7,193,96,0.1);
-        .hero-emoji { font-size: 140rpx; animation: floatEmoji 4s ease-in-out infinite; }
-      }
-      .hero-icon-particles { position: absolute; width: 100%; height: 100%;
-        .particle { position: absolute; width: 16rpx; height: 16rpx; border-radius: 50%; background: rgba(7,193,96,0.3);
-          &.p1 { top: 10%; left: 50%; transform: translateX(-50%); animation: particleMove 3s ease-in-out infinite; }
-          &.p2 { top: 50%; right: 10%; transform: translateY(-50%); animation: particleMove 3s ease-in-out infinite 0.75s; }
-          &.p3 { bottom: 10%; left: 50%; transform: translateX(-50%); animation: particleMove 3s ease-in-out infinite 1.5s; }
-          &.p4 { top: 50%; left: 10%; transform: translateY(-50%); animation: particleMove 3s ease-in-out infinite 2.25s; }
-        }
-      }
-    }
+    .hero-title { display: block; font-size: 120rpx; font-weight: 800; color: #fff; margin-bottom: 24rpx; background: linear-gradient(135deg, #c9a962, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 16rpx; animation: textGlow 3s ease-in-out infinite; }
+    .hero-subtitle { font-size: 56rpx; color: #b0b0c0; letter-spacing: 8rpx; animation: fadeIn 1s ease-out; margin-bottom: 32rpx; }
   }
 }
 
-@keyframes floatGlow { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(40rpx,40rpx) scale(1.1);} 66%{transform:translate(-20rpx,-20rpx) scale(0.9);} }
-@keyframes iconRingPulse { 0%,100%{transform:scale(1);opacity:0.5;box-shadow:0 0 30rpx rgba(7,193,96,0.15);} 50%{transform:scale(1.08);opacity:0.8;box-shadow:0 0 50rpx rgba(7,193,96,0.25);} }
-@keyframes floatEmoji { 0%,100%{transform:translateY(0) rotate(0deg);} 25%{transform:translateY(-10rpx) rotate(2deg);} 75%{transform:translateY(10rpx) rotate(-2deg);} }
-@keyframes particleMove { 0%,100%{transform:translate(0,0) scale(1);opacity:0.4;} 50%{transform:translate(20rpx,20rpx) scale(1.2);opacity:0.8;} }
-
-// 桌台信息卡片
-.table-info-card {
-  display: flex; align-items: center; justify-content: space-around;
-  background: rgba(255,255,255,0.9);
-  border-radius: 32rpx; padding: 32rpx 24rpx;
-  margin: 0 24rpx 32rpx;
-  border: 2rpx solid rgba(7,193,96,0.08);
-  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.04);
-
-  .table-info-item { display: flex; flex-direction: column; align-items: center; gap: 8rpx; flex: 1;
-    .table-info-icon { font-size: 48rpx; margin-bottom: 8rpx; }
-    .table-info-label { font-size: 26rpx; color: #999999; font-weight: 500; }
-    .table-info-value { font-size: 48rpx; font-weight: 800; color: #333333; }
-    &.status-item {
-      .status-indicator { width: 48rpx; height: 48rpx; display: flex; align-items: center; justify-content: center; margin-bottom: 8rpx;
-        .status-dot { width: 20rpx; height: 20rpx; border-radius: 50%; background: #07C160; box-shadow: 0 0 16rpx rgba(7,193,96,0.6); animation: statusPulse 2s infinite; }
-      }
-      .status-text { color: #07C160; }
-    }
+// 3列信息网格
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24rpx; margin: 0 16rpx 40rpx; width: calc(100% - 32rpx); }
+.info-card { background: rgba(0,0,0,.3); border-radius: 40rpx; padding: 40rpx 24rpx; border: 2rpx solid rgba(201,169,98,.15); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 160rpx;
+  .info-icon { font-size: 64rpx; margin-bottom: 20rpx; }
+  .info-label { font-size: 28rpx; color: rgba(255,255,255,.5); margin-bottom: 12rpx; }
+  .info-value { font-size: 48rpx; font-weight: 700; color: #c9a962; }
+  .status-badge-idle { display: flex; align-items: center; gap: 16rpx; padding: 24rpx 40rpx; border-radius: 56rpx; background: linear-gradient(135deg, rgba(46,213,115,.2), rgba(34,197,94,.1)); border: 2rpx solid rgba(46,213,115,.4);
+    .status-dot { width: 20rpx; height: 20rpx; border-radius: 50%; background: #2ed573; box-shadow: 0 0 12rpx rgba(46,213,115,1); animation: pulse 2s infinite; }
+    .status-text { font-size: 26rpx; color: #2ed573; font-weight: 600; }
   }
-  .table-info-divider { width: 2rpx; height: 100rpx; background: rgba(7,193,96,0.08); }
 }
 
-@keyframes statusPulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.2);} }
-
-// 快捷入口网格
-.quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20rpx; margin: 0 24rpx 32rpx; }
-.quick-card {
-  position: relative; border-radius: 36rpx; overflow: hidden;
-  background: #ffffff; border: 2rpx solid rgba(7,193,96,0.06);
-  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.04);
-  transition: all 0.3s ease;
-  &:active { transform: scale(0.96); border-color: #07C160; box-shadow: 0 12rpx 40rpx rgba(7,193,96,0.15); }
-
-  .quick-card-bg { position: absolute; inset: 0; opacity: 0.04;
-    &.bg-product { background: linear-gradient(135deg, #FF976A, #F97316); }
-    &.bg-assistant { background: linear-gradient(135deg, #07C160, #06AD56); }
-    &.bg-score { background: linear-gradient(135deg, #3B82F6, #6366F1); }
-    &.bg-service { background: linear-gradient(135deg, #F97316, #EA580C); }
-  }
-
-  .quick-card-content { position: relative; z-index: 1; padding: 36rpx 24rpx; display: flex; flex-direction: column; align-items: center; gap: 12rpx;
-    .quick-icon-wrap { width: 100rpx; height: 100rpx; background: rgba(7,193,96,0.04); border-radius: 28rpx; display: flex; align-items: center; justify-content: center; border: 2rpx solid rgba(7,193,96,0.08); margin-bottom: 8rpx;
-      .quick-icon { font-size: 56rpx; }
-    }
-    .quick-title { font-size: 40rpx; font-weight: 800; color: #333333; letter-spacing: 2rpx; }
-    .quick-desc { font-size: 26rpx; color: #999999; }
-  }
+// 2x2快捷入口
+.quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24rpx; margin: 0 16rpx 40rpx; width: calc(100% - 32rpx); }
+.quick-item { background: linear-gradient(145deg, rgba(201,169,98,.15), rgba(201,169,98,.05)); border-radius: 48rpx; padding: 48rpx 32rpx; border: 2rpx solid rgba(201,169,98,.2); display: flex; align-items: center; gap: 24rpx; transition: all .3s; min-height: 140rpx;
+  &:active { transform: scale(.98); background: linear-gradient(145deg, rgba(201,169,98,.25), rgba(201,169,98,.1)); }
+  .quick-icon { width: 100rpx; height: 100rpx; background: rgba(255,255,255,.1); border-radius: 32rpx; display: flex; align-items: center; justify-content: center; font-size: 52rpx; border: 2rpx solid rgba(255,255,255,.15); flex-shrink: 0; }
+  .quick-info { flex: 1; .quick-title { font-size: 40rpx; font-weight: 600; color: #fff; margin-bottom: 10rpx; } .quick-desc { font-size: 28rpx; color: rgba(255,255,255,.4); } }
 }
 
 // 一键开台按钮
-.quick-start-btn {
-  position: relative; margin: 0 24rpx 24rpx;
-  background: linear-gradient(135deg, #07C160, #06AD56);
-  border-radius: 44rpx; padding: 40rpx 48rpx;
-  border: 3rpx solid rgba(255,255,255,0.3);
-  box-shadow: 0 16rpx 48rpx rgba(7,193,96,0.35), 0 0 30rpx rgba(7,193,96,0.15);
-  overflow: hidden;
-  transition: all 0.3s ease;
-  &:active { transform: scale(0.96); box-shadow: 0 8rpx 24rpx rgba(7,193,96,0.3); }
-
-  .btn-wave { position: absolute; top: 50%; left: 50%; width: 200%; height: 200%; border-radius: 50%; border: 3rpx solid rgba(255,255,255,0.1); animation: waveExpand 3s ease-out infinite;
-    &.wave-1 { animation-delay: 0s; }
-    &.wave-2 { animation-delay: 1.5s; }
+.action-btn { position: relative; height: 320rpx; min-height: 320rpx; border-radius: 56rpx; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: all .4s ease; margin: 32rpx 16rpx 0; flex-shrink: 0;
+  .btn-bg { background: linear-gradient(135deg, rgba(201,169,98,.35), rgba(138,109,59,.2)); position: absolute; inset: 0; border-radius: 64rpx; border: 4rpx solid rgba(255,255,255,.3); box-shadow: 0 12rpx 48rpx rgba(201,169,98,.3); }
+  .btn-glow { background: rgba(201,169,98,.5); position: absolute; top: 50%; left: 50%; width: 80%; height: 80%; transform: translate(-50%,-50%); border-radius: 64rpx; filter: blur(80rpx); opacity: 0; transition: opacity .4s; }
+  .btn-shine { position: absolute; top: 0; left: 0; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent); animation: shine 3s ease-in-out infinite; }
+  &:active { transform: scale(.95); .btn-glow { opacity: 1; } }
+  .btn-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 56rpx; width: 100%; padding: 0 80rpx; }
+  .action-icon-wrap { position: relative; width: 160rpx; height: 160rpx; border-radius: 48rpx; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; border: 3rpx solid rgba(255,255,255,.2); box-shadow: 0 12rpx 40rpx rgba(0,0,0,.3); flex-shrink: 0;
+    .icon-pulse-ring { position: absolute; width: 100%; height: 100%; border-radius: 48rpx; border: 3rpx solid rgba(201,169,98,.5); animation: ringPulse 2s ease-out infinite; }
+    .action-icon { font-size: 96rpx; filter: drop-shadow(0 6rpx 16rpx rgba(0,0,0,.4)); }
   }
-
-  .btn-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between;
-    .btn-icon { font-size: 80rpx; color: rgba(255,255,255,0.9); }
-    .btn-text { flex: 1; text-align: center; margin: 0 24rpx;
-      .btn-title { display: block; font-size: 56rpx; font-weight: 900; color: #ffffff; letter-spacing: 4rpx; margin-bottom: 8rpx; }
-      .btn-subtitle { font-size: 32rpx; color: rgba(255,255,255,0.8); }
-    }
-    .btn-arrow { font-size: 64rpx; color: rgba(255,255,255,0.9); font-weight: 300; }
-  }
+  .action-info { flex: 1; text-align: left; .action-title { display: block; font-size: 80rpx; font-weight: 800; color: #fff; margin-bottom: 16rpx; letter-spacing: 6rpx; text-shadow: 0 6rpx 20rpx rgba(0,0,0,.4); } .action-desc { font-size: 44rpx; color: #e0e0e0; letter-spacing: 3rpx; } }
+  .action-arrow { flex-shrink: 0; .arrow-icon { font-size: 80rpx; color: #fff; font-weight: 300; } }
 }
-
-@keyframes waveExpand { 0%{transform:translate(-50%,-50%) scale(0.5);opacity:0.6;} 100%{transform:translate(-50%,-50%) scale(1.5);opacity:0;} }
 
 // 提示卡片
-.tips-card {
-  background: rgba(255,255,255,0.9);
-  border-radius: 32rpx; padding: 32rpx;
-  margin: 0 24rpx;
-  border: 2rpx solid rgba(7,193,96,0.06);
-  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.04);
-  flex-shrink: 0;
-
-  .tips-header { display: flex; align-items: center; gap: 16rpx; margin-bottom: 24rpx;
-    .tips-badge { width: 56rpx; height: 56rpx; background: rgba(7,193,96,0.08); border-radius: 16rpx; display: flex; align-items: center; justify-content: center; border: 2rpx solid rgba(7,193,96,0.1);
-      .tips-icon { font-size: 32rpx; }
-    }
-    .tips-title { font-size: 36rpx; color: #333333; font-weight: 700; }
-  }
-
-  .tips-content { display: flex; flex-direction: column; gap: 16rpx;
-    .tip-text { font-size: 30rpx; color: #666666; line-height: 1.6; padding-left: 24rpx; position: relative;
-      &::before { content: '·'; position: absolute; left: 0; color: #07C160; font-weight: 700; }
-    }
-  }
+.idle-tips-card { background: linear-gradient(145deg, rgba(26,26,46,.95), rgba(22,22,42,.98)); border-radius: 40rpx; padding: 32rpx 40rpx; margin: 32rpx 20rpx; border: 2rpx solid rgba(201,169,98,.15); box-shadow: 0 12rpx 48rpx rgba(0,0,0,.4); flex-shrink: 0;
+  .tips-header { display: flex; align-items: center; gap: 16rpx; margin-bottom: 28rpx; .tips-icon { font-size: 40rpx; } .tips-title { font-size: 36rpx; color: #c9a962; font-weight: 700; letter-spacing: 2rpx; } }
+  .tips-list { display: flex; flex-direction: column; gap: 20rpx; .tip-item { display: flex; align-items: flex-start; gap: 16rpx; .tip-dot { font-size: 32rpx; color: #c9a962; font-weight: 700; line-height: 1.4; } .tip-text { font-size: 30rpx; color: #b0b0c0; line-height: 1.5; flex: 1; } } }
 }
+
+@keyframes glowPulse { 0%,100%{transform:scale(1);opacity:.5} 50%{transform:scale(1.4);opacity:.8} }
+@keyframes gridPulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+@keyframes ringPulse { 0%,100%{transform:scale(1);opacity:.6;box-shadow:0 0 40rpx rgba(0,212,255,.3)} 50%{transform:scale(1.1);opacity:.8;box-shadow:0 0 80rpx rgba(0,212,255,.5)} }
+@keyframes ringExpand { 0%{transform:scale(.9);opacity:.8} 100%{transform:scale(1.4);opacity:0} }
+@keyframes ringRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20rpx)} }
+@keyframes textGlow { 0%,100%{text-shadow:0 0 30rpx rgba(201,169,98,.5)} 50%{text-shadow:0 0 60rpx rgba(201,169,98,.8)} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(20rpx)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.3)} }
+@keyframes shine { 0%{transform:translateX(-100%) skewX(-15deg)} 100%{transform:translateX(200%) skewX(-15deg)} }
 </style>

@@ -50,7 +50,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .records-page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f5f5f5;
 }
 
 .page-content {
@@ -58,11 +58,10 @@ onMounted(async () => {
 }
 
 .record-card {
-  background: #ffffff;
+  background: #fff;
   border-radius: 20rpx;
   padding: 28rpx;
   margin-bottom: 20rpx;
-  border: 1rpx solid #e5e5e5;
 }
 
 .record-header {
@@ -74,7 +73,7 @@ onMounted(async () => {
 
 .record-platform {
   font-size: 28rpx;
-  color: #999999;
+  color: #666;
 }
 
 .record-status {
@@ -84,12 +83,12 @@ onMounted(async () => {
 }
 
 .record-status.verified {
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
+  background: #f0fdf6;
+  color: #059669;
 }
 
 .record-status.revoked {
-  background: rgba(239, 68, 68, 0.1);
+  background: #fef2f2;
   color: #ef4444;
 }
 
@@ -102,13 +101,13 @@ onMounted(async () => {
 .record-name {
   font-size: 32rpx;
   font-weight: 600;
-  color: #333333;
+  color: #333;
 }
 
 .record-price {
   font-size: 32rpx;
   font-weight: 700;
-  color: #07C160;
+  color: #f59e0b;
 }
 
 .record-footer {
@@ -117,7 +116,7 @@ onMounted(async () => {
 
 .record-time {
   font-size: 24rpx;
-  color: #999999;
+  color: #ccc;
 }
 
 .empty {
@@ -127,6 +126,6 @@ onMounted(async () => {
 
 .empty-text {
   font-size: 28rpx;
-  color: #999999;
+  color: #ccc;
 }
 </style>

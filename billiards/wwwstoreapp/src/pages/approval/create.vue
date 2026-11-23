@@ -11,7 +11,7 @@
 						:class="{ selected: form.type === item.type }"
 						@click="selectType(item.type)"
 					>
-						<text class="type-icon">{{ getEmoji(item.type) }}</text>
+						<text class="type-icon">{{ getIcon(item.type) }}</text>
 						<text class="type-name">{{ item.name }}</text>
 					</view>
 				</view>
@@ -145,7 +145,7 @@
 						@click="selectAssistantItem(item)"
 					>
 						<text class="item-name">{{ item.name }}</text>
-						<view class="item-check" v-if="form.extraData.targetEmployeeId === item.id"><text>✓</text></view>
+						<view class="item-check" v-if="form.extraData.targetEmployeeId === item.id">✓</view>
 					</view>
 				</view>
 			</view>
@@ -157,7 +157,6 @@
 import { ref, reactive } from 'vue'
 import { createApproval, getApprovalTypes, getAssistantListForExchange } from '@/api/modules/approval'
 import DatePickerModal from '@/components/DatePickerModal.vue'
-''
 
 const approvalTypes = ref([
 	{ type: 'leave', name: '请假申请' },
@@ -196,15 +195,15 @@ const datePickerMode = ref<'date' | 'time' | 'datetime'>('datetime')
 const datePickerField = ref('')
 const datePickerTitle = ref('选择日期时间')
 
-function getEmoji(type: string): string {
-	const emojis: Record<string, string> = {
-		leave: '🏖',
+function getIcon(type: string): string {
+	const icons: Record<string, string> = {
+		leave: '🏖️',
 		checkin: '📍',
-		outwork: '🏢',
+		outwork: '🌐',
 		exchange: '🔄',
 		overtime: '⏰'
 	}
-	return emojis[type] || '📄'
+	return icons[type] || '📋'
 }
 
 function selectType(type: string) {
@@ -392,7 +391,7 @@ function goBack() {
 <style lang="scss" scoped>
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #f5f5f5;
 	padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
 }
 
@@ -407,40 +406,40 @@ function goBack() {
 	right: 0;
 	padding: 20rpx 32rpx;
 	padding-bottom: calc(env(safe-area-inset-bottom) + 20rpx);
-	background: #ffffff;
-	border-top: 1rpx solid #e5e5e5;
+	background: #fff;
+	border-top: 1rpx solid #f0f0f0;
 }
 
 .submit-btn {
 	height: 88rpx;
-	background: #07C160;
+	background: linear-gradient(135deg, #059669 0%, #059669 100%);
 	border-radius: 44rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
+	box-shadow: 0 8rpx 24rpx rgba(16, 185, 129, 0.3);
+	
 	text {
 		font-size: 32rpx;
 		font-weight: 600;
 		color: #fff;
 	}
-
+	
 	&:active {
 		opacity: 0.9;
 	}
 }
 
 .form-item {
-	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	background: #fff;
+	border-radius: 24rpx;
 	padding: 24rpx;
 	margin-bottom: 20rpx;
 }
 
 .form-label {
 	font-size: 28rpx;
-	color: #333333;
+	color: #333;
 	font-weight: 500;
 	margin-bottom: 16rpx;
 	display: block;
@@ -457,20 +456,20 @@ function goBack() {
 	flex-direction: column;
 	align-items: center;
 	padding: 20rpx 24rpx;
-	background: #f7f7f7;
+	background: #fafafa;
 	border-radius: 12rpx;
 	border: 2rpx solid transparent;
 	min-width: 140rpx;
-
+	
 	&.selected {
-		background: rgba(7, 193, 96, 0.1);
-		border-color: #07C160;
+		background: rgba(16, 185, 129, 0.1);
+		border-color: #059669;
 	}
-
+	
 	&.small {
 		min-width: 100rpx;
 		padding: 16rpx 20rpx;
-
+		
 		text {
 			font-size: 26rpx;
 		}
@@ -480,23 +479,21 @@ function goBack() {
 .type-icon {
 	font-size: 40rpx;
 	margin-bottom: 8rpx;
-	color: #07C160;
 }
 
 .type-name {
 	font-size: 26rpx;
-	color: #333333;
+	color: #333;
 }
 
 .form-textarea {
 	width: 100%;
 	height: 200rpx;
-	background: #f7f7f7;
-	border: 1rpx solid #e5e5e5;
+	background: #fafafa;
 	border-radius: 12rpx;
 	padding: 20rpx;
 	font-size: 28rpx;
-	color: #333333;
+	color: #333;
 	box-sizing: border-box;
 }
 
@@ -504,19 +501,17 @@ function goBack() {
 	display: block;
 	text-align: right;
 	font-size: 24rpx;
-	color: #999999;
+	color: #999;
 	margin-top: 12rpx;
 }
 
 .form-input {
 	width: 100%;
 	height: 88rpx;
-	background: #f7f7f7;
-	border: 1rpx solid #e5e5e5;
+	background: #fafafa;
 	border-radius: 12rpx;
 	padding: 0 24rpx;
 	font-size: 28rpx;
-	color: #333333;
 	box-sizing: border-box;
 }
 
@@ -534,17 +529,16 @@ function goBack() {
 	align-items: center;
 	justify-content: space-between;
 	height: 88rpx;
-	background: #f7f7f7;
-	border: 1rpx solid #e5e5e5;
+	background: #fafafa;
 	border-radius: 12rpx;
 	padding: 0 24rpx;
 	font-size: 28rpx;
-	color: #333333;
+	color: #333;
 }
 
 .picker-arrow {
 	font-size: 32rpx;
-	color: #999999;
+	color: #999;
 }
 
 .assistant-modal {
@@ -561,7 +555,7 @@ function goBack() {
 
 .modal-content {
 	width: 100%;
-	background: #ffffff;
+	background: #fff;
 	border-radius: 32rpx 32rpx 0 0;
 	max-height: 70vh;
 	overflow: hidden;
@@ -572,18 +566,18 @@ function goBack() {
 	align-items: center;
 	justify-content: space-between;
 	padding: 32rpx;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f0f0f0;
 }
 
 .modal-title {
 	font-size: 32rpx;
 	font-weight: 600;
-	color: #333333;
+	color: #333;
 }
 
 .modal-close {
 	font-size: 48rpx;
-	color: #999999;
+	color: #999;
 	line-height: 1;
 }
 
@@ -598,22 +592,22 @@ function goBack() {
 	align-items: center;
 	justify-content: space-between;
 	padding: 28rpx 32rpx;
-	border-bottom: 1rpx solid #e5e5e5;
-
+	border-bottom: 1rpx solid #f5f5f5;
+	
 	&.selected {
-		background: rgba(7, 193, 96, 0.1);
+		background: rgba(16, 185, 129, 0.05);
 	}
 }
 
 .item-name {
 	font-size: 30rpx;
-	color: #333333;
+	color: #333;
 }
 
 .item-check {
 	width: 40rpx;
 	height: 40rpx;
-	background: #07C160;
+	background: #059669;
 	color: #fff;
 	border-radius: 50%;
 	display: flex;

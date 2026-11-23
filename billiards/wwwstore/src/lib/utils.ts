@@ -144,9 +144,9 @@ export const tableTypeLabels: Record<string, string> = {
  * 台型颜色
  */
 export const tableTypeColors: Record<string, string> = {
-  standard: 'bg-[#07C160]',
-  tournament: 'bg-[#06B6D4]',
-  snooker: 'bg-[#8B5CF6]',
+  standard: 'bg-emerald-500',
+  tournament: 'bg-blue-500',
+  snooker: 'bg-purple-500',
 };
 
 /**

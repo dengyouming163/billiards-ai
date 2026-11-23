@@ -96,14 +96,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
       dispatch({ type: 'SET_LOADING', payload: true });
 
       try {
+        // auth-context persists the store under `storeId` (camelCase) while the
+        // StoreUser type declares `store_id` (snake_case); tolerate either so
+        // the default current store is the logged-in employee's own store
+        // instead of silently falling back to stores[0].
+        const userStoreId =
+          (authUser as { store_id?: string; storeId?: string }).store_id ||
+          (authUser as { store_id?: string; storeId?: string }).storeId ||
+          '';
+
         const user: User = {
           id: authUser.id || '',
           name: authUser.name || '',
           phone: authUser.phone || '',
           avatar: authUser.avatar || '',
           role: (authUser.role as EmployeeRole) || ('' as EmployeeRole),
-          storeIds: authUser.store_id ? [authUser.store_id] : [],
-          currentStoreId: authUser.store_id || '',
+          storeIds: userStoreId ? [userStoreId] : [],
+          currentStoreId: userStoreId,
         };
         dispatch({ type: 'SET_USER', payload: user });
 
@@ -119,7 +128,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         dispatch({ type: 'SET_STORES', payload: stores });
 
         // 设置当前门店 - 优先使用用户关联的门店，否则使用第一个门店
-        const currentStore = stores.find(s => s.id === authUser.store_id) || stores[0];
+        const currentStore = stores.find(s => s.id === userStoreId) || stores[0];
         if (currentStore) {
           dispatch({ type: 'SET_CURRENT_STORE', payload: currentStore });
           

@@ -69,7 +69,7 @@ onMounted(() => {
 .store-selector-mask {
 	position: fixed;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.6);
+	background: rgba(0, 0, 0, 0.5);
 	z-index: 1000;
 	display: flex;
 	align-items: flex-end;
@@ -83,14 +83,13 @@ onMounted(() => {
 
 .store-selector-popup {
 	width: 100%;
-	background: rgba(15, 23, 42, 0.98);
+	background: #fff;
 	border-radius: 32rpx 32rpx 0 0;
 	max-height: 70vh;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
 	animation: slideUp .3s ease;
-	border-top: 1rpx solid rgba(71, 85, 105, 0.4);
 }
 
 @keyframes slideUp {
@@ -105,14 +104,14 @@ onMounted(() => {
 	position: relative;
 	height: 96rpx;
 	padding: 0 32rpx;
-	border-bottom: 1rpx solid rgba(71, 85, 105, 0.4);
+	border-bottom: 1rpx solid #f0f0f0;
 	flex-shrink: 0;
 }
 
 .popup-title {
 	font-size: 34rpx;
 	font-weight: 600;
-	color: #f8fafc;
+	color: #1a1a1a;
 }
 
 .close-btn {
@@ -125,13 +124,11 @@ onMounted(() => {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 50%;
-	background: rgba(71, 85, 105, 0.3);
 }
 
 .close-text {
 	font-size: 32rpx;
-	color: #94a3b8;
+	color: #999;
 }
 
 .popup-body {
@@ -147,19 +144,18 @@ onMounted(() => {
 	align-items: center;
 	padding: 28rpx 24rpx;
 	margin-bottom: 16rpx;
-	background: rgba(30, 41, 59, 0.6);
-	border-radius: 24rpx;
-	border: 1rpx solid rgba(71, 85, 105, 0.4);
-	transition: all .2s;
+	background: #f8f8f8;
+	border-radius: 20rpx;
+	border: 2rpx solid transparent;
+	transition: background .2s;
 
 	&:active {
-		background: rgba(51, 65, 85, 0.8);
-		transform: scale(0.98);
+		background: #eef7f2;
 	}
 
 	&.active {
-		background: rgba(245, 158, 11, 0.08);
-		border-color: rgba(245, 158, 11, 0.4);
+		background: #eef7f2;
+		border-color: #059669;
 	}
 }
 
@@ -173,7 +169,7 @@ onMounted(() => {
 	display: block;
 	font-size: 30rpx;
 	font-weight: 600;
-	color: #f8fafc;
+	color: #1a1a1a;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -182,7 +178,7 @@ onMounted(() => {
 .store-address {
 	display: block;
 	font-size: 24rpx;
-	color: #94a3b8;
+	color: #999;
 	margin-top: 6rpx;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -194,14 +190,12 @@ onMounted(() => {
 	width: 44rpx;
 	height: 44rpx;
 	border-radius: 50%;
-	background: #f59e0b;
-	color: #1e293b;
+	background: #059669;
+	color: #fff;
 	font-size: 26rpx;
-	font-weight: 700;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0 0 16rpx rgba(245, 158, 11, 0.4);
 }
 
 .empty-state {
@@ -219,6 +213,6 @@ onMounted(() => {
 
 .empty-text {
 	font-size: 28rpx;
-	color: #64748b;
+	color: #999;
 }
 </style>

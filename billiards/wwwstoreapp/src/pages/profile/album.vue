@@ -3,7 +3,7 @@
 		<view class="album-content">
 			<view v-if="albumList.length === 0" class="empty-state">
 				<view class="empty-illustration">
-					<Icon class="empty-icon" name="camera" size="80" />
+					<text class="empty-icon">📷</text>
 				</view>
 				<text class="empty-title">还没有照片</text>
 				<text class="empty-desc">点击下方按钮上传您的第一张照片</text>
@@ -19,7 +19,7 @@
 				>
 					<image :src="item" class="album-image" mode="aspectFill" lazy-load />
 					<view class="item-check">
-						<Icon class="check-mark" name="check" size="22" />
+						<text class="check-mark">✓</text>
 					</view>
 				</view>
 			</view>
@@ -38,7 +38,7 @@
 				@click.stop
 			/>
 			<view class="preview-close" @click="closePreview">
-				<Icon name="x" size="32" />
+				<text>✕</text>
 			</view>
 			<view class="preview-indicator">
 				<text>{{ currentIndex + 1 }}/{{ albumList.length }}</text>
@@ -53,7 +53,6 @@
 import { ref, onMounted } from 'vue'
 import { getProfile, uploadAlbum, deleteAlbum } from '@/api/modules/profile'
 import { uploadFile } from '@/api/request'
-import Icon from '@/components/Icon.vue'
 
 const albumList = ref<string[]>([])
 const showPreview = ref(false)
@@ -167,7 +166,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .page {
 	min-height: 100vh;
-	background-color: #f7f7f7;
+	background-color: #f5f5f5;
 	padding-bottom: 160rpx;
 }
 
@@ -185,8 +184,7 @@ onMounted(() => {
 .empty-illustration {
 	width: 160rpx;
 	height: 160rpx;
-	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
+	background: #f0fdf4;
 	border-radius: 80rpx;
 	display: flex;
 	align-items: center;
@@ -196,19 +194,18 @@ onMounted(() => {
 
 .empty-icon {
 	font-size: 80rpx;
-	color: #07C160;
 }
 
 .empty-title {
 	font-size: 32rpx;
-	color: #000000;
+	color: #333;
 	font-weight: 600;
 	margin-bottom: 12rpx;
 }
 
 .empty-desc {
 	font-size: 26rpx;
-	color: #999999;
+	color: #999;
 }
 
 .album-grid {
@@ -224,8 +221,7 @@ onMounted(() => {
 	aspect-ratio: 1;
 	border-radius: 12rpx;
 	overflow: hidden;
-	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
+	background: #f3f4f6;
 }
 
 .album-image {
@@ -239,7 +235,7 @@ onMounted(() => {
 	right: 8rpx;
 	width: 40rpx;
 	height: 40rpx;
-	background: #07C160;
+	background: rgba(5, 150, 105, 0.85);
 	border-radius: 20rpx;
 	display: flex;
 	align-items: center;
@@ -248,22 +244,23 @@ onMounted(() => {
 
 .check-mark {
 	font-size: 22rpx;
-	color: #ffffff;
+	color: #fff;
 	font-weight: 700;
 }
 
+// 悬浮上传按钮
 .fab-upload {
 	position: fixed;
 	bottom: calc(env(safe-area-inset-bottom) + 60rpx);
 	right: 40rpx;
 	width: 112rpx;
 	height: 112rpx;
-	background: #07C160;
+	background: linear-gradient(135deg, #10b981, #059669);
 	border-radius: 56rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.35);
+	box-shadow: 0 8rpx 24rpx rgba(5, 150, 105, 0.35);
 	z-index: 100;
 	transition: transform 0.2s;
 
@@ -274,12 +271,13 @@ onMounted(() => {
 
 .fab-icon {
 	font-size: 56rpx;
-	color: #ffffff;
+	color: #fff;
 	font-weight: 300;
 	line-height: 1;
 	margin-top: -4rpx;
 }
 
+// 图片预览
 .preview-modal {
 	position: fixed;
 	top: 0;
@@ -309,7 +307,7 @@ onMounted(() => {
 	justify-content: center;
 	background-color: rgba(255, 255, 255, 0.15);
 	border-radius: 50%;
-	color: #ffffff;
+	color: #fff;
 	font-size: 32rpx;
 }
 
@@ -321,7 +319,7 @@ onMounted(() => {
 	background-color: rgba(0, 0, 0, 0.6);
 	padding: 10rpx 20rpx;
 	border-radius: 20rpx;
-	color: #ffffff;
+	color: #fff;
 	font-size: 24rpx;
 }
 
@@ -336,7 +334,7 @@ onMounted(() => {
 	justify-content: center;
 	background-color: rgba(255, 255, 255, 0.15);
 	border-radius: 50%;
-	color: #ffffff;
+	color: #fff;
 	font-size: 48rpx;
 }
 

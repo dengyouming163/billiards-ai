@@ -56,7 +56,7 @@
 							@click="goToDetail(item.id)"
 						>
 							<view class="card-icon-wrap">
-								<Icon class="card-icon" :name="getIcon(item.type)" size="42" />
+								<view class="card-icon">{{ getIcon(item.type) }}</view>
 							</view>
 							<view class="card-body">
 								<view class="card-row">
@@ -96,7 +96,6 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import TabBar from '@/components/TabBar.vue'
 import Header from '@/components/Header.vue'
 import StateView from '@/components/StateView.vue'
-import Icon from '@/components/Icon.vue'
 import { formatDateTimeFixed } from '@/utils/date'
 
 const { canAccessModule } = usePermission()
@@ -255,14 +254,14 @@ function getTypeLabel(type: string): string {
 
 function getIcon(type: string): string {
 	const icons: Record<string, string> = {
-		leave: 'leave',
-		checkin: 'location',
-		outwork: 'outwork',
-		schedule: 'clock',
-		exchange: 'refresh',
-		overtime: 'overtime',
+		leave: '🏖️',
+		checkin: '📍',
+		outwork: '🌐',
+		schedule: '📅',
+		exchange: '🔄',
+		overtime: '⏰',
 	}
-	return icons[type] || 'fileText'
+	return icons[type] || '📋'
 }
 
 function getStatusClass(status: string): string {
@@ -297,7 +296,7 @@ function goCreate() {
 <style lang="scss" scoped>
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #f2f3f5;
 	display: flex;
 	flex-direction: column;
 	padding: 16rpx 24rpx calc(env(safe-area-inset-bottom) + 140rpx);
@@ -306,9 +305,10 @@ function goCreate() {
 
 .hero-card,
 .panel-card {
-	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 100%);
+	border-radius: 34rpx;
+	box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+	border: 1rpx solid rgba(255, 255, 255, 0.8);
 }
 
 .hero-card {
@@ -328,7 +328,7 @@ function goCreate() {
 .hero-eyebrow {
 	font-size: 22rpx;
 	font-weight: 700;
-	color: #07C160;
+	color: #059669;
 	letter-spacing: 2rpx;
 }
 
@@ -336,13 +336,13 @@ function goCreate() {
 	font-size: 40rpx;
 	line-height: 1.24;
 	font-weight: 800;
-	color: #000000;
+	color: #0f172a;
 }
 
 .hero-desc {
 	font-size: 24rpx;
 	line-height: 1.7;
-	color: #999999;
+	color: #64748b;
 }
 
 .hero-stats {
@@ -353,14 +353,14 @@ function goCreate() {
 
 .hero-stat {
 	padding: 24rpx;
-	border-radius: 12rpx;
-	background: #f7f7f7;
+	border-radius: 28rpx;
+	background: #f7faf9;
 	display: flex;
 	flex-direction: column;
 	gap: 12rpx;
 
 	&.accent {
-		background: #07C160;
+		background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
 
 		.hero-stat-label,
 		.hero-stat-value {
@@ -371,14 +371,14 @@ function goCreate() {
 
 .hero-stat-label {
 	font-size: 22rpx;
-	color: #999999;
+	color: #64748b;
 }
 
 .hero-stat-value {
 	font-size: 42rpx;
 	line-height: 1;
 	font-weight: 800;
-	color: #333333;
+	color: #0f172a;
 }
 
 .mode-panel {
@@ -400,15 +400,16 @@ function goCreate() {
 	height: 68rpx;
 	font-size: 28rpx;
 	font-weight: 500;
-	color: #999999;
-	background: #f7f7f7;
+	color: #6b7280;
+	background: #f4f7f6;
 	border-radius: 34rpx;
 	transition: all 0.2s ease;
 
 	&.active {
-		background: #07C160;
+		background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
 		color: #fff;
 		font-weight: 600;
+		box-shadow: 0 12rpx 24rpx rgba(5, 150, 105, 0.2);
 
 		.segment-badge {
 			background: rgba(255, 255, 255, 0.25);
@@ -419,8 +420,8 @@ function goCreate() {
 
 .segment-badge {
 	font-size: 20rpx;
-	background: #e5e5e5;
-	color: #999999;
+	background: #e5e7eb;
+	color: #6b7280;
 	padding: 2rpx 12rpx;
 	border-radius: 20rpx;
 	font-weight: 600;
@@ -442,15 +443,15 @@ function goCreate() {
 		display: inline-block;
 		padding: 14rpx 26rpx;
 		font-size: 24rpx;
-		color: #999999;
-		background: #f7f7f7;
+		color: #6b7280;
+		background: #f4f7f6;
 		border-radius: 999rpx;
 		font-weight: 500;
 		transition: all 0.15s ease;
 
 		&.active {
-			background: rgba(7, 193, 96, 0.1);
-			color: #07C160;
+			background: #e8f7f1;
+			color: #047857;
 			font-weight: 600;
 		}
 	}
@@ -486,7 +487,7 @@ function goCreate() {
 	justify-content: center;
 	padding: 24rpx 0;
 	font-size: 24rpx;
-	color: #999999;
+	color: #9ca3af;
 }
 
 .card-list {
@@ -498,17 +499,18 @@ function goCreate() {
 .card-item {
 	display: flex;
 	align-items: flex-start;
-	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 100%);
+	border-radius: 30rpx;
 	padding: 26rpx;
+	box-shadow: 0 12rpx 28rpx rgba(15, 23, 42, 0.05);
+	border: 1rpx solid rgba(255, 255, 255, 0.85);
 }
 
 .card-icon-wrap {
 	width: 88rpx;
 	height: 88rpx;
-	border-radius: 16rpx;
-	background: #f7f7f7;
+	border-radius: 26rpx;
+	background: #f3f8f6;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -519,7 +521,6 @@ function goCreate() {
 .card-icon {
 	font-size: 42rpx;
 	line-height: 1;
-	color: #07C160;
 }
 
 .card-body {
@@ -543,7 +544,7 @@ function goCreate() {
 .card-title {
 	font-size: 28rpx;
 	font-weight: 600;
-	color: #333333;
+	color: #111827;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -557,24 +558,24 @@ function goCreate() {
 	flex-shrink: 0;
 
 	&.pending {
-		background: rgba(255, 149, 0, 0.1);
-		color: #ff9500;
+		background: #fffbeb;
+		color: #d97706;
 	}
 
 	&.approved {
-		background: rgba(7, 193, 96, 0.1);
-		color: #07C160;
+		background: #ecfdf5;
+		color: #059669;
 	}
 
 	&.rejected {
-		background: rgba(239, 68, 68, 0.1);
+		background: #fef2f2;
 		color: #dc2626;
 	}
 }
 
 .card-meta {
 	font-size: 24rpx;
-	color: #999999;
+	color: #6b7280;
 	max-width: 50%;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -583,7 +584,7 @@ function goCreate() {
 
 .card-time {
 	font-size: 22rpx;
-	color: #999999;
+	color: #9ca3af;
 	margin-left: auto;
 	flex-shrink: 0;
 }
@@ -591,7 +592,7 @@ function goCreate() {
 .card-reason {
 	font-size: 24rpx;
 	line-height: 1.6;
-	color: #999999;
+	color: #94a3b8;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -600,7 +601,7 @@ function goCreate() {
 
 .card-arrow {
 	font-size: 32rpx;
-	color: #cccccc;
+	color: #d1d5db;
 	margin-left: 12rpx;
 	align-self: center;
 	flex-shrink: 0;
@@ -612,12 +613,12 @@ function goCreate() {
 	right: 32rpx;
 	width: 100rpx;
 	height: 100rpx;
-	background: #07C160;
+	background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0 4rpx 12rpx rgba(7, 193, 96, 0.3);
+	box-shadow: 0 16rpx 30rpx rgba(5, 150, 105, 0.3);
 	z-index: 100;
 
 	.fab-icon {
@@ -631,9 +632,9 @@ function goCreate() {
 .empty-card {
 	width: 100%;
 	padding: 44rpx 36rpx;
-	border-radius: 16rpx;
-	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
+	border-radius: 32rpx;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 100%);
+	box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -644,20 +645,20 @@ function goCreate() {
 .empty-title {
 	font-size: 32rpx;
 	font-weight: 700;
-	color: #333333;
+	color: #0f172a;
 }
 
 .empty-desc {
 	font-size: 24rpx;
 	line-height: 1.7;
-	color: #999999;
+	color: #64748b;
 }
 
 .empty-action {
 	margin-top: 6rpx;
 	padding: 18rpx 34rpx;
 	border-radius: 999rpx;
-	background: #07C160;
+	background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
 	font-size: 24rpx;
 	font-weight: 600;
 	color: #ffffff;

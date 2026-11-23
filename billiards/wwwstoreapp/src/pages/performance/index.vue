@@ -304,7 +304,7 @@ onMounted(() => loadToday())
 <style lang="scss" scoped>
 .page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f2f3f5;
   padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
 }
 
@@ -313,12 +313,15 @@ onMounted(() => loadToday())
 .hero-section {
   position: relative; padding: 36rpx 30rpx; overflow: hidden;
   border-radius: 38rpx; margin-top: 6rpx; margin-bottom: 22rpx;
-  box-shadow: 0 18rpx 40rpx rgba(7, 193, 96, 0.18);
+  box-shadow: 0 18rpx 40rpx rgba(5, 150, 105, 0.18);
 }
 
 .hero-bg {
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(180deg, #07C160 0%, #10B981 100%);
+  background:
+    radial-gradient(circle at top right, rgba(255,255,255,.2) 0, rgba(255,255,255,0) 34%),
+    radial-gradient(circle at left bottom, rgba(255,255,255,.14) 0, rgba(255,255,255,0) 28%),
+    linear-gradient(135deg, #0f766e 0%, #059669 52%, #047857 100%);
 }
 
 .hero-content { position: relative; z-index: 1; }
@@ -338,7 +341,7 @@ onMounted(() => loadToday())
 }
 
 .stat-card {
-  background: rgba(255,255,255,.14);
+  background: rgba(255,255,255,.14); backdrop-filter: blur(10px);
   border-radius: 30rpx; padding: 26rpx 18rpx; text-align: left;
   border: 1rpx solid rgba(255,255,255,.2);
   display: flex; flex-direction: column; gap: 12rpx;
@@ -348,77 +351,71 @@ onMounted(() => loadToday())
 .stat-label { font-size: 22rpx; color: rgba(255,255,255,.9); display: block; }
 
 .section-card {
-  background: #ffffff;
+  background: linear-gradient(180deg, rgba(255,255,255,.97) 0%, rgba(255,255,255,.91) 100%);
   margin-bottom: 22rpx; border-radius: 34rpx; padding: 30rpx;
-  box-shadow: 0 12rpx 36rpx rgba(0,0,0,.08);
+  box-shadow: 0 12rpx 36rpx rgba(15,23,42,.06);
+  border: 1rpx solid rgba(255,255,255,.82);
 }
 
 .section-header { margin-bottom: 20rpx; display: flex; justify-content: space-between; align-items: center; }
-.section-title { font-size: 30rpx; font-weight: 700; color: #000000; }
-.refresh-hint { font-size: 22rpx; color: #07C160; font-weight: 600; }
-.date-hint { font-size: 20rpx; color: #999999; display: block; margin-top: 8rpx; }
+.section-title { font-size: 30rpx; font-weight: 700; color: #0f172a; }
+.refresh-hint { font-size: 22rpx; color: #059669; font-weight: 600; }
+.date-hint { font-size: 20rpx; color: #94a3b8; display: block; margin-top: 8rpx; }
 
+/* Date picker */
 .date-picker-bar { margin-bottom: 20rpx; }
 .quick-dates { display: flex; gap: 12rpx; flex-wrap: wrap; }
 .date-chip {
-  padding: 12rpx 24rpx; border-radius: 999rpx; font-size: 24rpx;
-  background: #f7f7f7; color: #999999;
-  border: 1.5rpx solid transparent;
-  transition: all 0.28s ease;
-  &.active { 
-    background: #07C160; 
-    color: #ffffff; 
-    font-weight: 600;
-    box-shadow: 0 8rpx 20rpx rgba(7, 193, 96, 0.3);
-  }
-  &:active:not(.active) {
-    transform: scale(0.96);
-    background: #e5e5e5;
-  }
+  padding: 12rpx 24rpx; border-radius: 20rpx; font-size: 24rpx;
+  background: #f1f5f9; color: #64748b;
+  &.active { background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-weight: 600; }
 }
 .custom-range { display: flex; align-items: center; gap: 12rpx; margin-top: 16rpx; }
 .date-picker { flex: 1; }
 .date-pick-box {
-  padding: 16rpx 20rpx; background: #f7f7f7; border: 1rpx solid #e5e5e5;
-  border-radius: 16rpx; font-size: 24rpx; color: #000000; text-align: center;
+  padding: 16rpx 20rpx; background: #f8fafc; border: 1rpx solid #e2e8f0;
+  border-radius: 16rpx; font-size: 24rpx; color: #1e293b; text-align: center;
 }
-.date-sep { font-size: 24rpx; color: #999999; flex-shrink: 0; }
+.date-sep { font-size: 24rpx; color: #94a3b8; flex-shrink: 0; }
 
+/* Summary */
 .summary-row { display: flex; gap: 16rpx; margin-bottom: 20rpx; }
 .summary-item {
   flex: 1; text-align: center; padding: 20rpx 0;
-  background: #f7f7f7; border-radius: 20rpx;
+  background: #f8fafc; border-radius: 20rpx;
 }
-.summary-val { font-size: 30rpx; font-weight: 700; color: #07C160; display: block; }
-.summary-lbl { font-size: 22rpx; color: #999999; margin-top: 4rpx; display: block; }
+.summary-val { font-size: 30rpx; font-weight: 700; color: #059669; display: block; }
+.summary-lbl { font-size: 22rpx; color: #64748b; margin-top: 4rpx; display: block; }
 
+/* Duration list */
 .duration-list { display: flex; flex-direction: column; }
 .duration-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 22rpx 0; border-bottom: 1rpx solid #e5e5e5;
+  padding: 22rpx 0; border-bottom: 1rpx solid #f4f4f5;
 }
 .duration-row:last-child { border-bottom: none; }
 .dr-left { display: flex; flex-direction: column; gap: 4rpx; width: 160rpx; }
-.dr-date { font-size: 26rpx; font-weight: 600; color: #000000; }
-.dr-weekday { font-size: 22rpx; color: #999999; }
+.dr-date { font-size: 26rpx; font-weight: 600; color: #1e293b; }
+.dr-weekday { font-size: 22rpx; color: #94a3b8; }
 .dr-mid { flex: 1; }
-.dr-table { font-size: 26rpx; color: #333333; }
+.dr-table { font-size: 26rpx; color: #64748b; }
 .dr-right { flex-shrink: 0; }
-.dr-duration { font-size: 28rpx; font-weight: 700; color: #07C160; }
-.empty-hint { text-align: center; color: #999999; font-size: 24rpx; padding: 40rpx 0; }
+.dr-duration { font-size: 28rpx; font-weight: 700; color: #059669; }
+.empty-hint { text-align: center; color: #94a3b8; font-size: 24rpx; padding: 40rpx 0; }
 
+/* Daily summary */
 .daily-section {  }
 .daily-list { display: flex; flex-direction: column; }
 .daily-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 24rpx 0; border-bottom: 1rpx solid #e5e5e5;
+  padding: 24rpx 0; border-bottom: 1rpx solid #f4f4f5;
 }
 .daily-row:last-child { border-bottom: none; }
 .daily-left { display: flex; flex-direction: column; gap: 4rpx; }
-.daily-date { font-size: 28rpx; font-weight: 600; color: #000000; }
-.daily-weekday { font-size: 22rpx; color: #999999; }
+.daily-date { font-size: 28rpx; font-weight: 600; color: #1e293b; }
+.daily-weekday { font-size: 22rpx; color: #94a3b8; }
 .daily-right { display: flex; gap: 24rpx; }
-.daily-stat { font-size: 28rpx; font-weight: 700; color: #07C160; }
-.load-more { text-align: center; padding: 24rpx 0; font-size: 24rpx; color: #999999; }
-.load-more-btn { color: #07C160; font-weight: 600; }
+.daily-stat { font-size: 28rpx; font-weight: 700; color: #059669; }
+.load-more { text-align: center; padding: 24rpx 0; font-size: 24rpx; color: #94a3b8; }
+.load-more-btn { color: #059669; font-weight: 600; }
 </style>

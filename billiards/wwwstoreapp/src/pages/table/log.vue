@@ -72,7 +72,7 @@ async function loadData() {
 <style lang="scss" scoped>
 .log-page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #fafafa;
   padding: 24rpx;
   display: flex;
   flex-direction: column;
@@ -88,78 +88,74 @@ async function loadData() {
   .log-title {
     font-size: 32rpx;
     font-weight: 700;
-    color: #000000;
+    color: #09090b;
   }
 }
 
 .log-list {
-  background: #ffffff;
-  border: 1rpx solid #e5e5e5;
-  border-radius: 16rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
 }
 
 .log-item {
   padding: 20rpx 24rpx;
-  border-bottom: 1rpx solid #e5e5e5;
+  border-bottom: 1rpx solid #f4f4f5;
   display: flex;
   flex-wrap: wrap;
   gap: 8rpx;
   align-items: center;
-
-  &:last-child {
-    border-bottom: none;
-  }
 }
 
 .log-action {
   font-size: 24rpx;
   padding: 4rpx 12rpx;
   border-radius: 6rpx;
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
+  background: #dbeafe;
+  color: #1e40af;
 
   &.create {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
+    background: #d1fae5;
+    color: #065f46;
   }
 
   &.checkout {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
+    background: #ede9fe;
+    color: #5b21b6;
   }
 
   &.transfer_to {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
+    background: #d1fae5;
+    color: #065f46;
   }
 
   &.merge_to {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
+    background: #e0f2fe;
+    color: #0369a1;
   }
 
   &.transfer_from, &.merge_from {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    background: #fef3c7;
+    color: #92400e;
   }
 }
 
 .log-time {
   font-size: 22rpx;
-  color: #999999;
+  color: #71717a;
   flex: 1;
   text-align: right;
 }
 
 .log-operator {
   font-size: 22rpx;
-  color: #333333;
+  color: #374151;
   font-weight: 500;
 }
 
 .log-remark {
   font-size: 22rpx;
-  color: #999999;
+  color: #a1a1aa;
   width: 100%;
 }
 </style>

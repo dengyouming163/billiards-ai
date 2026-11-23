@@ -44,19 +44,18 @@ const ActionCard = memo(({
 }: ActionCardProps) => (
   <button
     onClick={onClick}
-    className={`bg-white border border-[#e5e5e5]/60 rounded-2xl flex items-center gap-4 p-4 hover:border-[#07C160]/40 active:scale-[0.98] transition-all duration-200 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(7,193,96,0.12)] relative overflow-hidden group`}
+    className={`${gradient} rounded-xl flex items-center gap-4 p-4 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm hover:shadow-md relative overflow-hidden group`}
   >
-    <div className="absolute inset-0 bg-gradient-to-br from-[#07C160]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-    <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#f7f7f7] to-[#e8f5ef] flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
+    <div className="w-12 h-12 rounded-lg bg-white/90 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
       {icon}
     </div>
-    <div className="relative flex flex-col justify-center">
-      <span className="text-base font-bold text-[#333333] whitespace-nowrap">
+    <div className="flex flex-col justify-center">
+      <span className="text-base font-bold text-slate-800 whitespace-nowrap">
         {label}
       </span>
     </div>
     {badge !== undefined && badge > 0 && (
-      <span className="relative z-10 absolute top-2 right-2 w-6 h-6 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 text-white text-xs flex items-center justify-center font-bold shadow-lg shadow-rose-500/30">
+      <span className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center font-bold shadow-sm">
         {badge > 99 ? '99+' : badge}
       </span>
     )}
@@ -121,14 +120,14 @@ export const QuickPanel: React.FC<QuickPanelProps> = ({
   const getReservationCount = () => tables.filter((t) => t.status === 'reserved').length;
 
   return (
-    <div className="w-full max-w-[320px] bg-white p-4 flex flex-col h-full border-r border-[#e5e5e5] overflow-hidden">
+    <div className="w-full max-w-[320px] bg-gradient-to-b from-slate-50 to-white p-4 flex flex-col h-full border-l border-slate-100 overflow-hidden">
       {/* Header with Network Status */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-[#333333]">快捷操作</h2>
+        <h2 className="text-xl font-bold text-slate-800">快捷操作</h2>
         <div className="flex items-center gap-2">
           {networkStatus === 'online' ? (
-            <span className="flex items-center gap-1.5 text-sm text-[#07C160] bg-[#D1FAE5] px-3 py-1.5 rounded-full font-medium">
-              <span className="w-2 h-2 rounded-full bg-[#07C160] animate-pulse" />
+            <span className="flex items-center gap-1.5 text-sm text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               在线
             </span>
           ) : networkStatus === 'offline' ? (
@@ -148,91 +147,88 @@ export const QuickPanel: React.FC<QuickPanelProps> = ({
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-3 mb-4">
         <ActionCard
-          icon={<Bell className="w-6 h-6 text-[#FF976A]" />}
+          icon={<Bell className="w-6 h-6 text-orange-500" />}
           label="点单提醒"
-          gradient=""
+          gradient="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200"
           onClick={onOrderReminder}
           badge={0}
         />
         <ActionCard
-          icon={<UserCheck className="w-6 h-6 text-[#999999]" />}
+          icon={<UserCheck className="w-6 h-6 text-rose-500" />}
           label="上桌提醒"
-          gradient=""
+          gradient="bg-gradient-to-r from-rose-50 to-pink-50 border border-rose-200"
           onClick={onAssistantReminder}
           badge={0}
         />
         <ActionCard
-          icon={<Bell className="w-6 h-6 text-[#FF976A]" />}
+          icon={<Bell className="w-6 h-6 text-amber-500" />}
           label="开台申请"
-          gradient=""
+          gradient="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200"
           onClick={onOpenTableRequests}
           badge={pendingOpenRequests}
         />
         <ActionCard
-          icon={<ShoppingCart className="w-6 h-6 text-[#07C160]" />}
+          icon={<ShoppingCart className="w-6 h-6 text-teal-500" />}
           label="点单"
-          gradient=""
+          gradient="bg-gradient-to-r from-teal-100 to-cyan-100 border border-teal-200"
           onClick={onQuickOrder}
         />
         <ActionCard
-          icon={<CalendarClock className="w-6 h-6 text-[#999999]" />}
+          icon={<CalendarClock className="w-6 h-6 text-blue-500" />}
           label="预约"
-          gradient=""
+          gradient="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100"
           onClick={onReservation}
           badge={getReservationCount()}
         />
         <ActionCard
-          icon={<UserPlus className="w-6 h-6 text-[#999999]" />}
+          icon={<UserPlus className="w-6 h-6 text-indigo-500" />}
           label="会员"
-          gradient=""
+          gradient="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100"
           onClick={onMember}
         />
         <ActionCard
-          icon={<Receipt className="w-6 h-6 text-[#999999]" />}
+          icon={<Receipt className="w-6 h-6 text-slate-500" />}
           label="订单"
-          gradient=""
+          gradient="bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200"
           onClick={onHistoryOrders}
         />
         <ActionCard
-          icon={<Ticket className="w-6 h-6 text-[#07C160]" />}
+          icon={<Ticket className="w-6 h-6 text-cyan-500" />}
           label="验券"
-          gradient=""
+          gradient="bg-gradient-to-r from-cyan-100 to-teal-100 border border-cyan-200"
           onClick={onCouponVerify}
         />
       </div>
 
       {/* Shift Stats */}
       {currentShift ? (
-        <div className="bg-gradient-to-br from-[#D1FAE5] to-[#A7F3D0] rounded-2xl p-5 border border-[#86EFAC]/60 mb-4 shadow-[0_4px_16px_rgba(7,193,96,0.15)] relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#07C160]/10 rounded-full blur-3xl" />
-          <div className="relative">
-            <p className="text-[#065f46] text-sm font-medium mb-2">本班收入 · {(shiftSummary as any)?.workHours || 0}h · {getOnlineTablesCount()}桌</p>
-            <p className="text-4xl font-bold bg-gradient-to-r from-[#07C160] to-[#06AD56] bg-clip-text text-transparent mb-1">¥{((shiftSummary as any)?.totalRevenue || 0).toFixed(0)}</p>
-            <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-[#86EFAC]/60">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 shadow-sm">
-                <p className="font-bold text-[#333333] text-base">{(shiftSummary as any)?.cashPaid || 0}</p>
-                <p className="text-[#999999] text-sm">现金</p>
-              </div>
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 shadow-sm">
-                <p className="font-bold text-[#333333] text-base">{(shiftSummary as any)?.wechatPaid || 0}</p>
-                <p className="text-[#999999] text-sm">微信</p>
-              </div>
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 shadow-sm">
-                <p className="font-bold text-[#333333] text-base">{(shiftSummary as any)?.balancePaid || 0}</p>
-                <p className="text-[#999999] text-sm">余额</p>
-              </div>
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 shadow-sm">
-                <p className="font-bold text-[#333333] text-base">{(shiftSummary as any)?.orderCount || currentShift.totalOrders}</p>
-                <p className="text-[#999999] text-sm">单数</p>
-              </div>
+        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-100 mb-4">
+          <p className="text-emerald-600 text-sm font-medium mb-2">本班收入 · {(shiftSummary as any)?.workHours || 0}h · {getOnlineTablesCount()}桌</p>
+          <p className="text-4xl font-bold text-emerald-600 mb-1">¥{((shiftSummary as any)?.totalRevenue || 0).toFixed(0)}</p>
+          <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-emerald-100">
+            <div className="bg-white/60 rounded-lg p-3">
+              <p className="font-bold text-slate-700 text-base">{(shiftSummary as any)?.cashPaid || 0}</p>
+              <p className="text-slate-400 text-sm">现金</p>
+            </div>
+            <div className="bg-white/60 rounded-lg p-3">
+              <p className="font-bold text-slate-700 text-base">{(shiftSummary as any)?.wechatPaid || 0}</p>
+              <p className="text-slate-400 text-sm">微信</p>
+            </div>
+            <div className="bg-white/60 rounded-lg p-3">
+              <p className="font-bold text-slate-700 text-base">{(shiftSummary as any)?.balancePaid || 0}</p>
+              <p className="text-slate-400 text-sm">余额</p>
+            </div>
+            <div className="bg-white/60 rounded-lg p-3">
+              <p className="font-bold text-slate-700 text-base">{(shiftSummary as any)?.orderCount || currentShift.totalOrders}</p>
+              <p className="text-slate-400 text-sm">单数</p>
             </div>
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl p-5 border border-[#e5e5e5]/60 mb-4 text-center shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          <p className="text-[#999999] text-sm mb-3">尚未当班</p>
+        <div className="bg-white rounded-xl p-4 border border-slate-100 mb-4 text-center">
+          <p className="text-slate-400 text-sm mb-2">尚未当班</p>
           <button onClick={onShift}
-            className="w-full py-3 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold text-sm shadow-lg shadow-[#07C160]/30 hover:shadow-xl hover:shadow-[#07C160]/40 transition-all">
+            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm">
             开始班次
           </button>
         </div>

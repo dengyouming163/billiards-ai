@@ -1,5 +1,6 @@
 <template>
   <view class="page">
+    <Header />
     <view class="page-content">
       <view class="date-bar">
         <view v-for="d in dateOptions" :key="d.key" class="date-chip"
@@ -95,30 +96,30 @@ onMounted(() => loadData())
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; background: #f7f7f7; }
+.page { min-height: 100vh; background: #f2f3f5; }
 .page-content { padding: 20rpx 24rpx calc(env(safe-area-inset-bottom) + 120rpx); }
 .date-bar { display: flex; gap: 14rpx; margin-bottom: 20rpx; }
-.date-chip { padding: 14rpx 28rpx; background: #e5e5e5; border-radius: 999rpx; font-size: 24rpx; font-weight: 600; color: #666666; }
-.date-chip.active { background: #07C160; color: #ffffff; }
-.summary-card { display: flex; justify-content: space-around; background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 24rpx; padding: 28rpx; margin-bottom: 20rpx; }
+.date-chip { padding: 14rpx 28rpx; background: #f3f4f6; border-radius: 999rpx; font-size: 24rpx; font-weight: 600; color: #64748b; }
+.date-chip.active { background: linear-gradient(135deg,#059669,#10b981); color: #fff; }
+.summary-card { display: flex; justify-content: space-around; background: #fff; border-radius: 24rpx; padding: 28rpx; margin-bottom: 20rpx; }
 .sum-item { text-align: center; }
-.sum-num { font-size: 40rpx; font-weight: 800; color: #333333; display: block; }
-.sum-lbl { font-size: 22rpx; color: #999999; }
+.sum-num { font-size: 40rpx; font-weight: 800; color: #0f172a; display: block; }
+.sum-lbl { font-size: 22rpx; color: #94a3b8; }
 .a-list { display: flex; flex-direction: column; gap: 16rpx; }
-.a-card { background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 20rpx; padding: 24rpx; }
+.a-card { background: #fff; border-radius: 20rpx; padding: 24rpx; }
 .a-header { display: flex; align-items: center; gap: 16rpx; }
-.a-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: #07C160; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32rpx; font-weight: 700; flex-shrink: 0; }
+.a-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#818cf8); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32rpx; font-weight: 700; flex-shrink: 0; }
 .a-info { flex: 1; }
-.a-name { font-size: 30rpx; font-weight: 700; color: #333333; display: block; }
-.a-role { font-size: 24rpx; color: #999999; }
+.a-name { font-size: 30rpx; font-weight: 700; color: #0f172a; display: block; }
+.a-role { font-size: 24rpx; color: #94a3b8; }
 .a-right { text-align: right; }
-.a-amount { font-size: 30rpx; font-weight: 800; color: #07C160; display: block; }
-.a-count { font-size: 22rpx; color: #999999; }
-.a-detail { margin-top: 20rpx; padding-top: 20rpx; border-top: 1rpx solid #e5e5e5; }
+.a-amount { font-size: 30rpx; font-weight: 800; color: #059669; display: block; }
+.a-count { font-size: 22rpx; color: #94a3b8; }
+.a-detail { margin-top: 20rpx; padding-top: 20rpx; border-top: 1rpx solid #f1f5f9; }
 .prod-row { display: flex; justify-content: space-between; align-items: center; padding: 12rpx 0; }
-.prod-name { font-size: 26rpx; color: #333333; display: block; }
-.prod-qty { font-size: 22rpx; color: #999999; }
+.prod-name { font-size: 26rpx; color: #374151; display: block; }
+.prod-qty { font-size: 22rpx; color: #94a3b8; }
 .prod-right { text-align: right; }
-.prod-total { font-size: 28rpx; font-weight: 700; color: #07C160; display: block; }
-.prod-split { font-size: 20rpx; color: #07C160; background: rgba(7, 193, 96, 0.1); padding: 2rpx 10rpx; border-radius: 8rpx; margin-top: 4rpx; display: inline-block; }
+.prod-total { font-size: 28rpx; font-weight: 700; color: #059669; display: block; }
+.prod-split { font-size: 20rpx; color: #f59e0b; background: #fef3c7; padding: 2rpx 10rpx; border-radius: 8rpx; margin-top: 4rpx; display: inline-block; }
 </style>

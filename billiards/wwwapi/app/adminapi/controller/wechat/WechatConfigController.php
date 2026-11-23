@@ -103,7 +103,7 @@ class WechatConfigController extends BaseAdminController
                     'serialNo'   => $serialNo,
                     'privateKey' => $privateKey,
                     'merchantSerialNumber' => $serialNo,
-                    'notifyUrl'  => 'https://poolapi.kyyp.cn/api/pay-hub/callback',
+                    'notifyUrl'  => 'https://api.tpzl88.com/api/pay-hub/callback',
                 ],
             ]);
         } catch (\Throwable $e) {

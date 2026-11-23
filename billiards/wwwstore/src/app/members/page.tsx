@@ -31,13 +31,13 @@ export default function MembersPage() {
         icon={Users}
       />
 
-      <div className="flex flex-wrap gap-2 p-2 bg-[#f7f7f7] backdrop-blur-sm rounded-xl">
+      <div className="flex flex-wrap gap-2 p-2 bg-slate-100/80 backdrop-blur-sm rounded-xl">
         <Button
           variant={activeTab === 'management' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'management'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('management')}
@@ -48,9 +48,9 @@ export default function MembersPage() {
         <Button
           variant={activeTab === 'levels' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'levels'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('levels')}
@@ -60,7 +60,7 @@ export default function MembersPage() {
         </Button>
       </div>
 
-      <div className="rounded-[24px] border border-[#e5e5e5] bg-white shadow-sm overflow-hidden">
+      <div className="rounded-2xl border border-slate-200/60 bg-white/95 backdrop-blur-xl shadow-lg overflow-hidden">
         {activeTab === 'management' && <MembersManagementTab />}
         {activeTab === 'levels' && <MembersLevelsTab />}
       </div>

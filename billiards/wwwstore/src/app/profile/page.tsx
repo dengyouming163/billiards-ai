@@ -104,27 +104,27 @@ export default function ProfilePage() {
         <Button
           variant="ghost"
           onClick={() => router.back()}
-          className="gap-2 text-[#333333] hover:text-[#07C160] hover:bg-[#07C160]/10"
+          className="gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
           返回
         </Button>
-        <Badge variant="outline" className="text-[#07C160] border-[#07C160]/30 bg-[#07C160]/10">
+        <Badge variant="outline" className="text-emerald-600 border-emerald-200">
           {profile?.role}
         </Badge>
       </div>
 
-      <Card className="border-[#e5e5e5] shadow-sm rounded-[24px]">
+      <Card className="border-slate-200/50 shadow-lg">
         <CardHeader className="pb-4">
           <CardTitle className="text-lg flex items-center gap-2">
-            <User className="w-5 h-5 text-[#07C160]" />
+            <User className="w-5 h-5 text-emerald-500" />
             个人资料
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-center">
             <div className="relative">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#07C160] to-[#06AD56] flex items-center justify-center overflow-hidden">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center overflow-hidden">
                 {form.avatar ? (
                   <img
                     src={form.avatar}
@@ -135,8 +135,8 @@ export default function ProfilePage() {
                   <User className="w-12 h-12 text-white" />
                 )}
               </div>
-              <label className="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full border-2 border-[#07C160] flex items-center justify-center cursor-pointer hover:bg-[#07C160]/10 transition-colors shadow-md">
-                <Camera className="w-4 h-4 text-[#07C160]" />
+              <label className="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full border-2 border-emerald-500 flex items-center justify-center cursor-pointer hover:bg-emerald-50 transition-colors shadow-md">
+                <Camera className="w-4 h-4 text-emerald-600" />
                 <input
                   type="file"
                   accept="image/*"
@@ -149,27 +149,27 @@ export default function ProfilePage() {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#333333]">姓名</label>
+              <label className="text-sm font-medium text-slate-700">姓名</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#999999]" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <Input
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder="请输入姓名"
-                  className="pl-10 border-[#e5e5e5] focus:border-[#07C160] focus:ring-[#07C160]/20 rounded-xl"
+                  className="pl-10"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#333333]">手机号</label>
+              <label className="text-sm font-medium text-slate-700">手机号</label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#999999]" />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <Input
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   placeholder="请输入手机号"
-                  className="pl-10 border-[#e5e5e5] focus:border-[#07C160] focus:ring-[#07C160]/20 rounded-xl"
+                  className="pl-10"
                 />
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function ProfilePage() {
           <Button
             onClick={handleSave}
             disabled={saving}
-            className="w-full bg-gradient-to-r from-[#07C160] to-[#06AD56] hover:from-[#06AD56] hover:to-[#07C160] rounded-full shadow-lg shadow-[#07C160]/25"
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
           >
             {saving ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

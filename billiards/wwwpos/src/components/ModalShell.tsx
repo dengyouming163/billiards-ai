@@ -36,7 +36,7 @@ export const ModalShell = memo(function ModalShell({ children, onClose, title, i
         style={{ width: '50vw', height: '80vh' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-[#07C160] to-[#06AD56] shrink-0">
+        <div className="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 shrink-0">
           <div className="flex items-center gap-3 [&_svg]:text-white">
             {icon && <div className="w-8 h-8">{icon}</div>}
             <h2 id={titleId} className="text-xl font-bold text-white">{title}</h2>

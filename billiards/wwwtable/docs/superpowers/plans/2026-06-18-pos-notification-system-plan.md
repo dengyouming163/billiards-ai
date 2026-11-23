@@ -226,7 +226,7 @@ export class PosWebSocket {
 
   constructor(storeId: string, wsUrl?: string) {
     this.storeId = storeId
-    this.url = wsUrl || 'wss://poolapi.kyyp.cn:8282'
+    this.url = wsUrl || 'wss://api.tpzl88.com:8282'
   }
 
   connect(): void {

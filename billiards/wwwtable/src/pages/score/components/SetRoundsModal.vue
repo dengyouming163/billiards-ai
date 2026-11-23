@@ -79,30 +79,33 @@ function handleConfirm() {
 </script>
 
 <style lang="scss" scoped>
+$gold: #c9a962;
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(10rpx);
+  backdrop-filter: blur(20rpx);
 }
 
 .modal-content {
   position: relative;
   width: 50vw;
-  background: #ffffff;
-  border-radius: 48rpx;
+  background: linear-gradient(180deg, rgba(26, 26, 46, 0.98), rgba(20, 20, 40, 0.99));
+  border-radius: 64rpx;
   padding: 64rpx;
-  border: 2rpx solid rgba(7,193,96,0.08);
+  border: 4rpx solid rgba($gold, 0.25);
   box-shadow: 
-    0 24rpx 80rpx rgba(0, 0, 0, 0.1),
-    0 0 30rpx rgba(7,193,96,0.05);
+    0 32rpx 96rpx rgba(0, 0, 0, 0.6),
+    0 0 60rpx rgba($gold, 0.15),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
   overflow: hidden;
   animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
@@ -112,7 +115,7 @@ function handleConfirm() {
     right: -100rpx;
     width: 300rpx;
     height: 300rpx;
-    background: radial-gradient(circle, rgba(7,193,96,0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba($gold, 0.2) 0%, transparent 70%);
     pointer-events: none;
     animation: modalGlow 4s ease-in-out infinite;
   }
@@ -128,7 +131,7 @@ function handleConfirm() {
     .modal-title {
       font-size: 56rpx;
       font-weight: 700;
-      color: #333333;
+      color: #f1f5f9;
       letter-spacing: 4rpx;
     }
     
@@ -136,19 +139,19 @@ function handleConfirm() {
       width: 72rpx;
       height: 72rpx;
       border-radius: 50%;
-      background: rgba(0,0,0,0.04);
+      background: rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2rpx solid rgba(0,0,0,0.06);
+      border: 2rpx solid rgba(255, 255, 255, 0.12);
       
       &:active {
-        background: rgba(239, 68, 68, 0.1);
+        background: rgba(239, 68, 68, 0.2);
       }
       
       .close-icon {
         font-size: 36rpx;
-        color: #999999;
+        color: rgba(255, 255, 255, 0.6);
       }
     }
   }
@@ -164,29 +167,28 @@ function handleConfirm() {
       font-size: 72rpx;
       font-weight: 900;
       text-align: center;
-      border: 2rpx solid rgba(7,193,96,0.1);
+      border: 3rpx solid rgba($gold, 0.2);
       border-radius: 36rpx;
       box-sizing: border-box;
-      background: rgba(7,193,96,0.04);
-      color: #333333;
+      background: rgba(40, 40, 70, 0.95);
+      color: #f1f5f9;
       font-family: 'Courier New', monospace;
       letter-spacing: 8rpx;
       transition: all 0.3s;
       
       &::placeholder {
-        color: rgba(0, 0, 0, 0.2);
+        color: rgba(255, 255, 255, 0.25);
       }
       
       &:focus {
-        border-color: #07C160;
-        background: rgba(7,193,96,0.06);
+        border-color: $gold;
       }
     }
     
     .input-tip {
       text-align: center;
       font-size: 32rpx;
-      color: #999999;
+      color: rgba(255, 255, 255, 0.4);
       margin-top: 20rpx;
     }
   }
@@ -198,7 +200,7 @@ function handleConfirm() {
     
     .select-label {
       font-size: 36rpx;
-      color: #999999;
+      color: rgba(255, 255, 255, 0.6);
       display: block;
       margin-bottom: 24rpx;
       font-weight: 600;
@@ -206,18 +208,18 @@ function handleConfirm() {
     
     .select-grid {
       display: flex;
-      gap: 16rpx;
+      gap: 20rpx;
       
       .select-item {
         flex: 1;
         aspect-ratio: 1;
-        border-radius: 28rpx;
+        border-radius: 32rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: rgba(0,0,0,0.03);
-        border: 2rpx solid rgba(0,0,0,0.05);
+        background: rgba(255, 255, 255, 0.06);
+        border: 2rpx solid rgba(255, 255, 255, 0.08);
         transition: all 0.2s;
         
         &:active {
@@ -225,24 +227,24 @@ function handleConfirm() {
         }
         
         &.active {
-          background: rgba(7,193,96,0.08);
-          border-color: #07C160;
+          background: rgba($gold, 0.2);
+          border-color: $gold;
           
           .select-num, .select-unit {
-            color: #07C160;
+            color: $gold;
           }
         }
         
         .select-num {
           font-size: 56rpx;
           font-weight: 900;
-          color: #333333;
+          color: rgba(255, 255, 255, 0.85);
           font-family: 'Courier New', monospace;
         }
         
         .select-unit {
           font-size: 28rpx;
-          color: #999999;
+          color: rgba(255, 255, 255, 0.4);
         }
       }
     }
@@ -261,7 +263,7 @@ function handleConfirm() {
       justify-content: center;
       gap: 16rpx;
       padding: 32rpx;
-      border-radius: 36rpx;
+      border-radius: 40rpx;
       font-size: 48rpx;
       font-weight: 700;
       border: none;
@@ -273,22 +275,24 @@ function handleConfirm() {
       }
       
       &.cancel {
-        background: rgba(0,0,0,0.04);
-        color: #666666;
-        border: 2rpx solid rgba(0,0,0,0.06);
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.7);
+        border: 3rpx solid rgba(255, 255, 255, 0.12);
         
         .btn-icon {
-          color: #999999;
+          color: rgba(255, 255, 255, 0.5);
         }
       }
       
       &.confirm {
-        background: linear-gradient(135deg, #07C160, #06AD56);
-        color: #ffffff;
-        box-shadow: 0 8rpx 24rpx rgba(7,193,96,0.3);
+        background: linear-gradient(135deg, $gold, #8a6d3b);
+        color: #1a1a2e;
+        box-shadow: 
+          0 8rpx 32rpx rgba($gold, 0.4),
+          inset 0 2rpx 4rpx rgba(255, 255, 255, 0.3);
         
         .btn-icon {
-          color: #ffffff;
+          color: #1a1a2e;
         }
       }
       

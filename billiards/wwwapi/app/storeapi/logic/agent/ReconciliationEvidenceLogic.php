@@ -208,7 +208,9 @@ class ReconciliationEvidenceLogic
             if (preg_match('/^[0-9a-f]{40}$/', $gitSha)) {
                 return $gitSha;
             }
-            throw new HttpException(503, 'GIT_SHA must be a full Git commit SHA');
+            throw new HttpResponseException(json([
+                'message' => 'GIT_SHA must be a full Git commit SHA',
+            ], 503));
         }
 
         $projectRoot = dirname(app()->getRootPath(), 2);

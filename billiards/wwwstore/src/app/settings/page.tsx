@@ -120,13 +120,13 @@ export default function SettingsPage() {
       />
 
       {/* Tab bar — exact match with employees/page.tsx */}
-      <div className="flex flex-wrap gap-2 p-2 bg-[#f7f7f7] backdrop-blur-sm rounded-xl">
+      <div className="flex flex-wrap gap-2 p-2 bg-slate-100/80 backdrop-blur-sm rounded-xl">
         <Button
           variant={activeTab === 'store' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'store'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('store')}
@@ -137,9 +137,9 @@ export default function SettingsPage() {
         <Button
           variant={activeTab === 'business' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'business'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('business')}
@@ -150,9 +150,9 @@ export default function SettingsPage() {
         <Button
           variant={activeTab === 'wechat' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'wechat'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('wechat')}
@@ -163,9 +163,9 @@ export default function SettingsPage() {
         <Button
           variant={activeTab === 'discount' ? 'default' : 'ghost'}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === 'discount'
-              ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl'
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl'
               : 'hover:bg-white/80'
           }`}
           onClick={() => setActiveTab('discount')}
@@ -176,7 +176,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Content container — exact match with employees/page.tsx */}
-      <div className="rounded-[24px] border border-[#e5e5e5] bg-white shadow-sm overflow-hidden">
+      <div className="rounded-2xl border border-slate-200/60 bg-white/95 backdrop-blur-xl shadow-lg overflow-hidden">
         {activeTab === 'store' && (
           <SettingsStoreTab currentStore={currentStore} dispatch={dispatch} success={success} warning={warning} />
         )}

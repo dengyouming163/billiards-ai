@@ -13,15 +13,19 @@
     <view class="card-body">
       <template v-if="table.status === 'occupied' && table.current_order">
         <view class="info-row">
+          <view class="info-icon"><Icon name="clock" :size="22" /></view>
           <text class="info-value">{{ displayTime }}</text>
         </view>
         <view class="info-row">
+          <view class="info-icon"><Icon name="employee" :size="22" /></view>
           <text class="info-value">{{ table.current_order.player_count || 0 }}人</text>
         </view>
         <view v-if="assistantNames" class="info-row">
+          <view class="info-icon"><Icon name="assistant" :size="22" /></view>
           <text class="info-value assistant-name-ellipsis">{{ assistantNames }}</text>
         </view>
         <view v-if="orderCount > 0" class="info-row">
+          <view class="info-icon"><Icon name="product" :size="22" /></view>
           <text class="info-value order-highlight">{{ orderCount }}件</text>
         </view>
         <view class="fee-display">
@@ -32,9 +36,11 @@
 
       <template v-else>
         <view class="info-row">
+          <view class="info-icon"><Icon name="money" :size="22" /></view>
           <text class="info-value muted">¥{{ table.hourly_rate || 0 }}/时</text>
         </view>
         <view class="info-row">
+          <view class="info-icon"><Icon name="table" :size="22" /></view>
           <text class="info-value muted">{{ table.table_type_name || '标准台' }}</text>
         </view>
       </template>
@@ -51,6 +57,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { Table } from '@/api/modules/table'
+import Icon from '@/components/Icon.vue'
 
 const props = defineProps<{
   table: Table
@@ -166,16 +173,18 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .table-card {
   position: relative;
-  border-radius: 20rpx;
+  border-radius: 32rpx;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.2s ease;
-  background: #ffffff;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+  box-shadow:
+    0 4rpx 12rpx rgba(0, 0, 0, 0.04),
+    0 12rpx 28rpx rgba(0, 0, 0, 0.04),
+    0 0 0 1rpx rgba(0, 0, 0, 0.04);
 
   &:active {
-    transform: scale(0.96);
+    transform: scale(0.94);
   }
 }
 
@@ -203,7 +212,7 @@ onUnmounted(() => {
   gap: 8rpx;
   padding-top: 8rpx;
   margin-top: 8rpx;
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 1rpx solid rgba(0,0,0,.06);
 }
 
 .status-dot {
@@ -235,17 +244,32 @@ onUnmounted(() => {
   gap: 6rpx;
 }
 
+.info-icon {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 10rpx;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  text {
+    font-size: 18rpx;
+  }
+}
+
 .info-value {
   font-size: 22rpx;
   font-weight: 500;
-  color: #333333;
+  color: #334155;
 
   &.muted {
-    color: #999999;
+    color: #64748b;
   }
 
   &.order-highlight {
-    color: #FF976A;
+    color: #d97706;
   }
 }
 
@@ -253,7 +277,7 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #07C160;
+  color: #047857;
 }
 
 .fee-display {
@@ -262,98 +286,121 @@ onUnmounted(() => {
   gap: 6rpx;
   padding-top: 10rpx;
   margin-top: 6rpx;
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.06);
 }
 
 .fee-amount {
   font-size: 30rpx;
   font-weight: 700;
-  color: #FF976A;
+  background: linear-gradient(135deg, #059669, #0d9488);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .fee-label {
   font-size: 18rpx;
-  color: #999999;
+  color: #94a3b8;
 }
 
+/* ========== status-idle (slate) ========== */
 .status-idle {
-  border: 1rpx solid #e5e5e5;
+  background: linear-gradient(160deg, #f8fafc 0%, #f1f5f9 100%);
 
   .card-accent {
-    background: #007AFF;
+    background: linear-gradient(90deg, #cbd5e1, #94a3b8);
   }
 
   .table-number {
-    color: #000000;
+    color: #334155;
   }
 
+
   .status-dot {
-    background: #007AFF;
+    background: #64748b;
   }
 
   .status-text {
-    color: #007AFF;
+    color: #475569;
   }
 }
 
+/* ========== status-occupied (emerald/teal) ========== */
 .status-occupied {
-  border: 1rpx solid rgba(7, 193, 96, 0.3);
+  background: linear-gradient(160deg, #d1fae5 0%, #a7f3d0 50%, #99f6e4 100%);
 
   .card-accent {
-    background: #07C160;
+    background: linear-gradient(90deg, #34d399, #2dd4bf);
   }
 
   .table-number {
-    color: #000000;
+    color: #047857;
+  }
+
+  .status-badge {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1rpx solid #6ee7b7;
   }
 
   .status-dot {
-    background: #07C160;
+    background: #059669;
   }
 
   .status-text {
-    color: #07C160;
+    color: #065f46;
   }
 }
 
+/* ========== status-reserved (amber/orange) ========== */
 .status-reserved {
-  border: 1rpx solid rgba(255, 151, 106, 0.3);
+  background: linear-gradient(160deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
 
   .card-accent {
-    background: #FF976A;
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
   }
 
   .table-number {
-    color: #000000;
+    color: #78350f;
+  }
+
+  .status-badge {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1rpx solid #fcd34d;
   }
 
   .status-dot {
-    background: #FF976A;
+    background: #d97706;
   }
 
   .status-text {
-    color: #FF976A;
+    color: #92400e;
   }
 }
 
+/* ========== status-maintenance (gray) ========== */
 .status-maintenance {
-  opacity: 0.6;
-  border: 1rpx solid #e5e5e5;
+  background: linear-gradient(160deg, #f3f4f6 0%, #e5e7eb 100%);
+  opacity: 0.55;
 
   .card-accent {
-    background: #cccccc;
+    background: linear-gradient(90deg, #d1d5db, #9ca3af);
   }
 
   .table-number {
-    color: #999999;
+    color: #6b7280;
+  }
+
+  .status-badge {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1rpx solid #d1d5db;
   }
 
   .status-dot {
-    background: #cccccc;
+    background: #6b7280;
   }
 
   .status-text {
-    color: #999999;
+    color: #4b5563;
   }
 }
 

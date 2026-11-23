@@ -23,11 +23,11 @@ interface ToastProps {
 const toastConfig = {
   success: {
     icon: CheckCircle,
-    bgColor: "bg-[#07C160]/10",
-    borderColor: "border-[#07C160]/20",
-    textColor: "text-[#06AD56]",
-    iconBg: "bg-[#07C160]/20",
-    iconColor: "text-[#07C160]",
+    bgColor: "bg-emerald-50",
+    borderColor: "border-emerald-200",
+    textColor: "text-emerald-800",
+    iconBg: "bg-emerald-100",
+    iconColor: "text-emerald-600",
   },
   error: {
     icon: AlertCircle,
@@ -47,11 +47,11 @@ const toastConfig = {
   },
   info: {
     icon: Info,
-    bgColor: "bg-[#06B6D4]/10",
-    borderColor: "border-[#06B6D4]/20",
-    textColor: "text-[#0891B2]",
-    iconBg: "bg-[#06B6D4]/20",
-    iconColor: "text-[#06B6D4]",
+    bgColor: "bg-blue-50",
+    borderColor: "border-blue-200",
+    textColor: "text-blue-800",
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-600",
   },
   loading: {
     icon: Loader2,

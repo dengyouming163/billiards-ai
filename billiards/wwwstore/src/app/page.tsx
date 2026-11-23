@@ -108,15 +108,15 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-r from-[#07C160] via-[#06AD56] to-[#07C160] p-6 text-white">
-        <div className="absolute inset-0 bg-black/5" />
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-6 text-white">
+        <div className="absolute inset-0 bg-black/10" />
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
         
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold">欢迎回来，{user?.name}</h1>
-            <p className="text-white/80 text-sm mt-1">
+            <p className="text-emerald-100/80 text-sm mt-1">
               当前门店：{currentStore?.name || '未选择门店'}
             </p>
           </div>
@@ -125,7 +125,7 @@ export default function DashboardPage() {
             onClick={() => loadData()}
             variant="secondary" 
             size="sm" 
-            className="bg-white/20 hover:bg-white/30 border-0 text-white backdrop-blur-sm whitespace-nowrap rounded-full"
+            className="bg-white/20 hover:bg-white/30 border-0 text-white backdrop-blur-sm whitespace-nowrap"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             刷新数据
@@ -140,7 +140,7 @@ export default function DashboardPage() {
           value={formatCurrency(stats?.today_revenue ?? 0)}
           change={isPositive ? `+${revenueChange}` : revenueChange.toString()}
           icon={DollarSign}
-          gradient="from-[#07C160] to-[#06AD56]"
+          gradient="from-emerald-500 to-teal-500"
           isPositive={isPositive}
           onClick={() => router.push('/finance')}
         />
@@ -149,34 +149,34 @@ export default function DashboardPage() {
           value={`${stats?.tables_in_use ?? 0}`}
           subtitle={`/ ${stats?.total_tables ?? 0} 张`}
           icon={LayoutGrid}
-          gradient="from-[#06B6D4] to-[#0891B2]"
+          gradient="from-blue-500 to-indigo-500"
           onClick={() => router.push('/tables')}
         />
         <StatCard
           title="会员总数"
           value={(stats?.total_members ?? 0).toString()}
           icon={Users}
-          gradient="from-[#8B5CF6] to-[#7C3AED]"
+          gradient="from-purple-500 to-pink-500"
           onClick={() => router.push('/members')}
         />
         <StatCard
           title="进行中订单"
           value={(stats?.active_orders ?? 0).toString()}
           icon={Clock}
-          gradient="from-[#FF976A] to-[#FF7A45]"
+          gradient="from-amber-500 to-orange-500"
           onClick={() => router.push('/orders')}
         />
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-[24px] border border-[#e5e5e5] p-6 shadow-sm">
+      <div className="bg-white rounded-2xl border border-slate-200/60 p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#07C160] to-[#06AD56] flex items-center justify-center shadow-lg shadow-[#07C160]/25">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
             <Zap className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-black">快捷操作</h2>
-            <p className="text-sm text-[#999999]">常用功能快速入口</p>
+            <h2 className="text-lg font-semibold text-slate-800">快捷操作</h2>
+            <p className="text-sm text-slate-500">常用功能快速入口</p>
           </div>
         </div>
         
@@ -184,37 +184,37 @@ export default function DashboardPage() {
           <QuickActionButton
             icon={LayoutGrid}
             label="台桌管理"
-            gradient="from-[#07C160] to-[#06AD56]"
+            gradient="from-emerald-500 to-teal-500"
             onClick={() => router.push('/tables')}
           />
           <QuickActionButton
             icon={UserCog}
             label="助教管理"
-            gradient="from-[#06B6D4] to-[#0891B2]"
+            gradient="from-blue-500 to-indigo-500"
             onClick={() => router.push('/assistants')}
           />
           <QuickActionButton
             icon={Receipt}
             label="计费规则"
-            gradient="from-[#FF976A] to-[#FF7A45]"
+            gradient="from-amber-500 to-orange-500"
             onClick={() => router.push('/pricing')}
           />
           <QuickActionButton
             icon={ShoppingBag}
             label="商品订单"
-            gradient="from-[#8B5CF6] to-[#7C3AED]"
+            gradient="from-purple-500 to-pink-500"
             onClick={() => handleQuickAction('product')}
           />
           <QuickActionButton
             icon={CreditCard}
             label="会员充值"
-            gradient="from-[#FF5252] to-[#FF3B3B]"
+            gradient="from-rose-500 to-red-500"
             onClick={() => handleQuickAction('member-recharge')}
           />
           <QuickActionButton
             icon={RefreshCw}
             label="刷新状态"
-            gradient="from-[#999999] to-[#666666]"
+            gradient="from-slate-500 to-slate-600"
             onClick={() => loadData()}
           />
         </div>
@@ -223,21 +223,21 @@ export default function DashboardPage() {
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Table Status */}
-        <div className="lg:col-span-2 bg-white rounded-[24px] border border-[#e5e5e5] p-6 shadow-sm">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/60 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#07C160] to-[#06AD56] flex items-center justify-center shadow-lg shadow-[#07C160]/25">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/25">
                 <LayoutGrid className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-black">台桌实时状态</h2>
-                <p className="text-sm text-[#999999]">{tables.length} 张台桌 · {stats?.tables_in_use ?? 0} 张使用中</p>
+                <h2 className="text-lg font-semibold text-slate-800">台桌实时状态</h2>
+                <p className="text-sm text-slate-500">{tables.length} 张台桌 · {stats?.tables_in_use ?? 0} 张使用中</p>
               </div>
             </div>
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-[#07C160] hover:text-[#06AD56] hover:bg-[#07C160]/10 rounded-full"
+              className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
               onClick={() => router.push('/tables')}
             >
               查看全部
@@ -256,14 +256,14 @@ export default function DashboardPage() {
                 <div
                   key={table.id}
                   className={`
-                    relative p-4 rounded-[20px] border-2 transition-all duration-200 cursor-pointer
+                    relative p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer
                     ${isActive 
-                      ? 'bg-gradient-to-br from-[#07C160]/5 to-[#07C160]/10 border-[#07C160]/30 hover:border-[#07C160] hover:shadow-lg hover:shadow-[#07C160]/10' 
+                      ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/10' 
                       : isReserved
-                        ? 'bg-gradient-to-br from-[#FF976A]/5 to-[#FF976A]/10 border-[#FF976A]/30 hover:border-[#FF976A] hover:shadow-lg hover:shadow-[#FF976A]/10'
+                        ? 'bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/10'
                         : isMaintenance
-                          ? 'bg-gradient-to-br from-[#f7f7f7] to-white border-[#cccccc] hover:border-[#999999] hover:shadow-lg'
-                          : 'bg-white border-[#e5e5e5] hover:border-[#cccccc] hover:shadow-md'
+                          ? 'bg-gradient-to-br from-slate-50 to-gray-50 border-slate-200 hover:border-slate-400 hover:shadow-lg'
+                          : 'bg-white border-slate-100 hover:border-slate-300 hover:shadow-md'
                     }
                   `}
                   onClick={() => router.push('/tables')}
@@ -271,37 +271,37 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <span className={`w-3 h-3 rounded-full ${
-                        isActive ? 'bg-[#07C160] animate-pulse' : 
-                        isReserved ? 'bg-[#FF976A]' :
-                        isMaintenance ? 'bg-[#CCCCCC]' : 'bg-[#999999]'
+                        isActive ? 'bg-emerald-500 animate-pulse' : 
+                        isReserved ? 'bg-amber-500' :
+                        isMaintenance ? 'bg-slate-400' : 'bg-slate-300'
                       }`} />
-                      <span className="text-base font-bold text-black">{table.number}</span>
+                      <span className="text-base font-bold text-slate-800">{table.number}</span>
                     </div>
                     <Badge
                       className={`
                         text-[10px] px-2 py-0.5 rounded-full border-0
-                        ${isActive ? 'bg-[#07C160]/10 text-[#07C160]' : 
-                          isReserved ? 'bg-[#FF976A]/10 text-[#FF976A]' :
-                          isMaintenance ? 'bg-[#CCCCCC]/10 text-[#999999]' : 'bg-[#999999]/10 text-[#999999]'}
+                        ${isActive ? 'bg-emerald-100 text-emerald-700' : 
+                          isReserved ? 'bg-amber-100 text-amber-700' :
+                          isMaintenance ? 'bg-slate-100 text-slate-600' : 'bg-slate-100 text-slate-600'}
                       `}
                     >
                       {isActive ? '使用中' : isReserved ? '已预约' : isMaintenance ? '维护中' : '空闲'}
                     </Badge>
                   </div>
 
-                  <p className="text-xs text-[#999999] mb-3">{table.table_type_name || ''}</p>
+                  <p className="text-xs text-slate-500 mb-3">{table.table_type_name || ''}</p>
 
                   {isActive && (
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm text-[#333333]">
-                        <Timer className="w-4 h-4 text-[#07C160]" />
+                      <div className="flex items-center gap-2 text-sm text-slate-600">
+                        <Timer className="w-4 h-4 text-emerald-500" />
                         <span className="font-medium">{formatDuration(duration)}</span>
                       </div>
                       <div className="flex gap-2">
-                        <button className="flex-1 py-1.5 text-xs bg-[#FF976A]/10 text-[#FF976A] rounded-lg hover:bg-[#FF976A]/20 transition-colors font-medium">
+                        <button className="flex-1 py-1.5 text-xs bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors font-medium">
                           暂停
                         </button>
-                        <button className="flex-1 py-1.5 text-xs bg-[#FF5252]/10 text-[#FF5252] rounded-lg hover:bg-[#FF5252]/20 transition-colors font-medium">
+                        <button className="flex-1 py-1.5 text-xs bg-rose-100 text-rose-700 rounded-lg hover:bg-rose-200 transition-colors font-medium">
                           结账
                         </button>
                       </div>
@@ -314,14 +314,14 @@ export default function DashboardPage() {
         </div>
 
         {/* Active Orders */}
-        <div className="bg-white rounded-[24px] border border-[#e5e5e5] p-6 shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-200/60 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF976A] to-[#FF7A45] flex items-center justify-center shadow-lg shadow-[#FF976A]/25">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/25">
               <Receipt className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-black">进行中订单</h2>
-              <p className="text-sm text-[#999999]">{activeOrders.length} 个活跃订单</p>
+              <h2 className="text-lg font-semibold text-slate-800">进行中订单</h2>
+              <p className="text-sm text-slate-500">{activeOrders.length} 个活跃订单</p>
             </div>
           </div>
 
@@ -333,20 +333,20 @@ export default function DashboardPage() {
                 return (
                   <div
                     key={order.id}
-                    className="p-4 bg-gradient-to-br from-[#f7f7f7] to-white rounded-xl border border-[#e5e5e5]/50 hover:border-[#e5e5e5] hover:shadow-md transition-all cursor-pointer"
+                    className="p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-100 hover:border-slate-200 hover:shadow-md transition-all cursor-pointer"
                     onClick={() => router.push('/orders')}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-bold text-black">
+                      <span className="text-sm font-bold text-slate-800">
                         {order.table_name || order.tableNumber || '未指定台桌'}
                       </span>
-                      <Badge className="bg-[#07C160]/10 text-[#07C160] border-0 rounded-full px-2 text-xs">
+                      <Badge className="bg-emerald-100 text-emerald-700 border-0 rounded-full px-2 text-xs">
                         {formatDuration(duration)}
                       </Badge>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#999999]">订单号: {(order.order_no || order.orderNumber || '').slice(-6)}</span>
-                      <span className="text-[#07C160] font-semibold">
+                      <span className="text-slate-500">订单号: {(order.order_no || order.orderNumber || '').slice(-6)}</span>
+                      <span className="text-emerald-600 font-semibold">
                         {formatCurrency(order.final_amount || order.totalAmount || 0)}
                       </span>
                     </div>
@@ -355,10 +355,10 @@ export default function DashboardPage() {
               })
             ) : (
               <div className="text-center py-12">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[#f7f7f7] flex items-center justify-center">
-                  <Clock className="w-7 h-7 text-[#999999]" />
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
+                  <Clock className="w-7 h-7 text-slate-400" />
                 </div>
-                <p className="text-[#999999] text-sm">暂无进行中订单</p>
+                <p className="text-slate-500 text-sm">暂无进行中订单</p>
               </div>
             )}
           </div>
@@ -366,7 +366,7 @@ export default function DashboardPage() {
           {activeOrders.length > 0 && (
             <Button 
               variant="outline" 
-              className="w-full mt-4 rounded-xl border-[#e5e5e5] hover:border-[#07C160] hover:bg-[#07C160]/10"
+              className="w-full mt-4 rounded-xl border-slate-200 hover:border-emerald-300 hover:bg-emerald-50"
               onClick={() => router.push('/orders')}
             >
               查看全部订单
@@ -376,24 +376,24 @@ export default function DashboardPage() {
       </div>
 
       {/* Revenue Chart */}
-      <div className="bg-white rounded-[24px] border border-[#e5e5e5] p-6 shadow-sm">
+      <div className="bg-white rounded-2xl border border-slate-200/60 p-6 shadow-sm">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#07C160] to-[#06AD56] flex items-center justify-center shadow-lg shadow-[#07C160]/25">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/25">
               <TrendingUp className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-black">营收趋势</h2>
-              <p className="text-sm text-[#999999]">近7天营收数据</p>
+              <h2 className="text-lg font-semibold text-slate-800">营收趋势</h2>
+              <p className="text-sm text-slate-500">近7天营收数据</p>
             </div>
           </div>
-          <div className="flex gap-1 bg-[#f7f7f7] p-1 rounded-xl">
+          <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
             <button
-              className={`px-4 py-1.5 text-xs font-medium rounded-lg shadow-sm ${trendRange === 'week' ? 'bg-white text-black' : 'text-[#999999] hover:text-[#333333]'}`}
+              className={`px-4 py-1.5 text-xs font-medium rounded-lg shadow-sm ${trendRange === 'week' ? 'bg-white text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
               onClick={() => setTrendRange('week')}
             >本周</button>
             <button
-              className={`px-4 py-1.5 text-xs font-medium rounded-lg shadow-sm ${trendRange === 'month' ? 'bg-white text-black' : 'text-[#999999] hover:text-[#333333]'}`}
+              className={`px-4 py-1.5 text-xs font-medium rounded-lg shadow-sm ${trendRange === 'month' ? 'bg-white text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
               onClick={() => setTrendRange('month')}
             >本月</button>
           </div>
@@ -404,20 +404,20 @@ export default function DashboardPage() {
             <AreaChart data={revenueTrend.length > 0 ? revenueTrend : [{ date: '暂无数据', revenue: 0, orders: 0 }]}>
               <defs>
                 <linearGradient id="colorRevenueNew" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#07C160" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#07C160" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
               <XAxis 
                 dataKey="date" 
-                stroke="#999999" 
+                stroke="#94A3B8" 
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis 
-                stroke="#999999" 
+                stroke="#94A3B8" 
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
@@ -426,17 +426,17 @@ export default function DashboardPage() {
               <Tooltip
                 contentStyle={{
                   backgroundColor: 'white',
-                  border: '1px solid #e5e5e5',
+                  border: '1px solid #E2E8F0',
                   borderRadius: '12px',
                   boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                 }}
-                labelStyle={{ color: '#000000', fontWeight: 600 }}
+                labelStyle={{ color: '#1E293B', fontWeight: 600 }}
                 formatter={(value: number) => [formatCurrency(value), '营收']}
               />
               <Area
                 type="monotone"
                 dataKey="revenue"
-                stroke="#07C160"
+                stroke="#10B981"
                 strokeWidth={3}
                 fill="url(#colorRevenueNew)"
               />

@@ -190,28 +190,28 @@ async function handleSubmit() {
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; background: #f7f7f7; display: flex; flex-direction: column; }
-.nav-bar { display: flex; align-items: center; justify-content: space-between; padding: 24rpx; background: #ffffff; border-bottom: 1rpx solid #e5e5e5; }
+.page { min-height: 100vh; background: #f5f5f5; display: flex; flex-direction: column; }
+.nav-bar { display: flex; align-items: center; justify-content: space-between; padding: 24rpx; background: #fff; }
 .nav-back { width: 64rpx; height: 64rpx; display: flex; align-items: center; justify-content: center; }
-.nav-back-icon { font-size: 48rpx; color: #000000; }
-.nav-title { font-size: 34rpx; font-weight: 700; color: #000000; }
+.nav-back-icon { font-size: 48rpx; color: #374151; }
+.nav-title { font-size: 34rpx; font-weight: 700; color: #1a1a1a; }
 .nav-placeholder { width: 64rpx; }
 .form-scroll { flex: 1; }
 .form-container { padding: 24rpx; }
-.section-card { background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 16rpx; padding: 24rpx; margin-bottom: 24rpx; }
+.section-card { background: #fff; border-radius: 20rpx; padding: 24rpx; margin-bottom: 16rpx; }
 .section-header { margin-bottom: 16rpx; }
-.section-title { font-size: 30rpx; font-weight: 700; color: #000000; }
-.form-item { display: flex; align-items: center; justify-content: space-between; padding: 24rpx 0; border-bottom: 1rpx solid #e5e5e5; }
+.section-title { font-size: 28rpx; font-weight: 700; color: #1a1a1a; }
+.form-item { display: flex; align-items: center; justify-content: space-between; padding: 16rpx 0; border-bottom: 1rpx solid #f0f0f0; }
 .form-item:last-child { border-bottom: none; }
-.form-label { font-size: 28rpx; color: #333333; width: 160rpx; flex-shrink: 0; }
-.form-label.required::before { content: '* '; color: #07C160; }
-.form-input { flex: 1; font-size: 28rpx; color: #000000; text-align: right; }
+.form-label { font-size: 28rpx; color: #374151; width: 160rpx; flex-shrink: 0; }
+.form-label.required::before { content: '* '; color: #dc2626; }
+.form-input { flex: 1; font-size: 28rpx; color: #1a1a1a; text-align: right; }
 .picker-display { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 8rpx; }
-.picker-chip { font-size: 28rpx; color: #000000; }
-.picker-placeholder { font-size: 28rpx; color: #999999; }
-.picker-arrow { font-size: 28rpx; color: #999999; }
-.form-textarea { width: 100%; min-height: 120rpx; font-size: 28rpx; color: #000000; padding: 12rpx 0; }
-.textarea-count { font-size: 22rpx; color: #999999; text-align: right; }
+.picker-chip { font-size: 28rpx; color: #1a1a1a; }
+.picker-placeholder { font-size: 28rpx; color: #9ca3af; }
+.picker-arrow { font-size: 28rpx; color: #9ca3af; }
+.form-textarea { width: 100%; min-height: 120rpx; font-size: 28rpx; color: #1a1a1a; padding: 12rpx 0; }
+.textarea-count { font-size: 22rpx; color: #9ca3af; text-align: right; }
 .submit-area { padding: 32rpx 0; }
-.btn-submit { width: 100%; height: 88rpx; background: #07C160; color: #fff; font-size: 32rpx; font-weight: 600; border-radius: 44rpx; border: none; }
+.btn-submit { width: 100%; height: 88rpx; background: linear-gradient(135deg, #059669, #047857); color: #fff; font-size: 30rpx; font-weight: 600; border-radius: 44rpx; border: none; }
 </style>

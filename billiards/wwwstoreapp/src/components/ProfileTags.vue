@@ -44,12 +44,11 @@ function handleAddTag() {
 
 <style lang="scss" scoped>
 .section-card {
-	background: rgba(30, 41, 59, 0.7);
+	background: #ffffff;
 	border-radius: 24rpx;
 	padding: 24rpx;
 	margin-bottom: 20rpx;
-	box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
-	border: 1rpx solid rgba(71, 85, 105, 0.3);
+	box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
 .section-header {
@@ -66,7 +65,7 @@ function handleAddTag() {
 .section-title {
 	font-size: 32rpx;
 	font-weight: 600;
-	color: #f8fafc;
+	color: #1f2937;
 	flex: 1;
 }
 
@@ -78,15 +77,15 @@ function handleAddTag() {
 
 .tag-item {
 	font-size: 26rpx;
-	color: #e2e8f0;
-	background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+	color: #374151;
+	background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
 	padding: 12rpx 24rpx;
 	border-radius: 32rpx;
-	border: 1rpx solid rgba(245, 158, 11, 0.2);
+	border: 1rpx solid rgba(16, 185, 129, 0.2);
 }
 
 .add-tag {
-	color: #f59e0b;
+	color: #10B981;
 	border-style: dashed;
 }
 </style>

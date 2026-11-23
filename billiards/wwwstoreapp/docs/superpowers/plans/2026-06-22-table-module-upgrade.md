@@ -1473,7 +1473,7 @@ git commit -m "feat(table): expand BillPanel with time period coefficient and pr
 - [ ] **Step 1: 验证构建通过**
 
 ```bash
-cd d:/wwwroot/wwwbilliards-dky/www/wwwstoreapp
+cd d:/wwwroot/wwwbilliards/www/wwwstoreapp
 pnpm build:h5
 ```
 确认无编译错误。

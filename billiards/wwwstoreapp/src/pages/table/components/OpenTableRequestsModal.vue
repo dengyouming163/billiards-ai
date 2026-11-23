@@ -121,29 +121,29 @@ defineExpose({ loadData })
 
 <style lang="scss" scoped>
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 1000; display: flex; flex-direction: column; justify-content: flex-end; }
-.modal-panel { background: #ffffff; border-radius: 24rpx 24rpx 0 0; max-height: 75vh; display: flex; flex-direction: column; border-top: 1rpx solid #e5e5e5; }
-.modal-header { display: flex; align-items: center; padding: 28rpx; border-bottom: 1rpx solid #e5e5e5; background: rgba(7, 193, 96, 0.05); }
-.modal-title { font-size: 32rpx; font-weight: 700; color: #000000; }
-.count-badge { margin-left: 16rpx; padding: 4rpx 16rpx; background: rgba(7, 193, 96, 0.1); color: #07C160; font-size: 22rpx; font-weight: 700; border-radius: 20rpx; }
-.modal-close { margin-left: auto; font-size: 32rpx; color: #999999; padding: 8rpx; }
+.modal-panel { background: #fff; border-radius: 24rpx 24rpx 0 0; max-height: 75vh; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; padding: 28rpx; border-bottom: 1rpx solid #f3f4f6; background: #fffbeb; }
+.modal-title { font-size: 32rpx; font-weight: 700; color: #111827; }
+.count-badge { margin-left: 16rpx; padding: 4rpx 16rpx; background: #fef3c7; color: #92400e; font-size: 22rpx; font-weight: 700; border-radius: 20rpx; }
+.modal-close { margin-left: auto; font-size: 32rpx; color: #9ca3af; padding: 8rpx; }
 .modal-body { flex: 1; overflow-y: auto; padding: 16rpx 24rpx; padding-bottom: calc(env(safe-area-inset-bottom) + 48rpx); }
-.center-hint { display: flex; flex-direction: column; align-items: center; padding: 120rpx 0; color: #999999; }
+.center-hint { display: flex; flex-direction: column; align-items: center; padding: 120rpx 0; color: #9ca3af; }
 .hint-icon { font-size: 64rpx; margin-bottom: 16rpx; }
 .hint-text { font-size: 28rpx; }
-.request-item { padding: 24rpx; margin-bottom: 16rpx; border-radius: 16rpx; background: #f7f7f7; }
-.request-item.expired { opacity: 0.5; background: #e5e5e5; }
+.request-item { padding: 24rpx; margin-bottom: 16rpx; border-radius: 16rpx; background: #f9fafb; }
+.request-item.expired { opacity: 0.5; background: #f3f4f6; }
 .req-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12rpx; }
 .req-table { display: flex; align-items: center; gap: 8rpx; }
 .req-icon { font-size: 32rpx; }
-.req-name { font-size: 28rpx; font-weight: 700; color: #333333; }
+.req-name { font-size: 28rpx; font-weight: 700; color: #1f2937; }
 .req-timer { font-size: 24rpx; font-weight: 700; font-variant-numeric: tabular-nums; }
-.timer-ok { color: #07C160; }
-.timer-warn { color: #07C160; }
+.timer-ok { color: #059669; }
+.timer-warn { color: #d97706; }
 .timer-expired { color: #ef4444; }
-.req-meta { display: flex; gap: 24rpx; font-size: 22rpx; color: #999999; margin-bottom: 16rpx; }
+.req-meta { display: flex; gap: 24rpx; font-size: 22rpx; color: #9ca3af; margin-bottom: 16rpx; }
 .req-actions { display: flex; gap: 16rpx; }
-.btn-confirm { flex: 1; padding: 18rpx; background: #07C160; color: #fff; border-radius: 12rpx; font-size: 26rpx; font-weight: 600; border: none; }
-.btn-confirm[disabled] { background: #e5e5e5; color: #999999; }
+.btn-confirm { flex: 1; padding: 18rpx; background: #059669; color: #fff; border-radius: 12rpx; font-size: 26rpx; font-weight: 600; border: none; }
+.btn-confirm[disabled] { background: #d1d5db; color: #9ca3af; }
 .btn-reject { flex: 1; padding: 18rpx; background: #ef4444; color: #fff; border-radius: 12rpx; font-size: 26rpx; font-weight: 600; border: none; }
-.btn-reject[disabled] { background: #e5e5e5; color: #999999; }
+.btn-reject[disabled] { background: #d1d5db; color: #9ca3af; }
 </style>

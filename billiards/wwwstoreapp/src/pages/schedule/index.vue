@@ -180,7 +180,7 @@ function handleDelete(id: string, name: string) {
 <style lang="scss" scoped>
 .page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f2f3f5;
   display: flex;
   flex-direction: column;
   padding: 30rpx 24rpx calc(env(safe-area-inset-bottom) + 24rpx);
@@ -190,14 +190,15 @@ function handleDelete(id: string, name: string) {
   margin-top: 12rpx;
   padding: 34rpx 30rpx;
   border-radius: 34rpx;
-  background: #ffffff;
-  box-shadow: 0 12rpx 36rpx rgba(0, 0, 0, 0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,.95) 0%, rgba(255,255,255,.86) 100%);
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+  border: 1rpx solid rgba(255,255,255,.78);
 }
 
 .hero-copy { display: flex; flex-direction: column; gap: 10rpx; margin-bottom: 28rpx; }
-.hero-eyebrow { font-size: 22rpx; color: #07C160; font-weight: 700; letter-spacing: 2rpx; }
-.hero-title { font-size: 42rpx; line-height: 1.25; color: #000000; font-weight: 800; }
-.hero-desc { font-size: 24rpx; line-height: 1.7; color: #999999; }
+.hero-eyebrow { font-size: 22rpx; color: #059669; font-weight: 700; letter-spacing: 2rpx; }
+.hero-title { font-size: 42rpx; line-height: 1.25; color: #0f172a; font-weight: 800; }
+.hero-desc { font-size: 24rpx; line-height: 1.7; color: #64748b; }
 
 .week-bar {
   display: flex;
@@ -208,12 +209,12 @@ function handleDelete(id: string, name: string) {
 }
 .week-nav {
   width: 68rpx; height: 68rpx;
-  background: #f7f7f7; border-radius: 50%;
+  background: #f3f6f5; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 36rpx; color: #333333;
+  font-size: 36rpx; color: #374151;
 }
 .week-label {
-  font-size: 30rpx; font-weight: 800; color: #000000;
+  font-size: 30rpx; font-weight: 800; color: #0f172a;
 }
 
 .emp-filter {
@@ -222,22 +223,22 @@ function handleDelete(id: string, name: string) {
 }
 .filter-chip {
   display: inline-flex; align-items: center; gap: 6rpx;
-  padding: 16rpx 24rpx; background: #f7f7f7; border-radius: 999rpx;
-  font-size: 24rpx; color: #333333; font-weight: 600;
+  padding: 16rpx 24rpx; background: #f3f6f5; border-radius: 999rpx;
+  font-size: 24rpx; color: #374151; font-weight: 600;
 }
-.chip-arrow { font-size: 20rpx; color: #999999; }
+.chip-arrow { font-size: 20rpx; color: #9ca3af; }
 
 .content-scroll { flex: 1; }
 
 .empty-tip-card {
   margin: 8rpx 0 18rpx;
   padding: 26rpx 24rpx;
-  background: #ffffff;
+  background: rgba(255,255,255,.95);
   border-radius: 28rpx;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8rpx 24rpx rgba(15,23,42,.04);
 }
-.empty-tip-title { display: block; font-size: 28rpx; font-weight: 700; color: #000000; margin-bottom: 8rpx; }
-.empty-tip-desc { display: block; font-size: 22rpx; color: #999999; }
+.empty-tip-title { display: block; font-size: 28rpx; font-weight: 700; color: #0f172a; margin-bottom: 8rpx; }
+.empty-tip-desc { display: block; font-size: 22rpx; color: #64748b; }
 
 .week-grid {
   display: flex; padding: 8rpx 0 120rpx; gap: 12rpx;
@@ -248,25 +249,25 @@ function handleDelete(id: string, name: string) {
 }
 
 .day-head {
-  text-align: center; padding: 18rpx 8rpx; border-radius: 22rpx; background: #ffffff; box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
-  &.today { background: rgba(7, 193, 96, 0.08); .day-name,.day-date { color: #07C160 } }
+  text-align: center; padding: 18rpx 8rpx; border-radius: 22rpx; background: rgba(255,255,255,.95); box-shadow: 0 8rpx 24rpx rgba(15,23,42,.04);
+  &.today { background: linear-gradient(135deg, #059669, #10b981); .day-name,.day-date { color: #fff } }
 }
-.day-name { font-size: 22rpx; color: #333333; display: block; font-weight: 700; }
-.day-date { font-size: 20rpx; color: #999999; margin-top: 4rpx; }
+.day-name { font-size: 22rpx; color: #6b7280; display: block; font-weight: 700; }
+.day-date { font-size: 20rpx; color: #9ca3af; margin-top: 4rpx; }
 
 .day-slots { display: flex; flex-direction: column; gap: 8rpx; }
 
 .slot-card {
-  background: #ffffff; border-radius: 18rpx; padding: 16rpx 8rpx; text-align: center;
-  border-left: 4rpx solid #07C160; box-shadow: 0 8rpx 22rpx rgba(0, 0, 0, 0.06);
+  background: rgba(255,255,255,.95); border-radius: 18rpx; padding: 16rpx 8rpx; text-align: center;
+  border-left: 4rpx solid #059669; box-shadow: 0 8rpx 22rpx rgba(15,23,42,.04);
 }
-.slot-name { font-size: 22rpx; font-weight: 700; color: #000000; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.slot-time { display: block; margin-top: 6rpx; font-size: 18rpx; color: #999999; }
+.slot-name { font-size: 22rpx; font-weight: 700; color: #1a1a1a; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.slot-time { display: block; margin-top: 6rpx; font-size: 18rpx; color: #9ca3af; }
 
 .slot-add {
-  background: #f7f7f7; border-radius: 18rpx; padding: 16rpx 8rpx;
-  text-align: center; border: 2rpx dashed #e5e5e5;
-  &:active { background: rgba(7, 193, 96, 0.08); }
-  text { font-size: 30rpx; color: #999999; font-weight: 700; }
+  background: rgba(255,255,255,.82); border-radius: 18rpx; padding: 16rpx 8rpx;
+  text-align: center; border: 2rpx dashed #cbd5e1; box-shadow: 0 8rpx 22rpx rgba(15,23,42,.03);
+  &:active { background: #ecfdf5; }
+  text { font-size: 30rpx; color: #94a3b8; font-weight: 700; }
 }
 </style>

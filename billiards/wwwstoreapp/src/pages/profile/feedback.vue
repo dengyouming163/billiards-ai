@@ -8,16 +8,16 @@
           <text class="form-label">工单类型</text>
           <view class="type-options">
             <view class="type-option" :class="{ active: form.type === 'bug' }" @click="form.type = 'bug'">
-              <text class="type-emoji">🐛</text>问题反馈
+              <text>🐛 问题反馈</text>
             </view>
             <view class="type-option" :class="{ active: form.type === 'feature' }" @click="form.type = 'feature'">
-              <text class="type-emoji">⭐</text>功能需求
+              <text>✨ 功能需求</text>
             </view>
             <view class="type-option" :class="{ active: form.type === 'question' }" @click="form.type = 'question'">
-              <text class="type-emoji">💬</text>使用咨询
+              <text>💬 使用咨询</text>
             </view>
             <view class="type-option" :class="{ active: form.type === 'other' }" @click="form.type = 'other'">
-              <text class="type-emoji">📄</text>其他
+              <text>📋 其他</text>
             </view>
           </view>
         </view>
@@ -46,7 +46,6 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { post } from '@/api/request'
-''
 
 const form = reactive({ type: '', title: '', content: '' })
 const submitting = ref(false)
@@ -71,20 +70,19 @@ async function handleSubmit() {
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; background: #f7f7f7; }
+.page { min-height: 100vh; background: #f5f5f5; }
 .form-container { padding: 24rpx; }
-.section-card { background: #ffffff; border-radius: 16rpx; padding: 24rpx; margin-bottom: 16rpx; border: 1rpx solid #e5e5e5; }
-.section-title { font-size: 30rpx; font-weight: 700; color: #000000; display: block; margin-bottom: 20rpx; }
+.section-card { background: #fff; border-radius: 20rpx; padding: 24rpx; margin-bottom: 16rpx; }
+.section-title { font-size: 30rpx; font-weight: 700; color: #1a1a1a; display: block; margin-bottom: 20rpx; }
 .form-item { margin-bottom: 20rpx; }
-.form-label { font-size: 26rpx; color: #999999; display: block; margin-bottom: 12rpx; }
+.form-label { font-size: 26rpx; color: #6b7280; display: block; margin-bottom: 12rpx; }
 .type-options { display: flex; flex-wrap: wrap; gap: 12rpx; }
-.type-option { padding: 12rpx 24rpx; background: #f7f7f7; border-radius: 8rpx; font-size: 26rpx; color: #999999; border: 2rpx solid transparent; transition: all .15s; display: flex; align-items: center; }
-.type-emoji { margin-right: 8rpx; }
-.type-option.active { background: rgba(7, 193, 96, 0.1); color: #07C160; border-color: #07C160; }
-.form-input { width: 100%; height: 80rpx; padding: 0 20rpx; background: #f7f7f7; border-radius: 8rpx; font-size: 28rpx; color: #333333; box-sizing: border-box; }
-.form-textarea { width: 100%; min-height: 200rpx; padding: 20rpx; background: #f7f7f7; border-radius: 8rpx; font-size: 28rpx; color: #333333; box-sizing: border-box; }
-.form-tip { font-size: 22rpx; color: #999999; text-align: right; display: block; margin-top: 8rpx; }
+.type-option { padding: 12rpx 24rpx; background: #f3f4f6; border-radius: 12rpx; font-size: 26rpx; color: #6b7280; border: 2rpx solid transparent; transition: all .15s; }
+.type-option.active { background: rgba(5,150,105,.08); color: #059669; border-color: #059669; }
+.form-input { width: 100%; height: 80rpx; padding: 0 20rpx; background: #f9fafb; border-radius: 12rpx; font-size: 28rpx; color: #1a1a1a; box-sizing: border-box; }
+.form-textarea { width: 100%; min-height: 200rpx; padding: 20rpx; background: #f9fafb; border-radius: 12rpx; font-size: 28rpx; color: #1a1a1a; box-sizing: border-box; }
+.form-tip { font-size: 22rpx; color: #9ca3af; text-align: right; display: block; margin-top: 8rpx; }
 .submit-area { margin-top: 32rpx; }
-.submit-btn { width: 100%; height: 88rpx; background: #07C160; color: #ffffff; font-size: 30rpx; font-weight: 600; border-radius: 44rpx; border: none; display: flex; align-items: center; justify-content: center; }
-.submit-btn.disabled { background: #e5e5e5; color: #999999; }
+.submit-btn { width: 100%; height: 88rpx; background: linear-gradient(135deg, #059669, #047857); color: #fff; font-size: 30rpx; font-weight: 600; border-radius: 44rpx; border: none; display: flex; align-items: center; justify-content: center; }
+.submit-btn.disabled { background: #e5e5e5; color: #999; }
 </style>

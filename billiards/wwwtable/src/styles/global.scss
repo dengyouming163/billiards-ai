@@ -1,83 +1,96 @@
 :root {
-  --primary-color: #07C160;
-  --primary-dark: #06AD56;
-  --primary-light: #5EF0C4;
-  --secondary-color: #06B6D4;
-  --accent-color: #FF976A;
-  --success-color: #07C160;
-  --success-light: #5EF0C4;
-  --warning-color: #F97316;
-  --danger-color: #EF4444;
-  --info-color: #3B82F6;
-  --purple-color: #8B5CF6;
+  --primary-color: #c9a962;
+  --primary-dark: #8a6d3b;
+  --primary-light: #d4b87a;
+  --secondary-color: #ff6b6b;
+  --accent-color: #c9a962;
+  --accent-dark: #8a6d3b;
+  --success-color: #4ade80;
+  --success-light: #5ee99a;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --info-color: #6366f1;
+  --purple-color: #c9a962;
+  --cyber-pink: #ff00ff;
+  --cyber-blue: #00ffff;
   
-  --bg-light: #f7f7f7;
-  --bg-white: #ffffff;
-  --bg-card: #ffffff;
-  --bg-hover: #E8F8EF;
-  --bg-glow: rgba(7, 193, 96, 0.06);
+  --bg-dark: #0f0f16;
+  --bg-dark-gradient: linear-gradient(180deg, #0f0f16 0%, #12121a 50%, #0f0f16 100%);
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #252542;
+  --bg-light: #252542;
+  --bg-hover: #2d2d4a;
+  --bg-glow: rgba(201, 169, 98, 0.08);
   
-  --text-primary: #333333;
-  --text-secondary: #999999;
-  --text-muted: #cccccc;
-  --text-glow: rgba(51, 51, 51, 0.9);
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --text-glow: rgba(255, 255, 255, 0.9);
   
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-light: rgba(0, 0, 0, 0.04);
-  --border-glow: rgba(7, 193, 96, 0.3);
+  --border-color: #374151;
+  --border-light: #4b5563;
+  --border-glow: rgba(201, 169, 98, 0.4);
   
-  --shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
-  --shadow-xl: 0 16rpx 48rpx rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 40rpx rgba(7, 193, 96, 0.2);
-  --shadow-accent: 0 0 40rpx rgba(255, 151, 106, 0.2);
+  --shadow-sm: 0 4rpx 16rpx rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8rpx 32rpx rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16rpx 64rpx rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 24rpx 96rpx rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 60rpx rgba(201, 169, 98, 0.35);
+  --shadow-glow-lg: 0 0 100rpx rgba(201, 169, 98, 0.5);
+  --shadow-accent: 0 0 60rpx rgba(201, 169, 98, 0.35);
+  --shadow-pink: 0 0 60rpx rgba(255, 0, 255, 0.3);
+  --shadow-cyan: 0 0 60rpx rgba(0, 255, 255, 0.3);
   
-  --radius-sm: 16rpx;
-  --radius-md: 24rpx;
-  --radius-lg: 32rpx;
-  --radius-xl: 48rpx;
-  --radius-2xl: 64rpx;
+  --radius-sm: 20rpx;
+  --radius-md: 32rpx;
+  --radius-lg: 48rpx;
+  --radius-xl: 64rpx;
+  --radius-2xl: 80rpx;
   --radius-full: 9999rpx;
   
-  --font-xs: 40rpx;
-  --font-sm: 48rpx;
-  --font-base: 56rpx;
-  --font-lg: 64rpx;
-  --font-xl: 72rpx;
-  --font-2xl: 96rpx;
-  --font-3xl: 128rpx;
-  --font-4xl: 160rpx;
-  --font-5xl: 200rpx;
+  --font-xs: 48rpx;
+  --font-sm: 54rpx;
+  --font-base: 60rpx;
+  --font-lg: 72rpx;
+  --font-xl: 84rpx;
+  --font-2xl: 108rpx;
+  --font-3xl: 144rpx;
+  --font-4xl: 192rpx;
+  --font-5xl: 240rpx;
   
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
   --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   
-  --spacing-xs: 16rpx;
-  --spacing-sm: 24rpx;
-  --spacing-md: 40rpx;
-  --spacing-lg: 64rpx;
-  --spacing-xl: 96rpx;
-  --spacing-2xl: 128rpx;
+  --spacing-xs: 24rpx;
+  --spacing-sm: 36rpx;
+  --spacing-md: 60rpx;
+  --spacing-lg: 84rpx;
+  --spacing-xl: 120rpx;
+  --spacing-2xl: 180rpx;
   
-  --glass-bg: rgba(255, 255, 255, 0.9);
-  --glass-bg-light: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.06);
-  --glass-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+  /* 现代玻璃态效果 */
+  --glass-bg: rgba(26, 26, 46, 0.8);
+  --glass-bg-light: rgba(37, 37, 66, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
   
-  --gradient-border: linear-gradient(135deg, #07C160, #06AD56, #07C160);
-  --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500, #FFD700);
-  --gradient-cyber: linear-gradient(135deg, #06B6D4, #07C160, #FF976A);
-  --gradient-success: linear-gradient(135deg, #07C160, #06AD56);
-  --gradient-danger: linear-gradient(135deg, #EF4444, #FF4757);
-  --gradient-info: linear-gradient(135deg, #3B82F6, #6366F1);
+  /* 渐变边框效果 */
+  --gradient-border: linear-gradient(135deg, #c9a962, #8a6d3b, #c9a962);
+  --gradient-gold: linear-gradient(135deg, #c9a962, #d4b87a, #c9a962);
+  --gradient-cyber: linear-gradient(135deg, #00ffff, #c9a962, #ff00ff);
+  --gradient-success: linear-gradient(135deg, #4ade80, #22c55e);
+  --gradient-danger: linear-gradient(135deg, #ef4444, #ff6b6b);
+  --gradient-info: linear-gradient(135deg, #6366f1, #8b5cf6);
   
-  --glow-gold: 0 0 30rpx rgba(255, 215, 0, 0.4);
-  --glow-cyan: 0 0 30rpx rgba(6, 182, 212, 0.4);
-  --glow-pink: 0 0 30rpx rgba(255, 151, 106, 0.4);
+  /* 光晕效果 */
+  --glow-gold: 0 0 40rpx rgba(201, 169, 98, 0.5);
+  --glow-gold-lg: 0 0 80rpx rgba(201, 169, 98, 0.6);
+  --glow-cyan: 0 0 40rpx rgba(0, 255, 255, 0.5);
+  --glow-pink: 0 0 40rpx rgba(255, 0, 255, 0.5);
   
+  /* 动画时长 */
   --duration-fast: 0.15s;
   --duration-normal: 0.3s;
   --duration-slow: 0.5s;
@@ -115,10 +128,10 @@
 
 @keyframes glow {
   0%, 100% {
-    box-shadow: 0 0 20rpx rgba(7, 193, 96, 0.3);
+    box-shadow: 0 0 20rpx rgba(201, 169, 98, 0.3);
   }
   50% {
-    box-shadow: 0 0 40rpx rgba(7, 193, 96, 0.5);
+    box-shadow: 0 0 40rpx rgba(201, 169, 98, 0.6);
   }
 }
 
@@ -145,7 +158,8 @@
 }
 
 page {
-  background: var(--bg-light);
+  background: var(--bg-dark-gradient);
+  background-attachment: fixed;
   color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: var(--font-base);
@@ -166,7 +180,7 @@ page {
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   margin-bottom: var(--spacing-lg);
-  border: 1rpx solid var(--border-color);
+  border: 2rpx solid var(--border-color);
   box-shadow: var(--shadow-md);
   transition: all var(--transition-normal);
   
@@ -178,11 +192,11 @@ page {
 }
 
 .card-large {
-  background: linear-gradient(135deg, rgba(7, 193, 96, 0.06), rgba(6, 173, 86, 0.03));
+  background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), rgba(138, 109, 59, 0.05));
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   margin-bottom: var(--spacing-lg);
-  border: 2rpx solid rgba(7, 193, 96, 0.2);
+  border: 3rpx solid rgba(201, 169, 98, 0.3);
   box-shadow: var(--shadow-lg), var(--shadow-glow);
 }
 
@@ -200,19 +214,19 @@ page {
   &-primary {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: #fff;
-    box-shadow: 0 8rpx 30rpx rgba(7, 193, 96, 0.3);
+    box-shadow: 0 8rpx 30rpx rgba(201, 169, 98, 0.4);
     
     &:active {
       transform: scale(0.96);
       opacity: 0.9;
-      box-shadow: 0 0 40rpx rgba(7, 193, 96, 0.4);
+      box-shadow: 0 0 40rpx rgba(201, 169, 98, 0.6);
     }
   }
   
   &-secondary {
-    background: var(--bg-white);
+    background: var(--bg-light);
     color: var(--text-primary);
-    border: 2rpx solid var(--border-color);
+    border: 3rpx solid var(--border-color);
     
     &:active {
       background: var(--bg-hover);
@@ -221,25 +235,25 @@ page {
   }
   
   &-danger {
-    background: linear-gradient(135deg, var(--danger-color), #FF4757);
+    background: linear-gradient(135deg, var(--danger-color), #ff3838);
     color: #fff;
-    box-shadow: 0 8rpx 30rpx rgba(239, 68, 68, 0.3);
+    box-shadow: 0 8rpx 30rpx rgba(255, 71, 87, 0.4);
   }
   
   &-outline {
     background: transparent;
     color: var(--primary-color);
-    border: 2rpx solid var(--primary-color);
+    border: 3rpx solid var(--primary-color);
     
     &:active {
-      background: rgba(7, 193, 96, 0.1);
+      background: rgba(201, 169, 98, 0.15);
     }
   }
   
   &-accent {
-    background: linear-gradient(135deg, var(--accent-color), #F97316);
-    color: #fff;
-    box-shadow: 0 8rpx 30rpx rgba(255, 151, 106, 0.3);
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-dark));
+    color: #1a1a2e;
+    box-shadow: 0 8rpx 30rpx rgba(201, 169, 98, 0.4);
     
     &:active {
       transform: scale(0.96);
@@ -281,11 +295,11 @@ page {
 }
 
 .text-glow {
-  text-shadow: 0 0 20rpx rgba(7, 193, 96, 0.4);
+  text-shadow: 0 0 30rpx rgba(201, 169, 98, 0.6);
 }
 
 .text-glow-accent {
-  text-shadow: 0 0 20rpx rgba(255, 151, 106, 0.4);
+  text-shadow: 0 0 30rpx rgba(201, 169, 98, 0.6);
 }
 
 .flex {
@@ -428,6 +442,26 @@ page {
   box-shadow: var(--shadow-accent);
 }
 
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20rpx);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -441,11 +475,11 @@ page {
 
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 20rpx rgba(7, 193, 96, 0.2);
-    opacity: 0.8;
+    box-shadow: 0 0 30rpx rgba(201, 169, 98, 0.2);
+    opacity: 0.6;
   }
   50% {
-    box-shadow: 0 0 40rpx rgba(7, 193, 96, 0.4);
+    box-shadow: 0 0 60rpx rgba(201, 169, 98, 0.5);
     opacity: 1;
   }
 }
@@ -455,13 +489,13 @@ page {
     transform: translateY(0) rotate(0deg);
   }
   25% {
-    transform: translateY(-10rpx) rotate(1deg);
+    transform: translateY(-16rpx) rotate(1deg);
   }
   50% {
     transform: translateY(0) rotate(0deg);
   }
   75% {
-    transform: translateY(10rpx) rotate(-1deg);
+    transform: translateY(16rpx) rotate(-1deg);
   }
 }
 
@@ -489,10 +523,10 @@ page {
 
 @keyframes cardGlow {
   0%, 100% {
-    box-shadow: 0 10rpx 40rpx rgba(7, 193, 96, 0.15);
+    box-shadow: 0 20rpx 80rpx rgba(201, 169, 98, 0.25);
   }
   50% {
-    box-shadow: 0 10rpx 60rpx rgba(7, 193, 96, 0.25);
+    box-shadow: 0 20rpx 120rpx rgba(201, 169, 98, 0.4);
   }
 }
 
@@ -519,7 +553,7 @@ page {
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.85);
   }
   to {
     opacity: 1;
@@ -529,10 +563,10 @@ page {
 
 @keyframes textGlow {
   0%, 100% {
-    text-shadow: 0 0 10rpx rgba(7, 193, 96, 0.3);
+    text-shadow: 0 0 20rpx rgba(201, 169, 98, 0.4);
   }
   50% {
-    text-shadow: 0 0 20rpx rgba(7, 193, 96, 0.5);
+    text-shadow: 0 0 40rpx rgba(201, 169, 98, 0.8);
   }
 }
 
@@ -606,15 +640,9 @@ page {
 }
 
 .glass-effect {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20rpx);
-  -webkit-backdrop-filter: blur(20rpx);
-}
-
-.glass-light {
-  background: var(--glass-bg-light);
-  backdrop-filter: blur(15rpx);
-  -webkit-backdrop-filter: blur(15rpx);
+  background: rgba(22, 22, 42, 0.8);
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
 }
 
 .gradient-border {
@@ -625,8 +653,8 @@ page {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    padding: 2rpx;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+    padding: 3rpx;
+    background: linear-gradient(135deg, var(--primary-color), var(--purple-color), var(--cyber-pink));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -637,81 +665,126 @@ page {
 .shimmer {
   background: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.02) 0%,
-    rgba(0, 0, 0, 0.06) 50%,
-    rgba(0, 0, 0, 0.02) 100%
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
+/* ===== 现代动画库 ===== */
 
+/* 渐变流动动画 */
 @keyframes gradientFlow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-@keyframes breathe {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.03); opacity: 1; }
+/* 光晕脉冲动画 */
+@keyframes glowPulse2 {
+  0%, 100% {
+    box-shadow: 0 0 20rpx rgba(201, 169, 98, 0.3), 0 0 40rpx rgba(201, 169, 98, 0.2);
+    opacity: 0.8;
+  }
+  50% {
+    box-shadow: 0 0 40rpx rgba(201, 169, 98, 0.5), 0 0 80rpx rgba(201, 169, 98, 0.3);
+    opacity: 1;
+  }
 }
 
+/* 扫描线动画 */
+@keyframes scanLine {
+  0% { transform: translateY(-100%) scaleY(0.5); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(100vh) scaleY(0.5); opacity: 0; }
+}
+
+/* 边框流光动画 */
+@keyframes borderFlow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 200%; }
+}
+
+/* 呼吸灯动画 */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+/* 旋转光环动画 */
 @keyframes rotateHalo {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
+/* 文字闪烁动画 */
 @keyframes textFlicker {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.9; }
-  75% { opacity: 0.95; }
+  50% { opacity: 0.8; }
+  75% { opacity: 0.9; }
 }
 
+/* 粒子漂浮动画 */
 @keyframes particleFloat {
   0%, 100% {
     transform: translateY(0) translateX(0) rotate(0deg);
-    opacity: 0.4;
-  }
-  25% {
-    transform: translateY(-20rpx) translateX(10rpx) rotate(90deg);
-    opacity: 0.8;
-  }
-  50% {
-    transform: translateY(-40rpx) translateX(0) rotate(180deg);
     opacity: 0.6;
   }
-  75% {
-    transform: translateY(-20rpx) translateX(-10rpx) rotate(270deg);
+  25% {
+    transform: translateY(-30rpx) translateX(15rpx) rotate(90deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-60rpx) translateX(0) rotate(180deg);
     opacity: 0.8;
+  }
+  75% {
+    transform: translateY(-30rpx) translateX(-15rpx) rotate(270deg);
+    opacity: 1;
   }
 }
 
+/* 边框渐变动画 */
 @keyframes borderGradient {
-  0% { border-color: #07C160; }
-  33% { border-color: #06B6D4; }
-  66% { border-color: #FF976A; }
-  100% { border-color: #07C160; }
+  0% { border-color: #c9a962; }
+  33% { border-color: #00ffff; }
+  66% { border-color: #ff00ff; }
+  100% { border-color: #c9a962; }
 }
 
+/* 霓虹闪烁动画 */
+@keyframes neonFlicker {
+  0%, 100% {
+    text-shadow: 0 0 10rpx #c9a962, 0 0 20rpx #c9a962, 0 0 30rpx #c9a962;
+    opacity: 1;
+  }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+/* 进度条动画 */
 @keyframes progressPulse {
   0% { background-position: 0% 0%; }
   100% { background-position: 200% 0%; }
 }
 
+/* 3D悬浮效果 */
 @keyframes float3d {
   0%, 100% {
     transform: translateY(0) perspective(1000rpx) rotateX(0deg);
   }
   50% {
-    transform: translateY(-10rpx) perspective(1000rpx) rotateX(2deg);
+    transform: translateY(-15rpx) perspective(1000rpx) rotateX(2deg);
   }
 }
 
+/* 圆环扩展动画 */
 @keyframes ringExpand {
   0% {
     transform: scale(0.8);
@@ -723,6 +796,7 @@ page {
   }
 }
 
+/* 弹跳进入动画 */
 @keyframes bounceIn {
   0% {
     transform: scale(0.3);
@@ -740,6 +814,7 @@ page {
   }
 }
 
+/* 滑入动画 */
 @keyframes slideInUp {
   from {
     transform: translateY(100rpx);
@@ -784,6 +859,18 @@ page {
   }
 }
 
+/* 淡入动画 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* 缩放动画 */
 @keyframes zoomIn {
   from {
     transform: scale(0.8);
@@ -806,12 +893,25 @@ page {
   }
 }
 
+/* 旋转动画 */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* 抖动动画 */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5rpx); }
   20%, 40%, 60%, 80% { transform: translateX(5rpx); }
 }
 
+/* 心跳动画 */
 @keyframes heartbeat {
   0%, 100% { transform: scale(1); }
   15% { transform: scale(1.15); }
@@ -820,13 +920,62 @@ page {
   60% { transform: scale(1); }
 }
 
+/* ===== 工具类 ===== */
+
+/* 玻璃态效果 */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30rpx);
+  -webkit-backdrop-filter: blur(30rpx);
+  border: 2rpx solid var(--glass-border);
+}
+
+.glass-light {
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 2rpx solid var(--glass-border);
+}
+
+/* 渐变边框效果 */
+.gradient-border-box {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -3rpx;
+    border-radius: inherit;
+    background: var(--gradient-border);
+    background-size: 200% 200%;
+    animation: gradientFlow 3s ease infinite;
+    z-index: -1;
+  }
+}
+
+/* 发光文字效果 */
+.text-glow-gold {
+  text-shadow: 0 0 20rpx rgba(201, 169, 98, 0.8), 0 0 40rpx rgba(201, 169, 98, 0.5);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 20rpx rgba(0, 255, 255, 0.8), 0 0 40rpx rgba(0, 255, 255, 0.5);
+}
+
+.text-glow-pink {
+  text-shadow: 0 0 20rpx rgba(255, 0, 255, 0.8), 0 0 40rpx rgba(255, 0, 255, 0.5);
+}
+
+/* 动画类 */
 .animate-gradient-flow {
   animation: gradientFlow 3s ease infinite;
   background-size: 200% 200%;
 }
 
 .animate-glow-pulse {
-  animation: glowPulse 2s ease-in-out infinite;
+  animation: glowPulse2 2s ease-in-out infinite;
 }
 
 .animate-breathe {
@@ -857,6 +1006,7 @@ page {
   animation: zoomIn 0.3s ease-out;
 }
 
+/* 渐变背景 */
 .bg-gradient-gold {
   background: var(--gradient-gold);
 }
@@ -869,6 +1019,7 @@ page {
   background: var(--gradient-success);
 }
 
+/* 光晕背景 */
 .glow-bg-gold {
   box-shadow: var(--glow-gold);
 }
@@ -881,25 +1032,29 @@ page {
   box-shadow: var(--glow-pink);
 }
 
+/* ===== 计分页面专属样式 ===== */
+
+/* 自定义滚动条 */
 ::-webkit-scrollbar {
-  width: 12rpx;
-  height: 12rpx;
+  width: 16rpx;
+  height: 16rpx;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-light);
+  background: var(--bg-dark);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--border-color);
   border-radius: var(--radius-full);
   
   &:hover {
-    background: rgba(0, 0, 0, 0.15);
+    background: var(--border-light);
   }
 }
 
+/* 结果按钮样式 */
 .result-btn {
   display: flex;
   align-items: center;
@@ -909,51 +1064,51 @@ page {
   font-size: var(--font-xl);
   font-weight: 800;
   transition: all var(--transition-normal);
-  border: 3rpx solid transparent;
+  border: 4rpx solid transparent;
   
   &:active {
     transform: scale(0.96);
   }
   
   &.gold {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    color: #333333;
-    box-shadow: 0 12rpx 40rpx rgba(255, 215, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, #d4af37, #f4d03f, #d4af37);
+    color: #1a1a2e;
+    box-shadow: 0 12rpx 40rpx rgba(212, 175, 55, 0.5);
+    border-color: rgba(255, 255, 255, 0.3);
   }
   
   &.silver {
-    background: linear-gradient(135deg, #C0C0C0, #E8E8E8);
-    color: #333333;
-    box-shadow: 0 12rpx 40rpx rgba(192, 192, 192, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, #c0c0c0, #e8e8e8, #c0c0c0);
+    color: #1a1a2e;
+    box-shadow: 0 12rpx 40rpx rgba(192, 192, 192, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
   }
   
   &.primary {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: #fff;
-    box-shadow: 0 12rpx 40rpx rgba(7, 193, 96, 0.3);
+    box-shadow: 0 12rpx 40rpx rgba(201, 169, 98, 0.5);
     border-color: rgba(255, 255, 255, 0.2);
   }
   
   &.danger {
-    background: linear-gradient(135deg, var(--danger-color), #FF4757);
+    background: linear-gradient(135deg, var(--danger-color), #ff3838);
     color: #fff;
-    box-shadow: 0 12rpx 40rpx rgba(239, 68, 68, 0.3);
+    box-shadow: 0 12rpx 40rpx rgba(239, 68, 68, 0.5);
     border-color: rgba(255, 255, 255, 0.2);
   }
   
   &.success {
-    background: linear-gradient(135deg, var(--success-color), #06AD56);
+    background: linear-gradient(135deg, var(--success-color), #22c55e);
     color: #fff;
-    box-shadow: 0 12rpx 40rpx rgba(7, 193, 96, 0.3);
+    box-shadow: 0 12rpx 40rpx rgba(74, 222, 128, 0.5);
     border-color: rgba(255, 255, 255, 0.2);
   }
   
   &.warning {
-    background: linear-gradient(135deg, var(--warning-color), #D97706);
+    background: linear-gradient(135deg, var(--warning-color), #d97706);
     color: #fff;
-    box-shadow: 0 12rpx 40rpx rgba(245, 158, 11, 0.3);
+    box-shadow: 0 12rpx 40rpx rgba(245, 158, 11, 0.5);
     border-color: rgba(255, 255, 255, 0.2);
   }
   
@@ -963,39 +1118,41 @@ page {
     color: var(--text-secondary);
     
     &:active {
-      background: rgba(7, 193, 96, 0.08);
+      background: rgba(201, 169, 98, 0.1);
       border-color: var(--primary-color);
       color: var(--primary-color);
     }
   }
 }
 
+/* 玩家卡片样式 */
 .player-card {
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
-  border: 2rpx solid var(--border-color);
+  border: 3rpx solid var(--border-color);
   transition: all var(--transition-normal);
   
   &.active {
     border-color: var(--primary-color);
-    box-shadow: var(--shadow-glow), 0 0 40rpx rgba(7, 193, 96, 0.2);
-    background: linear-gradient(135deg, rgba(7, 193, 96, 0.05), rgba(6, 173, 86, 0.03));
+    box-shadow: var(--shadow-glow), 0 0 60rpx rgba(201, 169, 98, 0.3);
+    background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), rgba(138, 109, 59, 0.05));
   }
   
   &.winner {
-    border-color: #FFD700;
-    box-shadow: 0 0 60rpx rgba(255, 215, 0, 0.3);
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
+    border-color: #d4af37;
+    box-shadow: 0 0 80rpx rgba(212, 175, 55, 0.4);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(192, 152, 50, 0.08));
   }
   
   &.loser {
     border-color: var(--danger-color);
-    box-shadow: 0 0 40rpx rgba(239, 68, 68, 0.2);
+    box-shadow: 0 0 60rpx rgba(239, 68, 68, 0.3);
     opacity: 0.85;
   }
 }
 
+/* 分数显示样式 */
 .score-display {
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
   font-weight: 900;
@@ -1003,30 +1160,31 @@ page {
   
   &.positive {
     color: var(--success-color);
-    text-shadow: 0 0 20rpx rgba(7, 193, 96, 0.4);
+    text-shadow: 0 0 30rpx rgba(74, 222, 128, 0.6);
   }
   
   &.negative {
     color: var(--danger-color);
-    text-shadow: 0 0 20rpx rgba(239, 68, 68, 0.4);
+    text-shadow: 0 0 30rpx rgba(239, 68, 68, 0.6);
   }
   
   &.neutral {
     color: var(--text-primary);
-    text-shadow: 0 0 10rpx rgba(51, 51, 51, 0.2);
+    text-shadow: 0 0 30rpx rgba(255, 255, 255, 0.3);
   }
   
   &.highlight {
     color: var(--primary-color);
-    text-shadow: 0 0 30rpx rgba(7, 193, 96, 0.5);
+    text-shadow: 0 0 40rpx rgba(201, 169, 98, 0.8), 0 0 80rpx rgba(201, 169, 98, 0.4);
   }
 }
 
+/* 游戏选择卡片 */
 .game-card {
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   padding: var(--spacing-2xl);
-  border: 2rpx solid var(--border-color);
+  border: 3rpx solid var(--border-color);
   transition: all var(--transition-normal);
   
   &:active {
@@ -1038,23 +1196,25 @@ page {
   &.selected {
     border-color: var(--primary-color);
     box-shadow: var(--shadow-glow);
-    background: linear-gradient(135deg, rgba(7, 193, 96, 0.05), rgba(6, 173, 86, 0.03));
+    background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), rgba(138, 109, 59, 0.05));
   }
 }
 
+/* 历史记录项 */
 .history-item {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  border: 1rpx solid var(--border-color);
+  border: 2rpx solid var(--border-color);
   transition: all var(--transition-fast);
   
   &:active {
-    background: var(--bg-hover);
+    background: var(--bg-card-hover);
     transform: scale(0.99);
   }
 }
 
+/* 按钮组网格布局 */
 .result-grid {
   display: grid;
   gap: var(--spacing-md);
@@ -1072,6 +1232,7 @@ page {
   }
 }
 
+/* 固定头部 */
 .fixed-header {
   position: fixed;
   top: 0;
@@ -1079,21 +1240,23 @@ page {
   right: 0;
   z-index: 999;
   background: var(--bg-card);
-  backdrop-filter: blur(20rpx);
-  -webkit-backdrop-filter: blur(20rpx);
-  border-bottom: 1rpx solid var(--border-color);
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
+  border-bottom: 2rpx solid var(--border-color);
   padding: var(--spacing-lg) var(--spacing-xl);
 }
 
+/* 内容区域 */
 .content-area {
   padding-top: 180rpx;
   padding-bottom: var(--spacing-xl);
   min-height: 100vh;
 }
 
+/* 输入框样式 */
 .input-field {
   background: var(--bg-light);
-  border: 2rpx solid var(--border-color);
+  border: 3rpx solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-lg);
@@ -1111,6 +1274,7 @@ page {
   }
 }
 
+/* 操作按钮 */
 .action-btn {
   display: flex;
   align-items: center;

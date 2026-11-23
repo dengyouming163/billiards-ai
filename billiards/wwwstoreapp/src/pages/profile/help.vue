@@ -23,7 +23,7 @@ import StateView from '@/components/StateView.vue'
 const articles = ref<any[]>([])
 const loading = ref(true)
 const hasError = ref(false)
-const HELP_API = 'https://poolapi.kyyp.cn/api/help.php'
+const HELP_API = 'https://api.tpzl88.com/api/help.php'
 
 onMounted(() => { loadArticles() })
 
@@ -44,12 +44,12 @@ function goDetail(item: any) {
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; background: #f7f7f7; }
+.page { min-height: 100vh; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; background: #f5f5f5; }
 .content-scroll { padding: 16rpx 24rpx 80rpx; width: auto; }
 .article-list { display: flex; flex-direction: column; gap: 12rpx; }
-.article-card { background: #ffffff; border-radius: 12rpx; padding: 28rpx 24rpx; border: 1rpx solid #e5e5e5; }
-.article-title { font-size: 30rpx; font-weight: 600; color: #333333; display: block; margin-bottom: 14rpx; }
+.article-card { background: #fff; border-radius: 16rpx; padding: 28rpx 24rpx; }
+.article-title { font-size: 30rpx; font-weight: 600; color: #1a1a1a; display: block; margin-bottom: 14rpx; }
 .article-foot { display: flex; justify-content: space-between; align-items: center; }
-.article-category { font-size: 22rpx; color: #07C160; background: rgba(7, 193, 96, 0.1); padding: 2rpx 12rpx; border-radius: 8rpx; }
-.article-arrow { font-size: 24rpx; color: #07C160; }
+.article-category { font-size: 22rpx; color: #059669; background: #ecfdf5; padding: 2rpx 12rpx; border-radius: 8rpx; }
+.article-arrow { font-size: 24rpx; color: #059669; }
 </style>

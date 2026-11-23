@@ -4,7 +4,7 @@
 
 // 台球桌类型
 export type TableType = 'standard' | 'vip';
-export type TableStatus = 'idle' | 'occupied' | 'reserved' | 'maintenance' | 'cleaning';
+export type TableStatus = 'idle' | 'occupied' | 'reserved' | 'maintenance';
 
 // 台球桌
 export interface Table {

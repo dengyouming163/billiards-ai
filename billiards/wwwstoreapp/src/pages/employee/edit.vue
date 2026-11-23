@@ -421,8 +421,8 @@ async function handleSubmit() {
 	}
 
 	&.inactive {
-		background: rgba(71, 85, 105, 0.3);
-		color: #64748b;
+		background: #f5f5f5;
+		color: #9e9e9e;
 	}
 }
 
@@ -575,12 +575,12 @@ async function handleSubmit() {
 	border-radius: 20rpx;
 	font-size: 32rpx;
 	font-weight: $font-weight-semibold;
-	color: #f8fafc;
+	color: #ffffff;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	border: none;
-	box-shadow: 0 8rpx 24rpx rgba(0,0,0,.2);
+	box-shadow: 0 8rpx 24rpx rgba($color-primary, 0.35);
 
 	&::after {
 		border: none;

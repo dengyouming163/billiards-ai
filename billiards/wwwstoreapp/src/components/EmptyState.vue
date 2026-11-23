@@ -51,6 +51,6 @@ function handleRetry() {
 .empty-retry {
   margin-top: 16rpx;
   font-size: 26rpx;
-  color: #07C160;
+  color: #1989fa;
 }
 </style>

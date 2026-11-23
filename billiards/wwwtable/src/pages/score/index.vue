@@ -80,7 +80,24 @@
           </view>
         </view>
         
-
+        <view v-if="showAdSection" class="ad-section">
+          <view class="ad-card">
+            <video 
+              src="/static/tabbar/billiards_ad.mp4" 
+              autoplay 
+              loop 
+              muted 
+              class="ad-video"
+              object-fit="fill"
+              :controls="false"
+              :show-center-play-btn="false"
+              :show-play-btn="false"
+              :show-fullscreen-btn="false"
+              :enable-play-gesture="false"
+            />
+            <view class="video-overlay"></view>
+          </view>
+        </view>
       </view>
     </scroll-view>
     
@@ -172,7 +189,23 @@ const showInputModal = ref(false)
 const showSetRoundsModal = ref(false)
 const showResetModal = ref(false)
 const editingCard = ref<ScoreCardType | null>(null)
+const showAdSection = ref(true)
 
+function checkAdVisibility() {
+  const instance = getCurrentInstance()
+  if (!instance) return
+  
+  const query = uni.createSelectorQuery().in(instance)
+  query.select('.score-area').boundingClientRect((rect) => {
+    if (rect) {
+      const screenHeight = uni.getSystemInfoSync().windowHeight
+      const scoreAreaHeight = rect.height
+      const adRequiredHeight = screenHeight * 0.4
+      const availableSpace = screenHeight - scoreAreaHeight
+      showAdSection.value = availableSpace >= adRequiredHeight
+    }
+  }).exec()
+}
 
 const {
   isCallingWaiter, showCancelWaiterModal,
@@ -264,6 +297,9 @@ function handleModeChange(mode: GameMode) {
   penalty.value = 0
   currentMatchNumber.value = 1
   saveCurrentState(getCurrentStateData())
+  setTimeout(() => {
+    checkAdVisibility()
+  }, 500)
 }
 
 function handleCardPlus(id: string) {
@@ -428,6 +464,9 @@ function loadSavedState() {
 
 onMounted(() => {
   loadSavedState()
+  setTimeout(() => {
+    checkAdVisibility()
+  }, 300)
 })
 
 onUnmounted(() => {
@@ -436,9 +475,11 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+$gold: #c9a962;
+
 .score-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f0fdf4 0%, #f7f7f7 40%, #f0fdf4 100%);
+  background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 40%, #16162a 70%, #0f0f1f 100%);
   position: relative;
   overflow: hidden;
   padding-bottom: calc(env(safe-area-inset-bottom) + 200rpx);
@@ -454,50 +495,32 @@ onUnmounted(() => {
     
     .bg-gradient-1 {
       position: absolute;
-      top: -10%;
-      left: -10%;
-      width: 120%;
-      height: 50%;
-      background: radial-gradient(ellipse at 30% 20%, rgba(7,193,96,0.08) 0%, transparent 50%);
-      animation: floatBg 10s ease-in-out infinite;
+      top: -20%;
+      left: -20%;
+      width: 140%;
+      height: 60%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
     }
     
     .bg-gradient-2 {
       position: absolute;
       bottom: -10%;
       right: -10%;
-      width: 100%;
-      height: 40%;
-      background: radial-gradient(ellipse at 70% 80%, rgba(6,182,212,0.06) 0%, transparent 50%);
-      animation: floatBg 10s ease-in-out infinite 3s;
+      width: 120%;
+      height: 50%;
+      background: radial-gradient(ellipse at 70% 80%, rgba(201, 169, 98, 0.06) 0%, transparent 50%);
     }
     
     .bg-gradient-3 {
       position: absolute;
-      top: 40%;
+      top: 30%;
       left: 50%;
       transform: translateX(-50%);
-      width: 150%;
-      height: 30%;
-      background: radial-gradient(ellipse at 50% 50%, rgba(255,151,106,0.04) 0%, transparent 50%);
-      animation: floatBg 10s ease-in-out infinite 5s;
-    }
-    
-    .bg-grid {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(7,193,96,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(7,193,96,0.02) 1px, transparent 1px);
-      background-size: 50rpx 50rpx;
+      width: 200%;
+      height: 40%;
+      background: radial-gradient(ellipse at 50% 50%, rgba(239, 68, 68, 0.04) 0%, transparent 50%);
     }
   }
-}
-
-@keyframes floatBg {
-  0%,100%{transform:translate(0,0) scale(1);}
-  33%{transform:translate(40rpx,40rpx) scale(1.05);}
-  66%{transform:translate(-20rpx,-20rpx) scale(0.95);}
 }
 
 .header-section {
@@ -506,49 +529,48 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 24rpx 24rpx;
-  padding-top: calc(env(safe-area-inset-top) + 24rpx);
+  padding: 20rpx 24rpx;
+  padding-top: calc(env(safe-area-inset-top) + 20rpx);
   
   .header-card {
-    background: rgba(255,255,255,0.95);
-    border-radius: 48rpx;
+    background: linear-gradient(145deg, rgba(26, 26, 46, 0.92), rgba(20, 20, 40, 0.95));
+    border-radius: 56rpx;
     padding: 36rpx 40rpx;
-    border: 2rpx solid rgba(7,193,96,0.1);
+    border: 4rpx solid rgba($gold, 0.15);
     box-shadow: 
-      0 8rpx 40rpx rgba(0,0,0,0.06),
-      0 0 30rpx rgba(7,193,96,0.08);
-    backdrop-filter: blur(20rpx);
+      0 16rpx 64rpx rgba(0, 0, 0, 0.4),
+      0 0 40rpx rgba($gold, 0.08),
+      inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
     
     .header-main {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24rpx;
+      gap: 32rpx;
       
       .header-actions {
         display: flex;
         align-items: center;
-        gap: 16rpx;
+        gap: 20rpx;
         
         .header-btn {
           display: flex;
           align-items: center;
-          gap: 10rpx;
+          gap: 12rpx;
           padding: 24rpx 28rpx;
-          background: rgba(7,193,96,0.06);
-          border-radius: 32rpx;
-          border: 2rpx solid rgba(7,193,96,0.1);
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 28rpx;
+          border: 2rpx solid rgba(255, 255, 255, 0.12);
           transition: all 0.2s;
           
           &:active {
             transform: scale(0.96);
-            background: rgba(7,193,96,0.12);
-            border-color: rgba(7,193,96,0.2);
+            opacity: 0.8;
           }
           
           &.reset {
-            background: rgba(239,68,68,0.08);
-            border-color: rgba(239,68,68,0.15);
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
             
             .btn-icon, .btn-text {
               color: #ef4444;
@@ -562,7 +584,7 @@ onUnmounted(() => {
           .btn-text {
             font-size: 36rpx;
             font-weight: 600;
-            color: #333333;
+            color: rgba(255, 255, 255, 0.8);
           }
         }
       }
@@ -570,35 +592,34 @@ onUnmounted(() => {
     
     .header-secondary {
       display: flex;
-      gap: 20rpx;
+      gap: 24rpx;
       margin-top: 28rpx;
       padding-top: 28rpx;
-      border-top: 2rpx solid rgba(7,193,96,0.08);
+      border-top: 2rpx solid rgba(255, 255, 255, 0.06);
       
       .action-btn {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12rpx;
+        gap: 16rpx;
         padding: 32rpx;
         border-radius: 36rpx;
-        background: rgba(7,193,96,0.06);
-        border: 2rpx solid rgba(7,193,96,0.12);
+        background: rgba(255, 255, 255, 0.08);
+        border: 2rpx solid rgba(255, 255, 255, 0.12);
         transition: all 0.2s;
         
         &:active {
           transform: scale(0.98);
-          background: rgba(7,193,96,0.1);
+          opacity: 0.8;
         }
         
         &.primary {
-          background: linear-gradient(135deg, #07C160, #06AD56);
-          border: 2rpx solid rgba(255,255,255,0.2);
-          box-shadow: 0 12rpx 32rpx rgba(7,193,96,0.35);
+          background: linear-gradient(135deg, $gold, #8a6d3b);
+          border: none;
           
           .btn-icon, .btn-text {
-            color: #ffffff;
+            color: #1a1a2e;
           }
         }
         
@@ -607,14 +628,14 @@ onUnmounted(() => {
           pointer-events: none;
           
           .btn-icon, .btn-text {
-            color: #cccccc;
+            color: rgba(255, 255, 255, 0.3);
           }
           
           &.primary {
-            background: rgba(7,193,96,0.2);
+            background: rgba(201, 169, 98, 0.2);
             
             .btn-icon, .btn-text {
-              color: rgba(7,193,96,0.4);
+              color: rgba(201, 169, 98, 0.4);
             }
           }
         }
@@ -626,7 +647,7 @@ onUnmounted(() => {
         .btn-text {
           font-size: 44rpx;
           font-weight: 700;
-          color: #333333;
+          color: rgba(255, 255, 255, 0.8);
         }
       }
     }
@@ -652,52 +673,81 @@ onUnmounted(() => {
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24rpx;
-  margin-bottom: 32rpx;
+  gap: 32rpx;
+  margin-bottom: 40rpx;
 }
 
 .quick-buttons-area {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24rpx;
-  margin-bottom: 32rpx;
+  gap: 32rpx;
+  margin-bottom: 40rpx;
 }
 
-
+.ad-section {
+  margin-top: 32rpx;
+  padding-bottom: 40rpx;
+  
+  .ad-card {
+    position: relative;
+    margin-bottom:200rpx;
+    overflow: hidden;
+    
+    .ad-video {
+      width: 100%;
+      height: 40vh;
+      pointer-events: none;
+    }
+    
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: transparent;
+      z-index: 10;
+    }
+  }
+}
 
 .call-waiter-btn-wrap {
   position: fixed;
-  left: 32rpx;
+  right: 32rpx;
   bottom: calc(env(safe-area-inset-bottom) + 200rpx);
   z-index: 9999;
 }
 
 .call-waiter-btn {
   position: relative;
-  width: 170rpx;
-  height: 170rpx;
-  background: linear-gradient(135deg, #07C160, #06AD56);
+  width: 180rpx;
+  height: 180rpx;
+  background: linear-gradient(135deg, rgba(201, 169, 98, 0.95), rgba(138, 109, 59, 0.9));
   border-radius: 50%;
-  border: 4rpx solid rgba(255,255,255,0.95);
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
   box-shadow: 
-    0 20rpx 60rpx rgba(7,193,96,0.4),
-    0 0 50rpx rgba(7,193,96,0.2);
+    0 24rpx 72rpx rgba(201, 169, 98, 0.5),
+    0 0 60rpx rgba(201, 169, 98, 0.3),
+    inset 0 4rpx 8rpx rgba(255, 255, 255, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   
   &:active {
-    transform: scale(0.9);
+    transform: scale(0.92);
     box-shadow: 
-      0 10rpx 30rpx rgba(7,193,96,0.3),
-      0 0 30rpx rgba(7,193,96,0.1);
+      0 12rpx 36rpx rgba(201, 169, 98, 0.4),
+      0 0 30rpx rgba(201, 169, 98, 0.2),
+      inset 0 4rpx 8rpx rgba(255, 255, 255, 0.2),
+      inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.3);
   }
   
   .call-icon-wrap {
     position: relative;
-    width: 110rpx;
-    height: 110rpx;
+    width: 120rpx;
+    height: 120rpx;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -706,7 +756,7 @@ onUnmounted(() => {
       position: absolute;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
       border-radius: 50%;
       animation: iconPulse 3s ease-in-out infinite;
     }
@@ -715,39 +765,45 @@ onUnmounted(() => {
       position: relative;
       z-index: 1;
       font-size: 72rpx;
+      filter: drop-shadow(0 4rpx 12rpx rgba(0, 0, 0, 0.3));
     }
   }
   
   &.calling {
-    background: linear-gradient(135deg, #F97316, #EA580C);
-    border-color: rgba(255,255,255,0.95);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.9));
+    border-color: rgba(255, 255, 255, 0.4);
     
     .btn-glow-ring {
       position: absolute;
-      top: -16rpx; left: -16rpx; right: -16rpx; bottom: -16rpx;
+      top: -20rpx; left: -20rpx; right: -20rpx; bottom: -20rpx;
       border-radius: 50%;
-      border: 4rpx solid rgba(249,115,22,0.5);
-      animation: glowPulse 1.5s ease-out infinite;
+      border: 4rpx solid rgba(245, 158, 11, 0.6);
+      animation: glowPulse 2s ease-out infinite;
     }
     
     .btn-pulse-ring {
       position: absolute;
-      top: -10rpx; left: -10rpx; right: -10rpx; bottom: -10rpx;
+      top: -30rpx; left: -30rpx; right: -30rpx; bottom: -30rpx;
       border-radius: 50%;
-      border: 3rpx solid rgba(249,115,22,0.3);
-      animation: glowPulse 1.5s ease-out infinite;
+      border: 4rpx solid rgba(245, 158, 11, 0.4);
+      animation: glowPulse 2s ease-out infinite;
       animation-delay: 0.5s;
     }
   }
 }
 
 @keyframes iconPulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.3); opacity: 0.8; }
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 1; }
 }
 
 @keyframes glowPulse {
-  0% { transform: scale(1); opacity: 0.7; }
+  0% { transform: scale(1); opacity: 0.8; }
   100% { transform: scale(1.4); opacity: 0; }
+}
+
+@keyframes adGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
 }
 </style>

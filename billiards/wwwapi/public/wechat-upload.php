@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * 微信支付进件图片上传入口
- * URL: https://poolapi.kyyp.cn/wechat-upload.php
+ * URL: https://api.tpzl88.com/wechat-upload.php
  *
  * 轻薄自举，不实例化完整 MVC 链路。
  * 接收前端文件上传 → 调用 WechatPayService 上传到微信 → 返回 media_id

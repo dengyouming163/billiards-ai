@@ -25,7 +25,7 @@
 							@click="goToDetail(item)"
 						>
 							<view class="notification-icon-wrapper">
-								<Icon class="notification-icon" :name="getIcon(item.type)" size="40" />
+								<text class="notification-icon">{{ getIcon(item.type) }}</text>
 							</view>
 							<view class="notification-content">
 								<view class="notification-header">
@@ -54,7 +54,6 @@ import TabBar from '@/components/TabBar.vue'
 import Header from '@/components/Header.vue'
 import StoreSelector from '@/components/StoreSelector.vue'
 import StateView from '@/components/StateView.vue'
-import Icon from '@/components/Icon.vue'
 
 const notifications = ref<any[]>([])
 const loading = ref(false)
@@ -124,13 +123,13 @@ async function loadUnreadCount() {
 
 function getIcon(type: string): string {
 	const icons: Record<string, string> = {
-		order: 'fileText',
-		checkin: 'mapPin',
-		approval: 'check',
-		approval_result: 'edit',
-		system: 'bell'
+		order: '📋',
+		checkin: '📍',
+		approval: '✅',
+		approval_result: '📝',
+		system: '🔔'
 	}
-	return icons[type] || 'bell'
+	return icons[type] || '🔔'
 }
 
 function formatTime(timeStr: string): string {
@@ -176,7 +175,7 @@ async function handleMarkAllRead() {
 <style lang="scss">
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: linear-gradient(180deg, #f0fdf4 0%, #fafafa 100%);
 	padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
 }
 
@@ -194,13 +193,13 @@ async function handleMarkAllRead() {
 	justify-content: center;
 	padding: 24rpx 0;
 	font-size: 24rpx;
-	color: #999999;
+	color: #9ca3af;
 }
 
 .mark-all-btn {
 	font-size: 26rpx;
-	color: #07C160;
-	background: rgba(7, 193, 96, 0.1);
+	color: rgba(255, 255, 255, 0.9);
+	background: rgba(255, 255, 255, 0.2);
 	padding: 10rpx 20rpx;
 	border-radius: 20rpx;
 }
@@ -215,26 +214,27 @@ async function handleMarkAllRead() {
 	display: flex;
 	align-items: flex-start;
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	border-radius: 32rpx;
 	padding: 24rpx;
 	position: relative;
+	box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
 	transition: all 0.2s ease;
 
 	&:active {
-		background: #f7f7f7;
+		transform: scale(0.98);
+		background: #f9fafb;
 	}
 
 	&.unread {
-		background: #ffffff;
-		border-left: 6rpx solid #07C160;
+		background: rgba(16, 185, 129, 0.06);
+		border-left: 6rpx solid #059669;
 	}
 }
 
 .notification-icon-wrapper {
 	width: 80rpx;
 	height: 80rpx;
-	background: rgba(7, 193, 96, 0.1);
+	background: linear-gradient(135deg, #f0fdf4, #dcfce7);
 	border-radius: 20rpx;
 	display: flex;
 	align-items: center;
@@ -245,7 +245,6 @@ async function handleMarkAllRead() {
 
 .notification-icon {
 	font-size: 40rpx;
-	color: #07C160;
 }
 
 .notification-content {
@@ -265,21 +264,21 @@ async function handleMarkAllRead() {
 .notification-title {
 	font-size: 30rpx;
 	font-weight: 600;
-	color: #000000;
+	color: #09090b;
 	flex: 1;
 }
 
 .notification-badge {
 	width: 12rpx;
 	height: 12rpx;
-	background: #07C160;
+	background: #dc2626;
 	border-radius: 6rpx;
 	flex-shrink: 0;
 }
 
 .notification-desc {
 	font-size: 26rpx;
-	color: #333333;
+	color: #71717a;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
@@ -289,7 +288,7 @@ async function handleMarkAllRead() {
 
 .notification-time {
 	font-size: 22rpx;
-	color: #999999;
+	color: #a1a1aa;
 	margin-top: 4rpx;
 }
 </style>

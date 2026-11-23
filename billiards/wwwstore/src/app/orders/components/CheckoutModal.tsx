@@ -16,11 +16,11 @@ interface CheckoutModalProps {
 }
 
 const paymentMethods = [
-  { id: 'wechat', name: '微信支付', icon: Smartphone, color: 'text-[#07C160]', bgColor: 'bg-[#07C160]/10 border-[#07C160]/20' },
-  { id: 'alipay', name: '支付宝', icon: CreditCard, color: 'text-[#06B6D4]', bgColor: 'bg-[#06B6D4]/10 border-[#06B6D4]/20' },
-  { id: 'cash', name: '现金', icon: Wallet, color: 'text-[#FF976A]', bgColor: 'bg-[#FF976A]/10 border-[#FF976A]/20' },
-  { id: 'balance', name: '余额', icon: Building, color: 'text-[#8B5CF6]', bgColor: 'bg-[#8B5CF6]/10 border-[#8B5CF6]/20' },
-  { id: 'card', name: '会员卡', icon: Coins, color: 'text-[#FF976A]', bgColor: 'bg-[#FF976A]/10 border-[#FF976A]/20' },
+  { id: 'wechat', name: '微信支付', icon: Smartphone, color: 'text-green-500', bgColor: 'bg-green-50 border-green-200' },
+  { id: 'alipay', name: '支付宝', icon: CreditCard, color: 'text-blue-500', bgColor: 'bg-blue-50 border-blue-200' },
+  { id: 'cash', name: '现金', icon: Wallet, color: 'text-yellow-600', bgColor: 'bg-yellow-50 border-yellow-200' },
+  { id: 'balance', name: '余额', icon: Building, color: 'text-purple-500', bgColor: 'bg-purple-50 border-purple-200' },
+  { id: 'card', name: '会员卡', icon: Coins, color: 'text-orange-500', bgColor: 'bg-orange-50 border-orange-200' },
 ];
 
 export function CheckoutModal({ order, onSuccess }: CheckoutModalProps) {

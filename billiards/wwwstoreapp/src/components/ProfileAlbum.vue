@@ -93,12 +93,11 @@ function chooseImage(sourceType: 'camera' | 'album') {
 
 <style lang="scss" scoped>
 .section-card {
-	background: rgba(30, 41, 59, 0.7);
+	background: #ffffff;
 	border-radius: 24rpx;
 	padding: 24rpx;
 	margin-bottom: 20rpx;
-	border: 1rpx solid rgba(71, 85, 105, 0.3);
-	box-shadow: 0 4rpx 20rpx rgba(0,0,0,.2);
+	box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
 .section-header {
@@ -115,13 +114,13 @@ function chooseImage(sourceType: 'camera' | 'album') {
 .section-title {
 	font-size: 32rpx;
 	font-weight: 600;
-	color: #f8fafc;
+	color: #1f2937;
 	flex: 1;
 }
 
 .section-count {
 	font-size: 24rpx;
-	color: #64748b;
+	color: #9ca3af;
 }
 
 .album-grid {
@@ -134,7 +133,7 @@ function chooseImage(sourceType: 'camera' | 'album') {
 	aspect-ratio: 1;
 	border-radius: 16rpx;
 	overflow: hidden;
-	background: rgba(71, 85, 105, 0.3);
+	background: #f3f4f6;
 	position: relative;
 }
 
@@ -147,13 +146,13 @@ function chooseImage(sourceType: 'camera' | 'album') {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
-	border: 2rpx dashed rgba(245, 158, 11, 0.3);
+	background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+	border: 2rpx dashed rgba(16, 185, 129, 0.3);
 }
 
 .add-icon {
 	font-size: 48rpx;
-	color: #f59e0b;
+	color: #10B981;
 	font-weight: 300;
 }
 

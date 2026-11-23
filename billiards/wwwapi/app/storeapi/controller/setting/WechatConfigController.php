@@ -42,7 +42,7 @@ class WechatConfigController extends BaseStoreController
                 'apiV3Key'   => $params['apiV3Key'],
                 'serialNo'   => $params['serialNo'],
                 'privateKey' => $params['privateKey'],
-                'notifyUrl'  => 'https://poolapi.kyyp.cn/api/pay-hub/callback',
+                'notifyUrl'  => 'https://api.tpzl88.com/api/pay-hub/callback',
             ],
         ]);
 

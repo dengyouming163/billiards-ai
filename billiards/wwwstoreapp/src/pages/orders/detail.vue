@@ -77,7 +77,7 @@
             <view class="item-row" v-for="item in order.items" :key="item.id">
               <view class="item-left">
                 <view class="item-icon-circle" :class="'icon-' + item.item_type">
-                  <Icon class="item-icon-emoji" :name="itemIcon(item.item_type)" size="28" />
+                  <text class="item-icon-emoji">{{ itemIcon(item.item_type) }}</text>
                 </view>
                 <view class="item-info">
                   <text class="item-name">{{ item.item_name }}</text>
@@ -141,14 +141,14 @@
           </view>
           <view class="checkout-btn" v-if="order.status === 'in_progress'" @click="handleCheckout">
             <text class="checkout-btn-text">立即结算</text>
-            <text class="checkout-btn-arrow">›</text>
+            <text class="checkout-btn-arrow">→</text>
           </view>
         </view>
 
         <view class="section-card action-card" v-if="order.status === 'in_progress'">
           <view class="action-btn" @click="goTable">
             <text class="action-btn-text">前往台桌继续操作</text>
-            <text class="action-btn-arrow">›</text>
+            <text class="action-btn-arrow">→</text>
           </view>
         </view>
 
@@ -163,7 +163,6 @@ import { ref, computed, onMounted } from 'vue'
 import { getOrderDetail } from '@/api/modules/order'
 import type { MainOrder } from '@/types'
 import StateView from '@/components/StateView.vue'
-import Icon from '@/components/Icon.vue'
 
 const orderId = ref('')
 const order = ref<MainOrder | null>(null)
@@ -251,12 +250,12 @@ function typeLabel(type: string): string {
 
 function itemIcon(itemType: string): string {
   const icons: Record<string, string> = {
-    table: 'table',
-    product: 'product',
-    assistant: 'user',
-    merge_fee: 'refresh',
+    table: '🎱',
+    product: '🛒',
+    assistant: '👤',
+    merge_fee: '🔗',
   }
-  return icons[itemType] || 'fileText'
+  return icons[itemType] || '📋'
 }
 
 function formatDateTime(timeStr: string): string {
@@ -287,7 +286,7 @@ function goBack() {
 <style lang="scss" scoped>
 .page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #fafafa;
   display: flex;
   flex-direction: column;
 }
@@ -309,7 +308,7 @@ function goBack() {
     right: 32rpx;
     bottom: 0;
     height: 1rpx;
-    background: #e5e5e5;
+    background: rgba(0, 0, 0, 0.06);
     transform: scaleY(0.5);
   }
 }
@@ -319,7 +318,7 @@ function goBack() {
   align-items: center;
   gap: 6rpx;
   font-size: 26rpx;
-  color: #07C160;
+  color: #059669;
   font-weight: 500;
   padding: 8rpx 4rpx;
   transition: opacity 200ms ease-out;
@@ -337,7 +336,7 @@ function goBack() {
 .header-title {
   font-size: 34rpx;
   font-weight: 700;
-  color: #000000;
+  color: #09090b;
   letter-spacing: 1rpx;
 }
 
@@ -355,14 +354,14 @@ function goBack() {
 .hero-card {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #07C160 0%, #10B981 100%);
-  border-radius: 24rpx;
-  padding: 48rpx 32rpx 44rpx;
-  margin-bottom: 20rpx;
+  background: linear-gradient(135deg, #047857 0%, #059669 40%, #10b981 100%);
+  border-radius: 36rpx;
+  padding: 52rpx 36rpx 48rpx;
+  margin-bottom: 16rpx;
   text-align: center;
   box-shadow:
-    0 4rpx 20rpx rgba(7, 193, 96, 0.2),
-    0 2rpx 8rpx rgba(7, 193, 96, 0.1);
+    0 8rpx 32rpx rgba(5, 150, 105, 0.25),
+    0 2rpx 8rpx rgba(5, 150, 105, 0.15);
 }
 
 .hero-glow {
@@ -370,7 +369,7 @@ function goBack() {
   width: 280rpx;
   height: 280rpx;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
   top: -80rpx;
   right: -60rpx;
   pointer-events: none;
@@ -380,8 +379,8 @@ function goBack() {
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -395,13 +394,13 @@ function goBack() {
   margin-bottom: 24rpx;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1rpx solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.2);
+  border: 1rpx solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.18);
   z-index: 1;
 
   &.completed {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   &.cancelled {
@@ -441,7 +440,7 @@ function goBack() {
 .hero-no {
   display: block;
   font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 16rpx;
   letter-spacing: 1rpx;
   position: relative;
@@ -481,17 +480,16 @@ function goBack() {
 
 .section-card {
   background: #ffffff;
-  border-radius: 24rpx;
+  border-radius: 28rpx;
   padding: 30rpx 28rpx;
-  margin-bottom: 20rpx;
+  margin-bottom: 16rpx;
   box-shadow:
-    0 2rpx 12rpx rgba(0, 0, 0, 0.05);
-  border: 1rpx solid #e5e5e5;
+    0 4rpx 24rpx rgba(0, 0, 0, 0.06),
+    0 0 0 1rpx rgba(0, 0, 0, 0.03);
   transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 
   &:active {
     transform: scale(0.99);
-    background: #fafafa;
   }
 }
 
@@ -510,14 +508,14 @@ function goBack() {
   width: 6rpx;
   height: 28rpx;
   border-radius: 3rpx;
-  background: linear-gradient(180deg, #07C160, #10B981);
+  background: linear-gradient(180deg, #059669, #10b981);
   flex-shrink: 0;
 }
 
 .section-title {
   font-size: 30rpx;
   font-weight: 700;
-  color: #000000;
+  color: #09090b;
   letter-spacing: 1rpx;
 }
 
@@ -533,11 +531,11 @@ function goBack() {
   flex-direction: column;
   gap: 8rpx;
   padding: 18rpx 0;
-  border-bottom: 1rpx solid #e5e5e5;
+  border-bottom: 1rpx solid #f4f4f5;
   transition: background 200ms ease-out;
 
   &:active {
-    background: #f5f5f5;
+    background: #fafafa;
     border-radius: 12rpx;
     padding-left: 12rpx;
     padding-right: 12rpx;
@@ -554,13 +552,13 @@ function goBack() {
 
 .info-label {
   font-size: 22rpx;
-  color: #999999;
+  color: #a1a1aa;
   font-weight: 400;
 }
 
 .info-value {
   font-size: 26rpx;
-  color: #333333;
+  color: #09090b;
   font-weight: 500;
 }
 
@@ -574,7 +572,7 @@ function goBack() {
   justify-content: space-between;
   align-items: center;
   padding: 18rpx 0;
-  border-bottom: 1rpx solid #e5e5e5;
+  border-bottom: 1rpx solid #f4f4f5;
   transition: background 200ms ease-out;
 
   &:last-child {
@@ -582,7 +580,7 @@ function goBack() {
   }
 
   &:active {
-    background: #f5f5f5;
+    background: #fafaf9;
     margin: 0 -12rpx;
     padding: 18rpx 12rpx;
     border-radius: 16rpx;
@@ -609,19 +607,19 @@ function goBack() {
   transition: transform 200ms ease-out;
 
   &.icon-table {
-    background: rgba(7, 193, 96, 0.1);
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
   }
 
   &.icon-product {
-    background: rgba(7, 193, 96, 0.1);
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
   }
 
   &.icon-assistant {
-    background: rgba(7, 193, 96, 0.1);
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
   }
 
   &.icon-merge_fee {
-    background: rgba(7, 193, 96, 0.1);
+    background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
   }
 
   .item-row:active & {
@@ -632,7 +630,6 @@ function goBack() {
 .item-icon-emoji {
   font-size: 28rpx;
   line-height: 1;
-  color: #07C160;
 }
 
 .item-info {
@@ -644,7 +641,7 @@ function goBack() {
 
 .item-name {
   font-size: 26rpx;
-  color: #333333;
+  color: #09090b;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -653,12 +650,12 @@ function goBack() {
 
 .item-meta {
   font-size: 22rpx;
-  color: #999999;
+  color: #a1a1aa;
 }
 
 .item-price {
   font-size: 28rpx;
-  color: #07C160;
+  color: #09090b;
   font-weight: 600;
   flex-shrink: 0;
   margin-left: 16rpx;
@@ -676,7 +673,7 @@ function goBack() {
   padding: 16rpx 0;
 
   &.total-row {
-    border-top: 1rpx dashed #e5e5e5;
+    border-top: 1rpx dashed #e5e7eb;
     padding-top: 24rpx;
     margin-top: 8rpx;
   }
@@ -694,39 +691,39 @@ function goBack() {
   border-radius: 50%;
   flex-shrink: 0;
 
-  &.dot-cash { background: #07C160; }
-  &.dot-wechat { background: #07C160; }
+  &.dot-cash { background: #f59e0b; }
+  &.dot-wechat { background: #07c160; }
   &.dot-alipay { background: #1677ff; }
   &.dot-balance { background: #8b5cf6; }
-  &.dot-card { background: #999999; }
+  &.dot-card { background: #64748b; }
 }
 
 .payment-method {
   font-size: 26rpx;
-  color: #999999;
+  color: #71717a;
   font-weight: 400;
 }
 
 .payment-amount {
   font-size: 26rpx;
-  color: #333333;
+  color: #09090b;
   font-weight: 600;
 
   &.total {
     font-size: 34rpx;
-    color: #07C160;
+    color: #059669;
     font-weight: 800;
   }
 
   &.discount {
-    color: #07C160;
+    color: #059669;
     font-weight: 600;
   }
 }
 
 .payment-total-label {
   font-size: 28rpx;
-  color: #333333;
+  color: #09090b;
   font-weight: 600;
 }
 
@@ -736,33 +733,31 @@ function goBack() {
   justify-content: center;
   gap: 12rpx;
   padding: 30rpx 0;
-  background: rgba(7, 193, 96, 0.05);
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
   border-radius: 24rpx;
-  border: 1rpx solid rgba(7, 193, 96, 0.2);
   box-shadow:
-    0 6rpx 20rpx rgba(7, 193, 96, 0.08),
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.1);
+    0 6rpx 20rpx rgba(5, 150, 105, 0.15),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.7);
   transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 
   &:active {
     transform: scale(0.97);
-    background: rgba(7, 193, 96, 0.1);
     box-shadow:
-      0 3rpx 10rpx rgba(7, 193, 96, 0.12),
-      inset 0 1rpx 0 rgba(255, 255, 255, 0.1);
+      0 3rpx 10rpx rgba(5, 150, 105, 0.1),
+      inset 0 1rpx 0 rgba(255, 255, 255, 0.7);
   }
 }
 
 .action-btn-text {
   font-size: 32rpx;
-  color: #07C160;
+  color: #047857;
   font-weight: 700;
   letter-spacing: 1rpx;
 }
 
 .action-btn-arrow {
   font-size: 30rpx;
-  color: #07C160;
+  color: #047857;
   font-weight: 700;
   transition: transform 200ms ease-out;
 
@@ -779,15 +774,15 @@ function goBack() {
 .summary-card {
   padding: 36rpx 32rpx;
   margin-bottom: 20rpx;
-  background: #ffffff;
-  border: 1rpx solid #e5e5e5;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  border: 2rpx solid #e5e7eb;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
 }
 
 .summary-content {
   padding: 28rpx 24rpx;
-  background: #f7f7f7;
-  border-radius: 20rpx;
+  background: #f9fafb;
+  border-radius: 24rpx;
   margin-bottom: 28rpx;
 }
 
@@ -804,35 +799,35 @@ function goBack() {
 
 .summary-divider {
   height: 2rpx;
-  background: linear-gradient(90deg, transparent, #e5e5e5, transparent);
+  background: linear-gradient(90deg, transparent, #d1d5db, transparent);
   margin: 8rpx 0;
 }
 
 .summary-label {
   font-size: 28rpx;
-  color: #999999;
+  color: #6b7280;
   font-weight: 500;
 }
 
 .summary-value {
   font-size: 30rpx;
-  color: #333333;
+  color: #374151;
   font-weight: 600;
 
   &.discount {
-    color: #07C160;
+    color: #059669;
   }
 }
 
 .summary-total-label {
   font-size: 34rpx;
-  color: #000000;
+  color: #111827;
   font-weight: 700;
 }
 
 .summary-total-value {
   font-size: 48rpx;
-  color: #07C160;
+  color: #059669;
   font-weight: 800;
   letter-spacing: -1rpx;
 }
@@ -843,17 +838,17 @@ function goBack() {
   justify-content: center;
   gap: 12rpx;
   padding: 32rpx 0;
-  background: linear-gradient(135deg, #07C160 0%, #10B981 100%);
+  background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%);
   border-radius: 28rpx;
   box-shadow:
-    0 8rpx 24rpx rgba(7, 193, 96, 0.3),
+    0 8rpx 24rpx rgba(5, 150, 105, 0.35),
     inset 0 2rpx 0 rgba(255, 255, 255, 0.2);
   transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 
   &:active {
     transform: scale(0.97);
     box-shadow:
-      0 4rpx 12rpx rgba(7, 193, 96, 0.2),
+      0 4rpx 12rpx rgba(5, 150, 105, 0.25),
       inset 0 2rpx 0 rgba(255, 255, 255, 0.2);
   }
 }

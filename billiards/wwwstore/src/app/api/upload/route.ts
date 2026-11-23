@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // 统一图片上传代理 → ThinkPHP 控制器（同源，无 CORS）
 //   微信进件图片: WechatApplymentController::uploadImage
 //   产品/头像等:   UploadController::index
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://poolapi.kyyp.cn/storeapi';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.tpzl88.com/storeapi';
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     // 微信进件图片 → WechatApplymentController（顶层路由，无需认证）
     if (type === 'wechat_applyment') {
       formData.delete('type');
-      const API_ROOT = process.env.NEXT_PUBLIC_API_ROOT || 'https://poolapi.kyyp.cn';
+      const API_ROOT = process.env.NEXT_PUBLIC_API_ROOT || 'https://api.tpzl88.com';
       const response = await fetch(`${API_ROOT}/wechat-upload`, {
         method: 'POST',
         body: formData,

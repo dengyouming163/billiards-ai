@@ -4,20 +4,21 @@
       <view class="header-card">
         <view class="header-row">
           <view class="header-left">
-            <view class="header-icon-wrap">
-              <text class="header-icon">🏠</text>
-            </view>
-            <view class="header-title-wrap">
-              <text class="header-title">{{ activeTab === 'product' ? '商品服务' : '教练服务' }}</text>
-              <text class="header-count">{{ activeTab === 'product' ? products.length + '件商品' : assistants.length + '位教练' }}</text>
-            </view>
+          <view class="header-icon-wrap">
+            <view class="icon-glow"></view>
+            <view class="icon-ring"></view>
           </view>
+          <view class="header-title-wrap">
+            <text class="header-title">商品点单</text>
+            <text class="header-count">{{ products.length }}件</text>
+          </view>
+        </view>
           
           <view class="header-right">
             <view v-if="!orderStatus" class="status-tag empty" @click="goToHome">
               <text>还未开台</text>
             </view>
-            <view v-else class="status-tag active" @click="activeTab === 'product' ? (showOrderDetailModal = true) : (showAssistantOrdersModal = true)">
+            <view v-else class="status-tag active" @click="showOrderDetailModal = true">
               <text>{{ orderStatus.tableNumber }}台 · {{ orderStatus.duration }}</text>
             </view>
             <view class="search-btn" @click="toggleSearch">
@@ -27,36 +28,19 @@
         </view>
       </view>
 
-      <view class="tab-bar">
-        <view 
-          class="tab-item" 
-          :class="{ active: activeTab === 'product' }"
-          @click="activeTab = 'product'"
-        >
-          <text class="tab-label">商品</text>
-        </view>
-        <view 
-          class="tab-item" 
-          :class="{ active: activeTab === 'assistant' }"
-          @click="activeTab = 'assistant'"
-        >
-          <text class="tab-label">教练</text>
-        </view>
-      </view>
-
       <view class="search-bar" v-if="showSearch">
         <view class="search-box">
           <text class="search-icon">🔍</text>
           <input
             class="search-input"
             v-model="searchKeyword"
-            :placeholder="activeTab === 'product' ? '搜索商品...' : '搜索教练...'"
+            placeholder="搜索商品..."
           />
           <view class="clear-btn" v-if="searchKeyword" @click="clearSearch">✕</view>
         </view>
       </view>
 
-      <scroll-view class="category-scroll" scroll-x enhanced :show-scrollbar="false" v-if="activeTab === 'product'">
+      <scroll-view class="category-scroll" scroll-x enhanced :show-scrollbar="false">
         <view 
           class="category-item" 
           :class="{ active: currentCategory === item.id }"
@@ -67,39 +51,15 @@
           <text class="category-name">{{ item.name }}</text>
         </view>
       </scroll-view>
-
-      <scroll-view class="category-scroll" scroll-x enhanced :show-scrollbar="false" v-if="activeTab === 'assistant'">
-        <view 
-          class="category-item" 
-          :class="{ active: filterType === 'all' }"
-          @click="filterType = 'all'"
-        >
-          <text class="category-name">全部</text>
-        </view>
-        <view 
-          class="category-item" 
-          :class="{ active: filterType === 'available' }"
-          @click="filterType = 'available'"
-        >
-          <text class="category-name">可预约</text>
-        </view>
-        <view 
-          class="category-item" 
-          v-for="level in assistantLevels" 
-          :key="level.id"
-          :class="{ active: filterType === level.id || filterType === level.code }"
-          @click="filterType = level.id"
-        >
-          <text class="category-name">{{ level.name }}</text>
-        </view>
-      </scroll-view>
     </view>
 
-    <view class="loading-overlay" v-if="isLoading">
-      <Skeleton :card-count="4" :show-list="true" />
-    </view>
     
-    <scroll-view class="product-list" scroll-y v-if="activeTab === 'product'">
+
+  <view class="loading-overlay" v-if="isLoading">
+    <Skeleton :card-count="4" :show-list="true" />
+  </view>
+  
+  <scroll-view class="product-list" scroll-y>
       <view class="product-section" v-for="section in productSections" :key="section.name">
         <view class="section-header">
           <view class="section-title-wrap">
@@ -118,56 +78,28 @@
             <view class="product-image-full">
               <image v-if="product.image" class="product-img-full" :src="product.image" mode="aspectFill" />
               <text v-else class="product-emoji-full">{{ product.emoji || '📦' }}</text>
+              <view class="image-glow-full" :class="product.tag"></view>
               <view class="product-badge-full" :class="product.tag" v-if="product.tag">{{ getTagLabel(product.tag) }}</view>
             </view>
-            <view class="product-info">
-              <text class="product-name">{{ product.name }}</text>
-              <view class="product-price-row">
-                <view class="price-wrap">
-                  <text class="price-symbol">¥</text>
-                  <text class="price-value">{{ product.price }}</text>
-                  <text class="price-unit">/{{ product.unit }}</text>
-                </view>
-                <view class="add-btn" @click.stop="addToCart(product)">
-                  <text>+</text>
+            <view class="product-overlay">
+              <view class="overlay-gradient"></view>
+              <view class="overlay-content">
+                <text class="product-name">{{ product.name }}</text>
+                <view class="product-price-row">
+                  <view class="price-wrap">
+                    <text class="price-symbol">¥</text>
+                    <text class="price-value">{{ product.price }}</text>
+                    <text class="price-unit">/{{ product.unit }}</text>
+                  </view>
+                  <view class="add-btn" @click.stop="addToCart(product)">
+                    <view class="add-btn-glow"></view>
+                    <text>+</text>
+                  </view>
                 </view>
               </view>
             </view>
           </view>
         </view>
-      </view>
-    </scroll-view>
-
-    <scroll-view class="assistant-list" scroll-y v-if="activeTab === 'assistant'">
-      <view class="assistant-grid">
-        <view class="assistant-card" v-for="a in filteredAssistants" :key="a.id" @click="selectAssistant(a)">
-          <view class="assistant-image-wrap">
-            <image v-if="getAssistantImage(a)" class="assistant-img" :src="getAssistantImage(a)" mode="aspectFill" />
-            <text v-else class="assistant-emoji">👨‍🏫</text>
-            <view class="online-dot" v-if="a.is_online === 1 && !a.is_busy"></view>
-            <view class="busy-overlay" v-if="a.is_busy || a.status === 0">
-              <text class="busy-text">{{ a.is_busy ? '服务中' : '休息' }}</text>
-            </view>
-          </view>
-          <view class="assistant-info">
-            <text class="assistant-name">{{ a.name }}</text>
-            <text class="assistant-level">{{ a.level_name }}</text>
-            <view class="assistant-price-row">
-              <view class="price-wrap">
-                <text class="price-symbol">¥</text>
-                <text class="price-value">{{ calcMinuteRate(a.hourly_rate) }}</text>
-                <text class="price-unit">/分钟</text>
-              </view>
-              <view class="add-btn" :class="{ busy: a.is_busy }" @click.stop="selectAssistant(a)">
-                <text>{{ a.is_busy ? '忙' : '+' }}</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-      <view v-if="!assistantsLoaded" class="loading-state">
-        <text class="loading-icon">⏳</text>
-        <text class="loading-text">加载中...</text>
       </view>
     </scroll-view>
 
@@ -182,124 +114,137 @@
           <text class="cart-count-text">{{ cartCount }}件商品</text>
         </view>
       </view>
-      <view class="cart-detail-btn" @click.stop="showCartModal = true">
+      <view class="cart-detail-btn" @click.stop="showCartModal = true" >
         <text>查看详情</text>
       </view>
     </view>
 
+    <!-- 购物车弹窗 — 内容可滚动 + 操作栏固定底部 -->
     <ContentModal :visible="showCartModal" title="购物车" :show-footer="false" @close="closeCart">
-      <view class="detail-wrap">
-        <scroll-view class="detail-scroll" scroll-y>
-          <view class="cart-item" v-for="item in cartItems" :key="item.product_id || item.id">
-            <view class="cart-item-image">
-              <image v-if="item.image" class="cart-item-img" :src="item.image" mode="aspectFill" />
-              <view v-else class="item-image-bg"></view>
-              <text v-if="!item.image" class="cart-item-emoji">{{ item.emoji || '📦' }}</text>
-            </view>
-            <view class="cart-item-info">
-              <text class="cart-item-name">{{ item.item_name || item.name || '未知商品' }}</text>
-              <text class="cart-item-price">¥{{ item.unit_price || 0 }}/{{ item.unit || '份' }}</text>
-            </view>
-            <view class="cart-item-quantity">
-              <view class="qty-btn minus" @tap="decreaseQty(item)">-</view>
-              <text class="qty-num">{{ item.quantity || 0 }}</text>
-              <view class="qty-btn plus" @tap="increaseQty(item)">+</view>
-            </view>
-            <view class="cart-item-total">
-              <text>¥{{ formatPrice((item.unit_price || 0) * (item.quantity || 0)) }}</text>
-            </view>
-          </view>
-        </scroll-view>
-        <view class="fixed-book-bar">
-          <text class="fb-price">¥{{ formatPrice(cartTotal) }}</text>
-          <view
-            v-if="isOrderActive"
-            class="fb-btn"
-            :class="{ loading: submitting }"
-            :disabled="submitting"
-            @tap="confirmOrder"
-          >{{ submitting ? '提交中...' : '确认下单' }}</view>
-          <view
-            v-else
-            class="fb-btn secondary"
-            @tap="goToHome"
-          >去开台</view>
-        </view>
-      </view>
-    </ContentModal>
 
+        <view class="detail-wrap">
+          <scroll-view class="detail-scroll" scroll-y>
+            <view class="cart-item" v-for="item in cartItems" :key="item.product_id || item.id">
+              <view class="cart-item-image">
+                <image v-if="item.image" class="cart-item-img" :src="item.image" mode="aspectFill" />
+                <view v-else class="item-image-bg"></view>
+                <text v-if="!item.image" class="cart-item-emoji">{{ item.emoji || '📦' }}</text>
+              </view>
+              <view class="cart-item-info">
+                <text class="cart-item-name">{{ item.item_name || item.name || '未知商品' }}</text>
+                <text class="cart-item-price">¥{{ item.unit_price || 0 }}/{{ item.unit || '份' }}</text>
+              </view>
+              <view class="cart-item-quantity">
+                <view class="qty-btn minus" @tap="decreaseQty(item)">-</view>
+                <text class="qty-num">{{ item.quantity || 0 }}</text>
+                <view class="qty-btn plus" @tap="increaseQty(item)">+</view>
+              </view>
+              <view class="cart-item-total">
+                <text>¥{{ formatPrice((item.unit_price || 0) * (item.quantity || 0)) }}</text>
+              </view>
+            </view>
+          </scroll-view>
+
+          <view class="fixed-book-bar">
+            <text class="fb-price">¥{{ formatPrice(cartTotal) }}</text>
+            <view
+              v-if="isOrderActive"
+              class="fb-btn"
+              :class="{ loading: submitting }"
+              :disabled="submitting"
+              @tap="confirmOrder"
+            >{{ submitting ? '提交中...' : '确认下单' }}</view>
+            <view
+              v-else
+              class="fb-btn secondary"
+              @tap="goToHome"
+            >去开台</view>
+          </view>
+        </view>
+      </ContentModal>
+
+    <!-- 商品详情弹窗 — 图片/信息可滚动 + 操作栏固定底部 -->
     <ContentModal
       :visible="!!selectedProduct"
       :title="selectedProduct?.name || '商品详情'"
       :show-footer="false"
       @close="closeProductDetail"
     >
-      <view class="detail-wrap" v-if="selectedProduct">
-        <scroll-view class="detail-scroll" scroll-y>
-          <view class="detail-image-wrap">
-            <image v-if="selectedProduct.image" class="detail-img" :src="selectedProduct.image" mode="aspectFill" />
-            <text v-else class="detail-emoji-big">{{ selectedProduct.emoji || '📦' }}</text>
-            <view class="detail-tag" :class="selectedProduct.tag" v-if="selectedProduct.tag">{{ getTagLabel(selectedProduct.tag) }}</view>
+
+        <view class="detail-wrap" v-if="selectedProduct">
+          <scroll-view class="detail-scroll" scroll-y>
+            <!-- 商品大图 -->
+            <view class="detail-image-wrap">
+              <image v-if="selectedProduct.image" class="detail-img" :src="selectedProduct.image" mode="aspectFill" />
+              <text v-else class="detail-emoji-big">{{ selectedProduct.emoji || '📦' }}</text>
+              <view class="detail-tag" :class="selectedProduct.tag" v-if="selectedProduct.tag">{{ getTagLabel(selectedProduct.tag) }}</view>
+            </view>
+
+            <!-- 信息区 -->
+            <view class="detail-meta-bar">
+              <text class="meta-price">¥{{ selectedProduct.price }}</text>
+              <text class="meta-unit">/{{ selectedProduct.unit }}</text>
+              <text class="meta-divider" v-if="selectedProduct.stock !== undefined">·</text>
+              <text class="meta-stock" v-if="selectedProduct.stock !== undefined" :class="{ soldout: selectedProduct.stock <= 0 }">
+                {{ selectedProduct.stock > 0 ? '库存 '+selectedProduct.stock : '已售罄' }}
+              </text>
+            </view>
+
+            <text class="detail-desc" v-if="selectedProduct.desc">{{ selectedProduct.desc }}</text>
+            <text class="detail-body" v-if="selectedProduct.detail && selectedProduct.detail !== selectedProduct.desc">{{ selectedProduct.detail }}</text>
+          </scroll-view>
+
+          <!-- 固定底部操作栏 — 不随滚动，始终可见 -->
+          <view class="fixed-book-bar">
+            <text class="fb-price">¥{{ (selectedProduct?.price || 0) * detailQuantity }}</text>
+            <view class="footer-qty">
+              <view class="qty-btn minus" @tap="decreaseDetailQty">-</view>
+              <text class="qty-num">{{ detailQuantity }}</text>
+              <view class="qty-btn plus" @tap="increaseDetailQty">+</view>
+            </view>
+            <view class="fb-btn" @tap="addToCartWithQty">加入购物车</view>
           </view>
-          <view class="detail-meta-bar">
-            <text class="meta-price">¥{{ selectedProduct.price }}</text>
-            <text class="meta-unit">/{{ selectedProduct.unit }}</text>
-            <text class="meta-divider" v-if="selectedProduct.stock !== undefined">·</text>
-            <text class="meta-stock" v-if="selectedProduct.stock !== undefined" :class="{ soldout: selectedProduct.stock <= 0 }">
-              {{ selectedProduct.stock > 0 ? '库存 '+selectedProduct.stock : '已售罄' }}
-            </text>
-          </view>
-          <text class="detail-desc" v-if="selectedProduct.desc">{{ selectedProduct.desc }}</text>
-          <text class="detail-body" v-if="selectedProduct.detail && selectedProduct.detail !== selectedProduct.desc">{{ selectedProduct.detail }}</text>
-        </scroll-view>
-        <view class="fixed-book-bar">
-          <text class="fb-price">¥{{ (selectedProduct?.price || 0) * detailQuantity }}</text>
-          <view class="footer-qty">
-            <view class="qty-btn minus" @tap="decreaseDetailQty">-</view>
-            <text class="qty-num">{{ detailQuantity }}</text>
-            <view class="qty-btn plus" @tap="increaseDetailQty">+</view>
-          </view>
-          <view class="fb-btn" @tap="addToCartWithQty">加入购物车</view>
         </view>
-      </view>
-    </ContentModal>
+      </ContentModal>
 
     <ContentModal :visible="showOrderDetailModal" title="待确认商品" @close="showOrderDetailModal = false">
-      <scroll-view class="modal-body" scroll-y>
-        <view v-if="preOrderGroups.length > 0" class="preorder-list">
-          <view v-for="(group, gi) in preOrderGroups" :key="group.preorder_group_id" class="preorder-group">
-            <view class="preorder-group-head">
-              <text class="preorder-group-label">订单 {{ gi + 1 }}</text>
-            </view>
-            <view class="preorder-item" v-for="item in group.items" :key="item.product_id || item.id">
-              <view class="preorder-item-thumb">
-                <image v-if="item.image" class="preorder-thumb-img" :src="item.image" mode="aspectFill" />
-                <text v-else class="preorder-item-emoji">{{ item.emoji || '📦' }}</text>
+
+        <scroll-view class="modal-body" scroll-y>
+          <view v-if="preOrderGroups.length > 0" class="preorder-list">
+            <view v-for="(group, gi) in preOrderGroups" :key="group.preorder_group_id" class="preorder-group">
+              <view class="preorder-group-head">
+                <text class="preorder-group-label">订单 {{ gi + 1 }}</text>
               </view>
-              <view class="preorder-item-info">
-                <text class="preorder-item-name">{{ item.item_name }}</text>
-                <text class="preorder-item-price">¥{{ item.unit_price }}/{{ item.unit || '份' }}</text>
+              <view class="preorder-item" v-for="item in group.items" :key="item.product_id || item.id">
+                <view class="preorder-item-thumb">
+                  <image v-if="item.image" class="preorder-thumb-img" :src="item.image" mode="aspectFill" />
+                  <text v-else class="preorder-item-emoji">{{ item.emoji || '📦' }}</text>
+                </view>
+                <view class="preorder-item-info">
+                  <text class="preorder-item-name">{{ item.item_name }}</text>
+                  <text class="preorder-item-price">¥{{ item.unit_price }}/{{ item.unit || '份' }}</text>
+                </view>
+                <text class="preorder-item-qty">x{{ item.quantity }}</text>
+                <text class="preorder-item-total">¥{{ formatPrice(item.unit_price * item.quantity) }}</text>
+                <view class="preorder-item-cancel" @click.stop="handleRejectPreOrderItem(item.id, group.preorder_group_id)">取消</view>
               </view>
-              <text class="preorder-item-qty">x{{ item.quantity }}</text>
-              <text class="preorder-item-total">¥{{ formatPrice(item.unit_price * item.quantity) }}</text>
-              <view class="preorder-item-cancel" @click.stop="handleRejectPreOrderItem(item.id, group.preorder_group_id)">取消</view>
+              <view class="preorder-group-total">小计 ¥{{ formatPrice(group.total_amount) }}</view>
             </view>
-            <view class="preorder-group-total">小计 ¥{{ formatPrice(group.total_amount) }}</view>
           </view>
-        </view>
-        <view v-else class="modal-empty">
-          <text class="modal-empty-icon">📋</text>
-          <text class="modal-empty-text">暂无待确认商品</text>
-        </view>
-      </scroll-view>
-      <template #footer>
-        <view class="footer-summary" v-if="preOrderGroups.length > 0">
-          <text class="footer-summary-label">合计</text>
-          <text class="footer-summary-val">¥{{ formatPrice(preorderTotalAmount) }}</text>
-        </view>
-        <view class="footer-action" @click="showOrderDetailModal = false">关闭</view>
-      </template>
-    </ContentModal>
+          <view v-else class="modal-empty">
+            <text class="modal-empty-icon">📋</text>
+            <text class="modal-empty-text">暂无待确认商品</text>
+          </view>
+        </scroll-view>
+
+        <template #footer>
+          <view class="footer-summary" v-if="preOrderGroups.length > 0">
+            <text class="footer-summary-label">合计</text>
+            <text class="footer-summary-val">¥{{ formatPrice(preorderTotalAmount) }}</text>
+          </view>
+          <view class="footer-action" @click="showOrderDetailModal = false">关闭</view>
+        </template>
+      </ContentModal>
 
     <view class="call-waiter-btn-wrap">
       <view 
@@ -310,101 +255,11 @@
         <view class="btn-glow-ring" v-if="isCallingWaiter"></view>
         <view class="btn-pulse-ring" v-if="isCallingWaiter"></view>
         <view class="call-icon-wrap">
+          <view class="icon-glow"></view>
           <text class="call-icon">{{ isCallingWaiter ? '⏳' : '🛎️' }}</text>
         </view>
       </view>
     </view>
-
-    <ContentModal
-      :visible="!!selectedAssistant"
-      :title="selectedAssistant?.name || '教练详情'"
-      :show-footer="true"
-      height="75vh"
-      @close="closeAssistantModal"
-    >
-      <scroll-view class="modal-body" scroll-y v-if="selectedAssistant">
-        <view class="carousel-wrap" v-if="hasAlbum">
-          <swiper class="carousel" :current="carouselIdx" @change="onCarouselChange" circular indicator-dots indicator-color="rgba(255,255,255,.3)" indicator-active-color="#07C160">
-            <swiper-item v-for="(url, ai) in selectedAssistant.album" :key="ai">
-              <image class="carousel-img" :src="url" mode="aspectFill" />
-            </swiper-item>
-          </swiper>
-        </view>
-        <view class="carousel-placeholder" v-else>
-          <text class="placeholder-emoji">👨‍🏫</text>
-        </view>
-
-        <view class="detail-meta-bar">
-          <text class="meta-level">{{ selectedAssistant.level_name }}</text>
-          <text class="meta-divider">·</text>
-          <text class="meta-rating">★ {{ selectedAssistant.rating }}</text>
-          <text class="meta-divider">·</text>
-          <text class="meta-price">¥{{ calcMinuteRate(selectedAssistant.hourly_rate) }}/分钟</text>
-        </view>
-
-        <view class="info-block" v-if="selectedAssistant.introduction || (selectedAssistant.skills && selectedAssistant.skills.length)">
-          <text class="info-body" v-if="selectedAssistant.introduction">{{ selectedAssistant.introduction }}</text>
-          <view class="skill-tags" v-if="selectedAssistant.skills && selectedAssistant.skills.length">
-            <text class="skill-tag" v-for="tag in selectedAssistant.skills" :key="tag">{{ tag }}</text>
-          </view>
-        </view>
-
-        <view class="info-block">
-          <text class="info-title">选择时长</text>
-          <view class="duration-row">
-            <view class="dur-chip" v-for="d in durations" :key="d" :class="{ active: selectedDuration === d }" @click="selectedDuration = d">
-              <text class="dur-label">{{ d }}小时</text>
-              <text class="dur-price">¥{{ (selectedAssistant?.hourly_rate || 0) * d }}</text>
-            </view>
-          </view>
-        </view>
-      </scroll-view>
-      <template #footer>
-        <view class="fixed-book-bar">
-          <text class="fb-price">¥{{ (selectedAssistant?.hourly_rate || 0) * selectedDuration }}</text>
-          <view class="fb-btn" :class="{ loading: booking }" @click="handleBook">{{ booking ? '预约中...' : '立即预约' }}</view>
-        </view>
-      </template>
-    </ContentModal>
-
-    <ContentModal
-      :visible="showAssistantOrdersModal"
-      title="当前教练服务"
-      @close="showAssistantOrdersModal = false"
-    >
-      <scroll-view class="modal-body" scroll-y>
-        <view v-if="activeAssistantOrders.length > 0">
-          <view class="service-item" v-for="item in activeAssistantOrders" :key="item.item_id || item.id">
-            <view class="si-avatar">
-              <image v-if="item.assistant_avatar" :src="item.assistant_avatar" mode="aspectFill" />
-              <text v-else>👨‍🏫</text>
-            </view>
-            <view class="si-info">
-              <text class="si-name">{{ item.assistant_name }}</text>
-              <view class="si-meta">
-                <text class="si-rate">¥{{ item.hourly_rate }}/h</text>
-                <text class="si-status" :class="item.status">{{ statusLabel(item.status) }}</text>
-              </view>
-              <text class="si-duration" v-if="item.status === 'serving' && item.started_at">
-                {{ calcAssistantTimer(item) }}
-              </text>
-            </view>
-            <view class="si-actions">
-              <view class="si-btn start" v-if="item.status === 'processing'" @click.stop="handleStartAssistant(item)">开始</view>
-              <view class="si-btn end" v-if="item.status === 'serving'" @click.stop="handleEndAssistant(item)">结束</view>
-              <view class="si-btn cancel" v-if="item.status === 'pending' || item.status === 'processing'" @click.stop="handleCancelAssistant(item)">取消</view>
-            </view>
-          </view>
-        </view>
-        <view v-else class="modal-empty">
-          <text class="modal-empty-icon">👨‍🏫</text>
-          <text class="modal-empty-text">暂无进行中的教练服务</text>
-        </view>
-      </scroll-view>
-      <template #footer>
-        <view class="footer-action secondary" @click="showAssistantOrdersModal = false">关闭</view>
-      </template>
-    </ContentModal>
 
     <AlertModal
       :visible="showCancelWaiterModal"
@@ -417,6 +272,7 @@
       @confirm="showCancelWaiterModal = false; cancelWaiterCall()"
       @cancel="showCancelWaiterModal = false"
     />
+
   </view>
 </template>
 
@@ -435,13 +291,8 @@ import { formatPrice, formatDuration } from '@/utils/format'
 import { useServiceCall } from '@/composables/useServiceCall'
 import { tableWs } from '@/utils/websocket'
 import { useTabState } from '@/stores/tabState'
-import { isOnline } from '@/utils/network'
-import { offlineCache } from '@/utils/offline-cache'
-import { offlineQueue } from '@/utils/offline-queue'
 
 const tab = useTabState('product')
-
-const activeTab = ref<'product' | 'assistant'>('product')
 
 const {
   isCallingWaiter, showCancelWaiterModal,
@@ -452,283 +303,6 @@ const cartItems = computed(() => cartStore.cartItems.value)
 const cartCount = computed(() => cartStore.cartCount)
 const cartTotal = computed(() => cartStore.cartTotal)
 const isOrderActive = computed(() => orderStore.isOrderActive)
-
-interface Assistant {
-  id: string
-  name: string
-  avatar?: string
-  profile_avatar?: string
-  album?: string[]
-  level_id?: string
-  level_name: string
-  introduction: string
-  hourly_rate: number
-  is_online: number
-  is_busy: boolean
-  skills: string[]
-  rating: number
-  gift_count: number
-  status?: number
-}
-
-interface AssistantLevel {
-  id: string
-  name: string
-  code: string
-  color?: string
-  hourly_rate?: number
-}
-
-const assistants = ref<Assistant[]>([])
-const assistantLevels = ref<AssistantLevel[]>([])
-const filterType = ref('all')
-const selectedAssistant = ref<Assistant | null>(null)
-const selectedDuration = ref(1)
-const durations = [1, 2, 3]
-const booking = ref(false)
-const assistantsLoaded = ref(false)
-const showAssistantOrdersModal = ref(false)
-const assistantOrders = ref<any[]>([])
-const timerTick = ref(0)
-let assistantPollTimer: ReturnType<typeof setInterval> | null = null
-let assistantClockTimer: ReturnType<typeof setInterval> | null = null
-
-const carouselIdx = ref(0)
-const hasAlbum = computed(() => selectedAssistant.value?.album && selectedAssistant.value.album.length > 0)
-
-const servingCount = computed(() => assistantOrders.value.filter((i: any) => i.status === 'serving').length)
-const assistantPendingCount = computed(() => assistantOrders.value.filter((i: any) => i.status === 'pending').length)
-const readyCount = computed(() => assistantOrders.value.filter((i: any) => i.status === 'processing').length)
-const activeAssistantOrders = computed(() => assistantOrders.value.filter((i: any) => i.status !== 'cancelled'))
-
-function parseSkills(raw: any): string[] {
-  if (!raw) return []
-  if (Array.isArray(raw)) return raw
-  if (typeof raw === 'string') {
-    try { const parsed = JSON.parse(raw); if (Array.isArray(parsed)) return parsed } catch {}
-    return raw.split(',').map(s => s.trim()).filter(Boolean)
-  }
-  return []
-}
-
-function calcMinuteRate(hourlyRate: number): string {
-  const perMin = hourlyRate / 60
-  return perMin >= 1 ? perMin.toFixed(0) : perMin.toFixed(2)
-}
-
-function statusLabel(status: string): string {
-  const map: Record<string, string> = {
-    pending: '待确认',
-    processing: '可开始',
-    serving: '服务中',
-    completed: '已完成',
-    cancelled: '已取消',
-    accepted: '已接单',
-    preorder_pending: '待确认',
-    confirmed: '已确认',
-    delivered: '已完成'
-  }
-  return map[status] || status || '未知'
-}
-
-function calcAssistantTimer(item: any): string {
-  void timerTick.value
-  if (!item.started_at) return '00:00:00'
-  const diff = Math.floor((Date.now() - new Date(item.started_at).getTime()) / 1000)
-  if (diff < 0) return '00:00:00'
-  const h = Math.floor(diff / 3600)
-  const m = Math.floor((diff % 3600) / 60)
-  const s = diff % 60
-  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-}
-
-async function loadAssistantOrders() {
-  if (!orderStore.orderId) return
-  try {
-    const data = await tabletApi.getAssistantOrders(orderStore.orderId)
-    assistantOrders.value = Array.isArray(data) ? data : ((data as any)?.data || [])
-  } catch {}
-}
-
-function startAssistantClock() {
-  if (assistantClockTimer) clearInterval(assistantClockTimer)
-  assistantClockTimer = setInterval(() => { timerTick.value++ }, 1000) as unknown as number
-}
-
-function stopAssistantClock() {
-  if (assistantClockTimer) { clearInterval(assistantClockTimer); assistantClockTimer = null }
-}
-
-function startAssistantPoll() {
-  if (assistantPollTimer) clearInterval(assistantPollTimer)
-  loadAssistantOrders()
-  assistantPollTimer = setInterval(() => loadAssistantOrders(), 30000) as unknown as number
-}
-
-function stopAssistantPoll() {
-  if (assistantPollTimer) { clearInterval(assistantPollTimer); assistantPollTimer = null }
-}
-
-async function handleStartAssistant(item: any) {
-  const itemId = item.item_id || item.id
-  try {
-    await tabletApi.startAssistantService(itemId)
-    uni.showToast({ title: '服务已开始', icon: 'success' })
-    await loadAssistantOrders()
-  } catch {
-    uni.showToast({ title: '操作失败，请重试', icon: 'none' })
-  }
-}
-
-async function handleEndAssistant(item: any) {
-  const itemId = item.item_id || item.id
-  try {
-    await tabletApi.endAssistantService(itemId)
-    uni.showToast({ title: '服务已结束', icon: 'success' })
-    await loadAssistantOrders()
-  } catch {
-    uni.showToast({ title: '操作失败，请重试', icon: 'none' })
-  }
-}
-
-async function handleCancelAssistant(item: any) {
-  const itemId = item.item_id || item.id
-  try {
-    await tabletApi.cancelAssistant(itemId)
-    uni.showToast({ title: '已取消', icon: 'success' })
-    await loadAssistantOrders()
-  } catch {
-    uni.showToast({ title: '取消失败', icon: 'none' })
-  }
-}
-
-function getAssistantImage(a: any): string {
-  return a.profile_avatar || (a.album && a.album.length > 0 ? a.album[0] : '') || a.avatar || ''
-}
-
-const filteredAssistants = computed(() => {
-  let result = assistants.value
-  if (filterType.value === 'available') {
-    result = result.filter(a => !a.is_busy && a.is_online === 1)
-  } else {
-    const level = assistantLevels.value.find(l => l.id === filterType.value || l.code === filterType.value)
-    if (level) {
-      result = result.filter(a => a.level_id === level.id || a.level_name === level.name)
-    }
-  }
-  if (searchKeyword.value.trim() && activeTab.value === 'assistant') {
-    const kw = searchKeyword.value.toLowerCase()
-    result = result.filter(a => a.name.toLowerCase().includes(kw))
-  }
-  return result
-})
-
-async function loadAssistants() {
-  if (!isOnline.value) {
-    const cached = offlineCache.getAllAssistants()
-    if (cached.length > 0) {
-      assistants.value = cached.map(a => ({
-        id: a.id, name: a.name, avatar: a.avatar,
-        profile_avatar: a.avatar, is_online: a.is_online ? 1 : 0,
-        is_busy: false, level_id: a.level_id, level_name: a.level_name,
-        hourly_rate: a.hourly_rate, skills: [], rating: 5, gift_count: 0,
-        introduction: '',
-      } as any))
-      assistantsLoaded.value = true
-      return
-    }
-  }
-  try {
-    const res = await tabletApi.getAssistants() as any[]
-    assistants.value = res.map((item: any) => ({
-      ...item,
-      id: String(item.id),
-      avatar: item.profile_avatar || item.avatar || '',
-      profile_avatar: item.profile_avatar || item.avatar || '',
-      album: item.album || [],
-      level_id: String(item.level_id || ''),
-      skills: parseSkills(item.skills),
-      is_busy: item.is_busy || false,
-      level_name: item.level_name || '初级教练',
-      introduction: item.introduction || '',
-      gift_count: Number(item.gift_count) || 0,
-      rating: Number(item.rating) || 0,
-    }))
-    assistantsLoaded.value = true
-  } catch {
-    uni.showToast({ title: '加载教练失败', icon: 'none' })
-    assistantsLoaded.value = true
-  }
-}
-
-function selectAssistant(assistant: Assistant) {
-  if (assistant.is_busy) {
-    uni.showToast({ title: '该教练当前忙碌中', icon: 'none' })
-    return
-  }
-  selectedAssistant.value = assistant
-  selectedDuration.value = 1
-}
-
-function closeAssistantModal() {
-  selectedAssistant.value = null
-}
-
-function onCarouselChange(e: any) {
-  carouselIdx.value = e.detail.current
-}
-
-async function handleBook() {
-  if (!orderStore.isOrderActive) {
-    uni.showModal({ title: '提示', content: '请先开台后再预约教练' })
-    return
-  }
-  if (!selectedAssistant.value) return
-
-  booking.value = true
-
-  if (!isOnline.value) {
-    offlineQueue.enqueue('book_assistant', {
-      order_id: orderStore.orderId,
-      assistant_id: selectedAssistant.value.id,
-      duration: selectedDuration.value,
-    })
-    uni.showToast({ title: '已加入离线队列', icon: 'none', duration: 1500 })
-    booking.value = false
-    closeAssistantModal()
-    return
-  }
-
-  try {
-    await tabletApi.bookAssistant({
-      order_id: orderStore.orderId,
-      assistant_id: selectedAssistant.value.id,
-      duration: selectedDuration.value,
-    })
-    uni.showToast({ title: `预约成功(${selectedDuration.value}小时)，等待教练确认`, duration: 2000 })
-    closeAssistantModal()
-    loadAssistantOrders()
-  } catch (e: any) {
-    uni.showToast({ title: e.errMsg || e.msg || '预约失败', icon: 'none' })
-  } finally {
-    booking.value = false
-  }
-}
-
-async function loadAssistantLevels() {
-  try {
-    const data = await tabletApi.getAssistantLevels()
-    if (data && Array.isArray(data)) {
-      assistantLevels.value = data.map((item: any) => ({
-        ...item, id: String(item.id), code: item.code || '', name: item.name || '',
-      }))
-    } else {
-      assistantLevels.value = []
-    }
-  } catch {
-    assistantLevels.value = []
-  }
-}
 
 interface Product {
   id: string
@@ -776,12 +350,14 @@ let timer: ReturnType<typeof setInterval> | null = null
 const preorderTotalAmount = computed(() => {
   return preOrderGroups.value.reduce((sum: number, g: any) => sum + (g.total_amount || 0), 0)
 })
+const preorderTotalItems = computed(() => {
+  return preOrderGroups.value.reduce((sum: number, g: any) => sum + (g.item_count || 0), 0)
+})
 
 const pendingCount = computed(() => {
   const items = orderStore.orderItems.value || []
   return items.filter((i: any) => i.status === 'pending').length
 })
-
 const processingCount = computed(() => {
   const items = orderStore.orderItems.value || []
   return items.filter((i: any) => i.status === 'processing').length
@@ -826,9 +402,12 @@ function getTagLabel(tag: string) {
   return labels[tag] || tag
 }
 
+// 标准化 API 返回值：request.ts 已将 {code,data} 解包为 data，
+// 但后端可能还有一层 {code,data:{list:[...]}} 的嵌套，这里统一处理。
 function normalizeArrayResponse(raw: any): any[] | null {
   if (!raw) return null
   if (Array.isArray(raw)) return raw
+  // 兼容嵌套结构：{ data: [...] } 或 { list: [...] } 或 { data: { list: [...] } }
   for (const key of ['data', 'list']) {
     const inner = raw[key]
     if (Array.isArray(inner)) return inner
@@ -925,6 +504,8 @@ function clearSearch() {
   searchKeyword.value = ''
 }
 
+// handleSearch removed — search is handled reactively by productSections computed
+
 function selectCategory(categoryId: string) {
   currentCategory.value = categoryId
 }
@@ -1004,6 +585,10 @@ function increaseDetailQty() {
   detailQuantity.value++
 }
 
+function showCart() {
+  showCartModal.value = true
+}
+
 function closeCart() {
   showCartModal.value = false
 }
@@ -1063,6 +648,17 @@ async function loadPreOrders() {
   }
 }
 
+async function handleRejectPreOrder(preorderGroupId: string) {
+  try {
+    await tabletApi.rejectPreOrder({ preorder_group_id: preorderGroupId })
+    uni.showToast({ title: '已取消预订单' })
+    loadPreOrders()
+  } catch (e) {
+    console.error('[商品页] 取消预订单失败:', e)
+    uni.showToast({ title: '取消失败', icon: 'none' })
+  }
+}
+
 async function handleRejectPreOrderItem(itemId: string, preorderGroupId: string) {
   const confirmed = await new Promise<boolean>(resolve => {
     uni.showModal({
@@ -1096,10 +692,6 @@ function goToHome() {
   uni.switchTab({ url: '/pages/index/index' }).catch(() => {})
 }
 
-function goToAssistant() {
-  uni.navigateTo({ url: '/pages/assistant/index' })
-}
-
 function handleSocketOrderUpdate(data: any) {
   if (data && data.status === 'delivered') {
     uni.showToast({
@@ -1112,22 +704,27 @@ function handleSocketOrderUpdate(data: any) {
 }
 
 onMounted(async () => {
+  // 第一步：加载商品和分类（互不依赖，可并行）
   const [catOk, prodOk] = await Promise.all([
     loadCategories().then(() => true).catch(() => false),
     loadProducts().then(() => true).catch(() => false),
-    loadAssistants().then(() => true).catch(() => false),
-    loadAssistantLevels().then(() => true).catch(() => false),
   ])
   if (!catOk || !prodOk) {
     console.warn('[商品页] 分类或商品加载失败', { catOk, prodOk })
   }
+
+  // 第二步：加载订单状态（后续步骤依赖 orderId）
   await loadOrderStatus()
+
+  // 第三步：加载预订单（依赖 orderStore.orderId，必须在 loadOrderStatus 之后）
   await loadPreOrders()
-  await loadAssistantOrders()
+
+  // WebSocket 连接（不阻塞 UI）
   const tableId = authStore.tableId
   if (tableId) {
     tableWs.connect(tableId).catch(() => {})
   }
+
   tableWs.on('order_item_status', handleSocketOrderUpdate)
   tableWs.on('order_update', handleSocketOrderUpdate)
   tableWs.on('preorder_confirmed', (data: any) => {
@@ -1143,21 +740,16 @@ onMounted(async () => {
     })
     loadPreOrders()
   })
+
   tableWs.on('new_order_item', (data: any) => {
     uni.showToast({ title: '有新商品加入订单', icon: 'none', duration: 2000 })
     loadOrderStatus()
   })
-  tableWs.on('order_item_status', (data: any) => {
-    if (data && data.item_type === 'assistant') {
-      loadAssistantOrders()
-    }
-  })
+
   timer = setInterval(() => {
     try { loadOrderStatus() } catch (e) { console.error('[商品页] 轮询loadOrderStatus失败:', e) }
     try { loadPreOrders() } catch (e) { console.error('[商品页] 轮询loadPreOrders失败:', e) }
-    try { loadAssistantOrders() } catch (e) { console.error('[商品页] 轮询loadAssistantOrders失败:', e) }
   }, 30000)
-  startAssistantPoll()
 })
 
 onShow(() => {
@@ -1174,15 +766,12 @@ onHide(() => {
     clearInterval(timer)
     timer = null
   }
-  stopAssistantPoll()
 })
 
 onUnmounted(() => {
   if (timer) {
     clearInterval(timer)
   }
-  stopAssistantClock()
-  stopAssistantPoll()
   disposeServiceCall()
   tableWs.off('order_item_status', handleSocketOrderUpdate)
   tableWs.off('order_update', handleSocketOrderUpdate)
@@ -1194,20 +783,29 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$primary: #07C160;
-$primary-dark: #06AD56;
-$bg-light: #f7f7f7;
-$bg-white: #ffffff;
-$text-main: #333333;
-$text-secondary: #999999;
-$text-placeholder: #cccccc;
+@use '@/styles/layout-system.scss';
 
+/* 背景动画效果 */
 .container {
   padding: 0;
   min-height: 100vh;
   padding-bottom: 200rpx;
-  background: $bg-light;
+  background: linear-gradient(180deg, #0f0f16 0%, #12121a 30%, #1a1a2e 70%, #0f0f16 100%);
   position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(201, 169, 98, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(99, 102, 241, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
 }
 
 .loading-overlay {
@@ -1217,7 +815,7 @@ $text-placeholder: #cccccc;
   right: 0;
   bottom: 0;
   z-index: 999;
-  background: $bg-white;
+  background: rgba(15, 15, 22, 0.95);
   padding: 48rpx;
 }
 
@@ -1228,17 +826,33 @@ $text-placeholder: #cccccc;
   right: 0;
   z-index: 100;
   padding: 28rpx 40rpx;
-  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+  background: linear-gradient(180deg, rgba(15, 15, 22, 0.98) 0%, rgba(15, 15, 22, 0.95) 100%);
   backdrop-filter: blur(30rpx);
-  border-bottom: 1rpx solid rgba(0,0,0,0.06);
-  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+  border-bottom: 2rpx solid rgba(201, 169, 98, 0.1);
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.4);
+  animation: slideDown 0.5s ease-out;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2rpx;
+    left: 0;
+    right: 0;
+    height: 2rpx;
+    background: linear-gradient(90deg, transparent, rgba(201, 169, 98, 0.3), transparent);
+  }
 
   .header-card {
-    background: linear-gradient(135deg, $primary, $primary-dark);
-    border-radius: 32rpx;
+    background: linear-gradient(145deg, rgba(26, 26, 46, 0.9), rgba(20, 20, 40, 0.95));
+    border-radius: 48rpx;
     padding: 40rpx 48rpx;
-    margin-bottom: 24rpx;
-    box-shadow: 0 8rpx 32rpx rgba(7,193,96,0.2);
+    margin-bottom: 32rpx;
+    border: 3rpx solid rgba(201, 169, 98, 0.15);
+    box-shadow: 
+      0 12rpx 48rpx rgba(0, 0, 0, 0.35),
+      0 0 40rpx rgba(201, 169, 98, 0.08),
+      inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20rpx);
   }
 
   .header-row {
@@ -1268,16 +882,20 @@ $text-placeholder: #cccccc;
     position: absolute;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(201, 169, 98, 0.4) 0%, transparent 70%);
     border-radius: 50%;
+    animation: iconPulse 3s ease-in-out infinite;
   }
 
   .icon-ring {
     position: relative;
     width: 40rpx;
     height: 40rpx;
-    border: 4rpx solid rgba(255,255,255,0.8);
+    border: 4rpx solid #c9a962;
     border-radius: 50%;
+    box-shadow: 
+      0 0 20rpx rgba(201, 169, 98, 0.8),
+      inset 0 0 10rpx rgba(201, 169, 98, 0.4);
   }
 
   .header-title-wrap {
@@ -1295,10 +913,11 @@ $text-placeholder: #cccccc;
 
   .header-count {
     font-size: 36rpx;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.5);
     padding: 6rpx 20rpx;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 32rpx;
+    border: 2rpx solid rgba(255, 255, 255, 0.1);
   }
 
   .header-right {
@@ -1318,14 +937,18 @@ $text-placeholder: #cccccc;
     transition: all 0.3s ease;
 
     &.empty {
-      background: rgba(255,255,255,0.2);
-      color: rgba(255,255,255,0.8);
+      background: rgba(255, 255, 255, 0.08);
+      border: 2rpx solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.5);
     }
 
     &.active {
-      background: rgba(255,255,255,0.3);
-      color: #fff;
-      box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, rgba(201, 169, 98, 0.25), rgba(201, 169, 98, 0.1));
+      border: 2rpx solid rgba(201, 169, 98, 0.45);
+      color: #c9a962;
+      box-shadow: 
+        0 8rpx 24rpx rgba(201, 169, 98, 0.25),
+        0 0 30rpx rgba(201, 169, 98, 0.1);
     }
 
     &:active {
@@ -1336,16 +959,20 @@ $text-placeholder: #cccccc;
   .search-btn {
     width: 112rpx;
     height: 112rpx;
-    background: rgba(255,255,255,0.2);
+    background: linear-gradient(145deg, rgba(45, 45, 80, 0.8), rgba(35, 35, 65, 0.9));
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 3rpx solid rgba(201, 169, 98, 0.25);
+    box-shadow: 
+      0 10rpx 32rpx rgba(0, 0, 0, 0.35),
+      inset 0 2rpx 0 rgba(255, 255, 255, 0.08);
     transition: all 0.3s ease;
 
     &:active {
       transform: scale(0.94);
-      background: rgba(255,255,255,0.3);
+      background: linear-gradient(145deg, rgba(201, 169, 98, 0.3), rgba(201, 169, 98, 0.15));
     }
 
     text {
@@ -1354,64 +981,24 @@ $text-placeholder: #cccccc;
   }
 }
 
-.tab-bar {
-  display: flex;
-  background: rgba(255,255,255,0.95);
-  border-radius: 32rpx;
-  padding: 8rpx;
-  margin-bottom: 28rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
-
-  .tab-item {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 24rpx 0;
-    position: relative;
-    transition: all 0.3s ease;
-    border-radius: 24rpx;
-
-    .tab-label {
-      font-size: 52rpx;
-      font-weight: 600;
-      color: $text-secondary;
-      transition: all 0.3s ease;
-    }
-
-    &.active {
-      background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.05));
-      box-shadow: 0 4rpx 16rpx rgba($primary, 0.2);
-
-      .tab-label {
-        color: $primary;
-        font-weight: 700;
-        font-size: 56rpx;
-      }
-    }
-
-    &:active {
-      transform: scale(0.96);
-    }
-  }
-}
-
 .search-bar {
-  margin-bottom: 24rpx;
+  margin-bottom: 32rpx;
 
   .search-box {
     display: flex;
     align-items: center;
     width: 100%;
     min-height: 96rpx;
-    background: $bg-white;
+    background: linear-gradient(145deg, rgba(35, 35, 60, 0.9), rgba(25, 25, 50, 0.95));
     border-radius: 48rpx;
     padding: 0 36rpx;
-    box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+    border: 2rpx solid rgba(201, 169, 98, 0.15);
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.25);
 
     .search-icon {
-      font-size: 48rpx;
+      font-size: 56rpx;
       margin-right: 24rpx;
+      filter: drop-shadow(0 4rpx 12rpx rgba(201, 169, 98, 0.3));
       flex-shrink: 0;
     }
 
@@ -1420,11 +1007,12 @@ $text-placeholder: #cccccc;
       height: 100%;
       min-height: 80rpx;
       font-size: 48rpx;
-      color: $text-main;
+      color: #f1f5f9;
       background: transparent;
+      letter-spacing: 1rpx;
       
       &::placeholder {
-        color: $text-placeholder;
+        color: rgba(255, 255, 255, 0.4);
       }
     }
 
@@ -1435,12 +1023,13 @@ $text-placeholder: #cccccc;
       align-items: center;
       justify-content: center;
       font-size: 42rpx;
-      color: $text-secondary;
-      background: rgba(0,0,0,0.05);
+      color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 50%;
+      border: 2rpx solid rgba(255, 255, 255, 0.1);
       flex-shrink: 0;
       &:active {
-        background: rgba(0,0,0,0.1);
+        background: rgba(255, 255, 255, 0.15);
       }
     }
   }
@@ -1448,7 +1037,7 @@ $text-placeholder: #cccccc;
 
 .category-scroll {
   white-space: nowrap;
-  padding: 20rpx 0;
+  padding: 28rpx 0;
 
   .category-item {
     position: relative;
@@ -1457,20 +1046,62 @@ $text-placeholder: #cccccc;
     justify-content: center;
     min-height: 96rpx;
     padding: 20rpx 56rpx;
-    margin-right: 24rpx;
-    background: $bg-white;
+    margin-right: 32rpx;
+    background: rgba(35, 35, 60, 0.6);
     border-radius: 48rpx;
-    border: 2rpx solid rgba(0,0,0,0.06);
-    transition: all 0.25s ease;
+    border: 3rpx solid rgba(201, 169, 98, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(201, 169, 98, 0.25), rgba(201, 169, 98, 0.08));
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -2rpx;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 6rpx;
+      background: linear-gradient(90deg, transparent, #c9a962, transparent);
+      border-radius: 3rpx;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
     &.active {
-      background: rgba(7,193,96,0.1);
-      border-color: $primary;
-      box-shadow: 0 2rpx 12rpx rgba(7,193,96,0.15);
+      border-color: rgba(201, 169, 98, 0.6);
+      background: rgba(201, 169, 98, 0.2);
+      box-shadow: 
+        0 8rpx 32rpx rgba(201, 169, 98, 0.3),
+        0 0 60rpx rgba(201, 169, 98, 0.15),
+        inset 0 0 20rpx rgba(201, 169, 98, 0.05);
+
+      &::before {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+
+      &::after {
+        opacity: 1;
+        animation: categoryPulse 2s ease-in-out infinite;
+      }
 
       .category-name {
-        color: $primary;
-        font-weight: 600;
+        color: #c9a962;
+        text-shadow: 0 0 24rpx rgba(201, 169, 98, 0.6);
       }
     }
 
@@ -1479,85 +1110,107 @@ $text-placeholder: #cccccc;
     }
 
     .category-name {
-      font-size: 44rpx;
-      color: $text-secondary;
-      font-weight: 500;
-      transition: all 0.25s ease;
+      position: relative;
+      z-index: 1;
+      font-size: 48rpx;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 700;
+      letter-spacing: 2rpx;
+      transition: all 0.3s ease;
     }
+  }
+}
+
+@keyframes categoryPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
 .product-list {
   min-height: calc(100vh - 500rpx);
-  padding-top: 660rpx;
+  padding-top: 500rpx;
   padding-left: 32rpx;
   padding-right: 32rpx;
   padding-bottom: 400rpx;
 }
 
 .product-section {
-  margin-bottom: 48rpx;
-  padding: 32rpx;
-  background: $bg-white;
-  border-radius: 32rpx;
-  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+  margin-bottom: 64rpx;
+  padding: 40rpx;
+  background: linear-gradient(145deg, rgba(26, 26, 46, 0.6), rgba(22, 22, 42, 0.7));
+  border-radius: 48rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.15);
   
   .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32rpx;
+    margin-bottom: 40rpx;
     
     .section-title-wrap {
       display: flex;
       align-items: center;
-      gap: 20rpx;
+      gap: 24rpx;
       
       .section-line {
-        width: 12rpx;
+        width: 16rpx;
         height: 48rpx;
-        background: $primary;
-        border-radius: 6rpx;
+        background: linear-gradient(180deg, #c9a962, #8a6d3b);
+        border-radius: 8rpx;
       }
       
       .section-title {
-        font-size: 56rpx;
+        font-size: 60rpx;
         font-weight: 700;
-        color: $text-main;
+        color: #fff;
       }
     }
     
     .section-count {
-      font-size: 36rpx;
-      color: $text-secondary;
-      padding: 8rpx 20rpx;
-      background: $bg-light;
-      border-radius: 20rpx;
+      font-size: 42rpx;
+      color: #6b7280;
+      padding: 12rpx 28rpx;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 24rpx;
     }
   }
   
   .product-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24rpx;
+    gap: 28rpx;
 
     .product-card {
       position: relative;
-      border-radius: 24rpx;
+      border-radius: 40rpx;
       overflow: hidden;
-      background: $bg-light;
-      box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
-      transition: all 0.25s ease;
+      height: 720rpx;
+      box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:active {
         transform: scale(0.96);
-        box-shadow: 0 4rpx 20rpx rgba(7,193,96,0.1);
+        box-shadow: 0 4rpx 24rpx rgba(201, 169, 98, 0.2);
       }
 
       .product-image-full {
-        position: relative;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-        height: 360rpx;
+        height: 100%;
 
         .product-img-full {
           width: 100%;
@@ -1571,96 +1224,164 @@ $text-placeholder: #cccccc;
           justify-content: center;
           width: 100%;
           height: 100%;
-          font-size: 120rpx;
-          background: $bg-white;
+          font-size: 160rpx;
+          background: linear-gradient(145deg, rgba(40, 40, 70, 0.5), rgba(32, 32, 58, 0.6));
+        }
+
+        .image-glow-full {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          transition: opacity 0.35s;
+
+          &.hot {
+            background: radial-gradient(circle at top right, rgba(255, 107, 107, 0.25) 0%, transparent 60%);
+          }
+          &.recommend {
+            background: radial-gradient(circle at top right, rgba(46, 213, 115, 0.25) 0%, transparent 60%);
+          }
+          &.new {
+            background: radial-gradient(circle at top right, rgba(165, 94, 234, 0.25) 0%, transparent 60%);
+          }
         }
 
         .product-badge-full {
           position: absolute;
-          top: 16rpx;
-          right: 16rpx;
-          padding: 8rpx 20rpx;
-          border-radius: 20rpx;
-          font-size: 32rpx;
+          top: 24rpx;
+          right: 24rpx;
+          padding: 12rpx 28rpx;
+          border-radius: 24rpx;
+          font-size: 36rpx;
           color: #fff;
-          font-weight: 600;
+          font-weight: 700;
+          letter-spacing: 2rpx;
+          backdrop-filter: blur(10rpx);
 
           &.hot {
-            background: linear-gradient(135deg, #FF6B6B, #FF4757);
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(238, 90, 90, 0.8));
+            box-shadow: 0 4rpx 16rpx rgba(255, 107, 107, 0.4);
           }
           &.recommend {
-            background: linear-gradient(135deg, $primary, $primary-dark);
+            background: linear-gradient(135deg, rgba(46, 213, 115, 0.9), rgba(29, 209, 161, 0.8));
+            box-shadow: 0 4rpx 16rpx rgba(46, 213, 115, 0.4);
           }
           &.new {
-            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            background: linear-gradient(135deg, rgba(165, 94, 234, 0.9), rgba(136, 84, 208, 0.8));
+            box-shadow: 0 4rpx 16rpx rgba(165, 94, 234, 0.4);
           }
+        }
+
+        &:active .image-glow-full {
+          opacity: 1;
         }
       }
 
-      .product-info {
-        padding: 20rpx;
+      .product-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        padding: 32rpx;
+        z-index: 10;
+        display: flex; flex-direction: column; justify-content: flex-end;
 
-        .product-name {
-          display: block;
-          font-size: 36rpx;
-          font-weight: 600;
-          color: $text-main;
-          margin-bottom: 12rpx;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        .overlay-gradient {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: linear-gradient(0deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.45) 50%, transparent 100%);
+          pointer-events: none;
         }
 
-        .product-price-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+        .overlay-content {
+          position: relative;
+          z-index: 1;
 
-          .price-wrap {
-            display: flex;
-            align-items: baseline;
-            gap: 4rpx;
-
-            .price-symbol {
-              font-size: 28rpx;
-              color: $primary;
-              font-weight: 600;
-            }
-
-            .price-value {
-              font-size: 48rpx;
-              font-weight: 800;
-              color: $primary;
-              line-height: 1;
-            }
-
-            .price-unit {
-              font-size: 26rpx;
-              color: $text-secondary;
-            }
+          .product-name {
+            display: block;
+            font-size: 40rpx;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16rpx;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.5);
           }
 
-          .add-btn {
-            width: 64rpx;
-            height: 64rpx;
-            background: linear-gradient(135deg, $primary, $primary-dark);
-            border-radius: 50%;
+          .product-price-row {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 4rpx 16rpx rgba(7,193,96,0.3);
-            transition: all 0.25s;
-            flex-shrink: 0;
 
-            &:active {
-              transform: scale(0.85);
+            .price-wrap {
+              display: flex;
+              align-items: baseline;
+              gap: 4rpx;
+
+              .price-symbol {
+                font-size: 32rpx;
+                color: #c9a962;
+                font-weight: 600;
+              }
+
+              .price-value {
+                font-size: 52rpx;
+                font-weight: 800;
+                color: #c9a962;
+                line-height: 1;
+                text-shadow: 0 0 20rpx rgba(201, 169, 98, 0.4);
+              }
+
+              .price-unit {
+                font-size: 28rpx;
+                color: #8a8a9a;
+              }
             }
 
-            text {
-              font-size: 56rpx;
-              color: #fff;
-              font-weight: 600;
-              line-height: 1;
+            .add-btn {
+              position: relative;
+              width: 76rpx;
+              height: 76rpx;
+              background: linear-gradient(135deg, #c9a962, #8a6d3b);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0 6rpx 24rpx rgba(201, 169, 98, 0.5);
+              transition: all 0.35s;
+              flex-shrink: 0;
+
+              .add-btn-glow {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 100%;
+                height: 100%;
+                transform: translate(-50%, -50%);
+                background: rgba(201, 169, 98, 0.6);
+                border-radius: 50%;
+                filter: blur(15rpx);
+                opacity: 0;
+                transition: opacity 0.3s;
+              }
+
+              &:active {
+                transform: scale(0.85);
+
+                .add-btn-glow {
+                  opacity: 1;
+                }
+              }
+
+              text {
+                position: relative;
+                z-index: 1;
+                font-size: 64rpx;
+                color: #fff;
+                font-weight: 600;
+                line-height: 1;
+              }
             }
           }
         }
@@ -1669,6 +1390,98 @@ $text-placeholder: #cccccc;
   }
 }
 
+
+/* ========== 统一弹窗（购物车 / 商品详情 / 预订单） ========== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.9);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(16rpx);
+  padding: 40rpx;
+}
+.modal-card {
+  width: 80vw; height: 80vh;
+  background: linear-gradient(180deg, #232340 0%, #1a1a30 100%);
+  border-radius: 64rpx; padding: 56rpx 56rpx 40rpx;
+  border: 4rpx solid rgba(201,169,98,.35);
+  box-shadow: 0 40rpx 100rpx rgba(0,0,0,.6), 0 0 80rpx rgba(201,169,98,.15), inset 0 2rpx 0 rgba(255,255,255,.08);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  &::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6rpx;
+    background: linear-gradient(90deg, transparent, rgba(201,169,98,.8), rgba(201,169,98,.4), transparent);
+  }
+}
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 40rpx; padding-bottom: 28rpx;
+  border-bottom: 2rpx solid rgba(201,169,98,.2);
+  flex-shrink: 0;
+}
+.modal-title {
+  font-size: 78rpx; font-weight: 800; color: #c9a962;
+  letter-spacing: 3rpx; text-shadow: 0 0 30rpx rgba(201,169,98,.5);
+}
+.modal-close {
+  width: 72rpx; height: 72rpx;
+  background: linear-gradient(135deg, rgba(201,169,98,.15), rgba(201,169,98,.05));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 54rpx; color: #c9a962;
+  border: 3rpx solid rgba(201,169,98,.3);
+  box-shadow: 0 4rpx 20rpx rgba(201,169,98,.2);
+  &:active { transform: scale(.92); }
+}
+.modal-body {
+  flex: 1; overflow-y: auto; margin-bottom: 32rpx;
+}
+.modal-footer {
+  flex-shrink: 0;
+  border-top: 2rpx solid rgba(201,169,98,.2);
+  padding-top: 28rpx;
+  display: flex; flex-direction: column; gap: 20rpx;
+}
+.footer-summary {
+  display: flex; justify-content: space-between; align-items: baseline;
+  .footer-summary-label { font-size: 48rpx; color: rgba(255,255,255,.5); }
+  .footer-summary-val { font-size: 78rpx; font-weight: 800; color: #feca57; text-shadow: 0 0 20rpx rgba(254,202,87,.5); }
+}
+.footer-action {
+  height: 100rpx; border-radius: 32rpx;
+  background: linear-gradient(135deg, #c9a962, #8a6d3b);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 54rpx; font-weight: 700; color: #1a1a2e;
+  box-shadow: 0 12rpx 40rpx rgba(201,169,98,.4);
+  &:active { transform: scale(.97); }
+  &.secondary { background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); box-shadow: none; border: 2rpx solid rgba(255,255,255,.1); }
+}
+
+/* ===== 购物车列表项 ===== */
+.cart-item {
+  display: flex; align-items: center; padding: 36rpx 0;
+  border-bottom: 2rpx solid rgba(255,255,255,.06);
+  &:last-child { border-bottom: none; }
+  .cart-item-image { position: relative; width: 140rpx; height: 140rpx; border-radius: 28rpx; display: flex; align-items: center; justify-content: center; margin-right: 32rpx; overflow: hidden; flex-shrink: 0; }
+  .cart-item-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .item-image-bg { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,169,98,.2), rgba(138,109,59,.1)); border-radius: 28rpx; }
+  .cart-item-emoji { position: relative; z-index: 1; font-size: 96rpx; }
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-name { display: block; font-size: 48rpx; color: #fff; margin-bottom: 10rpx; font-weight: 600; }
+  .cart-item-price { font-size: 42rpx; color: #6b7280; }
+  .cart-item-quantity { display: flex; align-items: center; gap: 24rpx; margin-right: 32rpx; flex-shrink: 0;
+    .qty-btn { width: 72rpx; height: 72rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all .3s;
+      &.minus { background: #252542; text { font-size: 56rpx; color: #fff; line-height: 1; } }
+      &.plus { background: linear-gradient(135deg, #c9a962, #8a6d3b); text { font-size: 48rpx; color: #fff; line-height: 1; } }
+      &:active { transform: scale(0.9); }
+    }
+    .qty-num { font-size: 56rpx; color: #fff; min-width: 72rpx; text-align: center; font-weight: 600; }
+  }
+  .cart-item-total { flex-shrink: 0; }
+  .cart-item-total text { font-size: 54rpx; font-weight: 700; color: #feca57; }
+}
+
+/* ===== 商品详情弹窗 ===== */
 .detail-wrap {
   display: flex; flex-direction: column; height: 100%; overflow: hidden;
 }
@@ -1677,99 +1490,74 @@ $text-placeholder: #cccccc;
 }
 .detail-image-wrap {
   position: relative;
-  width: 100%; height: 800rpx; border-radius: 32rpx; overflow: hidden; margin-bottom: 32rpx;
-  background: $bg-light;
+  width: 100%; height: 900rpx; border-radius: 40rpx; overflow: hidden; margin-bottom: 36rpx;
+  background: linear-gradient(145deg, rgba(40,40,70,.5), rgba(32,32,58,.6));
+  border: 2rpx solid rgba(#c9a962,.2);
   .detail-img { width: 100%; height: 100%; object-fit: cover; }
-  .detail-emoji-big { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-size: 200rpx; }
-  .detail-tag { position: absolute; top: 24rpx; right: 24rpx; padding: 12rpx 28rpx; border-radius: 24rpx; font-size: 36rpx; font-weight: 600; color: #fff;
-    &.hot { background: linear-gradient(135deg, #FF6B6B, #FF4757); }
-    &.recommend { background: linear-gradient(135deg, $primary, $primary-dark); }
-    &.new { background: linear-gradient(135deg, #8B5CF6, #7C3AED); }
+  .detail-emoji-big { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-size: 240rpx; }
+  .detail-tag { position: absolute; top: 28rpx; right: 28rpx; padding: 14rpx 32rpx; border-radius: 28rpx; font-size: 40rpx; font-weight: 700; color: #fff; backdrop-filter: blur(10rpx); z-index: 3;
+    &.hot { background: linear-gradient(135deg, rgba(255,107,107,.9), rgba(238,90,90,.8)); box-shadow: 0 4rpx 16rpx rgba(255,107,107,.4); }
+    &.recommend { background: linear-gradient(135deg, rgba(46,213,115,.9), rgba(34,197,94,.8)); box-shadow: 0 4rpx 16rpx rgba(46,213,115,.4); }
+    &.new { background: linear-gradient(135deg, rgba(165,94,234,.9), rgba(147,51,234,.8)); box-shadow: 0 4rpx 16rpx rgba(165,94,234,.4); }
   }
 }
-.detail-meta-bar { display: flex; align-items: center; justify-content: center; gap: 16rpx; margin-bottom: 24rpx;
-  .meta-price { font-size: 64rpx; font-weight: 800; color: $primary; }
-  .meta-unit { font-size: 36rpx; color: $text-secondary; }
-  .meta-divider { font-size: 32rpx; color: rgba(0,0,0,0.1); margin: 0 8rpx; }
-  .meta-stock { font-size: 36rpx; color: $primary; font-weight: 600;
-    &.soldout { color: #FF4757; }
+.detail-meta-bar { display: flex; align-items: center; justify-content: center; gap: 16rpx; margin-bottom: 28rpx;
+  .meta-price { font-size: 72rpx; font-weight: 800; color: #feca57; text-shadow: 0 0 24rpx rgba(254,202,87,.5); }
+  .meta-unit { font-size: 42rpx; color: rgba(255,255,255,.45); }
+  .meta-divider { font-size: 36rpx; color: rgba(255,255,255,.2); margin: 0 8rpx; }
+  .meta-stock { font-size: 42rpx; color: rgba(74,222,128,.7); font-weight: 600;
+    &.soldout { color: #ef4444; }
   }
 }
-.detail-desc { display: block; text-align: center; font-size: 48rpx; color: $text-main; margin-bottom: 12rpx; line-height: 1.6; padding: 0 16rpx; font-weight: 600; }
-.detail-body { display: block; text-align: center; font-size: 40rpx; color: $text-secondary; margin-bottom: 16rpx; line-height: 1.7; padding: 0 16rpx; }
+.detail-desc { display: block; text-align: center; font-size: 54rpx; color: #f1f5f9; margin-bottom: 16rpx; line-height: 1.6; padding: 0 16rpx; font-weight: 600; }
+.detail-body { display: block; text-align: center; font-size: 45rpx; color: rgba(255,255,255,.5); margin-bottom: 20rpx; line-height: 1.7; padding: 0 16rpx; }
 
+/* 固定底部操作栏 — 不随内容滚动，始终可见 */
 .fixed-book-bar {
   flex-shrink: 0;
-  display: flex; align-items: center; justify-content: space-between; gap: 24rpx;
-  padding: 28rpx 0 0;
-  border-top: 1rpx solid rgba(0,0,0,0.06);
-  .fb-price { font-size: 56rpx; font-weight: 800; color: $primary; white-space: nowrap; flex-shrink: 0; }
-  .fb-btn { flex: 1; min-height: 110rpx; border-radius: 32rpx; display: flex; align-items: center; justify-content: center; font-size: 52rpx; font-weight: 600; background: linear-gradient(135deg, $primary, $primary-dark); color: #fff; box-shadow: 0 6rpx 24rpx rgba($primary,.3);
+  display: flex; align-items: center; justify-content: space-between; gap: 28rpx;
+  padding: 36rpx 0 0;
+  border-top: 2rpx solid rgba(#c9a962,.15);
+  .fb-price { font-size: 64rpx; font-weight: 800; color: #feca57; text-shadow: 0 0 24rpx rgba(254,202,87,.5); white-space: nowrap; flex-shrink: 0; }
+  .fb-btn { flex: 1; min-height: 120rpx; border-radius: 32rpx; display: flex; align-items: center; justify-content: center; font-size: 56rpx; font-weight: 700; background: linear-gradient(135deg, #c9a962, #8a6d3b); color: #1a1a2e; box-shadow: 0 8rpx 32rpx rgba(#c9a962,.35);
     &:active { transform: scale(.97); }
-    &.secondary { background: rgba(0,0,0,0.05); color: $text-secondary; box-shadow: none; border: 2rpx solid rgba(0,0,0,0.1); }
+    &.secondary { background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); box-shadow: none; border: 2rpx solid rgba(255,255,255,.1); }
   }
 }
-.footer-qty { display: flex; align-items: center; gap: 16rpx; flex-shrink: 0;
-  .qty-btn { width: 80rpx; height: 80rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all .25s;
-    &.minus { background: rgba(0,0,0,0.05); text { font-size: 56rpx; color: $text-main; line-height: 1; } }
-    &.plus { background: linear-gradient(135deg, $primary, $primary-dark); text { font-size: 48rpx; color: #fff; line-height: 1; } }
+.footer-qty { display: flex; align-items: center; gap: 20rpx; flex-shrink: 0;
+  .qty-btn { width: 88rpx; height: 88rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all .3s;
+    &.minus { background: rgba(255,255,255,.08); text { font-size: 60rpx; color: #fff; line-height: 1; } }
+    &.plus { background: linear-gradient(135deg, #c9a962, #8a6d3b); text { font-size: 52rpx; color: #fff; line-height: 1; } }
     &:active { transform: scale(0.9); }
   }
-  .qty-num { font-size: 56rpx; color: $text-main; min-width: 80rpx; text-align: center; font-weight: 600; }
+  .qty-num { font-size: 64rpx; color: #fff; min-width: 88rpx; text-align: center; font-weight: 700; }
 }
 
-.cart-item {
-  display: flex; align-items: center; padding: 28rpx 0;
-  border-bottom: 1rpx solid rgba(0,0,0,0.04);
+/* ===== 预订单列表 ===== */
+.preorder-list { display: flex; flex-direction: column; gap: 28rpx; }
+.preorder-group { background: rgba(255,255,255,.04); border-radius: 28rpx; padding: 28rpx; border: 2rpx solid rgba(255,255,255,.06); }
+.preorder-group-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20rpx;
+  .preorder-group-label { font-size: 45rpx; color: #c9a962; font-weight: 700; }
+}
+.preorder-item { display: flex; align-items: center; gap: 20rpx; padding: 20rpx 0; border-bottom: 1rpx solid rgba(255,255,255,.04);
   &:last-child { border-bottom: none; }
-  .cart-item-image { position: relative; width: 120rpx; height: 120rpx; border-radius: 24rpx; display: flex; align-items: center; justify-content: center; margin-right: 28rpx; overflow: hidden; flex-shrink: 0; background: $bg-light; }
-  .cart-item-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .item-image-bg { position: absolute; inset: 0; background: $bg-light; }
-  .cart-item-emoji { position: relative; z-index: 1; font-size: 80rpx; }
-  .cart-item-info { flex: 1; min-width: 0; }
-  .cart-item-name { display: block; font-size: 44rpx; color: $text-main; margin-bottom: 8rpx; font-weight: 600; }
-  .cart-item-price { font-size: 36rpx; color: $text-secondary; }
-  .cart-item-quantity { display: flex; align-items: center; gap: 20rpx; margin-right: 28rpx; flex-shrink: 0;
-    .qty-btn { width: 64rpx; height: 64rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all .25s;
-      &.minus { background: rgba(0,0,0,0.05); text { font-size: 48rpx; color: $text-main; line-height: 1; } }
-      &.plus { background: linear-gradient(135deg, $primary, $primary-dark); text { font-size: 40rpx; color: #fff; line-height: 1; } }
-      &:active { transform: scale(0.9); }
-    }
-    .qty-num { font-size: 48rpx; color: $text-main; min-width: 64rpx; text-align: center; font-weight: 600; }
-  }
-  .cart-item-total { flex-shrink: 0; }
-  .cart-item-total text { font-size: 48rpx; font-weight: 700; color: $primary; }
-}
-
-.modal-body {
-  flex: 1; overflow-y: auto; margin-bottom: 28rpx;
-}
-
-.preorder-list { display: flex; flex-direction: column; gap: 24rpx; }
-.preorder-group { background: $bg-light; border-radius: 24rpx; padding: 24rpx; }
-.preorder-group-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16rpx;
-  .preorder-group-label { font-size: 40rpx; color: $primary; font-weight: 600; }
-}
-.preorder-item { display: flex; align-items: center; gap: 16rpx; padding: 16rpx 0; border-bottom: 1rpx solid rgba(0,0,0,0.04);
-  &:last-child { border-bottom: none; }
-  .preorder-item-thumb { width: 80rpx; height: 80rpx; border-radius: 16rpx; overflow: hidden; flex-shrink: 0; background: $bg-light; display: flex; align-items: center; justify-content: center; }
+  .preorder-item-thumb { width: 96rpx; height: 96rpx; border-radius: 20rpx; overflow: hidden; flex-shrink: 0; background: linear-gradient(145deg, rgba(40,40,70,.5), rgba(32,32,58,.6)); display: flex; align-items: center; justify-content: center; }
   .preorder-thumb-img { width: 100%; height: 100%; object-fit: cover; }
-  .preorder-item-emoji { font-size: 48rpx; }
+  .preorder-item-emoji { font-size: 56rpx; }
   .preorder-item-info { flex: 1; min-width: 0;
-    .preorder-item-name { display: block; font-size: 40rpx; color: $text-main; font-weight: 500; margin-bottom: 4rpx; }
-    .preorder-item-price { font-size: 34rpx; color: $text-secondary; }
+    .preorder-item-name { display: block; font-size: 45rpx; color: #fff; font-weight: 600; margin-bottom: 6rpx; }
+    .preorder-item-price { font-size: 39rpx; color: rgba(255,255,255,.4); }
   }
-  .preorder-item-qty { font-size: 36rpx; color: $text-secondary; }
-  .preorder-item-total { font-size: 44rpx; color: $primary; font-weight: 600; white-space: nowrap; }
-  .preorder-item-cancel { padding: 8rpx 20rpx; border-radius: 12rpx; font-size: 32rpx; font-weight: 500; color: #FF4757; background: rgba(255,71,87,0.1); flex-shrink: 0; min-height: 56rpx; display: flex; align-items: center; justify-content: center; &:active { background: rgba(255,71,87,0.15); } }
+  .preorder-item-qty { font-size: 42rpx; color: rgba(255,255,255,.5); }
+  .preorder-item-total { font-size: 48rpx; color: #feca57; font-weight: 600; white-space: nowrap; }
+  .preorder-item-cancel { padding: 12rpx 24rpx; border-radius: 16rpx; font-size: 36rpx; font-weight: 600; color: #ef4444; background: rgba(239,68,68,.1); border: 2rpx solid rgba(239,68,68,.2); flex-shrink: 0; min-height: 64rpx; display: flex; align-items: center; justify-content: center; &:active { background: rgba(239,68,68,.2); } }
 }
-.preorder-group-total { text-align: right; font-size: 40rpx; color: $primary; font-weight: 600; padding-top: 12rpx; margin-top: 8rpx; border-top: 1rpx solid rgba(0,0,0,0.06); }
+.preorder-group-total { text-align: right; font-size: 45rpx; color: #feca57; font-weight: 600; padding-top: 16rpx; margin-top: 12rpx; border-top: 1rpx solid rgba(201,169,98,.1); }
 
-.modal-empty { text-align: center; padding: 60rpx 0;
-  .modal-empty-icon { font-size: 120rpx; display: block; margin-bottom: 20rpx; }
-  .modal-empty-text { font-size: 42rpx; color: $text-secondary; }
+.modal-empty { text-align: center; padding: 80rpx 0;
+  .modal-empty-icon { font-size: 140rpx; display: block; margin-bottom: 24rpx; }
+  .modal-empty-text { font-size: 48rpx; color: rgba(255,255,255,.4); }
 }
-
 .cart-bar {
   position: fixed;
   bottom: 80rpx;
@@ -1779,410 +1567,195 @@ $text-placeholder: #cccccc;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 140rpx;
-  background: $bg-white;
-  border-radius: 40rpx;
-  padding: 28rpx 40rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.08);
+  min-height: 160rpx;
+  background: linear-gradient(145deg, rgba(30, 30, 52, 0.95), rgba(24, 24, 44, 0.98));
+  border-radius: 48rpx;
+  padding: 32rpx 48rpx;
+  border: 3rpx solid rgba(201, 169, 98, 0.2);
+  box-shadow:
+    0 16rpx 60rpx rgba(0, 0, 0, 0.5),
+    0 0 60rpx rgba(201, 169, 98, 0.1),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20rpx);
 
   .cart-info {
     display: flex;
     align-items: center;
-    gap: 32rpx;
+    gap: 36rpx;
 
     .cart-icon-wrap {
       position: relative;
 
       .cart-icon {
-        font-size: 96rpx;
+        font-size: 112rpx;
+        filter: drop-shadow(0 4rpx 16rpx rgba(201, 169, 98, 0.4));
       }
 
       .cart-count {
         position: absolute;
-        top: -8rpx;
-        right: -16rpx;
-        min-width: 52rpx;
-        height: 52rpx;
-        background: linear-gradient(135deg, #FF6B6B, #FF4757);
-        border-radius: 26rpx;
-        font-size: 36rpx;
+        top: -12rpx;
+        right: -20rpx;
+        min-width: 60rpx;
+        height: 60rpx;
+        background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+        border-radius: 30rpx;
+        font-size: 42rpx;
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0 12rpx;
-        box-shadow: 0 4rpx 16rpx rgba(255,107,107,0.4);
-        font-weight: 600;
+        padding: 0 16rpx;
+        box-shadow: 0 8rpx 24rpx rgba(255, 107, 107, 0.5);
+        font-weight: 700;
       }
     }
 
     .cart-summary {
       .cart-total {
         display: block;
-        font-size: 64rpx;
+        font-size: 72rpx;
         font-weight: 800;
-        color: $primary;
+        color: #c9a962;
+        text-shadow: 0 0 28rpx rgba(201, 169, 98, 0.5);
         line-height: 1.2;
       }
 
       .cart-count-text {
-        font-size: 34rpx;
-        color: $text-secondary;
-        margin-top: 4rpx;
+        font-size: 39rpx;
+        color: #6b7280;
+        margin-top: 6rpx;
       }
     }
   }
 
   .cart-detail-btn {
-    min-height: 88rpx;
-    padding: 0 36rpx;
+    min-height: 96rpx;
+    padding: 0 40rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(7,193,96,0.1);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(139, 92, 246, 0.1));
     border-radius: 32rpx;
-    border: 2rpx solid rgba(7,193,96,0.3);
-    transition: all 0.25s;
+    border: 3rpx solid rgba(139, 92, 246, 0.35);
+    transition: all 0.3s;
 
     &:active {
-      transform: scale(0.96);
-      background: rgba(7,193,96,0.15);
+      transform: scale(0.94);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(139, 92, 246, 0.2));
     }
 
     text {
-      font-size: 44rpx;
-      font-weight: 500;
-      color: $primary;
+      font-size: 48rpx;
+      font-weight: 600;
+      color: #a78bfa;
     }
   }
 }
-
-.footer-summary {
-  display: flex; justify-content: space-between; align-items: baseline;
-  .footer-summary-label { font-size: 42rpx; color: $text-secondary; }
-  .footer-summary-val { font-size: 68rpx; font-weight: 800; color: $primary; }
-}
-.footer-action {
-  height: 96rpx; border-radius: 32rpx;
-  background: linear-gradient(135deg, $primary, $primary-dark);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 50rpx; font-weight: 600; color: #fff;
-  box-shadow: 0 8rpx 24rpx rgba($primary,.3);
-  &:active { transform: scale(.97); }
-  &.secondary { background: rgba(0,0,0,0.05); color: $text-secondary; box-shadow: none; border: 2rpx solid rgba(0,0,0,0.1); }
+.order-status-stats {
+  display: flex;
+  gap: 12rpx;
+  
+  .status-tag {
+    padding: 8rpx 16rpx;
+    border-radius: 12rpx;
+    font-size: 33rpx;
+    
+    &.pending {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+    
+    &.processing {
+      background: rgba(59, 130, 246, 0.2);
+      color: #3b82f6;
+    }
+    
+    &.delivered {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+    }
+  }
 }
 
 .call-waiter-btn-wrap {
   position: fixed;
   right: 32rpx;
-  bottom: 300rpx;
+  bottom: 320rpx;
   z-index: 9999;
 }
 
 .call-waiter-btn {
   position: relative;
-  width: 160rpx;
-  height: 160rpx;
-  background: linear-gradient(135deg, $primary, $primary-dark);
+  width: 180rpx;
+  height: 180rpx;
+  background: linear-gradient(135deg, rgba(201, 169, 98, 0.95), rgba(138, 109, 59, 0.9));
   border-radius: 50%;
-  border: 3rpx solid rgba(255,255,255,0.4);
-  box-shadow: 0 16rpx 48rpx rgba(7,193,96,0.4);
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 24rpx 72rpx rgba(201, 169, 98, 0.5),
+    0 0 60rpx rgba(201, 169, 98, 0.3),
+    inset 0 4rpx 8rpx rgba(255, 255, 255, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   
   &:active {
     transform: scale(0.92);
-    box-shadow: 0 8rpx 24rpx rgba(7,193,96,0.3);
+    box-shadow: 
+      0 12rpx 36rpx rgba(201, 169, 98, 0.4),
+      0 0 30rpx rgba(201, 169, 98, 0.2),
+      inset 0 4rpx 8rpx rgba(255, 255, 255, 0.2),
+      inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.3);
   }
   
   .call-icon-wrap {
     position: relative;
-    width: 100rpx;
-    height: 100rpx;
+    width: 120rpx;
+    height: 120rpx;
     display: flex;
     align-items: center;
     justify-content: center;
     
+    .icon-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: iconPulse 3s ease-in-out infinite;
+    }
+    
     .call-icon {
       position: relative;
       z-index: 1;
-      font-size: 64rpx;
+      font-size: 72rpx;
+      filter: drop-shadow(0 4rpx 12rpx rgba(0, 0, 0, 0.3));
     }
   }
   
   &.calling {
-    background: linear-gradient(135deg, #FF976A, #F97316);
-    border-color: rgba(255,255,255,0.5);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.9));
+    border-color: rgba(255, 255, 255, 0.4);
     
     .btn-glow-ring {
       position: absolute;
-      top: -16rpx; left: -16rpx; right: -16rpx; bottom: -16rpx;
+      top: -20rpx; left: -20rpx; right: -20rpx; bottom: -20rpx;
       border-radius: 50%;
-      border: 3rpx solid rgba(249,115,22,0.5);
+      border: 4rpx solid rgba(245, 158, 11, 0.6);
       animation: glowPulse 2s ease-out infinite;
     }
     
     .btn-pulse-ring {
       position: absolute;
-      top: -24rpx; left: -24rpx; right: -24rpx; bottom: -24rpx;
+      top: -30rpx; left: -30rpx; right: -30rpx; bottom: -30rpx;
       border-radius: 50%;
-      border: 2rpx solid rgba(249,115,22,0.3);
-      animation: glowPulse 2s ease-out infinite 0.5s;
+      border: 4rpx solid rgba(245, 158, 11, 0.4);
+      animation: glowPulse 2s ease-out infinite;
+      animation-delay: 0.5s;
     }
   }
 }
 
-@keyframes glowPulse {
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1.4); opacity: 0; }
-}
-
-.assistant-list {
-  height: calc(100vh - 80rpx);
-  padding: 660rpx 32rpx 200rpx;
-  position: relative;
-  z-index: 1;
-}
-
-.assistant-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28rpx;
-}
-
-.assistant-card {
-  background: $bg-white;
-  border-radius: 32rpx;
-  overflow: hidden;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
-  transition: all 0.25s ease;
-  
-  &:active {
-    transform: scale(0.96);
-    box-shadow: 0 6rpx 28rpx rgba(7,193,96,0.15);
-  }
-  
-  .assistant-image-wrap {
-    position: relative;
-    width: 100%;
-    height: 820rpx;
-    
-    .assistant-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .assistant-emoji {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      font-size: 140rpx;
-      background: $bg-light;
-    }
-    
-    .online-dot {
-      position: absolute;
-      top: 20rpx;
-      right: 20rpx;
-      width: 36rpx;
-      height: 36rpx;
-      background: #4ade80;
-      border-radius: 50%;
-      border: 4rpx solid rgba(255,255,255,0.8);
-      box-shadow: 0 0 20rpx rgba(74,222,128,0.7);
-      animation: pulseGreen 2s infinite;
-      z-index: 3;
-    }
-    
-    .busy-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-      backdrop-filter: blur(4rpx);
-      
-      .busy-text {
-        font-size: 40rpx;
-        color: rgba(255,255,255,0.9);
-        font-weight: 600;
-        padding: 16rpx 36rpx;
-        background: rgba(0,0,0,0.6);
-        border-radius: 24rpx;
-      }
-    }
-  }
-  
-  .assistant-info {
-    padding: 32rpx;
-    
-    .assistant-name {
-      display: block;
-      font-size: 48rpx;
-      font-weight: 700;
-      color: $text-main;
-      margin-bottom: 12rpx;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .assistant-level {
-      display: block;
-      font-size: 36rpx;
-      color: $primary;
-      font-weight: 500;
-      margin-bottom: 24rpx;
-      padding: 8rpx 20rpx;
-      background: rgba($primary, 0.08);
-      border-radius: 20rpx;
-      display: inline-block;
-    }
-    
-    .assistant-price-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      
-      .price-wrap {
-        display: flex;
-        align-items: baseline;
-        gap: 4rpx;
-        
-        .price-symbol {
-          font-size: 36rpx;
-          color: $primary;
-          font-weight: 700;
-        }
-        
-        .price-value {
-          font-size: 64rpx;
-          font-weight: 800;
-          color: $primary;
-          line-height: 1;
-        }
-        
-        .price-unit {
-          font-size: 32rpx;
-          color: $text-secondary;
-        }
-      }
-      
-      .add-btn {
-        width: 96rpx;
-        height: 96rpx;
-        background: linear-gradient(135deg, $primary, $primary-dark);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 6rpx 24rpx rgba($primary, 0.4);
-        transition: all 0.25s;
-        flex-shrink: 0;
-        
-        &:active {
-          transform: scale(0.85);
-        }
-        
-        text {
-          font-size: 72rpx;
-          color: #fff;
-          font-weight: 600;
-          line-height: 1;
-        }
-        
-        &.busy {
-          opacity: 0.6;
-          background: #e5e5e5;
-          box-shadow: none;
-          
-          text { color: $text-secondary; }
-        }
-      }
-    }
-  }
-}
-
-@keyframes pulseGreen {
-  0%, 100% { box-shadow: 0 0 24rpx rgba(74,222,128,0.7); }
-  50% { box-shadow: 0 0 40rpx rgba(74,222,128,1); }
-}
-
-.carousel-wrap {
-  width: 100%; height: 1800rpx;
-  border-radius: 48rpx; overflow: hidden; margin-bottom: 40rpx; flex-shrink: 0;
-  background: $bg-light;
-  
-  .carousel { width: 100%; height: 100%; }
-  .carousel-img { width: 100%; height: 100%; object-fit: cover; }
-}
-
-.carousel-placeholder {
-  width: 100%; height: 500rpx; border-radius: 48rpx; margin-bottom: 40rpx; flex-shrink: 0;
-  background: $bg-light;
-  display: flex; align-items: center; justify-content: center;
-  
-  .placeholder-emoji { font-size: 240rpx; }
-}
-
-.detail-meta-bar {
-  display: flex; align-items: center; gap: 24rpx; margin-bottom: 36rpx; flex-wrap: wrap;
-  
-  .meta-level {
-    padding: 12rpx 32rpx; background: rgba(7,193,96,0.1);
-    border-radius: 28rpx; font-size: 48rpx; color: $primary; font-weight: 700;
-  }
-  .meta-divider { font-size: 42rpx; color: rgba(0,0,0,.1); }
-  .meta-rating { font-size: 48rpx; color: #feca57; font-weight: 600; }
-  .meta-price { font-size: 48rpx; color: $primary; font-weight: 700; }
-}
-
-.info-block { margin-bottom: 40rpx; }
-.info-title { display: block; font-size: 56rpx; font-weight: 700; color: $text-main; margin-bottom: 24rpx; }
-.info-body { display: block; font-size: 48rpx; color: $text-secondary; line-height: 1.8; }
-.skill-tags { display: flex; gap: 16rpx; flex-wrap: wrap; margin-top: 24rpx; }
-.skill-tag { padding: 14rpx 32rpx; background: rgba(7,193,96,0.08); color: $primary; border-radius: 24rpx; font-size: 42rpx; font-weight: 600; }
-
-.duration-row { display: flex; gap: 24rpx;
-  .dur-chip { flex: 1; text-align: center; padding: 32rpx 20rpx; border-radius: 32rpx; background: $bg-light; border: 2rpx solid rgba(0,0,0,.06); transition: all .3s; min-height: 140rpx; display: flex; flex-direction: column; justify-content: center;
-    &.active { background: rgba(7,193,96,0.08); border-color: $primary; }
-  }
-  .dur-label { display: block; font-size: 52rpx; font-weight: 700; color: $text-main; }
-  .dur-price { display: block; font-size: 44rpx; color: $primary; margin-top: 12rpx; font-weight: 600; }
-}
-
-.service-item { display: flex; align-items: center; gap: 28rpx; padding: 32rpx; margin-bottom: 20rpx; background: $bg-light; border-radius: 36rpx; }
-.si-avatar { width: 120rpx; height: 120rpx; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: $bg-light; display: flex; align-items: center; justify-content: center;
-  image { width: 100%; height: 100%; object-fit: cover; }
-  text { font-size: 72rpx; }
-}
-.si-info { flex: 1; min-width: 0; }
-.si-name { font-size: 52rpx; font-weight: 700; color: $text-main; display: block; }
-.si-meta { display: flex; align-items: center; gap: 20rpx; margin-top: 10rpx; }
-.si-rate { font-size: 44rpx; color: $primary; font-weight: 600; }
-.si-status { font-size: 40rpx; padding: 8rpx 20rpx; border-radius: 18rpx; font-weight: 600;
-  &.pending { background: rgba(245,158,11,.1); color: #f59e0b; }
-  &.processing { background: rgba(59,130,246,.1); color: #3b82f6; }
-  &.serving { background: rgba(7,193,96,.1); color: $primary; }
-  &.completed { background: rgba(0,0,0,.04); color: $text-secondary; }
-}
-.si-duration { display: block; font-size: 44rpx; color: $text-secondary; margin-top: 8rpx; font-family: 'Courier New', monospace; }
-.si-actions { display: flex; gap: 16rpx; flex-shrink: 0; flex-direction: column; }
-.si-btn { padding: 20rpx 32rpx; border-radius: 24rpx; font-size: 40rpx; font-weight: 700; transition: all .2s; min-width: 120rpx; text-align: center;
-  &:active { transform: scale(.95); }
-  &.start { background: linear-gradient(135deg, $primary, $primary-dark); color: #fff; box-shadow: 0 8rpx 28rpx rgba(7,193,96,.3); }
-  &.end { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 8rpx 28rpx rgba(239,68,68,.3); }
-  &.cancel { background: rgba(0,0,0,.04); color: $text-secondary; }
-}
-
-.loading-state { text-align: center; padding: 160rpx 0; }
-.loading-icon { font-size: 128rpx; display: block; margin-bottom: 32rpx; }
-.loading-text { font-size: 52rpx; color: $text-secondary; }
 </style>

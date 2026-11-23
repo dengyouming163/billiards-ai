@@ -50,13 +50,13 @@ defineEmits<{
 .group-title {
   font-size: 28rpx;
   font-weight: 700;
-  color: #000000;
+  color: #334155;
   letter-spacing: 0.5px;
 }
 
 .group-count {
   font-size: 22rpx;
-  color: #999999;
+  color: #94a3b8;
 }
 
 .group-tables {
@@ -70,7 +70,7 @@ defineEmits<{
   flex-direction: column;
   align-items: center;
   padding: 80rpx 0;
-  color: #999999;
+  color: #9ca3af;
 }
 
 .empty-icon {

@@ -12,16 +12,16 @@
 
 		<view class="edit-section">
 			<view class="section-title-row">
-				<Icon class="section-icon" name="user" size="32" />
+				<text class="section-icon">👤</text>
 				<text class="section-title">基本信息</text>
 			</view>
 
 			<view class="form-row">
 				<text class="form-label">头像</text>
 				<view class="avatar-upload" @click="handleAvatarUpload">
-					<Icon v-if="!profile.avatar" class="avatar-icon" name="user" size="70" />
+					<text v-if="!profile.avatar" class="avatar-icon">👤</text>
 					<image v-else :src="profile.avatar" class="avatar-img" mode="aspectFill" />
-					<view class="upload-badge"><Icon name="camera" size="22" /></view>
+					<view class="upload-badge">📷</view>
 				</view>
 			</view>
 
@@ -50,7 +50,7 @@
 
 		<view class="edit-section">
 			<view class="section-title-row">
-				<Icon class="section-icon" name="tag" size="32" />
+				<text class="section-icon">🏷️</text>
 				<text class="section-title">个人标签</text>
 				<view class="tag-count" :class="{ 'warning': !canSaveTags }">
 					<text>{{ tagCountText }}</text>
@@ -70,7 +70,7 @@
 					@tap="toggleTag(tag.id)"
 				>
 					<text class="tag-text">{{ tag.name }}</text>
-					<Icon v-if="isTagSelected(tag.id)" class="tag-check" name="check" size="24" />
+					<view v-if="isTagSelected(tag.id)" class="tag-check">✓</view>
 				</view>
 				<view v-if="tagOptions.length === 0" class="empty-state">
 					<text>暂无标签可选择</text>
@@ -80,7 +80,7 @@
 
 		<view class="edit-section">
 			<view class="section-title-row">
-				<Icon class="section-icon" name="camera" size="32" />
+				<text class="section-icon">📷</text>
 				<text class="section-title">个人相册</text>
 				<text class="add-btn" @click="goToAlbum">管理相册</text>
 			</view>
@@ -105,7 +105,7 @@
 
 		<view class="edit-section">
 			<view class="section-title-row">
-				<Icon class="section-icon" name="briefcase" size="32" />
+				<text class="section-icon">💼</text>
 				<text class="section-title">服务项目</text>
 				<text class="add-btn" @click="showAddService">+ 添加</text>
 			</view>
@@ -232,7 +232,6 @@ import { ref, computed, onMounted, reactive } from 'vue'
 import { getProfile, updateProfile, saveService, deleteService as apiDeleteService, getTags } from '@/api/modules/profile'
 import type { ProfileData, ServiceItem, TagItem } from '@/api/modules/profile'
 import config from '@/config/index'
-import Icon from '@/components/Icon.vue'
 
 const profile = ref<ProfileData>({
 	id: '',
@@ -499,7 +498,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #f5f7fa;
 }
 
 .page-header {
@@ -508,10 +507,10 @@ onMounted(() => {
 	justify-content: space-between;
 	padding: 24rpx;
 	background: #ffffff;
-	border-bottom: 1rpx solid #e5e5e5;
 	position: sticky;
 	top: 0;
 	z-index: 100;
+	box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
 }
 
 .back-btn {
@@ -527,27 +526,27 @@ onMounted(() => {
 .page-title {
 	font-size: 34rpx;
 	font-weight: 600;
-	color: #000000;
+	color: #1f2937;
 }
 
 .save-btn {
 	font-size: 28rpx;
-	color: #999999;
+	color: #9ca3af;
 	padding: 12rpx 24rpx;
 	border-radius: 24rpx;
 
 	&.active {
-		color: #07C160;
+		color: #059669;
 		font-weight: 600;
 	}
 }
 
 .edit-section {
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
 	margin: 20rpx;
-	border-radius: 16rpx;
+	border-radius: 32rpx;
 	padding: 24rpx;
+	box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.03);
 }
 
 .section-title-row {
@@ -564,13 +563,13 @@ onMounted(() => {
 .section-title {
 	font-size: 32rpx;
 	font-weight: 600;
-	color: #000000;
+	color: #1f2937;
 	flex: 1;
 }
 
 .add-btn {
 	font-size: 26rpx;
-	color: #07C160;
+	color: #059669;
 }
 
 .form-row {
@@ -578,7 +577,7 @@ onMounted(() => {
 	flex-direction: column;
 	gap: 12rpx;
 	padding: 20rpx 0;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f3f4f6;
 
 	&:last-child {
 		border-bottom: none;
@@ -587,15 +586,15 @@ onMounted(() => {
 
 .form-label {
 	font-size: 28rpx;
-	color: #999999;
+	color: #6b7280;
 }
 
 .form-input {
 	height: 88rpx;
 	font-size: 30rpx;
-	color: #000000;
-	background: #f7f7f7;
-	border-radius: 8rpx;
+	color: #1f2937;
+	background: #f9fafb;
+	border-radius: 12rpx;
 	padding: 0 24rpx;
 	box-sizing: border-box;
 }
@@ -603,10 +602,10 @@ onMounted(() => {
 .form-textarea {
 	min-height: 120rpx;
 	font-size: 30rpx;
-	color: #000000;
-	background: #f7f7f7;
+	color: #1f2937;
+	background: #f9fafb;
 	width: 100%;
-	border-radius: 8rpx;
+	border-radius: 12rpx;
 	padding: 20rpx 24rpx;
 	box-sizing: border-box;
 	line-height: 1.6;
@@ -616,7 +615,7 @@ onMounted(() => {
 	position: relative;
 	width: 140rpx;
 	height: 140rpx;
-	background: #f7f7f7;
+	background: #f3f4f6;
 	border-radius: 70rpx;
 	display: flex;
 	align-items: center;
@@ -639,7 +638,7 @@ onMounted(() => {
 	right: 0;
 	width: 44rpx;
 	height: 44rpx;
-	background: #07C160;
+	background: #059669;
 	border-radius: 22rpx;
 	display: flex;
 	align-items: center;
@@ -656,20 +655,20 @@ onMounted(() => {
 
 .tag-count {
 	font-size: 24rpx;
-	color: #07C160;
+	color: #059669;
 	padding: 6rpx 16rpx;
-	background: rgba(7, 193, 96, 0.1);
+	background: rgba(5, 150, 105, 0.1);
 	border-radius: 20rpx;
 	
 	&.warning {
-		color: #ff9500;
-		background: rgba(255, 149, 0, 0.1);
+		color: #F59E0B;
+		background: rgba(245, 158, 11, 0.1);
 	}
 }
 
 .tags-hint {
 	font-size: 24rpx;
-	color: #ff9500;
+	color: #F59E0B;
 	padding: 10rpx 0;
 }
 
@@ -678,17 +677,17 @@ onMounted(() => {
 	align-items: center;
 	gap: 8rpx;
 	padding: 14rpx 28rpx;
-	background: #f7f7f7;
-	color: #333333;
+	background: #f3f4f6;
+	color: #6b7280;
 	border-radius: 28rpx;
 	font-size: 26rpx;
 	border: 2rpx solid transparent;
 	transition: all 0.2s;
 	
 	&.selected {
-		background: rgba(7, 193, 96, 0.1);
-		color: #07C160;
-		border-color: #07C160;
+		background: rgba(5, 150, 105, 0.1);
+		color: #059669;
+		border-color: #059669;
 	}
 	
 	&:active {
@@ -703,7 +702,7 @@ onMounted(() => {
 
 .empty-state {
 	font-size: 26rpx;
-	color: #999999;
+	color: #9ca3af;
 	padding: 30rpx 0;
 	text-align: center;
 }
@@ -721,9 +720,9 @@ onMounted(() => {
 .photo-wrap {
 	width: 100%;
 	padding-bottom: 100%;
-	border-radius: 8rpx;
+	border-radius: 12rpx;
 	overflow: hidden;
-	background: #f7f7f7;
+	background: #f3f4f6;
 	position: relative;
 }
 
@@ -741,26 +740,26 @@ onMounted(() => {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background: #f7f7f7;
-	border-radius: 8rpx;
-	border: 2rpx dashed #e5e5e5;
+	background: #f9fafb;
+	border-radius: 12rpx;
+	border: 2rpx dashed #d1d5db;
 	padding: 20rpx 0;
 }
 
 .add-icon {
 	font-size: 48rpx;
-	color: #999999;
+	color: #9ca3af;
 	margin-bottom: 8rpx;
 }
 
 .add-text {
 	font-size: 22rpx;
-	color: #999999;
+	color: #9ca3af;
 }
 
 .album-count {
 	font-size: 24rpx;
-	color: #999999;
+	color: #9ca3af;
 	text-align: right;
 	margin-top: 12rpx;
 	display: block;
@@ -777,8 +776,8 @@ onMounted(() => {
 	align-items: flex-start;
 	justify-content: space-between;
 	padding: 20rpx;
-	background: #f7f7f7;
-	border-radius: 12rpx;
+	background: #f9fafb;
+	border-radius: 24rpx;
 	gap: 20rpx;
 }
 
@@ -792,7 +791,7 @@ onMounted(() => {
 .service-icon-wrap {
 	width: 72rpx;
 	height: 72rpx;
-	background: rgba(7, 193, 96, 0.1);
+	background: rgba(5, 150, 105, 0.1);
 	border-radius: 16rpx;
 	display: flex;
 	align-items: center;
@@ -814,14 +813,14 @@ onMounted(() => {
 .service-name-input {
 	font-size: 30rpx;
 	font-weight: 600;
-	color: #000000;
+	color: #1f2937;
 	background: transparent;
 	border: none;
 }
 
 .service-desc-input {
 	font-size: 24rpx;
-	color: #999999;
+	color: #6b7280;
 	background: transparent;
 	border: none;
 }
@@ -842,14 +841,14 @@ onMounted(() => {
 .price-symbol {
 	font-size: 28rpx;
 	font-weight: 600;
-	color: #07C160;
+	color: #059669;
 }
 
 .price-input {
 	width: 100rpx;
 	font-size: 32rpx;
 	font-weight: 600;
-	color: #07C160;
+	color: #059669;
 	background: transparent;
 	border: none;
 	text-align: right;
@@ -858,7 +857,7 @@ onMounted(() => {
 .unit-input {
 	width: 80rpx;
 	font-size: 24rpx;
-	color: #999999;
+	color: #6b7280;
 	background: transparent;
 	border: none;
 	text-align: right;
@@ -899,18 +898,18 @@ onMounted(() => {
 	align-items: center;
 	justify-content: space-between;
 	padding: 30rpx;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f3f4f6;
 }
 
 .modal-title {
 	font-size: 34rpx;
 	font-weight: 600;
-	color: #000000;
+	color: #1f2937;
 }
 
 .modal-close {
 	font-size: 48rpx;
-	color: #999999;
+	color: #9ca3af;
 	line-height: 1;
 }
 
@@ -931,7 +930,7 @@ onMounted(() => {
 
 .modal-label {
 	font-size: 28rpx;
-	color: #999999;
+	color: #6b7280;
 }
 
 .icon-picker {
@@ -943,7 +942,7 @@ onMounted(() => {
 .icon-option {
 	width: 80rpx;
 	height: 80rpx;
-	background: #f7f7f7;
+	background: #f9fafb;
 	border-radius: 16rpx;
 	display: flex;
 	align-items: center;
@@ -952,17 +951,17 @@ onMounted(() => {
 	border: 2rpx solid transparent;
 
 	&.selected {
-		background: rgba(7, 193, 96, 0.1);
-		border-color: #07C160;
+		background: rgba(5, 150, 105, 0.1);
+		border-color: #059669;
 	}
 }
 
 .modal-input {
 	height: 88rpx;
 	font-size: 30rpx;
-	color: #000000;
-	background: #f7f7f7;
-	border-radius: 8rpx;
+	color: #1f2937;
+	background: #f9fafb;
+	border-radius: 12rpx;
 	padding: 0 24rpx;
 	box-sizing: border-box;
 
@@ -987,7 +986,7 @@ onMounted(() => {
 	display: flex;
 	gap: 20rpx;
 	padding: 24rpx 30rpx;
-	border-top: 1rpx solid #e5e5e5;
+	border-top: 1rpx solid #f3f4f6;
 }
 
 .modal-btn {
@@ -999,12 +998,12 @@ onMounted(() => {
 	border: none;
 
 	&.cancel {
-		background: #f7f7f7;
-		color: #999999;
+		background: #f5f5f5;
+		color: #6b7280;
 	}
 
 	&.confirm {
-		background: #07C160;
+		background: linear-gradient(135deg, #059669, #059669);
 		color: #ffffff;
 	}
 }

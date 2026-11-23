@@ -68,7 +68,7 @@ export async function fetchUnreadCount(): Promise<{ count: number }> {
   return get('/notification.Notification/unreadCount', {}, ApiResponseType.NORMAL);
 }
 
-const HELP_BASE = 'https://poolapi.kyyp.cn/api/help.php';
+const HELP_BASE = 'https://api.tpzl88.com/api/help.php';
 
 export async function fetchHelpList(params?: { category?: string }): Promise<HelpItem[]> {
   const query = params?.category ? '&category=' + params.category : '';

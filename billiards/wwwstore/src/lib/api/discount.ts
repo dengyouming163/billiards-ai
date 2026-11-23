@@ -24,7 +24,7 @@ export async function fetchDiscountList() {
   return get<DiscountConfig[]>(API_ENDPOINTS.discountList);
 }
 
-export async function saveDiscount(data: Partial<DiscountConfig> & { discount_name: string; type: string; value: number }) {
+export async function saveDiscount(data: Partial<DiscountConfig> & { discount_name: string; discount_type: DiscountConfig['discount_type']; discount_value: number }) {
   return post<DiscountConfig>(API_ENDPOINTS.discountSave, data);
 }
 

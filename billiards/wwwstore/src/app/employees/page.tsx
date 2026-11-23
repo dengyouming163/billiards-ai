@@ -31,13 +31,13 @@ export default function EmployeesPage() {
         icon={UserCog}
       />
 
-      <div className="flex flex-wrap gap-2 p-2 bg-[#f7f7f7] backdrop-blur-sm rounded-xl">
+      <div className="flex flex-wrap gap-2 p-2 bg-slate-100/80 backdrop-blur-sm rounded-xl">
         <Button
           variant={activeTab === "employees" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "employees" 
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl" 
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl" 
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("employees")}
@@ -48,9 +48,9 @@ export default function EmployeesPage() {
         <Button
           variant={activeTab === "stores" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "stores" 
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl" 
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl" 
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("stores")}
@@ -61,9 +61,9 @@ export default function EmployeesPage() {
         <Button
           variant={activeTab === "roles" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "roles" 
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl" 
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl" 
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("roles")}
@@ -74,9 +74,9 @@ export default function EmployeesPage() {
         <Button
           variant={activeTab === "approval" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "approval" 
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl" 
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl" 
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("approval")}
@@ -86,7 +86,7 @@ export default function EmployeesPage() {
         </Button>
       </div>
 
-      <div className="rounded-[24px] border border-[#e5e5e5] bg-white shadow-sm overflow-hidden">
+      <div className="rounded-2xl border border-slate-200/60 bg-white/95 backdrop-blur-xl shadow-lg overflow-hidden">
         <div className="p-4">
         {activeTab === 'employees' && <EmployeeManagement />}
         {activeTab === 'stores' && <StoreManagement />}

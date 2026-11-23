@@ -381,7 +381,7 @@ watch(showMemberQR, (v) => {
     // 生成会员绑定二维码
     const oid = bill.value.order_id
     if (oid) {
-      memberQrUrl.value = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(`https://poolstore.kyyp.cn/member-bind?order_id=${oid}`)}`
+      memberQrUrl.value = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(`https://store.tpzl88.com/member-bind?order_id=${oid}`)}`
       // 开始轮询会员绑定状态
       const timer = setInterval(async () => {
         try {
@@ -595,18 +595,16 @@ onUnmounted(() => { paymentStore.reset(); if (tickTimer) clearInterval(tickTimer
 <style lang="scss" scoped>
 @use '@/styles/layout-system.scss';
 
-$primary: #07C160;
-$primary-dark: #06AD56;
-$bg: #f7f7f7;
-$card-bg: #ffffff;
-$text-primary: #333333;
-$text-secondary: #999999;
+$gold: #c9a962;
+$bg: #0f0f16;
+$card-bg: rgba(26, 26, 46, 0.95);
+$card-border: rgba($gold, 0.15);
 
 .container {
   min-height: 100vh;
   padding: 32rpx;
   padding-bottom: 360rpx;
-  background: $bg;
+  background: linear-gradient(180deg, $bg 0%, #12121a 30%, #1a1a2e 70%, $bg 100%);
   position: relative;
   overflow: hidden;
 
@@ -615,8 +613,8 @@ $text-secondary: #999999;
     position: absolute;
     inset: 0;
     background: 
-      radial-gradient(ellipse at 20% 30%, rgba($primary, .05), transparent 50%),
-      radial-gradient(ellipse at 80% 70%, rgba(6, 182, 212, .04), transparent 50%);
+      radial-gradient(ellipse at 20% 30%, rgba($gold, .06), transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(99, 102, 241, .04), transparent 50%);
     pointer-events: none;
   }
 }
@@ -633,13 +631,14 @@ $text-secondary: #999999;
   background: linear-gradient(180deg, rgba($bg, 0.98), rgba($bg, 0.95) 80%, transparent);
 
   .header-card {
-    background: $card-bg;
+    background: linear-gradient(145deg, rgba(26, 26, 46, 0.98), rgba(20, 20, 40, 0.95));
     border-radius: 40rpx;
-    padding: 28rpx 32rpx;
-    border: 2rpx solid rgba($primary, 0.1);
+    padding: 20rpx 32rpx;
+    border: 2rpx solid rgba($gold, 0.15);
     box-shadow: 
-      0 8rpx 32rpx rgba(0, 0, 0, 0.06),
-      0 0 24rpx rgba($primary, 0.04);
+      0 8rpx 32rpx rgba(0, 0, 0, 0.3),
+      0 0 24rpx rgba($gold, 0.06),
+      inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20rpx);
   }
 
@@ -657,18 +656,20 @@ $text-secondary: #999999;
 
   .header-icon-wrap {
     position: relative;
-    width: 88rpx;
-    height: 88rpx;
+    width: 80rpx;
+    height: 80rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.05));
-    border-radius: 24rpx;
-    border: 2rpx solid rgba($primary, 0.15);
   }
 
   .icon-glow {
-    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba($gold, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: iconPulse 3s ease-in-out infinite;
   }
 
   .icon-text {
@@ -685,13 +686,13 @@ $text-secondary: #999999;
   .header-title {
     font-size: 56rpx;
     font-weight: 800;
-    color: $text-primary;
+    color: #fff;
     letter-spacing: 3rpx;
   }
 
   .header-subtitle {
     font-size: 34rpx;
-    color: $text-secondary;
+    color: rgba(255, 255, 255, 0.5);
     margin-top: 4rpx;
     font-weight: 500;
   }
@@ -704,7 +705,7 @@ $text-secondary: #999999;
 }
 
 .header-placeholder {
-  height: 220rpx;
+  height: 200rpx;
 }
 
 /* Back Button */
@@ -714,29 +715,33 @@ $text-secondary: #999999;
   gap: 12rpx;
   height: 88rpx;
   padding: 0 40rpx;
-  background: $card-bg;
+  background: linear-gradient(135deg, rgba($gold, 0.15), rgba($gold, 0.05));
   border-radius: 44rpx;
-  border: 2rpx solid rgba($primary, 0.3);
+  border: 2rpx solid rgba($gold, 0.3);
   box-shadow: 
-    0 4rpx 16rpx rgba($primary, 0.1);
+    0 4rpx 16rpx rgba($gold, 0.15),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.08);
   transition: all 0.3s ease;
 
   &:active {
     transform: scale(0.95);
-    border-color: $primary;
-    background: rgba($primary, 0.05);
+    border-color: $gold;
+    background: linear-gradient(135deg, rgba($gold, 0.25), rgba($gold, 0.1));
+    box-shadow: 
+      0 2rpx 8rpx rgba($gold, 0.25),
+      inset 0 1rpx 0 rgba(255, 255, 255, 0.12);
   }
 
   .back-icon {
     font-size: 48rpx;
-    color: $primary;
+    color: $gold;
     font-weight: 800;
     line-height: 1;
   }
 
   .back-text {
     font-size: 44rpx;
-    color: $primary;
+    color: $gold;
     font-weight: 600;
     letter-spacing: 1rpx;
   }
@@ -753,8 +758,8 @@ $text-secondary: #999999;
 .loading-spinner {
   width: 140rpx;
   height: 140rpx;
-  border: 12rpx solid #e5e5e5;
-  border-top-color: $primary;
+  border: 12rpx solid #374151;
+  border-top-color: $gold;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 48rpx;
@@ -762,19 +767,19 @@ $text-secondary: #999999;
 
 .loading-text {
   font-size: 60rpx;
-  color: $text-secondary;
+  color: #8a8a9a;
 }
 
 /* === Status Card === */
 .status-card {
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba($gold, 0.1), rgba($gold, 0.03));
   border-radius: 40rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  border: 2rpx solid rgba($primary, 0.1);
+  border: 2rpx solid rgba($gold, 0.15);
   box-shadow: 
-    0 8rpx 32rpx rgba(0, 0, 0, 0.06),
-    0 0 24rpx rgba($primary, 0.04);
+    0 8rpx 32rpx rgba(0, 0, 0, 0.3),
+    0 0 32rpx rgba($gold, 0.08);
   position: relative;
   overflow: hidden;
 
@@ -784,8 +789,8 @@ $text-secondary: #999999;
     top: 0;
     left: 0;
     right: 0;
-    height: 6rpx;
-    background: linear-gradient(90deg, transparent, $primary, transparent);
+    height: 4rpx;
+    background: linear-gradient(90deg, transparent, rgba($gold, 0.6), transparent);
   }
 }
 
@@ -812,36 +817,36 @@ $text-secondary: #999999;
   }
 
   &.in_progress {
-    background: linear-gradient(135deg, rgba($primary, 0.15), rgba($primary, 0.06));
-    color: $primary;
+    background: linear-gradient(135deg, rgba($gold, 0.2), rgba($gold, 0.08));
+    color: $gold;
     .status-dot {
-      background: $primary;
-      box-shadow: 0 0 12rpx rgba($primary, 0.4);
+      background: $gold;
+      box-shadow: 0 0 12rpx rgba($gold, 0.6);
     }
   }
 
   &.settled {
-    background: linear-gradient(135deg, rgba($primary, 0.15), rgba($primary, 0.06));
-    color: $primary;
+    background: linear-gradient(135deg, rgba(46, 213, 115, 0.2), rgba(46, 213, 115, 0.08));
+    color: #2ed573;
     .status-dot {
-      background: $primary;
-      box-shadow: 0 0 12rpx rgba($primary, 0.4);
+      background: #2ed573;
+      box-shadow: 0 0 12rpx rgba(46, 213, 115, 0.4);
     }
   }
 
   &.cancelled {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.06));
     color: #ef4444;
     .status-dot {
       background: #ef4444;
-      box-shadow: 0 0 12rpx rgba(239, 68, 68, 0.3);
+      box-shadow: 0 0 12rpx rgba(239, 68, 68, 0.4);
     }
   }
 }
 
 .status-order {
   font-size: 38rpx;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.4);
   font-weight: 500;
 }
 
@@ -851,7 +856,7 @@ $text-secondary: #999999;
   align-items: center;
   padding: 20rpx 0;
   margin-bottom: 20rpx;
-  border-bottom: 2rpx solid rgba($primary, 0.1);
+  border-bottom: 2rpx solid rgba($gold, 0.1);
 }
 
 .timer-wrap, .fee-wrap {
@@ -861,22 +866,24 @@ $text-secondary: #999999;
 .timer-label, .fee-label {
   display: block;
   font-size: 30rpx;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: 12rpx;
 }
 
 .timer-text {
   font-size: 120rpx;
   font-weight: 800;
-  color: $text-primary;
+  color: #fff;
   font-family: 'Courier New', monospace;
   letter-spacing: 8rpx;
+  text-shadow: 0 0 40rpx rgba($gold, 0.4);
 }
 
 .fee-text {
   font-size: 80rpx;
   font-weight: 800;
-  color: $primary;
+  color: $gold;
+  text-shadow: 0 0 30rpx rgba($gold, 0.3);
 }
 
 .status-meta {
@@ -898,25 +905,27 @@ $text-secondary: #999999;
 
 .meta-label {
   font-size: 28rpx;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .meta-value {
   font-size: 40rpx;
-  color: $text-primary;
+  color: #fff;
   font-weight: 600;
 }
 
 /* === Fee Panel === */
 .fee-panel {
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba(26, 26, 46, 0.95), rgba(20, 20, 40, 0.98));
   border-radius: 40rpx;
   margin-bottom: 24rpx;
-  border: 2rpx solid rgba($primary, 0.08);
+  border: 2rpx solid rgba($gold, 0.1);
   box-shadow: 
-    0 8rpx 32rpx rgba(0, 0, 0, 0.06),
-    0 0 20rpx rgba($primary, 0.03);
+    0 8rpx 32rpx rgba(0, 0, 0, 0.3),
+    0 0 20rpx rgba($gold, 0.06),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
   overflow: hidden;
+  backdrop-filter: blur(16rpx);
 }
 
 .fee-panel-head {
@@ -924,7 +933,7 @@ $text-secondary: #999999;
   justify-content: space-between;
   align-items: center;
   padding: 28rpx 32rpx;
-  border-bottom: 2rpx solid rgba($primary, 0.08);
+  border-bottom: 2rpx solid rgba($gold, 0.08);
 }
 
 .fee-panel-left {
@@ -936,12 +945,12 @@ $text-secondary: #999999;
 .panel-icon-wrap {
   width: 72rpx;
   height: 72rpx;
-  background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.04));
+  background: linear-gradient(135deg, rgba($gold, 0.15), rgba($gold, 0.04));
   border-radius: 20rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2rpx solid rgba($primary, 0.1);
+  border: 2rpx solid rgba($gold, 0.12);
 }
 
 .panel-icon {
@@ -951,13 +960,13 @@ $text-secondary: #999999;
 .fee-panel-title {
   font-size: 48rpx;
   font-weight: 700;
-  color: $text-primary;
+  color: #fff;
   letter-spacing: 2rpx;
 }
 
 .fee-panel-arrow {
   font-size: 48rpx;
-  color: $primary;
+  color: $gold;
   font-weight: 300;
 }
 
@@ -970,42 +979,44 @@ $text-secondary: #999999;
   justify-content: space-between;
   align-items: center;
   padding: 20rpx 28rpx;
-  background: rgba($primary, 0.03);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 28rpx;
   margin-bottom: 16rpx;
-  border: 2rpx solid rgba($primary, 0.05);
+  border: 2rpx solid rgba(255, 255, 255, 0.03);
   transition: all 0.3s ease;
 
   &:active {
-    background: rgba($primary, 0.06);
-    border-color: rgba($primary, 0.1);
+    background: rgba($gold, 0.06);
+    border-color: rgba($gold, 0.12);
   }
 
   .fee-label {
     font-size: 42rpx;
-    color: $text-secondary;
+    color: rgba(255, 255, 255, 0.6);
     font-weight: 500;
   }
 
   .fee-value {
     font-size: 44rpx;
-    color: $text-primary;
+    color: #fff;
     font-weight: 600;
 
     &.price {
-      color: $primary;
+      color: $gold;
       font-weight: 700;
+      text-shadow: 0 0 12rpx rgba($gold, 0.3);
     }
 
     &.discount {
-      color: $primary;
+      color: #4ade80;
       font-weight: 700;
     }
 
     &.total-price {
       font-size: 68rpx;
       font-weight: 800;
-      color: $primary;
+      color: $gold;
+      text-shadow: 0 0 24rpx rgba($gold, 0.4);
       letter-spacing: 2rpx;
     }
   }
@@ -1015,21 +1026,23 @@ $text-secondary: #999999;
   padding: 28rpx 28rpx;
   margin-top: 16rpx;
   margin-bottom: 0;
-  border: 2rpx solid rgba($primary, 0.15);
-  background: linear-gradient(145deg, rgba($primary, 0.08), rgba($primary, 0.03));
-  box-shadow: 0 4rpx 16rpx rgba($primary, 0.06);
+  border: 2rpx solid rgba($gold, 0.2);
+  background: linear-gradient(145deg, rgba($gold, 0.08), rgba($gold, 0.02));
+  box-shadow: 0 4rpx 16rpx rgba($gold, 0.08);
 }
 
 /* === Items Panel === */
 .items-panel {
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba(26, 26, 46, 0.95), rgba(20, 20, 40, 0.98));
   border-radius: 40rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  border: 2rpx solid rgba($primary, 0.08);
+  border: 2rpx solid rgba($gold, 0.1);
   box-shadow: 
-    0 8rpx 32rpx rgba(0, 0, 0, 0.06),
-    0 0 20rpx rgba($primary, 0.03);
+    0 8rpx 32rpx rgba(0, 0, 0, 0.3),
+    0 0 20rpx rgba($gold, 0.06),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16rpx);
 }
 
 .items-panel-head {
@@ -1038,24 +1051,24 @@ $text-secondary: #999999;
   gap: 16rpx;
   margin-bottom: 28rpx;
   padding-bottom: 20rpx;
-  border-bottom: 2rpx solid rgba($primary, 0.08);
+  border-bottom: 2rpx solid rgba($gold, 0.08);
 }
 
 .items-panel-title {
   font-size: 48rpx;
   font-weight: 700;
-  color: $text-primary;
+  color: #fff;
   flex: 1;
   letter-spacing: 2rpx;
 }
 
 .items-count {
   font-size: 36rpx;
-  color: $text-secondary;
-  background: rgba($primary, 0.06);
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba($gold, 0.08);
   padding: 10rpx 24rpx;
   border-radius: 28rpx;
-  border: 2rpx solid rgba($primary, 0.12);
+  border: 2rpx solid rgba($gold, 0.15);
   font-weight: 500;
 }
 
@@ -1070,14 +1083,14 @@ $text-secondary: #999999;
   align-items: center;
   gap: 24rpx;
   padding: 28rpx;
-  background: rgba($primary, 0.03);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 28rpx;
-  border: 2rpx solid rgba($primary, 0.05);
+  border: 2rpx solid rgba(255, 255, 255, 0.04);
   transition: all 0.3s ease;
 
   &:active {
-    background: rgba($primary, 0.06);
-    border-color: rgba($primary, 0.12);
+    background: rgba($gold, 0.06);
+    border-color: rgba($gold, 0.15);
     transform: scale(0.99);
   }
 }
@@ -1085,14 +1098,14 @@ $text-secondary: #999999;
 .item-icon-wrap {
   width: 100rpx;
   height: 100rpx;
-  background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.04));
+  background: linear-gradient(135deg, rgba($gold, 0.15), rgba($gold, 0.04));
   border-radius: 28rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 2rpx solid rgba($primary, 0.1);
-  box-shadow: 0 4rpx 16rpx rgba($primary, 0.06);
+  border: 2rpx solid rgba($gold, 0.15);
+  box-shadow: 0 4rpx 16rpx rgba($gold, 0.08);
 }
 
 .item-emoji {
@@ -1107,7 +1120,7 @@ $text-secondary: #999999;
 .item-name {
   display: block;
   font-size: 46rpx;
-  color: $text-primary;
+  color: #fff;
   font-weight: 600;
   margin-bottom: 8rpx;
   letter-spacing: 1rpx;
@@ -1115,7 +1128,7 @@ $text-secondary: #999999;
 
 .item-meta {
   font-size: 34rpx;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 500;
 }
 
@@ -1133,34 +1146,35 @@ $text-secondary: #999999;
   font-weight: 600;
 
   &.pending {
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(245, 158, 11, 0.15);
     color: #f59e0b;
-    border: 2rpx solid rgba(245, 158, 11, 0.15);
+    border: 2rpx solid rgba(245, 158, 11, 0.2);
   }
 
   &.processing {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(59, 130, 246, 0.15);
     color: #3b82f6;
-    border: 2rpx solid rgba(59, 130, 246, 0.15);
+    border: 2rpx solid rgba(59, 130, 246, 0.2);
   }
 
   &.serving {
-    background: rgba($primary, 0.1);
-    color: $primary;
-    border: 2rpx solid rgba($primary, 0.15);
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 2rpx solid rgba(34, 197, 94, 0.2);
   }
 
   &.completed {
-    background: rgba(107, 114, 128, 0.08);
-    color: $text-secondary;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.4);
   }
 }
 
 .item-price {
   font-size: 52rpx;
-  color: $primary;
+  color: $gold;
   font-weight: 700;
   white-space: nowrap;
+  text-shadow: 0 0 12rpx rgba($gold, 0.3);
   letter-spacing: 1rpx;
 }
 
@@ -1169,17 +1183,16 @@ $text-secondary: #999999;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba($gold, 0.08), rgba($gold, 0.02));
   border-radius: 32rpx;
   padding: 24rpx 28rpx;
   margin-bottom: 16rpx;
-  border: 2rpx solid rgba($primary, 0.1);
+  border: 2rpx solid rgba($gold, 0.1);
   transition: all 0.3s ease;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
 
   &:active {
-    border-color: rgba($primary, 0.3);
-    background: rgba($primary, 0.05);
+    border-color: rgba($gold, 0.3);
+    background: linear-gradient(145deg, rgba($gold, 0.12), rgba($gold, 0.04));
   }
 
   .member-left {
@@ -1191,12 +1204,11 @@ $text-secondary: #999999;
   .member-icon-wrap {
     width: 64rpx;
     height: 64rpx;
-    background: rgba($primary, 0.08);
+    background: rgba($gold, 0.08);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2rpx solid rgba($primary, 0.15);
   }
 
   .member-icon {
@@ -1205,13 +1217,13 @@ $text-secondary: #999999;
 
   .member-text {
     font-size: 42rpx;
-    color: $primary;
+    color: $gold;
     font-weight: 600;
   }
 
   .member-arrow {
     font-size: 56rpx;
-    color: rgba($primary, 0.3);
+    color: rgba($gold, 0.3);
   }
 }
 
@@ -1223,25 +1235,25 @@ $text-secondary: #999999;
 
   .member-phone-input {
     flex: 1;
-    background: $card-bg;
-    border: 2rpx solid rgba($primary, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    border: 2rpx solid rgba(255, 255, 255, 0.08);
     border-radius: 24rpx;
     padding: 20rpx 28rpx;
     font-size: 42rpx;
-    color: $text-primary;
+    color: #fff;
     min-height: 80rpx;
   }
 
   .member-bind-btn {
-    background: linear-gradient(135deg, $primary, $primary-dark);
-    color: #fff;
+    background: linear-gradient(135deg, $gold, #8a6d3b);
+    color: #000;
     border: none;
     border-radius: 24rpx;
     padding: 20rpx 40rpx;
     font-size: 42rpx;
     font-weight: 700;
     min-height: 80rpx;
-    box-shadow: 0 4rpx 16rpx rgba($primary, 0.3);
+    box-shadow: 0 4rpx 16rpx rgba($gold, 0.3);
 
     &:active {
       transform: scale(0.97);
@@ -1262,7 +1274,7 @@ $text-secondary: #999999;
 
   .empty-text {
     font-size: 40rpx;
-    color: $text-secondary;
+    color: rgba(255, 255, 255, 0.4);
   }
 }
 
@@ -1274,7 +1286,7 @@ $text-secondary: #999999;
   right: 0;
   padding: 24rpx 32rpx;
   padding-bottom: calc(env(safe-area-inset-bottom) + 32rpx);
-  background: linear-gradient(180deg, rgba($bg, 0), rgba($bg, 0.95) 20%, $bg);
+  background: linear-gradient(180deg, rgba($bg, 0), rgba($bg, 0.95) 20%, rgba(0, 0, 0, 0.98));
   z-index: 100;
 }
 
@@ -1282,13 +1294,14 @@ $text-secondary: #999999;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba(26, 26, 46, 0.98), rgba(20, 20, 40, 0.99));
   border-radius: 40rpx;
   padding: 32rpx;
-  border: 2rpx solid rgba($primary, 0.1);
+  border: 2rpx solid rgba($gold, 0.15);
   box-shadow: 
-    0 -8rpx 32rpx rgba(0, 0, 0, 0.08),
-    0 0 24rpx rgba($primary, 0.04);
+    0 -8rpx 32rpx rgba(0, 0, 0, 0.4),
+    0 0 32rpx rgba($gold, 0.06);
+  backdrop-filter: blur(20rpx);
 }
 
 .bottom-left {
@@ -1299,14 +1312,15 @@ $text-secondary: #999999;
 
 .bottom-label {
   font-size: 38rpx;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 500;
 }
 
 .bottom-amount {
   font-size: 88rpx;
   font-weight: 800;
-  color: $primary;
+  color: $gold;
+  text-shadow: 0 0 30rpx rgba($gold, 0.4);
   letter-spacing: 3rpx;
 }
 
@@ -1319,25 +1333,25 @@ $text-secondary: #999999;
 .bottom-back-btn {
   height: 120rpx;
   padding: 0 56rpx;
-  background: rgba($primary, 0.08);
+  background: linear-gradient(135deg, rgba($gold, 0.12), rgba($gold, 0.04));
   border-radius: 48rpx;
-  border: 2rpx solid rgba($primary, 0.2);
+  border: 2rpx solid rgba($gold, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4rpx 16rpx rgba($primary, 0.08);
+  box-shadow: 0 4rpx 16rpx rgba($gold, 0.1);
   transition: all 0.3s ease;
 
   &:active {
     transform: scale(0.97);
-    background: rgba($primary, 0.12);
-    border-color: rgba($primary, 0.3);
+    background: linear-gradient(135deg, rgba($gold, 0.2), rgba($gold, 0.08));
+    border-color: rgba($gold, 0.4);
   }
 
   text {
     font-size: 44rpx;
     font-weight: 600;
-    color: $primary;
+    color: $gold;
     letter-spacing: 1rpx;
   }
 }
@@ -1345,14 +1359,14 @@ $text-secondary: #999999;
 .bottom-btn {
   height: 120rpx;
   padding: 0 72rpx;
-  background: linear-gradient(135deg, $primary, $primary-dark);
+  background: linear-gradient(135deg, $gold, #8a6d3b);
   border-radius: 48rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 
-    0 8rpx 32rpx rgba($primary, 0.35),
-    0 0 20rpx rgba($primary, 0.15);
+    0 8rpx 32rpx rgba($gold, 0.4),
+    0 0 20rpx rgba($gold, 0.2);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -1371,8 +1385,8 @@ $text-secondary: #999999;
   &:active {
     transform: scale(0.97);
     box-shadow: 
-      0 4rpx 16rpx rgba($primary, 0.25),
-      0 0 12rpx rgba($primary, 0.1);
+      0 4rpx 16rpx rgba($gold, 0.3),
+      0 0 12rpx rgba($gold, 0.15);
   }
 
   text {
@@ -1387,14 +1401,16 @@ $text-secondary: #999999;
 
 /* === 账单汇总 === */
 .bill-summary-card {
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba(26, 26, 46, 0.98), rgba(20, 20, 40, 0.95));
   border-radius: 40rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  border: 2rpx solid rgba($primary, 0.08);
+  border: 2rpx solid rgba($gold, 0.1);
   box-shadow: 
-    0 8rpx 32rpx rgba(0, 0, 0, 0.06),
-    0 0 20rpx rgba($primary, 0.03);
+    0 8rpx 32rpx rgba(0, 0, 0, 0.3),
+    0 0 20rpx rgba($gold, 0.06),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16rpx);
 
   .bs-header {
     display: flex;
@@ -1402,19 +1418,19 @@ $text-secondary: #999999;
     gap: 16rpx;
     margin-bottom: 28rpx;
     padding-bottom: 20rpx;
-    border-bottom: 2rpx solid rgba($primary, 0.08);
+    border-bottom: 2rpx solid rgba($gold, 0.08);
   }
 
   .bs-icon-wrap {
     width: 72rpx;
     height: 72rpx;
-    background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.05));
+    background: linear-gradient(135deg, rgba($gold, 0.15), rgba($gold, 0.06));
     border-radius: 24rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2rpx solid rgba($primary, 0.12);
-    box-shadow: 0 4rpx 16rpx rgba($primary, 0.06);
+    border: 2rpx solid rgba($gold, 0.15);
+    box-shadow: 0 4rpx 16rpx rgba($gold, 0.08);
   }
 
   .bs-icon { font-size: 44rpx; }
@@ -1422,7 +1438,7 @@ $text-secondary: #999999;
   .bs-title {
     font-size: 48rpx;
     font-weight: 700;
-    color: $text-primary;
+    color: #fff;
     letter-spacing: 2rpx;
   }
 
@@ -1433,16 +1449,16 @@ $text-secondary: #999999;
   }
 
   .bs-item {
-    background: rgba($primary, 0.03);
+    background: rgba(0, 0, 0, 0.15);
     border-radius: 28rpx;
     padding: 28rpx 20rpx;
     text-align: center;
-    border: 2rpx solid rgba($primary, 0.05);
+    border: 2rpx solid rgba(255, 255, 255, 0.04);
     transition: all 0.3s ease;
 
     &:active {
-      background: rgba($primary, 0.06);
-      border-color: rgba($primary, 0.12);
+      background: rgba($gold, 0.06);
+      border-color: rgba($gold, 0.15);
       transform: scale(0.98);
     }
   }
@@ -1450,7 +1466,7 @@ $text-secondary: #999999;
   .bs-label {
     display: block;
     font-size: 28rpx;
-    color: $text-secondary;
+    color: rgba(255, 255, 255, 0.5);
     margin-bottom: 12rpx;
     font-weight: 500;
   }
@@ -1458,24 +1474,25 @@ $text-secondary: #999999;
   .bs-val {
     font-size: 48rpx;
     font-weight: 700;
-    color: $text-primary;
+    color: #fff;
     letter-spacing: 1rpx;
   }
 
   .bs-paid {
     .bs-val {
-      color: $primary;
+      color: #34d399;
     }
   }
 
   .bs-payable {
-    background: linear-gradient(145deg, rgba($primary, 0.08), rgba($primary, 0.03));
-    border-color: rgba($primary, 0.12);
-    box-shadow: 0 4rpx 16rpx rgba($primary, 0.05);
+    background: linear-gradient(145deg, rgba($gold, 0.08), rgba($gold, 0.02));
+    border-color: rgba($gold, 0.15);
+    box-shadow: 0 4rpx 16rpx rgba($gold, 0.06);
     
     .bs-val {
-      color: $primary;
+      color: $gold;
       font-size: 56rpx;
+      text-shadow: 0 0 24rpx rgba($gold, 0.3);
     }
   }
 }
@@ -1490,18 +1507,19 @@ $text-secondary: #999999;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: $card-bg;
+  background: linear-gradient(145deg, $card-bg, rgba(20, 20, 40, 0.95));
   border-radius: 48rpx;
   padding: 48rpx;
-  border: 3rpx solid rgba($primary, 0.1);
+  border: 3rpx solid rgba($gold, 0.15);
   box-shadow: 
-    0 12rpx 40rpx rgba(0, 0, 0, 0.08);
+    0 12rpx 40rpx rgba(0, 0, 0, 0.3),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
 
   &:active {
     transform: scale(0.99);
-    border-color: rgba($primary, 0.25);
-    background: rgba($primary, 0.05);
+    border-color: rgba($gold, 0.3);
+    background: linear-gradient(145deg, rgba($gold, 0.08), rgba($gold, 0.02));
   }
 
   .mlc-left {
@@ -1517,13 +1535,15 @@ $text-secondary: #999999;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.05));
-    border-radius: 50%;
-    border: 3rpx solid rgba($primary, 0.15);
   }
 
   .mlc-icon-glow {
-    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba($gold, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: iconPulse 3s ease-in-out infinite;
   }
 
   .mlc-icon {
@@ -1541,40 +1561,39 @@ $text-secondary: #999999;
   .mlc-title {
     font-size: 60rpx;
     font-weight: 700;
-    color: $text-primary;
+    color: #fff;
   }
 
   .mlc-desc {
     font-size: 44rpx;
-    color: $text-secondary;
+    color: rgba(255, 255, 255, 0.5);
   }
 
   .mlc-arrow-wrap {
     width: 88rpx;
     height: 88rpx;
-    background: rgba($primary, 0.08);
+    background: rgba($gold, 0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2rpx solid rgba($primary, 0.15);
   }
 
   .mlc-arrow {
     font-size: 72rpx;
-    color: $primary;
+    color: $gold;
     font-weight: 600;
   }
 }
 
 .member-info-card {
-  background: $card-bg;
+  background: linear-gradient(145deg, rgba($gold, 0.1), rgba($gold, 0.03));
   border-radius: 48rpx;
   padding: 48rpx;
-  border: 3rpx solid rgba($primary, 0.15);
+  border: 3rpx solid rgba($gold, 0.25);
   box-shadow: 
-    0 12rpx 40rpx rgba(0, 0, 0, 0.08),
-    0 0 40rpx rgba($primary, 0.04);
+    0 12rpx 40rpx rgba(0, 0, 0, 0.3),
+    0 0 40rpx rgba($gold, 0.08);
 
   .mic-header {
     display: flex;
@@ -1582,7 +1601,7 @@ $text-secondary: #999999;
     gap: 32rpx;
     margin-bottom: 40rpx;
     padding-bottom: 32rpx;
-    border-bottom: 2rpx solid rgba($primary, 0.1);
+    border-bottom: 2rpx solid rgba($gold, 0.15);
   }
 
   .mic-icon-wrap {
@@ -1592,13 +1611,15 @@ $text-secondary: #999999;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba($primary, 0.12), rgba($primary, 0.06));
-    border-radius: 50%;
-    border: 3rpx solid rgba($primary, 0.18);
   }
 
   .mic-ring {
-    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 5rpx solid rgba($gold, 0.3);
+    border-radius: 50%;
+    animation: ringRotate 8s linear infinite;
   }
 
   .mic-icon {
@@ -1617,12 +1638,12 @@ $text-secondary: #999999;
   .mic-name {
     font-size: 64rpx;
     font-weight: 700;
-    color: $text-primary;
+    color: #fff;
   }
 
   .mic-level {
     font-size: 44rpx;
-    color: $primary;
+    color: $gold;
   }
 
   .mic-balance-wrap {
@@ -1631,20 +1652,21 @@ $text-secondary: #999999;
     align-items: flex-end;
     gap: 4rpx;
     padding: 20rpx 32rpx;
-    background: linear-gradient(135deg, rgba($primary, 0.08), rgba($primary, 0.04));
+    background: rgba($gold, 0.1);
     border-radius: 32rpx;
-    border: 2rpx solid rgba($primary, 0.15);
+    border: 2rpx solid rgba($gold, 0.2);
   }
 
   .mic-balance {
     font-size: 72rpx;
     font-weight: 800;
-    color: $primary;
+    color: $gold;
+    text-shadow: 0 0 30rpx rgba($gold, 0.4);
   }
 
   .mic-balance-label {
     font-size: 36rpx;
-    color: rgba($primary, 0.6);
+    color: rgba($gold, 0.6);
   }
 
   .mic-actions {
@@ -1655,32 +1677,32 @@ $text-secondary: #999999;
 
   .mic-action-btn {
     padding: 24rpx 48rpx;
-    background: linear-gradient(135deg, rgba($primary, 0.15), rgba($primary, 0.06));
+    background: linear-gradient(135deg, rgba($gold, 0.2), rgba($gold, 0.08));
     border-radius: 32rpx;
-    border: 2rpx solid rgba($primary, 0.2);
+    border: 2rpx solid rgba($gold, 0.3);
     transition: all 0.3s ease;
 
     &:active {
       transform: scale(0.97);
-      background: linear-gradient(135deg, rgba($primary, 0.22), rgba($primary, 0.1));
+      background: linear-gradient(135deg, rgba($gold, 0.3), rgba($gold, 0.12));
     }
 
     text {
       font-size: 48rpx;
       font-weight: 600;
-      color: $primary;
+      color: $gold;
     }
 
     &.secondary {
-      background: rgba(107, 114, 128, 0.08);
-      border-color: rgba(107, 114, 128, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
 
       text {
-        color: $text-secondary;
+        color: rgba(255, 255, 255, 0.5);
       }
 
       &:active {
-        background: rgba(107, 114, 128, 0.12);
+        background: rgba(255, 255, 255, 0.08);
       }
     }
   }
@@ -1688,10 +1710,10 @@ $text-secondary: #999999;
 
 /* === 支付方式 === */
 .pay-methods { display: flex; gap: 12rpx; margin: 0 24rpx 12rpx; }
-.pay-method { flex: 1; padding: 16rpx 12rpx; background: rgba($primary, 0.04); border: 2rpx solid rgba($primary, 0.08); border-radius: 16rpx; text-align: center; }
-.pay-method.active { border-color: $primary; background: rgba($primary, 0.1); }
-.pm-label { font-size: 22rpx; color: $text-secondary; display: block; }
-.pm-amount { font-size: 26rpx; font-weight: 700; color: $text-primary; margin-top: 4rpx; display: block; }
+.pay-method { flex: 1; padding: 16rpx 12rpx; background: rgba(255,255,255,.1); border: 2rpx solid rgba(255,255,255,.1); border-radius: 16rpx; text-align: center; }
+.pay-method.active { border-color: #34d399; background: rgba(52,211,153,.15); }
+.pm-label { font-size: 22rpx; color: rgba(255,255,255,.7); display: block; }
+.pm-amount { font-size: 26rpx; font-weight: 700; color: #fff; margin-top: 4rpx; display: block; }
 
 /* === 消费明细列表 === */
 .detail-list {
@@ -1704,14 +1726,14 @@ $text-secondary: #999999;
   align-items: center;
   padding: 28rpx 24rpx;
   margin-bottom: 8rpx;
-  background: rgba($primary, 0.03);
+  background: rgba(0, 0, 0, 0.12);
   border-radius: 24rpx;
-  border: 2rpx solid rgba($primary, 0.05);
+  border: 2rpx solid rgba(255, 255, 255, 0.03);
   transition: all 0.3s ease;
 
   &:active {
-    background: rgba($primary, 0.06);
-    border-color: rgba($primary, 0.1);
+    background: rgba($gold, 0.05);
+    border-color: rgba($gold, 0.1);
     transform: scale(0.99);
   }
 
@@ -1736,32 +1758,32 @@ $text-secondary: #999999;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 2rpx solid rgba($primary, 0.1);
-  background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.03));
+  border: 2rpx solid rgba($gold, 0.12);
+  background: linear-gradient(135deg, rgba($gold, 0.12), rgba($gold, 0.03));
 
   &.di-icon-table {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.04));
-    border-color: rgba(99, 102, 241, 0.15);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(99, 102, 241, 0.04));
+    border-color: rgba(99, 102, 241, 0.2);
   }
 
   &.di-icon-product {
-    background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.04));
-    border-color: rgba($primary, 0.15);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.04));
+    border-color: rgba(34, 197, 94, 0.2);
   }
 
   &.di-icon-assistant {
-    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(236, 72, 153, 0.04));
-    border-color: rgba(236, 72, 153, 0.15);
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(236, 72, 153, 0.04));
+    border-color: rgba(236, 72, 153, 0.2);
   }
 
   &.di-icon-charging {
-    background: linear-gradient(135deg, rgba(251, 146, 60, 0.1), rgba(251, 146, 60, 0.04));
-    border-color: rgba(251, 146, 60, 0.15);
+    background: linear-gradient(135deg, rgba(251, 146, 60, 0.15), rgba(251, 146, 60, 0.04));
+    border-color: rgba(251, 146, 60, 0.2);
   }
 
   &.di-icon-merge_fee {
-    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(147, 51, 234, 0.04));
-    border-color: rgba(147, 51, 234, 0.15);
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(147, 51, 234, 0.04));
+    border-color: rgba(147, 51, 234, 0.2);
   }
 }
 
@@ -1776,7 +1798,7 @@ $text-secondary: #999999;
 
 .di-name {
   font-size: 42rpx;
-  color: $text-primary;
+  color: #fff;
   font-weight: 600;
   display: block;
   margin-bottom: 8rpx;
@@ -1795,7 +1817,7 @@ $text-secondary: #999999;
 
 .di-meta {
   font-size: 32rpx;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 500;
 }
 
@@ -1806,45 +1828,45 @@ $text-secondary: #999999;
   font-weight: 600;
 
   &.pending, &.preorder_pending {
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(245, 158, 11, 0.15);
     color: #f59e0b;
-    border: 2rpx solid rgba(245, 158, 11, 0.15);
+    border: 2rpx solid rgba(245, 158, 11, 0.2);
   }
 
   &.processing {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(59, 130, 246, 0.15);
     color: #3b82f6;
-    border: 2rpx solid rgba(59, 130, 246, 0.15);
+    border: 2rpx solid rgba(59, 130, 246, 0.2);
   }
 
   &.delivered {
-    background: rgba($primary, 0.1);
-    color: $primary;
-    border: 2rpx solid rgba($primary, 0.15);
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 2rpx solid rgba(34, 197, 94, 0.2);
   }
 
   &.serving {
-    background: rgba($primary, 0.1);
-    color: $primary;
-    border: 2rpx solid rgba($primary, 0.15);
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 2rpx solid rgba(34, 197, 94, 0.2);
   }
 
   &.completed {
-    background: rgba(107, 114, 128, 0.08);
-    color: $text-secondary;
-    border: 2rpx solid rgba(107, 114, 128, 0.12);
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+    border: 2rpx solid rgba(107, 114, 128, 0.2);
   }
 
   &.active {
-    background: rgba($primary, 0.1);
-    color: $primary;
-    border: 2rpx solid rgba($primary, 0.15);
+    background: rgba($gold, 0.15);
+    color: $gold;
+    border: 2rpx solid rgba($gold, 0.2);
   }
 
   &.cancelled {
-    background: rgba(239, 68, 68, 0.08);
+    background: rgba(239, 68, 68, 0.1);
     color: rgba(239, 68, 68, 0.6);
-    border: 2rpx solid rgba(239, 68, 68, 0.12);
+    border: 2rpx solid rgba(239, 68, 68, 0.15);
   }
 }
 
@@ -1856,28 +1878,28 @@ $text-secondary: #999999;
 .di-price {
   font-size: 46rpx;
   font-weight: 700;
-  color: $text-primary;
+  color: #fff;
   display: block;
   letter-spacing: 1rpx;
 }
 
 .di-paid-tag {
   font-size: 26rpx;
-  color: $primary;
-  background: rgba($primary, 0.1);
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.15);
   padding: 6rpx 16rpx;
   border-radius: 12rpx;
   margin-top: 8rpx;
   display: inline-block;
-  border: 2rpx solid rgba($primary, 0.15);
+  border: 2rpx solid rgba(52, 211, 153, 0.2);
 }
 
 .fee-panel-footer {
   margin-top: 16rpx;
   padding: 20rpx 24rpx;
-  background: rgba($primary, 0.04);
+  background: rgba($gold, 0.03);
   border-radius: 20rpx;
-  border: 2rpx solid rgba($primary, 0.08);
+  border: 2rpx solid rgba($gold, 0.08);
 }
 
 .discount-row {
@@ -1886,7 +1908,7 @@ $text-secondary: #999999;
   align-items: center;
   padding: 16rpx 0;
   margin-bottom: 12rpx;
-  border-bottom: 2rpx dashed rgba($primary, 0.08);
+  border-bottom: 2rpx dashed rgba(255, 255, 255, 0.08);
 
   .dr-left {
     display: flex;
@@ -1900,14 +1922,14 @@ $text-secondary: #999999;
 
   .dr-name {
     font-size: 38rpx;
-    color: $primary;
+    color: #34d399;
     font-weight: 600;
   }
 
   .dr-price {
     font-size: 44rpx;
     font-weight: 700;
-    color: $primary;
+    color: #34d399;
     letter-spacing: 1rpx;
   }
 }
@@ -1921,14 +1943,15 @@ $text-secondary: #999999;
   .total-label {
     font-size: 44rpx;
     font-weight: 700;
-    color: $text-primary;
+    color: #fff;
     letter-spacing: 2rpx;
   }
 
   .total-price {
     font-size: 60rpx;
     font-weight: 800;
-    color: $primary;
+    color: $gold;
+    text-shadow: 0 0 20rpx rgba($gold, 0.3);
     letter-spacing: 3rpx;
   }
 }

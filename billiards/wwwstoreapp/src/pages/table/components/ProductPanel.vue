@@ -105,18 +105,18 @@ function statusClass(status: string): string {
 
 <style lang="scss" scoped>
 .panel {
-  background: #ffffff;
+  background: #fff;
   margin: 0 24rpx 18rpx;
-  border-radius: 16rpx;
+  border-radius: 34rpx;
   overflow: hidden;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,.06);
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.05);
 }
 
 .panel-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 28rpx 30rpx;
+  padding: 32rpx 30rpx;
   user-select: none;
 }
 
@@ -127,15 +127,15 @@ function statusClass(status: string): string {
 }
 
 .head-title {
-  font-size: 30rpx;
-  font-weight: 700;
-  color: #000000;
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #111827;
 }
 
 .head-count {
   font-size: 22rpx;
-  color: #07C160;
-  background: rgba(7, 193, 96, 0.1);
+  color: #059669;
+  background: #ecfdf5;
   padding: 4rpx 16rpx;
   border-radius: 20rpx;
   font-weight: 600;
@@ -148,7 +148,7 @@ function statusClass(status: string): string {
   align-items: center;
   justify-content: center;
   font-size: 28rpx;
-  color: #999999;
+  color: #9ca3af;
   transition: transform 0.25s ease;
   transform: rotate(-90deg);
 
@@ -162,10 +162,10 @@ function statusClass(status: string): string {
 }
 
 .item-card {
-  background: #f7f7f7;
-  border-radius: 12rpx;
-  padding: 24rpx;
-  margin-bottom: 12rpx;
+  background: linear-gradient(180deg, #fafcff 0%, #f8fafc 100%);
+  border-radius: 24rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 14rpx;
 
   &:last-of-type {
     margin-bottom: 0;
@@ -187,9 +187,9 @@ function statusClass(status: string): string {
 }
 
 .item-name {
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 600;
-  color: #333333;
+  color: #111827;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -197,7 +197,7 @@ function statusClass(status: string): string {
 
 .item-meta {
   font-size: 24rpx;
-  color: #999999;
+  color: #9ca3af;
 }
 
 .item-cost {
@@ -210,9 +210,9 @@ function statusClass(status: string): string {
 }
 
 .item-price {
-  font-size: 30rpx;
+  font-size: 32rpx;
   font-weight: 700;
-  color: #07C160;
+  color: #dc2626;
   font-variant-numeric: tabular-nums;
 }
 
@@ -226,32 +226,32 @@ function statusClass(status: string): string {
   font-weight: 500;
 
   &.done {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
-    .pill-dot { background: #07C160; }
+    background: #ecfdf5;
+    color: #059669;
+    .pill-dot { background: #22c55e; }
   }
 
   &.preorder {
-    background: rgba(7, 193, 96, 0.08);
-    color: #07C160;
-    .pill-dot { background: #07C160; }
+    background: #fef3c7;
+    color: #d97706;
+    .pill-dot { background: #f59e0b; }
   }
 
   &.pending {
-    background: rgba(7, 193, 96, 0.08);
-    color: #07C160;
-    .pill-dot { background: #07C160; }
+    background: #fffbeb;
+    color: #d97706;
+    .pill-dot { background: #f59e0b; }
   }
 
   &.processing {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
-    .pill-dot { background: #07C160; }
+    background: #eff6ff;
+    color: #2563eb;
+    .pill-dot { background: #3b82f6; }
   }
 
   &.cancelled {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    background: #fef2f2;
+    color: #dc2626;
     .pill-dot { background: #ef4444; }
   }
 }
@@ -269,7 +269,7 @@ function statusClass(status: string): string {
   gap: 16rpx;
   margin-top: 20rpx;
   padding-top: 20rpx;
-  border-top: 1rpx solid #e5e5e5;
+  border-top: 1rpx solid #e5e7eb;
 }
 
 .act-btn {
@@ -280,33 +280,33 @@ function statusClass(status: string): string {
   transition: all 0.15s ease;
 
   &.confirm {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
-    border: 1rpx solid rgba(7, 193, 96, 0.3);
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1rpx solid #bfdbfe;
   }
 
   &.deliver {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
-    border: 1rpx solid rgba(7, 193, 96, 0.3);
+    background: #ecfdf5;
+    color: #059669;
+    border: 1rpx solid #a7f3d0;
   }
 
   &.cancel {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border: 1rpx solid rgba(239, 68, 68, 0.3);
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1rpx solid #fecaca;
   }
 
   &.remove {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border: 1rpx solid rgba(239, 68, 68, 0.3);
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1rpx solid #fecaca;
   }
 }
 
 .act-done {
   font-size: 36rpx;
-  color: #07C160;
+  color: #22c55e;
   font-weight: 700;
 }
 
@@ -324,14 +324,14 @@ function statusClass(status: string): string {
 
 .empty-title {
   font-size: 26rpx;
-  color: #999999;
+  color: #9ca3af;
   font-weight: 500;
   margin-bottom: 6rpx;
 }
 
 .empty-desc {
   font-size: 22rpx;
-  color: #999999;
+  color: #d1d5db;
 }
 
 .add-btn {
@@ -340,24 +340,24 @@ function statusClass(status: string): string {
   justify-content: center;
   gap: 8rpx;
   padding: 24rpx;
-  border: 2rpx dashed #e5e5e5;
-  border-radius: 12rpx;
-  color: #999999;
+  border: 2rpx dashed #d1d5db;
+  border-radius: 22rpx;
+  color: #6b7280;
   font-size: 26rpx;
   font-weight: 600;
   transition: all 0.15s ease;
 
   &:active {
-    border-color: #07C160;
-    color: #07C160;
-    background: rgba(7, 193, 96, 0.05);
+    border-color: #059669;
+    color: #059669;
+    background: #f0fdf4;
   }
 }
 
 .add-plus {
   font-size: 28rpx;
   font-weight: 400;
-  color: #999999;
+  color: #9ca3af;
   line-height: 1;
 }
 </style>

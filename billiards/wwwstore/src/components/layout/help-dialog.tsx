@@ -104,13 +104,13 @@ export function HelpDialog({ onClose }: HelpDialogProps) {
           <div className="flex items-center gap-2 overflow-x-auto pb-1">
             <button onClick={() => setSelectedCategory('')}
               className={cn('px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors',
-                !selectedCategory ? 'bg-[#07C160] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200')}>
+                !selectedCategory ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200')}>
               全部
             </button>
             {categories.map(c => (
               <button key={c.key} onClick={() => setSelectedCategory(c.key)}
                 className={cn('px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors',
-                  selectedCategory === c.key ? 'bg-[#07C160] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200')}>
+                  selectedCategory === c.key ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200')}>
                 {c.label}
               </button>
             ))}
@@ -141,14 +141,14 @@ export function HelpDialog({ onClose }: HelpDialogProps) {
               </div>
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setShowTicket(false)}>取消</Button>
-                <Button onClick={handleSubmitTicket} disabled={submitting} className="bg-[#07C160] hover:bg-[#06AD56]">
+                <Button onClick={handleSubmitTicket} disabled={submitting} className="bg-emerald-600 hover:bg-emerald-700">
                   {submitting ? '提交中...' : '确认提交'}
                 </Button>
               </div>
             </div>
           ) : loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="w-6 h-6 border-2 border-[#07C160] border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : filteredHelps.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-slate-400">
@@ -169,7 +169,7 @@ export function HelpDialog({ onClose }: HelpDialogProps) {
                     <div className="px-4 py-3 bg-white border-t border-slate-100">
                       {detailLoading === help.id ? (
                         <div className="flex items-center justify-center py-6">
-                          <div className="w-5 h-5 border-2 border-[#07C160] border-t-transparent rounded-full animate-spin" />
+                          <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
                         </div>
                       ) : (
                         <div className="prose prose-sm max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: help.content || articleContents[help.id] || '' }} />

@@ -177,7 +177,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #f5f5f5;
 }
 
 .detail-container {
@@ -185,9 +185,8 @@ onMounted(() => {
 }
 
 .header-card {
-	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	background: #fff;
+	border-radius: 24rpx;
 	padding: 32rpx;
 	margin-bottom: 24rpx;
 	display: flex;
@@ -198,7 +197,7 @@ onMounted(() => {
 .type-name {
 	font-size: 36rpx;
 	font-weight: 600;
-	color: #333333;
+	color: #333;
 }
 
 .status-badge {
@@ -212,19 +211,18 @@ onMounted(() => {
 	}
 	
 	&.approved {
-		background: rgba(7, 193, 96, 0.1);
-		color: #07C160;
+		background: rgba(52, 199, 89, 0.1);
+		color: #34c759;
 	}
 	
 	&.rejected {
-		background: rgba(239, 68, 68, 0.1);
-		color: #dc2626;
+		background: rgba(255, 59, 48, 0.1);
+		color: #ff3b30;
 	}
 }
 
 .info-card, .reason-card, .extra-card, .approve-card, .action-card {
-	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
+	background: #fff;
 	border-radius: 16rpx;
 	padding: 32rpx;
 	margin-bottom: 24rpx;
@@ -233,7 +231,7 @@ onMounted(() => {
 .section-title {
 	font-size: 28rpx;
 	font-weight: 600;
-	color: #333333;
+	color: #333;
 	margin-bottom: 24rpx;
 }
 
@@ -241,7 +239,7 @@ onMounted(() => {
 	display: flex;
 	justify-content: space-between;
 	padding: 16rpx 0;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f0f0f0;
 	
 	&:last-child {
 		border-bottom: none;
@@ -250,17 +248,17 @@ onMounted(() => {
 
 .label {
 	font-size: 28rpx;
-	color: #999999;
+	color: #666;
 }
 
 .value {
 	font-size: 28rpx;
-	color: #333333;
+	color: #333;
 }
 
 .reason-text {
 	font-size: 28rpx;
-	color: #333333;
+	color: #333;
 	line-height: 1.6;
 }
 
@@ -268,7 +266,7 @@ onMounted(() => {
 	display: flex;
 	justify-content: space-between;
 	padding: 16rpx 0;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f0f0f0;
 	
 	&:last-child {
 		border-bottom: none;
@@ -277,24 +275,19 @@ onMounted(() => {
 
 .extra-label {
 	font-size: 28rpx;
-	color: #999999;
+	color: #666;
 }
 
 .extra-value {
 	font-size: 28rpx;
-	color: #333333;
+	color: #333;
 }
 
 .remark-textarea {
 	width: 100%;
 	min-height: 150rpx;
 	font-size: 28rpx;
-	color: #333333;
-	background: #f7f7f7;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 12rpx;
-	padding: 20rpx;
-	box-sizing: border-box;
+	color: #333;
 	margin-bottom: 24rpx;
 }
 
@@ -313,12 +306,12 @@ onMounted(() => {
 	font-weight: 600;
 	
 	&.approve {
-		background: #07C160;
+		background: #34c759;
 		color: #fff;
 	}
 	
 	&.reject {
-		background: #dc2626;
+		background: #ff3b30;
 		color: #fff;
 	}
 }
@@ -328,6 +321,6 @@ onMounted(() => {
 	justify-content: center;
 	align-items: center;
 	height: 300rpx;
-	color: #999999;
+	color: #999;
 }
 </style>

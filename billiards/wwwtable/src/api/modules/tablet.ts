@@ -368,7 +368,7 @@ const tabletApi = {
   },
 }
 
-// 支付接口走根路径 https://poolapi.kyyp.cn（不在 /storeapi 组内，LoginMiddleware 免检）
-const PAYMENT_BASE = 'https://poolapi.kyyp.cn'
+// 支付接口走根路径 https://api.tpzl88.com（不在 /storeapi 组内，LoginMiddleware 免检）
+const PAYMENT_BASE = 'https://api.tpzl88.com'
 
 export { tabletApi }

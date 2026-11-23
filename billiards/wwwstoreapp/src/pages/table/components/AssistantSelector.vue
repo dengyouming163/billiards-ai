@@ -225,9 +225,8 @@ defineExpose({ open, close })
   display: flex; flex-direction: column; justify-content: flex-end;
 }
 .as-panel {
-  background: #ffffff; border-radius: 36rpx 36rpx 0 0;
+  background: #fff; border-radius: 36rpx 36rpx 0 0;
   display: flex; flex-direction: column; max-height: 85vh; overflow: hidden;
-  border-top: 1rpx solid #e5e5e5;
 }
 
 // ===== 拖拽条 =====
@@ -235,7 +234,7 @@ defineExpose({ open, close })
   display: flex; justify-content: center; padding: 14rpx 0 6rpx; flex-shrink: 0;
 }
 .as-drag-indicator {
-  width: 64rpx; height: 6rpx; border-radius: 3rpx; background: #e5e5e5;
+  width: 64rpx; height: 6rpx; border-radius: 3rpx; background: #e2e8f0;
 }
 
 // ===== Header =====
@@ -245,62 +244,62 @@ defineExpose({ open, close })
 }
 .as-header-left { display: flex; align-items: center; gap: 14rpx; }
 .as-header-icon { font-size: 36rpx; }
-.as-title { font-size: 36rpx; font-weight: 800; color: #000000; }
+.as-title { font-size: 36rpx; font-weight: 800; color: #0f172a; }
 .as-close {
   width: 56rpx; height: 56rpx; display: flex; align-items: center;
-  justify-content: center; border-radius: 50%; background: #f7f7f7;
-  color: #999999; font-size: 28rpx; flex-shrink: 0;
+  justify-content: center; border-radius: 50%; background: #f1f5f9;
+  color: #64748b; font-size: 28rpx; flex-shrink: 0;
 }
 
 // ===== 搜索 =====
 .as-search {
   display: flex; align-items: center; margin: 0 32rpx 20rpx;
-  padding: 6rpx 6rpx 6rpx 20rpx; background: #f7f7f7;
-  border: 2rpx solid #e5e5e5; border-radius: 20rpx; flex-shrink: 0;
+  padding: 6rpx 6rpx 6rpx 20rpx; background: #f8fafc;
+  border: 2rpx solid #e2e8f0; border-radius: 20rpx; flex-shrink: 0;
 }
 .as-search-icon { font-size: 28rpx; flex-shrink: 0; }
 .as-search-input {
   flex: 1; height: 68rpx; padding: 0 16rpx; background: transparent;
-  font-size: 28rpx; color: #333333;
+  font-size: 28rpx; color: #1e293b;
 }
 .as-search-clear {
   width: 52rpx; height: 52rpx; display: flex; align-items: center;
-  justify-content: center; border-radius: 50%; background: #e5e5e5;
-  font-size: 22rpx; color: #999999; flex-shrink: 0;
+  justify-content: center; border-radius: 50%; background: #e2e8f0;
+  font-size: 22rpx; color: #64748b; flex-shrink: 0;
 }
 
 // ===== 列表 =====
 .as-list { flex: 1; padding: 0 32rpx; }
 .as-item {
   display: flex; align-items: center; gap: 18rpx;
-  padding: 22rpx 0; border-bottom: 1rpx solid #e5e5e5;
+  padding: 22rpx 0; border-bottom: 1rpx solid #f4f4f5;
   &--busy { opacity: 0.5; pointer-events: none; }
 }
 .as-item-avatar {
   width: 80rpx; height: 80rpx; border-radius: 50%;
-  background: rgba(7, 193, 96, 0.1);
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.as-item-avatar-text { font-size: 34rpx; font-weight: 700; color: #07C160; }
+.as-item-avatar-text { font-size: 34rpx; font-weight: 700; color: #059669; }
 .as-item-body { flex: 1; min-width: 0; }
-.as-item-name { font-size: 30rpx; font-weight: 600; color: #333333; display: block; }
+.as-item-name { font-size: 30rpx; font-weight: 600; color: #1e293b; display: block; }
 .as-item-meta {
-  font-size: 24rpx; color: #999999; margin-top: 4rpx;
+  font-size: 24rpx; color: #94a3b8; margin-top: 4rpx;
   display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .as-item-end { text-align: right; flex-shrink: 0; }
-.as-item-rate { font-size: 28rpx; color: #07C160; font-weight: 700; display: block; }
+.as-item-rate { font-size: 28rpx; color: #ef4444; font-weight: 700; display: block; }
 .as-item-status {
   display: inline-flex; align-items: center; gap: 6rpx;
   font-size: 22rpx; padding: 4rpx 18rpx; border-radius: 20rpx; margin-top: 8rpx;
 }
 .as-item-status-dot { width: 8rpx; height: 8rpx; border-radius: 50%; }
-.as-item-status.free { background: rgba(7, 193, 96, 0.1); color: #07C160; .as-item-status-dot { background: #07C160; } }
-.as-item-status.busy { background: rgba(239, 68, 68, 0.1); color: #ef4444; .as-item-status-dot { background: #ef4444; } }
+.as-item-status.free { background: #d1fae5; color: #065f46; .as-item-status-dot { background: #059669; } }
+.as-item-status.busy { background: #fee2e2; color: #991b1b; .as-item-status-dot { background: #ef4444; } }
 
 .as-empty { padding: 100rpx 0; text-align: center; }
 .as-empty-icon { font-size: 56rpx; display: block; margin-bottom: 16rpx; }
-.as-empty-text { color: #999999; font-size: 28rpx; }
+.as-empty-text { color: #94a3b8; font-size: 28rpx; }
 
 // ===== 配置区 =====
 .as-config { flex: 1; padding: 0 32rpx 48rpx; }
@@ -308,73 +307,74 @@ defineExpose({ open, close })
 // 已选助教
 .as-selected {
   display: flex; align-items: center; gap: 18rpx;
-  background: rgba(7, 193, 96, 0.05);
-  border: 2rpx solid rgba(7, 193, 96, 0.2); border-radius: 16rpx; padding: 24rpx; margin-top: 8rpx;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+  border: 2rpx solid #a7f3d0; border-radius: 24rpx; padding: 24rpx; margin-top: 8rpx;
 }
 .as-selected-avatar {
   width: 72rpx; height: 72rpx; border-radius: 50%;
-  background: #07C160; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  background: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .as-selected-avatar-text { font-size: 32rpx; font-weight: 700; color: #fff; }
 .as-selected-info { flex: 1; min-width: 0; }
-.as-selected-name { font-size: 30rpx; font-weight: 700; color: #07C160; display: block; }
-.as-selected-rate { font-size: 24rpx; color: #07C160; margin-top: 4rpx; display: block; }
+.as-selected-name { font-size: 30rpx; font-weight: 700; color: #065f46; display: block; }
+.as-selected-rate { font-size: 24rpx; color: #059669; margin-top: 4rpx; display: block; }
 .as-selected-change {
-  font-size: 24rpx; color: #07C160; padding: 10rpx 24rpx;
-  background: rgba(7, 193, 96, 0.1); border-radius: 16rpx; flex-shrink: 0;
+  font-size: 24rpx; color: #3b82f6; padding: 10rpx 24rpx;
+  background: rgba(59,130,246,.1); border-radius: 16rpx; flex-shrink: 0;
 }
 
 // 分组
 .as-section { margin-top: 28rpx; }
 .as-section-title {
-  font-size: 28rpx; font-weight: 700; color: #333333; margin-bottom: 16rpx; display: block;
+  font-size: 28rpx; font-weight: 700; color: #334155; margin-bottom: 16rpx; display: block;
 }
 
 // 服务方式 / 支付方式 — 大卡片
 .as-mode-row { display: flex; gap: 16rpx; }
 .as-mode-card {
-  flex: 1; padding: 24rpx 16rpx; border-radius: 16rpx;
-  border: 2rpx solid #e5e5e5; background: #f7f7f7; text-align: center;
-  &.active { border-color: #07C160; background: rgba(7, 193, 96, 0.1); }
+  flex: 1; padding: 24rpx 16rpx; border-radius: 20rpx;
+  border: 2rpx solid #e5e7eb; background: #fff; text-align: center;
+  &.active { border-color: #059669; background: #ecfdf5; }
 }
 .as-mode-card-icon { font-size: 36rpx; display: block; margin-bottom: 8rpx; }
-.as-mode-card-label { font-size: 28rpx; font-weight: 600; color: #333333; display: block; }
-.as-mode-card-desc { font-size: 22rpx; color: #999999; margin-top: 4rpx; display: block; }
+.as-mode-card-label { font-size: 28rpx; font-weight: 600; color: #1e293b; display: block; }
+.as-mode-card-desc { font-size: 22rpx; color: #94a3b8; margin-top: 4rpx; display: block; }
 
 // 时长芯片
 .as-duration-row { display: flex; gap: 14rpx; align-items: center; }
 .as-dur-chip {
-  padding: 18rpx 28rpx; border-radius: 16rpx; border: 2rpx solid #e5e5e5;
-  background: #f7f7f7; text-align: center; flex: 1;
-  &.active { border-color: #07C160; background: rgba(7, 193, 96, 0.1); }
+  padding: 18rpx 28rpx; border-radius: 18rpx; border: 2rpx solid #e5e7eb;
+  background: #fff; text-align: center; flex: 1;
+  &.active { border-color: #059669; background: #ecfdf5; }
 }
-.as-dur-chip-h { font-size: 28rpx; font-weight: 700; color: #333333; display: block; }
-.as-dur-chip-price { font-size: 22rpx; color: #07C160; margin-top: 2rpx; display: block; }
+.as-dur-chip-h { font-size: 28rpx; font-weight: 700; color: #1e293b; display: block; }
+.as-dur-chip-price { font-size: 22rpx; color: #059669; margin-top: 2rpx; display: block; }
 .as-dur-input {
-  width: 150rpx; padding: 24rpx 16rpx; border-radius: 16rpx;
-  border: 2rpx solid #e5e5e5; font-size: 26rpx; text-align: center; color: #999999;
+  width: 150rpx; padding: 24rpx 16rpx; border-radius: 18rpx;
+  border: 2rpx solid #e5e7eb; font-size: 26rpx; text-align: center; color: #64748b;
 }
 
 // 价格卡片
 .as-price-card {
   margin-top: 20rpx; padding: 24rpx 28rpx;
-  background: #f7f7f7; border-radius: 16rpx; border: 1rpx solid #e5e5e5;
+  background: #f8fafc; border-radius: 20rpx; border: 1rpx solid #e2e8f0;
 }
 .as-price-row { display: flex; justify-content: space-between; align-items: center; padding: 6rpx 0; }
-.as-price-label { font-size: 26rpx; color: #999999; }
-.as-price-val { font-size: 26rpx; font-weight: 600; color: #333333; }
-.as-price-divider { height: 1rpx; background: #e5e5e5; margin: 12rpx 0; }
-.as-price-total { .as-price-label { font-size: 28rpx; font-weight: 700; color: #333333; } .as-price-val { font-size: 32rpx; font-weight: 800; color: #07C160; } }
+.as-price-label { font-size: 26rpx; color: #64748b; }
+.as-price-val { font-size: 26rpx; font-weight: 600; color: #1e293b; }
+.as-price-divider { height: 1rpx; background: #e2e8f0; margin: 12rpx 0; }
+.as-price-total { .as-price-label { font-size: 28rpx; font-weight: 700; color: #1e293b; } .as-price-val { font-size: 32rpx; font-weight: 800; color: #059669; } }
 
 // ===== 底部按钮 =====
 .as-confirm { display: flex; gap: 20rpx; margin-top: 36rpx; padding-bottom: env(safe-area-inset-bottom); }
 .as-btn-cancel {
-  flex: 1; padding: 28rpx; border-radius: 16rpx; background: #f7f7f7;
-  color: #999999; font-size: 28rpx; font-weight: 600; text-align: center; border: none;
+  flex: 1; padding: 28rpx; border-radius: 36rpx; background: #f1f5f9;
+  color: #64748b; font-size: 28rpx; font-weight: 600; text-align: center; border: none;
 }
 .as-btn-confirm {
-  flex: 2; padding: 28rpx; border-radius: 16rpx;
-  background: #07C160;
+  flex: 2; padding: 28rpx; border-radius: 36rpx;
+  background: linear-gradient(135deg, #059669, #10b981);
   color: #fff; font-size: 30rpx; font-weight: 700; text-align: center; border: none;
+  box-shadow: 0 8rpx 24rpx rgba(5,150,105,.25);
 }
 </style>

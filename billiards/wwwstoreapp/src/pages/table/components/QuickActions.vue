@@ -85,22 +85,21 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 26rpx 12rpx;
-  border-radius: 20rpx;
+  border-radius: 28rpx;
   gap: 10rpx;
-  background: #ffffff;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+  box-shadow: 0 12rpx 28rpx rgba(15,23,42,.05);
   transition: all 0.15s;
 
   &:active { transform: scale(0.95); }
 }
 
-.qa-card--amber { border: 1rpx solid rgba(255, 151, 106, 0.3); }
-.qa-card--orange { border: 1rpx solid rgba(0, 122, 255, 0.3); }
-.qa-card--rose { border: 1rpx solid rgba(7, 193, 96, 0.3); }
-.qa-card--teal { border: 1rpx solid rgba(7, 193, 96, 0.3); }
+.qa-card--amber { background: linear-gradient(135deg, #fef3c7, #fde68a); border: 1rpx solid #fcd34d; }
+.qa-card--orange { background: linear-gradient(135deg, #fff7ed, #fed7aa); border: 1rpx solid #fb923c; }
+.qa-card--rose { background: linear-gradient(135deg, #fff1f2, #fecdd3); border: 1rpx solid #fb7185; }
+.qa-card--teal { background: linear-gradient(135deg, #f0fdfa, #99f6e4); border: 1rpx solid #2dd4bf; }
 
-.qa-icon { font-size: 32rpx; opacity: 0.8; }
-.qa-label { font-size: 24rpx; font-weight: 700; color: #333333; }
+.qa-icon { font-size: 40rpx; }
+.qa-label { font-size: 24rpx; font-weight: 700; color: #334155; }
 
 .qa-badge {
   position: absolute;
@@ -109,7 +108,7 @@ onUnmounted(() => {
   min-width: 36rpx;
   height: 36rpx;
   padding: 0 8rpx;
-  background: #FF5252;
+  background: #ef4444;
   color: #fff;
   font-size: 20rpx;
   font-weight: 700;

@@ -96,8 +96,6 @@ export default function ReportsPage() {
   const [overview, setOverview] = useState<{
     totalRevenue: number; totalOrders: number; totalHours: number;
     avgUtilization: number; avgOrderAmount: number; totalProductSales: number; growthRate: number;
-    occupancyRate: number; turnoverRate: number; avgCustomerSpend: number;
-    productSalesCount: number; tableDurationMinutes: number; assistantDurationMinutes: number; outworkDurationMinutes: number;
   } | null>(null);
   const [revenueTrend, setRevenueTrend] = useState<{ date: string; dateValue: string; revenue: number; orders: number; tableHours: number; productSales: number }[]>([]);
   const [tableUsage, setTableUsage] = useState<{ tableId: string; tableNumber: string; utilization: number; hours: number; revenue: number; orderCount: number }[]>([]);
@@ -263,6 +261,14 @@ export default function ReportsPage() {
       totalTables: operationOverview?.total_tables ?? defaults.totalTables,
     };
   }, [overview, revenueSummary, operationOverview]);
+
+  const rechargeChartData = rechargeData.length > 0
+    ? [{
+        ...Object.fromEntries(rechargeData.map((item) => [item.channel, item.amount])),
+        date: getRange().end,
+        total: rechargeData.reduce((sum, item) => sum + item.amount, 0),
+      }]
+    : [];
 
   const handleExport = () => {
     if (!revenueTrend || revenueTrend.length === 0) {
@@ -437,14 +443,18 @@ export default function ReportsPage() {
 
             <TabsContent value="itemType" className="space-y-6">
               <ReportItemTypePanel
-                itemTypeData={itemTypeData}
+                itemTypeData={itemTypeData.map((item) => ({
+                  type: item.item_type,
+                  revenue: item.revenue,
+                  orders: item.order_count,
+                }))}
                 formatCurrency={formatCurrency}
               />
             </TabsContent>
 
             <TabsContent value="recharge" className="space-y-6">
               <ReportRechargePanel
-                rechargeData={rechargeData}
+                rechargeData={rechargeChartData}
                 formatCurrency={formatCurrency}
               />
             </TabsContent>

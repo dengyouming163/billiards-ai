@@ -57,7 +57,7 @@ class AssistantController extends BasePosController
                 if (empty($url)) return $url;
                 return str_replace(
                     ['http://127.0.0.1:10002', 'http://localhost:10002'],
-                    'https://poolapi.kyyp.cn',
+                    'https://api.tpzl88.com',
                     $url
                 );
             };

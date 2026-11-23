@@ -70,30 +70,33 @@ function handleConfirm() {
 </script>
 
 <style lang="scss" scoped>
+$gold: #c9a962;
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(10rpx);
+  backdrop-filter: blur(20rpx);
 }
 
 .modal-content {
   position: relative;
   width: 50vw;
-  background: #ffffff;
-  border-radius: 48rpx;
+  background: linear-gradient(180deg, rgba(26, 26, 46, 0.98), rgba(20, 20, 40, 0.99));
+  border-radius: 64rpx;
   padding: 64rpx;
-  border: 2rpx solid rgba(7,193,96,0.08);
+  border: 4rpx solid rgba($gold, 0.25);
   box-shadow: 
-    0 24rpx 80rpx rgba(0, 0, 0, 0.1),
-    0 0 30rpx rgba(7,193,96,0.05);
+    0 32rpx 96rpx rgba(0, 0, 0, 0.6),
+    0 0 60rpx rgba($gold, 0.15),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
   overflow: hidden;
   animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
@@ -103,7 +106,7 @@ function handleConfirm() {
     left: -100rpx;
     width: 300rpx;
     height: 300rpx;
-    background: radial-gradient(circle, rgba(7,193,96,0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba($gold, 0.25) 0%, transparent 70%);
     pointer-events: none;
     animation: modalGlow 4s ease-in-out infinite;
   }
@@ -117,7 +120,7 @@ function handleConfirm() {
     .modal-title {
       font-size: 56rpx;
       font-weight: 700;
-      color: #333333;
+      color: #f1f5f9;
       letter-spacing: 4rpx;
     }
   }
@@ -133,35 +136,41 @@ function handleConfirm() {
     .player-box {
       flex: 1;
       padding: 40rpx 32rpx;
-      border-radius: 32rpx;
+      border-radius: 48rpx;
       text-align: center;
       transition: all 0.3s;
       
       &.blue {
-        background: rgba(59, 130, 246, 0.06);
-        border: 2rpx solid rgba(59, 130, 246, 0.15);
+        background: linear-gradient(145deg, rgba(59, 130, 246, 0.18), rgba(59, 130, 246, 0.06));
+        border: 3rpx solid rgba(59, 130, 246, 0.25);
         
         .player-score {
           color: #3b82f6;
+          text-shadow: 0 0 40rpx rgba(59, 130, 246, 0.5);
         }
         
         &.winner {
           border-color: #3b82f6;
-          box-shadow: 0 0 30rpx rgba(59, 130, 246, 0.2);
+          box-shadow: 
+            0 0 40rpx rgba(59, 130, 246, 0.4),
+            inset 0 1rpx 0 rgba(59, 130, 246, 0.2);
         }
       }
       
       &.red {
-        background: rgba(239, 68, 68, 0.06);
-        border: 2rpx solid rgba(239, 68, 68, 0.15);
+        background: linear-gradient(145deg, rgba(239, 68, 68, 0.18), rgba(239, 68, 68, 0.06));
+        border: 3rpx solid rgba(239, 68, 68, 0.25);
         
         .player-score {
           color: #ef4444;
+          text-shadow: 0 0 40rpx rgba(239, 68, 68, 0.5);
         }
         
         &.winner {
           border-color: #ef4444;
-          box-shadow: 0 0 30rpx rgba(239, 68, 68, 0.2);
+          box-shadow: 
+            0 0 40rpx rgba(239, 68, 68, 0.4),
+            inset 0 1rpx 0 rgba(239, 68, 68, 0.2);
         }
       }
       
@@ -177,14 +186,14 @@ function handleConfirm() {
           position: absolute;
           top: -8rpx; left: -8rpx; right: -8rpx; bottom: -8rpx;
           border-radius: 50%;
-          border: 4rpx solid #07C160;
+          border: 4rpx solid $gold;
           animation: winnerPulse 1.5s ease-in-out infinite;
         }
       }
       
       .player-name {
         font-size: 40rpx;
-        color: #999999;
+        color: rgba(255, 255, 255, 0.5);
         display: block;
         margin-bottom: 20rpx;
         font-weight: 600;
@@ -200,7 +209,7 @@ function handleConfirm() {
       
       .winner-badge {
         font-size: 36rpx;
-        color: #07C160;
+        color: $gold;
         display: block;
         margin-top: 20rpx;
         font-weight: 700;
@@ -217,6 +226,7 @@ function handleConfirm() {
         
         .trophy {
           font-size: 80rpx;
+          filter: drop-shadow(0 8rpx 24rpx rgba($gold, 0.4));
         }
         
         .trophy-glow {
@@ -226,14 +236,14 @@ function handleConfirm() {
           transform: translate(-50%, -50%);
           width: 120rpx;
           height: 120rpx;
-          background: radial-gradient(circle, rgba(7,193,96,0.15) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba($gold, 0.4) 0%, transparent 70%);
           animation: trophyGlow 2s ease-in-out infinite;
         }
       }
       
       .round-text {
         font-size: 40rpx;
-        color: #999999;
+        color: rgba(255, 255, 255, 0.5);
         font-weight: 600;
         display: block;
         margin-bottom: 16rpx;
@@ -242,10 +252,10 @@ function handleConfirm() {
       .draw-badge {
         display: inline-block;
         padding: 12rpx 32rpx;
-        background: rgba(0,0,0,0.04);
+        background: rgba(107, 114, 128, 0.2);
         border-radius: 32rpx;
         font-size: 32rpx;
-        color: #666666;
+        color: rgba(255, 255, 255, 0.7);
         font-weight: 600;
       }
     }
@@ -264,7 +274,7 @@ function handleConfirm() {
       justify-content: center;
       gap: 16rpx;
       padding: 32rpx;
-      border-radius: 36rpx;
+      border-radius: 40rpx;
       font-size: 48rpx;
       font-weight: 700;
       border: none;
@@ -276,22 +286,24 @@ function handleConfirm() {
       }
       
       &.cancel {
-        background: rgba(0,0,0,0.04);
-        color: #666666;
-        border: 2rpx solid rgba(0,0,0,0.06);
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.7);
+        border: 3rpx solid rgba(255, 255, 255, 0.12);
         
         .btn-icon {
-          color: #999999;
+          color: rgba(255, 255, 255, 0.5);
         }
       }
       
       &.confirm {
-        background: linear-gradient(135deg, #07C160, #06AD56);
-        color: #ffffff;
-        box-shadow: 0 8rpx 24rpx rgba(7,193,96,0.3);
+        background: linear-gradient(135deg, $gold, #8a6d3b);
+        color: #1a1a2e;
+        box-shadow: 
+          0 8rpx 32rpx rgba($gold, 0.4),
+          inset 0 2rpx 4rpx rgba(255, 255, 255, 0.3);
         
         .btn-icon {
-          color: #ffffff;
+          color: #1a1a2e;
         }
       }
       

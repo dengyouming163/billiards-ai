@@ -46,15 +46,14 @@ function handleSelect(key: string) {
   border-radius: 999rpx;
   font-size: 24rpx;
   font-weight: 600;
-  color: #999999;
-  background: #ffffff;
-  border: 1rpx solid #e5e5e5;
+  color: #64748b;
+  background: #f3f6f5;
   transition: all 0.2s;
 
   &.active {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
-    border-color: #07C160;
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: #fff;
+    box-shadow: 0 10rpx 24rpx rgba(5,150,105,.22);
   }
 }
 </style>

@@ -148,9 +148,8 @@ async function handleSubmit() {
   display: flex; align-items: flex-end;
 }
 .aom-panel {
-  width: 100%; background: #ffffff;
+  width: 100%; background: #fff;
   border-radius: 40rpx 40rpx 0 0; overflow: hidden; padding-bottom: env(safe-area-inset-bottom);
-  border-top: 1rpx solid #e5e5e5;
 }
 
 // Header
@@ -158,11 +157,11 @@ async function handleSubmit() {
   display: flex; justify-content: space-between; align-items: center;
   padding: 36rpx 36rpx 24rpx;
 }
-.aom-title { font-size: 36rpx; font-weight: 800; color: #000000; }
+.aom-title { font-size: 36rpx; font-weight: 800; color: #0f172a; }
 .aom-close {
-  width: 60rpx; height: 60rpx; border-radius: 50%; background: #f7f7f7;
+  width: 60rpx; height: 60rpx; border-radius: 50%; background: #f1f5f9;
   display: flex; align-items: center; justify-content: center;
-  font-size: 28rpx; color: #999999;
+  font-size: 28rpx; color: #64748b;
 }
 
 // Body
@@ -171,52 +170,53 @@ async function handleSubmit() {
 // 分组
 .aom-section { margin-bottom: 28rpx; }
 .aom-section-title {
-  font-size: 28rpx; font-weight: 700; color: #333333; margin-bottom: 18rpx; display: block;
+  font-size: 28rpx; font-weight: 700; color: #334155; margin-bottom: 18rpx; display: block;
 }
 
 // 时长卡片
 .aom-duration-row { display: flex; gap: 14rpx; align-items: stretch; }
 .aom-dur-card {
-  flex: 1; padding: 28rpx 12rpx; border-radius: 16rpx;
-  border: 2rpx solid #e5e5e5; background: #f7f7f7; text-align: center;
-  &.active { border-color: #07C160; background: rgba(7, 193, 96, 0.1); }
+  flex: 1; padding: 28rpx 12rpx; border-radius: 22rpx;
+  border: 2rpx solid #e5e7eb; background: #fff; text-align: center;
+  &.active { border-color: #059669; background: #ecfdf5; }
 }
-.aom-dur-val { display: block; font-size: 30rpx; font-weight: 800; color: #333333; }
-.aom-dur-price { display: block; font-size: 22rpx; color: #07C160; margin-top: 6rpx; font-weight: 600; }
+.aom-dur-val { display: block; font-size: 30rpx; font-weight: 800; color: #1e293b; }
+.aom-dur-price { display: block; font-size: 22rpx; color: #059669; margin-top: 6rpx; font-weight: 600; }
 
 .aom-dur-custom {
   display: flex; align-items: center; justify-content: center;
   min-width: 140rpx;
 }
 .aom-dur-input {
-  width: 100%; text-align: center; font-size: 28rpx; font-weight: 700; color: #999999;
+  width: 100%; text-align: center; font-size: 28rpx; font-weight: 700; color: #64748b;
   background: transparent; border: none; outline: none;
 }
 
 // 价格预览
 .aom-preview {
-  background: #f7f7f7; border-radius: 16rpx; padding: 28rpx 32rpx;
-  border: 1rpx solid #e5e5e5;
+  background: #f8fafc; border-radius: 24rpx; padding: 28rpx 32rpx;
+  border: 1rpx solid #e2e8f0;
 }
 .aom-preview-row { display: flex; justify-content: space-between; align-items: center; padding: 8rpx 0; }
-.aom-preview-label { font-size: 26rpx; color: #999999; }
-.aom-preview-val { font-size: 26rpx; font-weight: 600; color: #333333; }
-.aom-preview-divider { height: 1rpx; background: #e5e5e5; margin: 14rpx 0; }
+.aom-preview-label { font-size: 26rpx; color: #64748b; }
+.aom-preview-val { font-size: 26rpx; font-weight: 600; color: #1e293b; }
+.aom-preview-divider { height: 1rpx; background: #e2e8f0; margin: 14rpx 0; }
 .aom-preview-total {
-  .aom-preview-label { font-size: 30rpx; font-weight: 700; color: #333333; }
-  .aom-preview-val { font-size: 34rpx; font-weight: 800; color: #07C160; }
+  .aom-preview-label { font-size: 30rpx; font-weight: 700; color: #1e293b; }
+  .aom-preview-val { font-size: 34rpx; font-weight: 800; color: #059669; }
 }
 
 // Footer
 .aom-footer { display: flex; gap: 22rpx; padding: 0 36rpx 36rpx; }
 .aom-btn-cancel {
-  flex: 1; padding: 30rpx; border-radius: 16rpx; background: #f7f7f7;
-  color: #999999; font-size: 30rpx; font-weight: 600; text-align: center; border: none;
+  flex: 1; padding: 30rpx; border-radius: 36rpx; background: #f1f5f9;
+  color: #64748b; font-size: 30rpx; font-weight: 600; text-align: center; border: none;
 }
 .aom-btn-confirm {
-  flex: 2; padding: 30rpx; border-radius: 16rpx;
-  background: #07C160;
+  flex: 2; padding: 30rpx; border-radius: 36rpx;
+  background: linear-gradient(135deg, #059669, #10b981);
   color: #fff; font-size: 30rpx; font-weight: 800; text-align: center; border: none;
-  &[disabled] { opacity: .5; }
+  box-shadow: 0 8rpx 24rpx rgba(5,150,105,.25);
+  &[disabled] { opacity: .5; box-shadow: none; }
 }
 </style>

@@ -21,6 +21,14 @@ class Settings(BaseSettings):
 
     billiards_base_url: str = "http://127.0.0.1:10002/storeapi"
 
+    # Comma-separated browser origins allowed to call the agent directly (CORS).
+    # Auth is still enforced via the Bearer token; this only relaxes the
+    # browser same-origin policy for the local demo frontend.
+    cors_allow_origins: str = (
+        "http://127.0.0.1:3000,http://localhost:3000,"
+        "http://127.0.0.1:3001,http://localhost:3001"
+    )
+
     # Dedicated MySQL read-only identity that only sees agent_* views.
     billiards_mysql_ro_url: str | None = None
     sql_timeout_ms: int = Field(default=2000, ge=1, le=60000)

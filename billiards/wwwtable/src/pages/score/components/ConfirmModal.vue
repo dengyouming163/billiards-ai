@@ -47,6 +47,7 @@ function handleConfirm() {
 </script>
 
 <style lang="scss" scoped>
+$gold: #c9a962;
 $danger: #ef4444;
 
 .modal-overlay {
@@ -55,24 +56,25 @@ $danger: #ef4444;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(10rpx);
+  backdrop-filter: blur(20rpx);
 }
 
 .modal-content {
   position: relative;
   width: 50vw;
-  background: #ffffff;
-  border-radius: 48rpx;
+  background: linear-gradient(180deg, rgba(26, 26, 46, 0.98), rgba(20, 20, 40, 0.99));
+  border-radius: 64rpx;
   padding: 64rpx;
-  border: 2rpx solid rgba(7,193,96,0.08);
+  border: 4rpx solid rgba($gold, 0.25);
   box-shadow: 
-    0 24rpx 80rpx rgba(0, 0, 0, 0.1),
-    0 0 30rpx rgba(7,193,96,0.05);
+    0 32rpx 96rpx rgba(0, 0, 0, 0.6),
+    0 0 60rpx rgba($gold, 0.15),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
   overflow: hidden;
   animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
@@ -82,7 +84,7 @@ $danger: #ef4444;
     right: -100rpx;
     width: 300rpx;
     height: 300rpx;
-    background: radial-gradient(circle, rgba(7,193,96,0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba($gold, 0.2) 0%, transparent 70%);
     pointer-events: none;
     animation: modalGlow 4s ease-in-out infinite;
   }
@@ -94,11 +96,11 @@ $danger: #ef4444;
     height: 160rpx;
     margin: 0 auto 48rpx;
     border-radius: 50%;
-    background: rgba(7,193,96,0.06);
+    background: linear-gradient(135deg, rgba($gold, 0.2), rgba($gold, 0.05));
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2rpx solid rgba(7,193,96,0.1);
+    border: 4rpx solid rgba($gold, 0.3);
     
     .icon-glow {
       position: absolute;
@@ -107,7 +109,7 @@ $danger: #ef4444;
       transform: translate(-50%, -50%);
       width: 120rpx;
       height: 120rpx;
-      background: radial-gradient(circle, rgba(7,193,96,0.1) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba($gold, 0.3) 0%, transparent 70%);
       animation: iconGlow 2s ease-in-out infinite;
     }
     
@@ -128,14 +130,14 @@ $danger: #ef4444;
       display: block;
       font-size: 56rpx;
       font-weight: 700;
-      color: #333333;
+      color: #f1f5f9;
       margin-bottom: 28rpx;
       letter-spacing: 4rpx;
     }
     
     .modal-message {
       font-size: 40rpx;
-      color: #999999;
+      color: rgba(255, 255, 255, 0.6);
       line-height: 1.6;
     }
   }
@@ -152,7 +154,7 @@ $danger: #ef4444;
       align-items: center;
       justify-content: center;
       padding: 36rpx;
-      border-radius: 36rpx;
+      border-radius: 40rpx;
       font-size: 48rpx;
       font-weight: 700;
       border: none;
@@ -164,19 +166,23 @@ $danger: #ef4444;
       }
       
       &.cancel {
-        background: rgba(0,0,0,0.04);
-        color: #666666;
-        border: 2rpx solid rgba(0,0,0,0.06);
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.7);
+        border: 3rpx solid rgba(255, 255, 255, 0.12);
       }
       
       &.confirm {
-        background: linear-gradient(135deg, #07C160, #06AD56);
-        color: #ffffff;
-        box-shadow: 0 8rpx 24rpx rgba(7,193,96,0.3);
+        background: linear-gradient(135deg, $gold, #8a6d3b);
+        color: #1a1a2e;
+        box-shadow: 
+          0 8rpx 32rpx rgba($gold, 0.4),
+          inset 0 2rpx 4rpx rgba(255, 255, 255, 0.3);
         
         &.danger {
-          background: linear-gradient(135deg, $danger, #dc2626);
-          box-shadow: 0 8rpx 24rpx rgba(239,68,68,0.3);
+          background: linear-gradient(135deg, $danger, #b91c1c);
+          box-shadow: 
+            0 8rpx 32rpx rgba($danger, 0.4),
+            inset 0 2rpx 4rpx rgba(255, 255, 255, 0.3);
         }
       }
       

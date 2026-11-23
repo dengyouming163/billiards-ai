@@ -79,6 +79,7 @@
 		{
 			"path": "pages/recharge-report/index",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "员工充值报表"
 			}
 		},
@@ -281,21 +282,23 @@
 		{
 			"path": "pages/recharge/index",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "会员充值"
 			}
 		},
 		{
 			"path": "pages/assistant-sales/index",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "商品销售"
 			}
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "客稻云",
-		"navigationBarBackgroundColor": "#0f172a",
-		"backgroundColor": "#0f172a",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "球房管理",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#F5F5F5",
 		"animationType": "slide-in-right",
 		"animationDuration": 300
 	},

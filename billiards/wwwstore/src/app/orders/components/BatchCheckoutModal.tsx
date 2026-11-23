@@ -17,11 +17,11 @@ interface BatchCheckoutModalProps {
 }
 
 const paymentMethods = [
-  { id: 'wechat', name: '微信支付', icon: Smartphone, color: 'text-[#07C160]' },
-  { id: 'alipay', name: '支付宝', icon: CreditCard, color: 'text-[#06B6D4]' },
-  { id: 'cash', name: '现金', icon: Wallet, color: 'text-[#FF976A]' },
-  { id: 'balance', name: '余额', icon: Building, color: 'text-[#8B5CF6]' },
-  { id: 'card', name: '会员卡', icon: Coins, color: 'text-[#FF976A]' },
+  { id: 'wechat', name: '微信支付', icon: Smartphone, color: 'text-green-500' },
+  { id: 'alipay', name: '支付宝', icon: CreditCard, color: 'text-blue-500' },
+  { id: 'cash', name: '现金', icon: Wallet, color: 'text-yellow-600' },
+  { id: 'balance', name: '余额', icon: Building, color: 'text-purple-500' },
+  { id: 'card', name: '会员卡', icon: Coins, color: 'text-orange-500' },
 ];
 
 export function BatchCheckoutModal({ tableId, tableName, onSuccess }: BatchCheckoutModalProps) {

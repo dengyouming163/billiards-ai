@@ -60,7 +60,7 @@ function FormSection({ title, icon: Icon, children, defaultOpen = true }: FormSe
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border border-slate-200 rounded-2xl overflow-hidden">
+    <div className="border border-slate-200 rounded-xl overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -397,15 +397,15 @@ export function PricingRulesTab() {
   };
 
   return (
-    <div className="space-y-3 p-3">
+    <div className="space-y-4 p-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-slate-900">标准计费规则</h2>
           <p className="text-sm text-slate-500">管理和配置门店球台的计费规则</p>
         </div>
       </div>
-      <div className="bg-white rounded-3xl p-3 shadow-sm border border-slate-200">
-        <div className="flex flex-col lg:flex-row gap-3">
+      <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+        <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -413,12 +413,12 @@ export function PricingRulesTab() {
                 placeholder="搜索计费规则..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 rounded-2xl"
+                className="pl-10 rounded-xl"
               />
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl px-4 py-2 shadow-md">
+            <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl px-4 py-2 shadow-md">
               <div className="flex items-center gap-2">
                 <Table className="w-4 h-4 text-white" />
                 <div>
@@ -427,7 +427,7 @@ export function PricingRulesTab() {
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl px-4 py-2 shadow-md">
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl px-4 py-2 shadow-md">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-white" />
                 <div>
@@ -437,7 +437,7 @@ export function PricingRulesTab() {
               </div>
             </div>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className="w-[140px] rounded-2xl">
+              <SelectTrigger className="w-[140px] rounded-xl">
                 <SelectValue placeholder="计费类型" />
               </SelectTrigger>
               <SelectContent>
@@ -451,17 +451,17 @@ export function PricingRulesTab() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {filteredRules.map((rule) => {
           const typeInfo = pricingTypeLabels[rule.type] || pricingTypeLabels.time;
           const TypeIcon = typeInfo.icon;
           const pricePreview = getPricePreview(rule);
           return (
-            <Card key={rule.id} className="group relative overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 border-slate-200 bg-white rounded-3xl">
-              <CardContent className="p-3.5">
+            <Card key={rule.id} className="group relative overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 border-slate-200 bg-white rounded-2xl">
+              <CardContent className="p-4">
                 <div className="flex items-start gap-3">
                   <div className={cn(
-                    "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0",
+                    "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
                     (rule.type === "time") && "bg-gradient-to-br from-blue-500 to-cyan-500 text-white",
                     (rule.type === "hourly") && "bg-gradient-to-br from-emerald-500 to-teal-500 text-white",
                     rule.type === "period" && "bg-gradient-to-br from-amber-500 to-orange-500 text-white",
@@ -510,8 +510,8 @@ export function PricingRulesTab() {
           );
         })}
         {filteredRules.length === 0 && (
-          <div className="col-span-full p-12 text-center bg-white rounded-3xl border border-slate-200">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-3xl bg-slate-100 flex items-center justify-center">
+          <div className="col-span-full p-12 text-center bg-white rounded-2xl border border-slate-200">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
               <Table className="w-8 h-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-semibold text-slate-900 mb-2">暂无计费规则</h3>
@@ -532,7 +532,7 @@ export function PricingRulesTab() {
             <DialogDescription>{editingRule ? "修改计费规则的配置" : "创建一个新的计费规则"}</DialogDescription>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto space-y-3 py-3">
+          <div className="flex-1 overflow-y-auto space-y-4 py-4">
             <FormSection title="基本信息" icon={Settings}>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">

@@ -313,10 +313,10 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center" onClick={onClose}>
       <div className="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col" style={{ width: '58vw', height: '90vh' }} onClick={e => e.stopPropagation()}>
         {/* === Header === */}
-        <div className="px-6 py-4 bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white flex items-center justify-between shrink-0">
+        <div className="px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white flex items-center justify-between shrink-0">
           <div>
             <h2 className="text-xl font-bold">结账 · {table.name}</h2>
-            {durStr && <p className="text-white/80 text-sm mt-0.5">已用 {durStr}</p>}
+            {durStr && <p className="text-emerald-100 text-sm mt-0.5">已用 {durStr}</p>}
           </div>
           <button onClick={onClose} className="p-2.5 rounded-xl hover:bg-white/20 transition-colors"><X className="w-6 h-6" /></button>
         </div>
@@ -324,15 +324,15 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
         {/* === Body — 左右分栏 === */}
         <div className="flex-1 flex overflow-hidden min-h-0">
           {/* ===== 左栏：账单 + 会员 ===== */}
-          <div className="w-[45%] bg-gray-50 overflow-auto p-5 space-y-4">
+          <div className="w-[45%] bg-slate-50 overflow-auto p-5 space-y-4">
             {billLoading ? (
-              <div className="flex items-center justify-center h-full text-[#999999] text-lg">加载中...</div>
+              <div className="flex items-center justify-center h-full text-slate-400 text-lg">加载中...</div>
             ) : (
               <>
                 {/* 应收总额 */}
-                <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#e5e5e5] text-center">
-                  <p className="text-sm font-medium text-[#999999] mb-1">应收总额</p>
-                  <p className="text-4xl font-extrabold text-[#333333]">¥{fmt(total)}</p>
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 text-center">
+                  <p className="text-sm font-medium text-slate-500 mb-1">应收总额</p>
+                  <p className="text-4xl font-extrabold text-slate-800">¥{fmt(total)}</p>
                   {((b.prepaid_hours as number) || (b.prepaidHours as number) || 0) > 0 && (
                     <div className="mt-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-left">
                       <p className="text-sm font-bold text-amber-700">
@@ -344,34 +344,34 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
                     </div>
                   )}
                   {paidAmount > 0 && (
-                    <div className="mt-3 flex justify-between items-center px-4 py-2 bg-[#07C160]/10 rounded-2xl text-sm">
-                      <span className="text-[#07C160]">已付</span>
-                      <span className="font-bold text-[#07C160]">-¥{fmt(paidAmount)}</span>
+                    <div className="mt-3 flex justify-between items-center px-4 py-2 bg-emerald-50 rounded-2xl text-sm">
+                      <span className="text-emerald-600">已付</span>
+                      <span className="font-bold text-emerald-600">-¥{fmt(paidAmount)}</span>
                     </div>
                   )}
                 </div>
 
                 {/* 费用明细 */}
-                <div className="bg-white rounded-3xl p-5 shadow-sm border border-[#e5e5e5]">
-                  <p className="text-sm font-bold text-[#333333] mb-4">费用明细</p>
+                <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
+                  <p className="text-sm font-bold text-slate-700 mb-4">费用明细</p>
                   <div className="space-y-3 text-sm">
-                    <div className="flex justify-between"><span className="text-[#999999]">台费</span><span className="text-[#333333] font-medium">¥{fmt(tableFee)}</span></div>
-                    {mergeFee > 0 && <div className="flex justify-between"><span className="text-[#999999]">并入台费</span><span className="text-[#333333] font-medium">¥{fmt(mergeFee)}</span></div>}
-                    <div className="flex justify-between"><span className="text-[#999999]">商品费</span><span className="text-[#333333] font-medium">¥{fmt(productFee)}</span></div>
-                    {assistantFee > 0 && <div className="flex justify-between"><span className="text-[#999999]">助教费</span><span className="text-[#333333] font-medium">¥{fmt(assistantFee)}</span></div>}
-                    {chargingFee > 0 && <div className="flex justify-between"><span className="text-[#999999]">充电费</span><span className="text-[#333333] font-medium">¥{fmt(chargingFee)}</span></div>}
+                    <div className="flex justify-between"><span className="text-slate-500">台费</span><span className="text-slate-800 font-medium">¥{fmt(tableFee)}</span></div>
+                    {mergeFee > 0 && <div className="flex justify-between"><span className="text-slate-500">并入台费</span><span className="text-slate-800 font-medium">¥{fmt(mergeFee)}</span></div>}
+                    <div className="flex justify-between"><span className="text-slate-500">商品费</span><span className="text-slate-800 font-medium">¥{fmt(productFee)}</span></div>
+                    {assistantFee > 0 && <div className="flex justify-between"><span className="text-slate-500">助教费</span><span className="text-slate-800 font-medium">¥{fmt(assistantFee)}</span></div>}
+                    {chargingFee > 0 && <div className="flex justify-between"><span className="text-slate-500">充电费</span><span className="text-slate-800 font-medium">¥{fmt(chargingFee)}</span></div>}
                   </div>
                 </div>
 
                 {/* 助教服务 */}
                 {items.filter((i: any) => (i.item_type === 'assistant' || i.item_type === 'assistant_overtime') && !['cancelled','rejected'].includes(i.status)).length > 0 && (
-                  <div className="bg-white rounded-3xl p-5 shadow-sm border border-[#e5e5e5]">
-                    <p className="text-sm font-bold text-[#333333] mb-4">助教服务</p>
+                  <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
+                    <p className="text-sm font-bold text-slate-700 mb-4">助教服务</p>
                     {items.filter((i: any) => (i.item_type === 'assistant' || i.item_type === 'assistant_overtime') && !['cancelled','rejected'].includes(i.status)).map((item: any) => (
-                      <div key={item.id} className="flex items-center justify-between py-2.5 text-sm border-b border-[#e5e5e5]/30 last:border-0">
-                        <span className="text-[#333333]">{item.item_name || '助教服务'}{item.item_type === 'assistant_overtime' ? ` (加钟${item.quantity || 0}h)` : item.billing_mode === 'flat_rate' ? ' (买断)' : ''}</span>
+                      <div key={item.id} className="flex items-center justify-between py-2.5 text-sm border-b border-slate-50 last:border-0">
+                        <span className="text-slate-700">{item.item_name || '助教服务'}{item.item_type === 'assistant_overtime' ? ` (加钟${item.quantity || 0}h)` : item.billing_mode === 'flat_rate' ? ' (买断)' : ''}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-[#999999] text-xs">
+                          <span className="text-slate-500 text-xs">
                             {item.item_type === 'assistant_overtime' ? `¥${item.price || 0}` : ''}
                             {item.billing_mode === 'flat_rate' && item.item_type !== 'assistant_overtime' ? `${item.quantity || '-'}h` : ''}
                             {item.gift_hours > 0 ? `实${item.actual_hours || '-'}h+赠${item.gift_hours}h` : ''}
@@ -379,7 +379,7 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
                           {item.billing_mode !== 'flat_rate' && item.item_type !== 'assistant_overtime' && (
                             <button onClick={() => handleTogglePauseAssistant(item)}
                               className={`px-2.5 py-1 text-[10px] rounded-xl font-medium ${
-                                item.is_paused ? 'bg-[#07C160]/10 text-[#07C160] hover:bg-[#07C160]/20' : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                                item.is_paused ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
                               }`}>{item.is_paused ? '▶恢复' : '⏸暂停'}</button>
                           )}
                           {item.item_type !== 'assistant_overtime' && (
@@ -394,14 +394,14 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
 
                 {/* 会员信息 */}
                 {memberInfo && !selectedMember && (
-                  <div className="bg-gray-50 rounded-3xl p-5 border border-[#e5e5e5]">
+                  <div className="bg-indigo-50 rounded-3xl p-5 border border-indigo-200">
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-2xl bg-[#07C160]/10 flex items-center justify-center shrink-0">
-                        <User className="w-6 h-6 text-[#07C160]" />
+                      <div className="w-11 h-11 rounded-2xl bg-indigo-100 flex items-center justify-center shrink-0">
+                        <User className="w-6 h-6 text-indigo-500" />
                       </div>
                       <div>
-                        <p className="font-bold text-sm text-[#333333]">{memberInfo.name || ''}</p>
-                        <p className="text-xs text-[#999999]">余额 ¥{(memberInfo.balance as number) || 0}</p>
+                        <p className="font-bold text-sm text-indigo-700">{memberInfo.name || ''}</p>
+                        <p className="text-xs text-indigo-500">余额 ¥{(memberInfo.balance as number) || 0}</p>
                       </div>
                     </div>
                   </div>
@@ -411,20 +411,20 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
 
             {/* 会员余额扣款 */}
             {(memberInfo || selectedMember || billData) && (
-              <div className="bg-white rounded-3xl p-5 shadow-sm border border-[#e5e5e5]">
+              <div className="bg-white rounded-3xl p-5 shadow-sm border border-indigo-100">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-2xl bg-[#07C160]/10 flex items-center justify-center shrink-0">
-                      <User className="w-6 h-6 text-[#07C160]" />
+                    <div className="w-11 h-11 rounded-2xl bg-indigo-100 flex items-center justify-center shrink-0">
+                      <User className="w-6 h-6 text-indigo-500" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#333333]">会员余额扣款</p>
-                      <p className="text-xs text-[#999999]">{selectedMember?.name || memberInfo?.name || '未绑定会员'} · 余额 ¥{fmt(memberBalance)}</p>
+                      <p className="text-sm font-bold text-slate-800">会员余额扣款</p>
+                      <p className="text-xs text-slate-500">{selectedMember?.name || memberInfo?.name || '未绑定会员'} · 余额 ¥{fmt(memberBalance)}</p>
                     </div>
                   </div>
                   {memberBalance > 0 && (
                     <button onClick={() => setUseBalance(!useBalance)}
-                      className={`w-14 h-8 rounded-full transition-all shrink-0 ${useBalance ? 'bg-[#07C160]' : 'bg-gray-300'}`}>
+                      className={`w-14 h-8 rounded-full transition-all shrink-0 ${useBalance ? 'bg-indigo-500' : 'bg-slate-300'}`}>
                       <div className={`w-6 h-6 bg-white rounded-full shadow-md transform transition-transform ${useBalance ? 'translate-x-7' : 'translate-x-1'}`} />
                     </button>
                   )}
@@ -434,16 +434,16 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
                   <div className="flex gap-2 mb-3">
                     <input value={memberPhone} onChange={e => setMemberPhone(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleSearchMember()}
-                      placeholder="输入会员手机号" className="flex-1 px-4 py-3 rounded-2xl border-2 border-[#e5e5e5] text-sm outline-none focus:border-[#07C160]" />
+                      placeholder="输入会员手机号" className="flex-1 px-4 py-3 rounded-2xl border-2 border-slate-200 text-sm outline-none focus:border-indigo-400" />
                     <button onClick={handleSearchMember} disabled={!memberPhone}
-                      className="px-5 py-3 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white text-sm font-bold disabled:opacity-50 hover:opacity-90 transition-colors">查找</button>
+                      className="px-5 py-3 rounded-2xl bg-indigo-500 text-white text-sm font-bold disabled:opacity-50 hover:bg-indigo-600 transition-colors">查找</button>
                   </div>
                 )}
 
                 {useBalance && memberBalance > 0 && (
-                  <div className="flex justify-between items-center px-4 py-3 bg-[#07C160]/10 rounded-2xl">
-                    <span className="text-sm text-[#07C160] font-medium">抵扣金额</span>
-                    <span className="text-xl font-extrabold text-[#07C160]">-¥{fmt(balanceDeduction)}</span>
+                  <div className="flex justify-between items-center px-4 py-3 bg-indigo-50 rounded-2xl">
+                    <span className="text-sm text-indigo-700 font-medium">抵扣金额</span>
+                    <span className="text-xl font-extrabold text-indigo-600">-¥{fmt(balanceDeduction)}</span>
                   </div>
                 )}
 
@@ -459,17 +459,17 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
             {billLoading ? null : (
               <>
                 {/* 待支付金额 */}
-                <div className="bg-gradient-to-br from-[#07C160]/5 to-[#06AD56]/5 rounded-3xl p-6 border border-[#07C160]/20 text-center">
-                  <p className="text-sm font-medium text-[#07C160] mb-1">待支付金额</p>
-                  <p className="text-5xl font-extrabold text-[#07C160]">¥{fmt(finalAmount)}</p>
+                <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-6 border border-emerald-200 text-center">
+                  <p className="text-sm font-medium text-emerald-600 mb-1">待支付金额</p>
+                  <p className="text-5xl font-extrabold text-emerald-700">¥{fmt(finalAmount)}</p>
                   {countdown > 0 && (
-                    <p className="text-sm text-[#07C160]/80 mt-2">
+                    <p className="text-sm text-emerald-500 mt-2">
                       金额锁定 <span className={countdown <= 10 ? 'text-red-500 font-bold' : 'text-amber-500 font-medium'}>{countdown}s</span>
                     </p>
                   )}
                   {(discountAmount > 0 || roundingAmount > 0) && (
-                    <div className="mt-4 pt-4 border-t border-[#07C160]/20 space-y-1.5 text-sm">
-                      <div className="flex justify-between"><span className="text-[#999999]">应收</span><span className="text-[#333333] font-medium">¥{fmt(total)}</span></div>
+                    <div className="mt-4 pt-4 border-t border-emerald-200 space-y-1.5 text-sm">
+                      <div className="flex justify-between"><span className="text-slate-500">应收</span><span className="text-slate-700 font-medium">¥{fmt(total)}</span></div>
                       {discountAmount > 0 && <div className="flex justify-between"><span className="text-red-500">折扣</span><span className="text-red-500 font-medium">-¥{fmt(discountAmount)}</span></div>}
                       {roundingAmount > 0 && <div className="flex justify-between"><span className="text-amber-500">抹零</span><span className="text-amber-500 font-medium">-¥{fmt(roundingAmount)}</span></div>}
                     </div>
@@ -478,28 +478,28 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
 
                 {/* 折扣优惠 */}
                 {discountList.length > 0 && (
-                  <div className="bg-white rounded-3xl p-5 shadow-sm border border-[#e5e5e5]">
-                    <p className="text-sm font-bold text-[#333333] mb-3">折扣优惠</p>
+                  <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
+                    <p className="text-sm font-bold text-slate-700 mb-3">折扣优惠</p>
                     <div className="flex flex-wrap gap-2">
                       <button type="button"
                         onClick={() => { setSelectedDiscountId(''); setCustomDiscountValue(''); }}
-                        className={`px-4 py-2.5 rounded-full text-sm font-medium border-2 transition-all ${
-                          !selectedDiscountId ? 'border-[#333333] bg-[#333333] text-white' : 'border-[#e5e5e5] bg-white text-[#333333] hover:border-gray-300'
+                        className={`px-4 py-2.5 rounded-2xl text-sm font-medium border-2 transition-all ${
+                          !selectedDiscountId ? 'border-slate-800 bg-slate-800 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                         }`}>无折扣</button>
                       {discountList.filter((d: any) => d.status === 1).map((d: any) => {
                         const label = d.discount_type === 'rate' ? `${d.discount_value}折` : `减¥${d.discount_value}`;
                         return (
                           <button key={d.id} type="button"
                             onClick={() => { setSelectedDiscountId(d.id); setCustomDiscountValue(''); }}
-                            className={`px-4 py-2.5 rounded-full text-sm font-medium border-2 transition-all ${
-                              selectedDiscountId === d.id ? 'border-red-400 bg-red-50 text-red-600' : 'border-[#e5e5e5] bg-white text-[#333333] hover:border-red-300'
+                            className={`px-4 py-2.5 rounded-2xl text-sm font-medium border-2 transition-all ${
+                              selectedDiscountId === d.id ? 'border-red-400 bg-red-50 text-red-600' : 'border-slate-200 bg-white text-slate-600 hover:border-red-300'
                             }`}>{d.discount_name} · {label}</button>
                         );
                       })}
                       <button type="button"
                         onClick={() => { setSelectedDiscountId('__custom__'); setCustomDiscountValue(''); }}
-                        className={`px-4 py-2.5 rounded-full text-sm font-medium border-2 transition-all ${
-                          selectedDiscountId === '__custom__' ? 'border-amber-400 bg-amber-50 text-amber-600' : 'border-dashed border-gray-300 bg-white text-[#999999] hover:border-amber-300'
+                        className={`px-4 py-2.5 rounded-2xl text-sm font-medium border-2 transition-all ${
+                          selectedDiscountId === '__custom__' ? 'border-amber-400 bg-amber-50 text-amber-600' : 'border-dashed border-slate-300 bg-white text-slate-500 hover:border-amber-300'
                         }`}>✏️ 自定义</button>
                     </div>
                     {selectedDiscountId === '__custom__' && (
@@ -512,19 +512,19 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
                 )}
 
                 {/* 抹零 */}
-                <div className="bg-white rounded-3xl p-5 shadow-sm border border-[#e5e5e5]">
+                <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-11 h-11 rounded-2xl bg-amber-100 flex items-center justify-center">
                         <ScanLine className="w-6 h-6 text-amber-500" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-[#333333]">抹零</p>
-                        <p className="text-sm text-[#999999]">¥{fmt(roundingAmount)}</p>
+                        <p className="text-sm font-bold text-slate-800">抹零</p>
+                        <p className="text-sm text-slate-500">¥{fmt(roundingAmount)}</p>
                       </div>
                     </div>
                     <button onClick={() => setUseRounding(!useRounding)}
-                      className={`w-14 h-8 rounded-full transition-all ${useRounding ? 'bg-amber-500' : 'bg-gray-300'}`}>
+                      className={`w-14 h-8 rounded-full transition-all ${useRounding ? 'bg-amber-500' : 'bg-slate-300'}`}>
                       <div className={`w-6 h-6 bg-white rounded-full shadow-md transform transition-transform ${useRounding ? 'translate-x-7' : 'translate-x-1'}`} />
                     </button>
                   </div>
@@ -533,28 +533,28 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
                 {/* 收款方式 */}
                 {remainingAfterBalance > 0 && (
                   <>
-                    <div className="bg-white rounded-3xl p-5 shadow-sm border border-[#e5e5e5]">
-                      <p className="text-sm font-bold text-[#333333] mb-3">收款 ¥{fmt(remainingAfterBalance)}</p>
+                    <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
+                      <p className="text-sm font-bold text-slate-700 mb-3">收款 ¥{fmt(remainingAfterBalance)}</p>
                       <div className="grid grid-cols-2 gap-3 mb-4">
                         <button type="button"
                           onClick={() => setPaymentChannel('cash')}
                           className={`p-4 rounded-2xl border-2 text-center transition-all ${
-                            paymentChannel === 'cash' ? 'border-amber-400 bg-amber-50 shadow-sm' : 'border-[#e5e5e5] bg-white hover:border-gray-300'
+                            paymentChannel === 'cash' ? 'border-amber-400 bg-amber-50 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'
                           }`}>
-                          <div className={`w-12 h-12 rounded-2xl mx-auto mb-2 flex items-center justify-center ${paymentChannel === 'cash' ? 'bg-amber-500 text-white' : 'bg-gray-100 text-[#999999]'}`}>
+                          <div className={`w-12 h-12 rounded-2xl mx-auto mb-2 flex items-center justify-center ${paymentChannel === 'cash' ? 'bg-amber-500 text-white' : 'bg-slate-100 text-slate-400'}`}>
                             <Banknote className="w-6 h-6" />
                           </div>
-                          <span className={`text-sm font-bold ${paymentChannel === 'cash' ? 'text-amber-700' : 'text-[#333333]'}`}>现金</span>
+                          <span className={`text-sm font-bold ${paymentChannel === 'cash' ? 'text-amber-700' : 'text-slate-600'}`}>现金</span>
                         </button>
                         <button type="button"
                           onClick={() => setPaymentChannel('wechat')}
                           className={`p-4 rounded-2xl border-2 text-center transition-all ${
-                            paymentChannel === 'wechat' ? 'border-[#07C160] bg-[#07C160]/5 shadow-sm' : 'border-[#e5e5e5] bg-white hover:border-gray-300'
+                            paymentChannel === 'wechat' ? 'border-emerald-400 bg-emerald-50 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'
                           }`}>
-                          <div className={`w-12 h-12 rounded-2xl mx-auto mb-2 flex items-center justify-center ${paymentChannel === 'wechat' ? 'bg-[#07C160] text-white' : 'bg-gray-100 text-[#999999]'}`}>
+                          <div className={`w-12 h-12 rounded-2xl mx-auto mb-2 flex items-center justify-center ${paymentChannel === 'wechat' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'}`}>
                             <CreditCard className="w-6 h-6" />
                           </div>
-                          <span className={`text-sm font-bold ${paymentChannel === 'wechat' ? 'text-[#07C160]' : 'text-[#333333]'}`}>微信</span>
+                          <span className={`text-sm font-bold ${paymentChannel === 'wechat' ? 'text-emerald-700' : 'text-slate-600'}`}>微信</span>
                         </button>
                       </div>
 
@@ -564,7 +564,7 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
                             onChange={e => setCashReceived(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && handleCheckout('cash')}
                             placeholder="实收金额" min={0} step={0.01}
-                            className="w-full px-5 py-4 rounded-2xl border-2 border-amber-300 text-[#333333] text-2xl font-extrabold outline-none focus:border-amber-500 bg-amber-50/30" />
+                            className="w-full px-5 py-4 rounded-2xl border-2 border-amber-300 text-slate-900 text-2xl font-extrabold outline-none focus:border-amber-500 bg-amber-50/30" />
                           {(parseFloat(cashReceived || '0') || 0) > remainingAfterBalance && (
                             <p className="text-sm text-amber-600 mt-3 text-center font-medium">找零 ¥{fmt((parseFloat(cashReceived || '0') || 0) - remainingAfterBalance)}</p>
                           )}
@@ -576,9 +576,9 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
                           <input ref={barcodeRef} value={barcodeCode} onChange={e => setBarcodeCode(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && handleWechat()}
                             placeholder="扫描或输入18位付款码" autoFocus
-                            className="w-full px-4 py-3 rounded-2xl border-2 border-[#07C160]/30 text-[#333333] text-base outline-none focus:border-[#07C160]" />
-                          {wechatProcessing && <p className="text-sm text-[#999999] mt-2 text-center">支付处理中...</p>}
-                          {wechatResult === 'success' && <p className="text-sm text-[#07C160] mt-2 text-center font-medium">✅ 支付成功 · 结算中...</p>}
+                            className="w-full px-4 py-3 rounded-2xl border-2 border-emerald-300 text-slate-900 text-base outline-none focus:border-emerald-500" />
+                          {wechatProcessing && <p className="text-sm text-slate-500 mt-2 text-center">支付处理中...</p>}
+                          {wechatResult === 'success' && <p className="text-sm text-emerald-600 mt-2 text-center font-medium">✅ 支付成功 · 结算中...</p>}
                           {wechatResult && wechatResult !== 'success' && <p className="text-sm text-red-500 mt-2 text-center">{wechatResult}</p>}
                         </div>
                       )}
@@ -591,8 +591,8 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
         </div>
 
         {/* === Footer === */}
-        <div className="px-5 py-4 border-t border-[#e5e5e5] bg-white flex justify-between items-center shrink-0 gap-4">
-          <button onClick={onClose} className="flex-1 h-14 rounded-full bg-white border-2 border-[#07C160] text-[#07C160] font-bold text-base hover:bg-[#07C160]/5 transition-colors">取消</button>
+        <div className="px-5 py-4 border-t border-slate-200 bg-white flex justify-between items-center shrink-0 gap-4">
+          <button onClick={onClose} className="flex-1 h-14 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-base transition-colors">取消</button>
           <button onClick={() => {
             if (balanceDeduction > 0 && remainingAfterBalance <= 0) {
               handleCheckout('member_balance');
@@ -600,7 +600,7 @@ export function CheckoutModal({ table, onClose, onComplete }: CheckoutModalProps
               handleCheckout(paymentChannel);
             }
           }} disabled={isProcessing || finalAmount < 0}
-            className="flex-[2] h-14 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] hover:opacity-90 disabled:opacity-50 text-white font-extrabold text-base transition-all shadow-lg shadow-[#07C160]/30">
+            className="flex-[2] h-14 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:opacity-50 text-white font-extrabold text-base transition-all shadow-lg shadow-emerald-500/30">
             {isProcessing ? '结算中...' : getPaymentLabel()}
           </button>
         </div>

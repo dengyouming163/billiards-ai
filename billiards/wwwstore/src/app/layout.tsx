@@ -4,8 +4,8 @@ import { AppProviderWrapper } from '@/components/app-provider-wrapper';
 
 export const metadata: Metadata = {
   title: {
-    default: '客稻云 - 球房管理系统',
-    template: '%s | 客稻云',
+    default: '台屏智联 - 球房管理系统',
+    template: '%s | 台屏智联',
   },
   description: '多商户商业台球球房管理系统，助您高效管理门店经营',
   icons: {

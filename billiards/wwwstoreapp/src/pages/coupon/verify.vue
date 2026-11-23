@@ -224,7 +224,7 @@ const handleReset = () => {
 <style lang="scss" scoped>
 .coupon-verify-page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f5f5f5;
 }
 
 .page-content {
@@ -245,17 +245,17 @@ const handleReset = () => {
   gap: 12rpx;
   padding: 28rpx;
   border-radius: 24rpx;
-  background: #ffffff;
+  background: #fff;
   border: 2rpx solid #e5e5e5;
   font-size: 30rpx;
-  color: #999999;
+  color: #666;
   transition: all 0.2s;
 }
 
 .platform-btn.active {
-  border-color: #07C160;
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
+  border-color: #059669;
+  background: #f0fdf6;
+  color: #059669;
 }
 
 .platform-icon {
@@ -263,16 +263,15 @@ const handleReset = () => {
 }
 
 .input-section {
-  background: #ffffff;
+  background: #fff;
   border-radius: 24rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  border: 1rpx solid #e5e5e5;
 }
 
 .input-label {
   font-size: 28rpx;
-  color: #999999;
+  color: #999;
   margin-bottom: 16rpx;
 }
 
@@ -285,11 +284,10 @@ const handleReset = () => {
 .code-input {
   flex: 1;
   height: 88rpx;
-  background: #f7f7f7;
+  background: #f5f5f5;
   border-radius: 16rpx;
   padding: 0 24rpx;
   font-size: 34rpx;
-  color: #333333;
 }
 
 .scan-btn {
@@ -298,7 +296,7 @@ const handleReset = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f7f7f7;
+  background: #f5f5f5;
   border-radius: 16rpx;
   flex-shrink: 0;
 }
@@ -310,7 +308,7 @@ const handleReset = () => {
 .prepare-btn {
   margin-top: 24rpx;
   height: 88rpx;
-  background: #07C160;
+  background: #059669;
   color: #fff;
   border-radius: 16rpx;
   font-size: 32rpx;
@@ -324,11 +322,10 @@ const handleReset = () => {
 }
 
 .result-card {
-  background: #ffffff;
+  background: #fff;
   border-radius: 24rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  border: 1rpx solid #e5e5e5;
 }
 
 .result-row {
@@ -339,36 +336,35 @@ const handleReset = () => {
 
 .result-label {
   font-size: 28rpx;
-  color: #999999;
+  color: #999;
 }
 
 .result-value {
   font-size: 28rpx;
-  color: #333333;
+  color: #333;
   font-weight: 500;
 }
 
 .result-value.accent {
-  color: #07C160;
+  color: #059669;
 }
 
 .result-value.price {
-  color: #07C160;
+  color: #f59e0b;
   font-weight: 700;
 }
 
 .table-section {
-  background: #ffffff;
+  background: #fff;
   border-radius: 24rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  border: 1rpx solid #e5e5e5;
 }
 
 .section-title {
   font-size: 30rpx;
   font-weight: 600;
-  color: #333333;
+  color: #333;
   margin-bottom: 20rpx;
 }
 
@@ -382,18 +378,18 @@ const handleReset = () => {
   width: calc(25% - 12rpx);
   padding: 24rpx 0;
   text-align: center;
-  background: #f7f7f7;
+  background: #f5f5f5;
   border-radius: 16rpx;
   font-size: 28rpx;
-  color: #999999;
+  color: #666;
   border: 2rpx solid transparent;
   transition: all 0.2s;
 }
 
 .table-item.selected {
-  border-color: #07C160;
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
+  border-color: #059669;
+  background: #f0fdf6;
+  color: #059669;
   font-weight: 600;
 }
 
@@ -402,24 +398,23 @@ const handleReset = () => {
   text-align: center;
   padding: 48rpx 0;
   font-size: 28rpx;
-  color: #999999;
+  color: #ccc;
 }
 
 .confirm-btn {
   margin-top: 24rpx;
   height: 88rpx;
-  background: #07C160;
+  background: #059669;
   color: #fff;
   border-radius: 16rpx;
   font-size: 32rpx;
 }
 
 .success-card {
-  background: #ffffff;
+  background: #fff;
   border-radius: 24rpx;
   padding: 48rpx 32rpx;
   text-align: center;
-  border: 1rpx solid #e5e5e5;
 }
 
 .success-icon {
@@ -431,14 +426,14 @@ const handleReset = () => {
 .success-title {
   font-size: 40rpx;
   font-weight: 700;
-  color: #07C160;
+  color: #059669;
   display: block;
   margin-bottom: 32rpx;
 }
 
 .success-details {
   text-align: left;
-  background: #f7f7f7;
+  background: #f5f5f5;
   border-radius: 16rpx;
   padding: 24rpx;
   margin-bottom: 24rpx;
@@ -452,17 +447,17 @@ const handleReset = () => {
 
 .detail-label {
   font-size: 28rpx;
-  color: #999999;
+  color: #999;
 }
 
 .detail-value {
   font-size: 28rpx;
-  color: #333333;
+  color: #333;
   font-weight: 500;
 }
 
 .detail-value.accent {
-  color: #07C160;
+  color: #059669;
 }
 
 .btn-row {
@@ -473,7 +468,7 @@ const handleReset = () => {
 .reset-btn {
   flex: 1;
   height: 88rpx;
-  background: #07C160;
+  background: #059669;
   color: #fff;
   border-radius: 16rpx;
   font-size: 32rpx;

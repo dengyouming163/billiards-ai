@@ -254,7 +254,7 @@ async function handleUnbind(channel: LightChannel) {
 <style lang="scss" scoped>
 .page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f2f3f5;
   display: flex;
   flex-direction: column;
   padding: 30rpx 24rpx calc(env(safe-area-inset-bottom) + 40rpx);
@@ -264,9 +264,10 @@ async function handleUnbind(channel: LightChannel) {
   margin-top: 12rpx;
   margin-bottom: 22rpx;
   padding: 34rpx 30rpx;
-  border-radius: 16rpx;
-  background: #ffffff;
-  border: 1rpx solid #e5e5e5;
+  border-radius: 34rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.86) 100%);
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+  border: 1rpx solid rgba(255, 255, 255, 0.78);
 }
 
 .hero-copy {
@@ -278,7 +279,7 @@ async function handleUnbind(channel: LightChannel) {
 
 .hero-eyebrow {
   font-size: 22rpx;
-  color: #07C160;
+  color: #059669;
   font-weight: 700;
   letter-spacing: 2rpx;
 }
@@ -286,7 +287,7 @@ async function handleUnbind(channel: LightChannel) {
 .hero-title {
   font-size: 42rpx;
   line-height: 1.25;
-  color: #000000;
+  color: #0f172a;
   font-weight: 800;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -296,7 +297,7 @@ async function handleUnbind(channel: LightChannel) {
 .hero-desc {
   font-size: 24rpx;
   line-height: 1.7;
-  color: #999999;
+  color: #64748b;
 }
 
 .device-status-row {
@@ -316,12 +317,12 @@ async function handleUnbind(channel: LightChannel) {
   font-weight: 600;
 
   &.online {
-    background: rgba(7, 193, 96, 0.15);
-    color: #07C160;
+    background: #ecfdf5;
+    color: #059669;
   }
 
   &.offline {
-    background: rgba(239, 68, 68, 0.15);
+    background: #fef2f2;
     color: #dc2626;
   }
 }
@@ -335,7 +336,7 @@ async function handleUnbind(channel: LightChannel) {
 
 .device-meta {
   font-size: 22rpx;
-  color: #999999;
+  color: #94a3b8;
   font-weight: 500;
 }
 
@@ -354,20 +355,20 @@ async function handleUnbind(channel: LightChannel) {
   justify-content: center;
   gap: 10rpx;
   padding: 24rpx 0;
-  border-radius: 16rpx;
+  border-radius: 24rpx;
   font-size: 26rpx;
   font-weight: 700;
 
   &.on {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
-    border: 1rpx solid #e5e5e5;
+    background: #ecfdf5;
+    color: #059669;
+    border: 1rpx solid #d1fae5;
   }
 
   &.off {
-    background: #f5f5f5;
-    color: #333333;
-    border: 1rpx solid #e5e5e5;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1rpx solid #e5e7eb;
   }
 
   &:active {
@@ -388,10 +389,11 @@ async function handleUnbind(channel: LightChannel) {
 }
 
 .channel-card {
-  background: #ffffff;
-  border-radius: 16rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border-radius: 28rpx;
   padding: 26rpx 28rpx;
-  border: 1rpx solid #e5e5e5;
+  box-shadow: 0 8rpx 24rpx rgba(15, 23, 42, 0.04);
+  border: 1rpx solid rgba(255, 255, 255, 0.82);
 }
 
 .channel-header {
@@ -410,7 +412,7 @@ async function handleUnbind(channel: LightChannel) {
 .channel-no {
   font-size: 28rpx;
   font-weight: 800;
-  color: #000000;
+  color: #0f172a;
 }
 
 /* Toggle switch */
@@ -423,11 +425,11 @@ async function handleUnbind(channel: LightChannel) {
   transition: all 0.2s;
 
   &.on {
-    background: rgba(7, 193, 96, 0.1);
+    background: #ecfdf5;
   }
 
   &.off {
-    background: #f5f5f5;
+    background: #f3f4f6;
   }
 }
 
@@ -437,12 +439,12 @@ async function handleUnbind(channel: LightChannel) {
   border-radius: 50%;
 
   .channel-toggle.on & {
-    background: #07C160;
-    box-shadow: 0 0 10rpx rgba(7, 193, 96, 0.4);
+    background: #10b981;
+    box-shadow: 0 0 10rpx rgba(16, 185, 129, 0.4);
   }
 
   .channel-toggle.off & {
-    background: #cccccc;
+    background: #d1d5db;
   }
 }
 
@@ -451,11 +453,11 @@ async function handleUnbind(channel: LightChannel) {
   font-weight: 600;
 
   .channel-toggle.on & {
-    color: #07C160;
+    color: #059669;
   }
 
   .channel-toggle.off & {
-    color: #999999;
+    color: #6b7280;
   }
 }
 
@@ -471,16 +473,16 @@ async function handleUnbind(channel: LightChannel) {
   flex: 1;
   height: 72rpx;
   padding: 0 22rpx;
-  background: #f5f5f5;
-  border-radius: 8rpx;
+  background: #f7faf9;
+  border-radius: 18rpx;
   font-size: 26rpx;
-  color: #000000;
-  border: 1rpx solid #e5e5e5;
+  color: #0f172a;
+  border: 1rpx solid #edf2ef;
 }
 
 .save-btn {
   padding: 14rpx 28rpx;
-  background: #07C160;
+  background: linear-gradient(135deg, #059669, #10b981);
   border-radius: 999rpx;
   flex-shrink: 0;
 
@@ -501,7 +503,7 @@ async function handleUnbind(channel: LightChannel) {
   align-items: center;
   gap: 8rpx;
   padding-top: 12rpx;
-  border-top: 1rpx solid #e5e5e5;
+  border-top: 1rpx solid #f1f5f9;
 }
 
 .binding-icon {
@@ -510,11 +512,11 @@ async function handleUnbind(channel: LightChannel) {
 
 .binding-text {
   font-size: 22rpx;
-  color: #333333;
+  color: #374151;
   font-weight: 500;
 
   &.unbound {
-    color: #999999;
+    color: #9ca3af;
   }
 }
 
@@ -524,11 +526,11 @@ async function handleUnbind(channel: LightChannel) {
   font-weight: 600;
   padding: 4rpx 14rpx;
   margin-left: auto;
-  background: rgba(239, 68, 68, 0.1);
+  background: #fef2f2;
   border-radius: 999rpx;
 
   &:active {
-    background: rgba(239, 68, 68, 0.1);
+    background: #fee2e2;
   }
 }
 </style>

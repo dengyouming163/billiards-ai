@@ -236,7 +236,7 @@ function goChannelManage() {
 <style lang="scss" scoped>
 .page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f2f3f5;
   display: flex;
   flex-direction: column;
   padding: 30rpx 24rpx calc(env(safe-area-inset-bottom) + 120rpx);
@@ -246,9 +246,10 @@ function goChannelManage() {
   margin-top: 12rpx;
   margin-bottom: 22rpx;
   padding: 34rpx 30rpx;
-  border-radius: 16rpx;
-  background: #ffffff;
-  border: 1rpx solid #e5e5e5;
+  border-radius: 34rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.86) 100%);
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+  border: 1rpx solid rgba(255, 255, 255, 0.78);
 }
 
 .hero-copy {
@@ -260,7 +261,7 @@ function goChannelManage() {
 
 .hero-eyebrow {
   font-size: 22rpx;
-  color: #07C160;
+  color: #059669;
   font-weight: 700;
   letter-spacing: 2rpx;
 }
@@ -268,14 +269,14 @@ function goChannelManage() {
 .hero-title {
   font-size: 42rpx;
   line-height: 1.25;
-  color: #000000;
+  color: #0f172a;
   font-weight: 800;
 }
 
 .hero-desc {
   font-size: 24rpx;
   line-height: 1.7;
-  color: #999999;
+  color: #64748b;
 }
 
 .device-selector {
@@ -287,9 +288,9 @@ function goChannelManage() {
   align-items: center;
   justify-content: space-between;
   padding: 24rpx 28rpx;
-  background: #f5f5f5;
-  border-radius: 16rpx;
-  border: 1rpx solid #e5e5e5;
+  background: #f7faf9;
+  border-radius: 24rpx;
+  border: 1rpx solid #edf2ef;
   gap: 16rpx;
 
   &.empty {
@@ -308,7 +309,7 @@ function goChannelManage() {
 .device-picker-label {
   font-size: 28rpx;
   font-weight: 700;
-  color: #000000;
+  color: #0f172a;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -316,7 +317,7 @@ function goChannelManage() {
 
 .device-picker-hint {
   font-size: 22rpx;
-  color: #999999;
+  color: #9ca3af;
 }
 
 .device-picker-right {
@@ -336,12 +337,12 @@ function goChannelManage() {
   font-weight: 600;
 
   &.online {
-    background: rgba(7, 193, 96, 0.15);
-    color: #07C160;
+    background: #ecfdf5;
+    color: #059669;
   }
 
   &.offline {
-    background: rgba(239, 68, 68, 0.15);
+    background: #fef2f2;
     color: #dc2626;
   }
 }
@@ -355,13 +356,13 @@ function goChannelManage() {
 
 .device-channel-count {
   font-size: 22rpx;
-  color: #999999;
+  color: #64748b;
   font-weight: 600;
 }
 
 .chip-arrow {
   font-size: 20rpx;
-  color: #999999;
+  color: #9ca3af;
   flex-shrink: 0;
 }
 
@@ -374,10 +375,11 @@ function goChannelManage() {
 }
 
 .table-card {
-  background: #ffffff;
-  border-radius: 16rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border-radius: 28rpx;
   padding: 26rpx 28rpx;
-  border: 1rpx solid #e5e5e5;
+  box-shadow: 0 8rpx 24rpx rgba(15, 23, 42, 0.04);
+  border: 1rpx solid rgba(255, 255, 255, 0.82);
 }
 
 .table-card-header {
@@ -398,12 +400,12 @@ function goChannelManage() {
 .table-number {
   font-size: 30rpx;
   font-weight: 800;
-  color: #000000;
+  color: #0f172a;
 }
 
 .table-name {
   font-size: 22rpx;
-  color: #999999;
+  color: #9ca3af;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -419,16 +421,16 @@ function goChannelManage() {
 .bind-label {
   font-size: 22rpx;
   font-weight: 600;
-  color: #07C160;
+  color: #059669;
 
   &.unbound {
-    color: #999999;
+    color: #9ca3af;
   }
 }
 
 .bind-channel-name {
   font-size: 22rpx;
-  color: #333333;
+  color: #374151;
   font-weight: 500;
   max-width: 140rpx;
   overflow: hidden;
@@ -442,17 +444,17 @@ function goChannelManage() {
   font-weight: 600;
   padding: 6rpx 16rpx;
   margin-left: 8rpx;
-  background: rgba(239, 68, 68, 0.1);
+  background: #fef2f2;
   border-radius: 999rpx;
 
   &:active {
-    background: rgba(239, 68, 68, 0.1);
+    background: #fee2e2;
   }
 }
 
 .table-card-body {
   padding-top: 12rpx;
-  border-top: 1rpx solid #e5e5e5;
+  border-top: 1rpx solid #f1f5f9;
 }
 
 .bind-row {
@@ -467,16 +469,16 @@ function goChannelManage() {
   align-items: center;
   gap: 8rpx;
   padding: 14rpx 22rpx;
-  background: #f5f5f5;
+  background: #f3f6f5;
   border-radius: 999rpx;
   font-size: 24rpx;
-  color: #333333;
+  color: #374151;
   font-weight: 500;
 }
 
 .bind-btn {
   padding: 14rpx 32rpx;
-  background: #07C160;
+  background: linear-gradient(135deg, #059669, #10b981);
   border-radius: 999rpx;
 
   &:active {
@@ -492,7 +494,7 @@ function goChannelManage() {
 
 .no-channel-tip {
   font-size: 22rpx;
-  color: #999999;
+  color: #9ca3af;
   padding: 8rpx 0;
 }
 
@@ -503,8 +505,9 @@ function goChannelManage() {
   left: 0;
   right: 0;
   padding: 20rpx 24rpx calc(env(safe-area-inset-bottom) + 20rpx);
-  background: #ffffff;
-  border-top: 1rpx solid #e5e5e5;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20rpx);
+  border-top: 1rpx solid rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: center;
 }
@@ -513,9 +516,10 @@ function goChannelManage() {
   width: 100%;
   max-width: 600rpx;
   padding: 26rpx 0;
-  background: #07C160;
+  background: linear-gradient(135deg, #059669, #10b981);
   border-radius: 999rpx;
   text-align: center;
+  box-shadow: 0 8rpx 24rpx rgba(5, 150, 105, 0.25);
 
   &:active {
     opacity: 0.85;

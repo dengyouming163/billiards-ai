@@ -3,9 +3,7 @@
         <view class="header" :style="{ paddingTop: statusBarHeight + 'px' }">
             <view class="header-inner">
                 <view class="store-selector" @click="handleStoreSelect">
-                    <view class="selector-icon-wrap">
-                        <svg class="store-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2"/><path d="M6 9v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></svg>
-                    </view>
+                    <svg class="store-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2"/><path d="M6 9v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></svg>
                     <text class="store-name">{{ storeName || '选择门店' }}</text>
                     <svg class="store-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </view>
@@ -44,6 +42,7 @@ function loadStoreName() {
     if (cached) {
         storeName.value = cached
     }
+    // Read directly from storage for consistency
     const cachedId = uni.getStorageSync('storeId')
     if (cachedId) currentStoreId.value = cachedId
 }
@@ -53,6 +52,7 @@ function handleStoreSelect() {
 }
 
 async function handleStoreSelected(store: Store) {
+    // Call backend to switch store context, save new token
     try {
         const res = await switchStore(store.id)
         if (res?.token) {
@@ -69,6 +69,7 @@ async function handleStoreSelected(store: Store) {
         title: `已切换到 ${store.name}`,
         icon: 'success'
     })
+    // Reload current page after store switch
     setTimeout(() => {
         const pages = getCurrentPages()
         const page = pages[pages.length - 1]
@@ -99,85 +100,62 @@ onUnmounted(() => {
 }
 
 .header {
-    background: #ffffff;
+    background: linear-gradient(180deg, rgba(240, 253, 244, 0.96) 0%, rgba(248, 250, 252, 0.9) 100%);
     padding-top: var(--status-bar-height);
-    min-height: calc(96rpx + env(safe-area-inset-top));
-    padding-bottom: 16rpx;
-    position: relative;
-}
-
-.header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1rpx;
-    background: #e5e5e5;
+    min-height: calc(112rpx + env(safe-area-inset-top));
+    padding-bottom: 18rpx;
+    backdrop-filter: blur(18rpx);
+    -webkit-backdrop-filter: blur(18rpx);
 }
 
 .header-inner {
     display: flex;
     align-items: center;
-    height: 96rpx;
+    height: 112rpx;
     padding: 0 24rpx;
 }
 
 .store-selector {
     display: flex;
     align-items: center;
-    gap: 16rpx;
-    min-height: 68rpx;
-    padding: 10rpx 24rpx;
-    background: #f7f7f7;
-    border-radius: 20rpx;
-    border: 1rpx solid #e5e5e5;
-    transition: all 0.2s ease;
-    position: relative;
-    
+    gap: 14rpx;
+    min-height: 84rpx;
+    padding: 16rpx 26rpx;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 30rpx;
+    border: 1rpx solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 12rpx 32rpx rgba(15, 23, 42, 0.06);
+    transition: all 0.25s ease;
+
     &:active {
-        background: #f0f0f0;
+        background: rgba(255, 255, 255, 0.96);
         transform: scale(0.98);
-        border-color: #07C160;
     }
 }
 
-.selector-icon-wrap {
-    width: 40rpx;
-    height: 40rpx;
-    border-radius: 12rpx;
-    background: rgba(7, 193, 96, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.store-icon {
+    width: 36rpx;
+    height: 36rpx;
+    color: #059669;
     flex-shrink: 0;
 }
 
-.store-icon {
-    width: 20rpx;
-    height: 20rpx;
-    color: #07C160;
-}
-
 .store-name {
-    font-size: 28rpx;
-    font-weight: 600;
-    color: #000000;
-    max-width: 300rpx;
+    font-size: 30rpx;
+    font-weight: 700;
+    color: #0f172a;
+    max-width: 320rpx;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .store-arrow {
-    width: 22rpx;
-    height: 22rpx;
-    color: #999999;
+    width: 24rpx;
+    height: 24rpx;
+    color: #94a3b8;
     flex-shrink: 0;
-    transition: transform 0.2s ease;
-}
-
-.store-selector:active .store-arrow {
-    transform: rotate(180deg);
 }
 </style>

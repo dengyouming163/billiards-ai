@@ -1,27 +1,27 @@
-$uni-color-primary: #07C160;
-$uni-color-primary-dark: #06AD56;
-$uni-color-primary-light: #5EF0C4;
-$uni-color-alipay: #06B6D4;
-$uni-color-amber: #FF976A;
+$uni-color-primary: #c9a962;
+$uni-color-primary-dark: #8a6d3b;
+$uni-color-success: #2ed573;
+$uni-color-warning: #ffa502;
+$uni-color-error: #ff4757;
 
-$uni-text-color: #333333;
-$uni-text-color-secondary: #999999;
-$uni-text-color-placeholder: #cccccc;
+$uni-text-color: #ffffff;
+$uni-text-color-secondary: rgba(255, 255, 255, 0.7);
+$uni-text-color-placeholder: rgba(255, 255, 255, 0.4);
 
-$uni-bg-color: #f7f7f7;
-$uni-bg-color-secondary: #ffffff;
-$uni-bg-color-card: #ffffff;
-$uni-bg-color-hover: #E8F8EF;
+$uni-bg-color: #0f0f16;
+$uni-bg-color-secondary: #1a1a2e;
+$uni-bg-color-card: rgba(255, 255, 255, 0.05);
+$uni-bg-color-hover: rgba(255, 255, 255, 0.1);
 
-$uni-border-color: rgba(0, 0, 0, 0.08);
-$uni-border-color-light: rgba(0, 0, 0, 0.04);
+$uni-border-color: rgba(255, 255, 255, 0.1);
+$uni-border-color-light: rgba(255, 255, 255, 0.05);
 
-$uni-font-size-sm: 22rpx;
+$uni-font-size-sm: 24rpx;
 $uni-font-size-base: 28rpx;
 $uni-font-size-lg: 32rpx;
 $uni-font-size-xl: 36rpx;
-$uni-font-size-xxl: 44rpx;
-$uni-font-size-title: 56rpx;
+$uni-font-size-xxl: 40rpx;
+$uni-font-size-title: 48rpx;
 
 $uni-spacing-xs: 8rpx;
 $uni-spacing-sm: 16rpx;
@@ -29,26 +29,26 @@ $uni-spacing-base: 24rpx;
 $uni-spacing-lg: 32rpx;
 $uni-spacing-xl: 48rpx;
 
-$uni-radius-sm: 16rpx;
-$uni-radius-base: 24rpx;
-$uni-radius-lg: 32rpx;
-$uni-radius-xl: 48rpx;
-$uni-radius-circle: 9999rpx;
+$uni-radius-sm: 8rpx;
+$uni-radius-base: 16rpx;
+$uni-radius-lg: 24rpx;
+$uni-radius-xl: 32rpx;
+$uni-radius-circle: 1000rpx;
 
-$uni-shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-$uni-shadow-base: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
-$uni-shadow-lg: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+$uni-shadow-sm: 0 4rpx 12rpx rgba(0, 0, 0, 0.3);
+$uni-shadow-base: 0 8rpx 24rpx rgba(0, 0, 0, 0.4);
+$uni-shadow-lg: 0 12rpx 32rpx rgba(0, 0, 0, 0.5);
 
 $uni-transition-base: all 0.3s ease;
 $uni-transition-fast: all 0.15s ease;
 
 $uni-status-bar-height: var(--status-bar-height, 44px);
-$uni-tabbar-height: 120rpx;
+$uni-tabbar-height: 100rpx;
 
 $uni-gradient-primary: linear-gradient(135deg, $uni-color-primary, $uni-color-primary-dark);
-$uni-gradient-bg: linear-gradient(180deg, #f0fdf4 0%, $uni-bg-color 100%);
+$uni-gradient-bg: linear-gradient(180deg, $uni-bg-color 0%, $uni-bg-color-secondary 100%);
 
-$uni-table-idle: #3b82f6;
-$uni-table-occupied: #07C160;
-$uni-table-reserved: #f97316;
+$uni-table-idle: #2ed573;
+$uni-table-occupied: #ff6b6b;
+$uni-table-reserved: #ffa502;
 $uni-table-maintenance: #6c757d;

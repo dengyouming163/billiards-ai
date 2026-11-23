@@ -230,7 +230,7 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
   };
 
   const renderMemberCard = (member: MemberResult, showBindButton: boolean = true, key?: string) => (
-    <div key={key || member.id} className="bg-white rounded-2xl border border-[#e5e5e5] p-5 shadow-sm hover:shadow-md transition-all duration-200">
+    <div key={key || member.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all duration-200">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${member.levelColor}15` }}>
@@ -238,40 +238,40 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-bold text-[#333333]">{member.name}</h3>
+              <h3 className="text-lg font-bold text-slate-800">{member.name}</h3>
               <span className="px-2.5 py-0.5 rounded-lg text-xs font-medium" style={{ backgroundColor: `${member.levelColor}20`, color: member.levelColor }}>
                 {member.levelName || '普通'}
               </span>
             </div>
-            <p className="text-sm text-[#999999] mt-0.5 flex items-center gap-1">
+            <p className="text-sm text-slate-500 mt-0.5 flex items-center gap-1">
               <Phone className="w-3.5 h-3.5" /> {member.phone}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1 text-xs text-[#999999]">
+        <div className="flex items-center gap-1 text-xs text-slate-400">
           <Star className="w-3.5 h-3.5" style={{ color: member.levelColor }} />
           <span>{member.levelDiscount > 0 ? `${(member.levelDiscount > 1 ? member.levelDiscount / 10 : member.levelDiscount * 10).toFixed(1)}折` : '无折扣'}</span>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+      <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl">
         <div className="text-center">
-          <p className="text-xl font-bold text-[#07C160]">¥{member.balance}</p>
-          <p className="text-xs text-[#999999] mt-0.5">可用余额</p>
+          <p className="text-xl font-bold text-emerald-600">¥{member.balance}</p>
+          <p className="text-xs text-slate-500 mt-0.5">可用余额</p>
         </div>
         <div className="text-center">
           <p className="text-xl font-bold text-amber-500">{member.points}</p>
-          <p className="text-xs text-[#999999] mt-0.5">积分</p>
+          <p className="text-xs text-slate-500 mt-0.5">积分</p>
         </div>
         <div className="text-center">
-          <p className="text-xl font-bold text-[#333333]">¥{member.totalConsume}</p>
-          <p className="text-xs text-[#999999] mt-0.5">累计消费</p>
+          <p className="text-xl font-bold text-slate-600">¥{member.totalConsume}</p>
+          <p className="text-xs text-slate-500 mt-0.5">累计消费</p>
         </div>
       </div>
       {showBindButton && orderId && (
         <button 
           onClick={() => handleBindMember(member)} 
           disabled={isProcessing}
-          className="mt-4 w-full py-3.5 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold text-sm hover:shadow-lg hover:shadow-[#07C160]/20 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+          className="mt-4 w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {isProcessing ? (
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -291,8 +291,8 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
       onClick={() => setRegisterForm({ ...registerForm, levelId: level.id })}
       className={`relative p-4 rounded-xl border-2 transition-all duration-200 ${
         isSelected 
-          ? 'border-[#07C160] bg-[#07C160]/5 shadow-md shadow-[#07C160]/10' 
-          : 'border-[#e5e5e5] bg-white hover:border-[#07C160]/50 hover:shadow-sm'
+          ? 'border-emerald-500 bg-emerald-50 shadow-md shadow-emerald-100' 
+          : 'border-slate-200 bg-white hover:border-emerald-300 hover:shadow-sm'
       }`}
     >
       <div className="flex items-center gap-2 mb-2">
@@ -305,17 +305,17 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
         </span>
       </div>
       <div className="space-y-1">
-        <p className="text-sm text-[#333333]">
+        <p className="text-sm text-slate-600">
           {level.discount > 0 ? `享 ${(level.discount > 1 ? level.discount / 10 : level.discount * 10).toFixed(1)} 折优惠` : '无折扣'}
         </p>
         {level.minAmount > 0 && (
-          <p className="text-xs text-[#999999]">
+          <p className="text-xs text-slate-400">
             最低充值 ¥{level.minAmount}
           </p>
         )}
       </div>
       {isSelected && (
-        <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[#07C160] flex items-center justify-center">
+        <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
           <Check className="w-3 h-3 text-white" />
         </div>
       )}
@@ -325,7 +325,7 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
   return (
     <ModalShell onClose={onClose} title="会员管理" icon={<User className="w-5 h-5" />} width="50vw">
       <div className="flex flex-col h-full">
-        <div className="flex border-b border-[#e5e5e5]">
+        <div className="flex border-b border-slate-200">
           {[
             { key: 'search' as const, label: '查询', icon: Search },
             { key: 'register' as const, label: '开卡', icon: User },
@@ -339,14 +339,14 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                 onClick={() => { clearErrors(); setActiveTab(tab.key); }}
                 className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 text-sm font-bold transition-all relative ${
                   activeTab === tab.key 
-                    ? 'text-[#07C160]' 
-                    : 'text-[#999999] hover:text-[#333333]'
+                    ? 'text-emerald-600' 
+                    : 'text-slate-400 hover:text-slate-600'
                 }`}
               >
                 <Icon className="w-4 h-4" />
                 {tab.label}
                 {activeTab === tab.key && (
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#07C160] rounded-t-full" />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-emerald-500 rounded-t-full" />
                 )}
               </button>
             );
@@ -358,19 +358,19 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
             <div className="space-y-5">
               <div className="flex gap-3">
                 <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#999999]" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input 
                     type="text" 
                     placeholder="输入手机号或姓名搜索会员..." 
                     value={searchQuery} 
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    className="w-full h-14 pl-12 pr-4 rounded-2xl bg-white border-2 border-[#e5e5e5] text-base outline-none focus:border-[#07C160] transition-all" 
+                    className="w-full h-14 pl-12 pr-4 rounded-xl bg-slate-50 border-2 border-slate-200 text-base outline-none focus:border-emerald-500 focus:bg-white transition-all" 
                   />
                 </div>
                 <Button 
                   onClick={handleSearch} 
-                  className="h-14 px-8 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold shadow-md hover:shadow-lg transition-all"
+                  className="h-14 px-8 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold shadow-md hover:shadow-lg transition-all"
                 >
                   <Search className="w-4 h-4 mr-2" />搜索
                 </Button>
@@ -392,8 +392,8 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
 
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <History className="w-4 h-4 text-[#999999]" />
-                  <h3 className="text-sm font-bold text-[#999999]">最近会员</h3>
+                  <History className="w-4 h-4 text-slate-400" />
+                  <h3 className="text-sm font-bold text-slate-500">最近会员</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {recentMembers.map((member) => (
@@ -404,21 +404,21 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                         setBindSearchResults([member]); 
                         setBindHasSearched(true); 
                       }}
-                      className="flex items-center gap-3 p-3 rounded-xl bg-white border border-[#e5e5e5] hover:border-[#07C160]/50 hover:shadow-sm transition-all text-left group"
+                      className="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-sm transition-all text-left group"
                     >
                       <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${member.levelColor}15` }}>
                         <User className="w-5 h-5" style={{ color: member.levelColor }} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="text-sm font-bold text-[#333333] truncate">{member.name}</p>
+                          <p className="text-sm font-bold text-slate-800 truncate">{member.name}</p>
                           <span className="px-2 py-0.5 rounded-md text-xs" style={{ backgroundColor: `${member.levelColor}15`, color: member.levelColor }}>
                             {member.levelName || '普通'}
                           </span>
                         </div>
-                        <p className="text-xs text-[#999999] mt-0.5">余额 ¥{member.balance}</p>
+                        <p className="text-xs text-slate-400 mt-0.5">余额 ¥{member.balance}</p>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-[#999999] group-hover:text-[#07C160] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-colors" />
                     </button>
                   ))}
                 </div>
@@ -436,7 +436,7 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-[#333333] mb-2">手机号 *</label>
+                  <label className="block text-sm font-bold text-slate-600 mb-2">手机号 *</label>
                   <input 
                     type="tel" 
                     placeholder="请输入11位手机号" 
@@ -445,8 +445,8 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                       setRegisterForm({ ...registerForm, phone: e.target.value }); 
                       if (fieldErrors.phone) setFieldErrors((prev) => ({ ...prev, phone: '' })); 
                     }}
-                    className={`w-full h-14 px-4 rounded-2xl bg-white border-2 text-base outline-none transition-all ${
-                      fieldErrors.phone ? 'border-red-400' : 'border-[#e5e5e5] focus:border-[#07C160]'
+                    className={`w-full h-14 px-4 rounded-xl bg-slate-50 border-2 text-base outline-none focus:bg-white transition-all ${
+                      fieldErrors.phone ? 'border-red-400' : 'border-slate-200 focus:border-emerald-500'
                     }`} 
                   />
                   {fieldErrors.phone && (
@@ -456,7 +456,7 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-[#333333] mb-2">姓名 *</label>
+                  <label className="block text-sm font-bold text-slate-600 mb-2">姓名 *</label>
                   <input 
                     type="text" 
                     placeholder="请输入顾客姓名" 
@@ -465,8 +465,8 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                       setRegisterForm({ ...registerForm, name: e.target.value }); 
                       if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: '' })); 
                     }}
-                    className={`w-full h-14 px-4 rounded-2xl bg-white border-2 text-base outline-none transition-all ${
-                      fieldErrors.name ? 'border-red-400' : 'border-[#e5e5e5] focus:border-[#07C160]'
+                    className={`w-full h-14 px-4 rounded-xl bg-slate-50 border-2 text-base outline-none focus:bg-white transition-all ${
+                      fieldErrors.name ? 'border-red-400' : 'border-slate-200 focus:border-emerald-500'
                     }`} 
                   />
                   {fieldErrors.name && (
@@ -478,18 +478,18 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-[#333333] mb-3">会员等级</label>
+                <label className="block text-sm font-bold text-slate-600 mb-3">会员等级</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {levelOptions.map((level) => renderLevelCard(level, registerForm.levelId === level.id, level.id))}
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#07C160]/5 to-[#06AD56]/5 rounded-xl p-4 border border-[#07C160]/20">
+              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-4 border border-emerald-200">
                 <div className="flex items-center gap-2 mb-2">
-                  <Gift className="w-4 h-4 text-[#07C160]" />
-                  <span className="text-sm font-bold text-[#07C160]">开卡福利</span>
+                  <Gift className="w-4 h-4 text-emerald-500" />
+                  <span className="text-sm font-bold text-emerald-700">开卡福利</span>
                 </div>
-                <p className="text-sm text-[#07C160]/80">新会员开卡即享专属折扣优惠，消费累计积分可兑换礼品</p>
+                <p className="text-sm text-emerald-600">新会员开卡即享专属折扣优惠，消费累计积分可兑换礼品</p>
               </div>
 
             </div>
@@ -499,22 +499,22 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
             <div className="space-y-5">
               {!rechargeMember ? (
                 <div className="space-y-4">
-                  <label className="block text-sm font-bold text-[#333333]">选择会员</label>
+                  <label className="block text-sm font-bold text-slate-600">选择会员</label>
                   <div className="flex gap-3 mb-4">
                     <div className="relative flex-1">
-                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#999999]" />
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <input 
                         type="text" 
                         placeholder="搜索会员手机号或姓名..." 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                        className="w-full h-12 px-12 pr-4 rounded-2xl bg-white border-2 border-[#e5e5e5] text-base outline-none focus:border-[#07C160] transition-all" 
+                        className="w-full h-12 px-12 pr-4 rounded-xl bg-slate-50 border-2 border-slate-200 text-base outline-none focus:border-emerald-500 focus:bg-white transition-all" 
                       />
                     </div>
                     <Button 
                       onClick={handleSearch} 
-                      className="h-12 px-6 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold"
+                      className="h-12 px-6 rounded-xl bg-emerald-500 text-white font-bold"
                     >
                       <Search className="w-4 h-4 mr-2" />搜索
                     </Button>
@@ -531,32 +531,32 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                           setWechatStatus('idle'); 
                           setWechatError(''); 
                         }}
-                        className="w-full flex items-center gap-4 p-4 rounded-xl bg-white border border-[#e5e5e5] hover:border-[#07C160]/50 hover:shadow-sm transition-all text-left group"
+                        className="w-full flex items-center gap-4 p-4 rounded-xl bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-sm transition-all text-left group"
                       >
                         <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${member.levelColor}15` }}>
                           <User className="w-6 h-6" style={{ color: member.levelColor }} />
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <h4 className="text-base font-bold text-[#333333]">{member.name}</h4>
+                            <h4 className="text-base font-bold text-slate-800">{member.name}</h4>
                             <span className="px-2 py-0.5 rounded-md text-xs" style={{ backgroundColor: `${member.levelColor}15`, color: member.levelColor }}>
                               {member.levelName || '普通'}
                             </span>
                           </div>
-                          <p className="text-sm text-[#999999] mt-0.5">{member.phone}</p>
+                          <p className="text-sm text-slate-500 mt-0.5">{member.phone}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-lg font-bold text-[#07C160]">¥{member.balance}</p>
-                          <p className="text-xs text-[#999999]">{member.points}积分</p>
+                          <p className="text-lg font-bold text-emerald-600">¥{member.balance}</p>
+                          <p className="text-xs text-slate-400">{member.points}积分</p>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-[#999999] group-hover:text-[#07C160] transition-colors" />
+                        <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition-colors" />
                       </button>
                     ))}
                   </div>
                 </div>
               ) : (
                 <>
-                  <div className="bg-gradient-to-br from-[#07C160] to-[#06AD56] rounded-2xl p-5 text-white shadow-lg">
+                  <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-5 text-white shadow-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
@@ -571,7 +571,7 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                       </div>
                       <button 
                         onClick={() => { setRechargeMember(null); }}
-                        className="px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 transition-all flex items-center gap-2 text-sm font-medium"
+                        className="px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 transition-all flex items-center gap-2 text-sm font-medium"
                       >
                         <X className="w-4 h-4" /> 切换
                       </button>
@@ -588,7 +588,7 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                     </div>
                   </div>
 
-                  <div className="flex gap-2 p-2 bg-gray-100 rounded-xl">
+                  <div className="flex gap-2 p-2 bg-slate-100 rounded-xl">
                     {[
                       { key: 'cash' as const, label: '现金充值', icon: Banknote },
                       { key: 'wechat' as const, label: '微信充值', icon: Smartphone },
@@ -607,8 +607,8 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                           }}
                           className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all ${
                             rechargeSubTab === tab.key
-                              ? 'bg-white text-[#07C160] shadow-md'
-                              : 'text-[#999999] hover:text-[#333333] hover:bg-gray-50'
+                              ? 'bg-white text-emerald-600 shadow-md'
+                              : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                           }`}
                         >
                           <Icon className="w-4 h-4" />
@@ -618,20 +618,20 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                     })}
                   </div>
 
-                  <div className="bg-white rounded-2xl border border-[#e5e5e5] p-5">
+                  <div className="bg-white rounded-2xl border border-slate-200 p-5">
                     {rechargeSubTab === 'cash' && (
                       <div className="space-y-5">
                         <div>
-                          <label className="block text-sm font-bold text-[#333333] mb-2">充值金额</label>
+                          <label className="block text-sm font-bold text-slate-600 mb-2">充值金额</label>
                           <div className="grid grid-cols-3 gap-2 mb-3">
                             {quickRechargeAmounts.map((amount) => (
                               <button
                                 key={amount}
                                 onClick={() => setRechargeAmount(amount.toString())}
-                                className={`py-3 rounded-full text-sm font-bold transition-all ${
+                                className={`py-3 rounded-xl text-sm font-bold transition-all ${
                                   rechargeAmount === amount.toString()
-                                    ? 'bg-[#07C160] text-white shadow-md'
-                                    : 'bg-gray-100 text-[#333333] hover:bg-gray-200'
+                                    ? 'bg-emerald-500 text-white shadow-md'
+                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                 }`}
                               >
                                 ¥{amount}
@@ -643,25 +643,25 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                             placeholder="或输入自定义金额" 
                             value={rechargeAmount}
                             onChange={(e) => setRechargeAmount(e.target.value)}
-                            className="w-full h-14 px-4 rounded-2xl bg-white border-2 border-[#e5e5e5] text-base outline-none focus:border-[#07C160] transition-all" 
+                            className="w-full h-14 px-4 rounded-xl bg-slate-50 border-2 border-slate-200 text-base outline-none focus:border-emerald-500 focus:bg-white transition-all" 
                           />
                         </div>
 
                         {rechargeAmount && parseFloat(rechargeAmount) > 0 && (
-                          <div className="bg-gradient-to-r from-[#07C160]/5 to-[#06AD56]/5 rounded-xl p-4 border border-[#07C160]/20">
+                          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-4 border border-emerald-200">
                             <div className="flex items-center justify-between">
-                              <span className="text-sm text-[#333333] font-medium">实收金额</span>
-                              <span className="text-3xl font-bold text-[#07C160]">¥{parseFloat(rechargeAmount).toFixed(2)}</span>
+                              <span className="text-sm text-slate-600 font-medium">实收金额</span>
+                              <span className="text-3xl font-bold text-emerald-600">¥{parseFloat(rechargeAmount).toFixed(2)}</span>
                             </div>
                             {giftAmount && parseFloat(giftAmount) > 0 && (
                               <div className="flex items-center justify-between mt-2 text-sm">
-                                <span className="text-[#999999]">赠送金额</span>
+                                <span className="text-slate-500">赠送金额</span>
                                 <span className="text-amber-500 font-bold">+¥{parseFloat(giftAmount).toFixed(2)}</span>
                               </div>
                             )}
                             {giftPoints && parseInt(giftPoints) > 0 && (
                               <div className="flex items-center justify-between mt-1 text-sm">
-                                <span className="text-[#999999]">赠送积分</span>
+                                <span className="text-slate-500">赠送积分</span>
                                 <span className="text-amber-500 font-bold">+{giftPoints}</span>
                               </div>
                             )}
@@ -676,16 +676,16 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                     {rechargeSubTab === 'wechat' && (
                       <div className="space-y-5">
                         <div>
-                          <label className="block text-sm font-bold text-[#333333] mb-2">充值金额</label>
+                          <label className="block text-sm font-bold text-slate-600 mb-2">充值金额</label>
                           <div className="grid grid-cols-3 gap-2 mb-3">
                             {quickRechargeAmounts.map((amount) => (
                               <button
                                 key={amount}
                                 onClick={() => setRechargeAmount(amount.toString())}
-                                className={`py-3 rounded-full text-sm font-bold transition-all ${
+                                className={`py-3 rounded-xl text-sm font-bold transition-all ${
                                   rechargeAmount === amount.toString()
-                                    ? 'bg-[#07C160] text-white shadow-md'
-                                    : 'bg-gray-100 text-[#333333] hover:bg-gray-200'
+                                    ? 'bg-emerald-500 text-white shadow-md'
+                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                 }`}
                               >
                                 ¥{amount}
@@ -697,15 +697,15 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                             placeholder="或输入自定义金额" 
                             value={rechargeAmount}
                             onChange={(e) => setRechargeAmount(e.target.value)}
-                            className="w-full h-14 px-4 rounded-2xl bg-white border-2 border-[#e5e5e5] text-base outline-none focus:border-[#07C160] transition-all" 
+                            className="w-full h-14 px-4 rounded-xl bg-slate-50 border-2 border-slate-200 text-base outline-none focus:border-emerald-500 focus:bg-white transition-all" 
                           />
                         </div>
 
-                        <div className="bg-gradient-to-br from-[#07C160]/5 to-[#06AD56]/5 rounded-xl p-5 border-2 border-dashed border-[#07C160]/30">
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-5 border-2 border-dashed border-green-300">
                           <div className="text-center mb-4">
-                            <Smartphone className="w-10 h-10 mx-auto text-[#07C160] mb-2" />
-                            <p className="text-sm font-bold text-[#07C160]">请扫描顾客微信付款码</p>
-                            <p className="text-xs text-[#07C160]/80 mt-1">支持微信支付/支付宝</p>
+                            <Smartphone className="w-10 h-10 mx-auto text-green-500 mb-2" />
+                            <p className="text-sm font-bold text-green-700">请扫描顾客微信付款码</p>
+                            <p className="text-xs text-green-600 mt-1">支持微信支付/支付宝</p>
                           </div>
                           <input
                             id="barcodeInput"
@@ -718,7 +718,7 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
                                 setTimeout(() => handleWechatRecharge(), 100);
                               }
                             }}
-                            className="w-full h-14 px-4 rounded-2xl bg-white border-2 border-[#07C160]/30 text-base text-center outline-none focus:border-[#07C160] font-mono tracking-wider"
+                            className="w-full h-14 px-4 rounded-xl bg-white border-2 border-green-300 text-base text-center outline-none focus:border-emerald-500 font-mono tracking-wider"
                             autoFocus
                           />
                         </div>
@@ -871,12 +871,12 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
 
         {/* 开卡操作按钮 — 底部固定 */}
         {activeTab === 'register' && (
-          <div className="shrink-0 px-5 py-4 border-t border-[#e5e5e5] bg-white">
+          <div className="shrink-0 px-5 py-4 border-t border-slate-200 bg-white">
             <div className="flex justify-end gap-3">
               <Button onClick={onClose} variant="outline"
-                className="h-14 px-8 rounded-full text-[#07C160] font-bold border-2 border-[#07C160] hover:bg-[#07C160]/5">取消</Button>
+                className="h-14 px-8 rounded-xl text-slate-600 font-bold border-2 hover:bg-slate-50">取消</Button>
               <Button onClick={handleRegister} disabled={isProcessing}
-                className="h-14 px-10 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-50">
+                className="h-14 px-10 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-50">
                 {isProcessing ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : '确认开卡'}
               </Button>
             </div>
@@ -885,26 +885,26 @@ export function MemberModal({ table, onClose, onSuccess, onMemberBound, defaultT
 
         {/* 充值操作按钮 — 底部固定 */}
         {activeTab === 'recharge' && rechargeMember && (
-          <div className="shrink-0 px-5 py-4 border-t border-[#e5e5e5] bg-white">
+          <div className="shrink-0 px-5 py-4 border-t border-slate-200 bg-white">
             <div className="flex justify-end">
               {rechargeSubTab === 'cash' && (
                 <button onClick={handleCashRecharge}
                   disabled={!rechargeAmount || parseFloat(rechargeAmount) <= 0 || isProcessing}
-                  className="h-14 px-12 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2">
+                  className="h-14 px-12 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2">
                   {isProcessing ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <><Banknote className="w-5 h-5" /> 确认收款 ¥{rechargeAmount || 0}</>}
                 </button>
               )}
               {rechargeSubTab === 'wechat' && (
                 <button onClick={handleWechatRecharge}
                   disabled={!rechargeAmount || parseFloat(rechargeAmount) <= 0 || isProcessing}
-                  className="h-14 px-12 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2">
+                  className="h-14 px-12 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2">
                   {isProcessing ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <><Smartphone className="w-5 h-5" /> 确认支付 ¥{rechargeAmount || 0}</>}
                 </button>
               )}
               {rechargeSubTab === 'adjust' && (
                 <button onClick={handleBalanceAdjust}
                   disabled={!rechargeAmount || parseFloat(rechargeAmount) === 0 || isProcessing}
-                  className="h-14 px-12 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2">
+                  className="h-14 px-12 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2">
                   {isProcessing ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <><Zap className="w-5 h-5" /> 确认调整 {rechargeAmount && (parseFloat(rechargeAmount) > 0 ? '+' : '')}{rechargeAmount}</>}
                 </button>
               )}

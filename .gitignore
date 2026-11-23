@@ -25,6 +25,7 @@
 **/__pycache__/
 **/.pytest_cache/
 **/.venv/
+**/*.egg-info/
 # Agent data and evaluation output with sensitive content
 agent/data/
 eval/results/*.json

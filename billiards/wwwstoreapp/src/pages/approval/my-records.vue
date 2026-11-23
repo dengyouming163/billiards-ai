@@ -26,7 +26,7 @@
 							v-for="item in records" 
 							:key="item.id"
 						>
-							<Icon class="record-icon" :name="getIcon(item.type)" size="48" />
+							<view class="record-icon">{{ getIcon(item.type) }}</view>
 							<view class="record-content">
 								<view class="record-header">
 									<text class="record-title">{{ getTypeText(item.type) }}</text>
@@ -56,7 +56,6 @@ import { getApplyRecords } from '@/api/modules/apply'
 import Header from '@/components/Header.vue'
 import TabBar from '@/components/TabBar.vue'
 import StateView from '@/components/StateView.vue'
-import Icon from '@/components/Icon.vue'
 
 const props = defineProps<{
 	embedded?: boolean
@@ -132,11 +131,11 @@ function onLoadMore() {
 
 function getIcon(type: string): string {
 	const icons: Record<string, string> = {
-		checkin: 'location',
-		leave: 'leave',
-		outwork: 'outwork'
+		checkin: '📍',
+		leave: '🏖️',
+		outwork: '🌐'
 	}
-	return icons[type] || 'fileText'
+	return icons[type] || '📋'
 }
 
 function getTypeText(type: string): string {
@@ -175,7 +174,7 @@ function formatDate(timeStr: string): string {
 <style lang="scss">
 .my-records-page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #fafafa;
 	padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
 }
 
@@ -187,7 +186,6 @@ function formatDate(timeStr: string): string {
 .page-header {
 	padding: 24rpx;
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
 }
 
 .page-title {
@@ -200,7 +198,7 @@ function formatDate(timeStr: string): string {
 	display: flex;
 	background: #ffffff;
 	padding: 0 24rpx;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f0f0f0;
 }
 
 .tab-item {
@@ -211,12 +209,12 @@ function formatDate(timeStr: string): string {
 	height: 88rpx;
 	position: relative;
 	font-size: 28rpx;
-	color: #999999;
+	color: #666666;
 }
 
 .tab-item.active {
 	font-weight: 600;
-	color: #07C160;
+	color: #059669;
 }
 
 .tab-item.active::after {
@@ -227,7 +225,7 @@ function formatDate(timeStr: string): string {
 	transform: translateX(-50%);
 	width: 48rpx;
 	height: 6rpx;
-	background: #07C160;
+	background: #059669;
 	border-radius: 3rpx;
 }
 
@@ -245,7 +243,7 @@ function formatDate(timeStr: string): string {
 	justify-content: center;
 	padding: 24rpx 0;
 	font-size: 24rpx;
-	color: #999999;
+	color: #9ca3af;
 }
 
 .record-list {
@@ -257,7 +255,6 @@ function formatDate(timeStr: string): string {
 .record-item {
 	display: flex;
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
 	border-radius: 16rpx;
 	padding: 24rpx;
 }
@@ -265,7 +262,6 @@ function formatDate(timeStr: string): string {
 .record-icon {
 	font-size: 48rpx;
 	margin-right: 20rpx;
-	color: #07C160;
 }
 
 .record-content {
@@ -294,13 +290,13 @@ function formatDate(timeStr: string): string {
 }
 
 .record-status.pending {
-	background: rgba(255, 149, 0, 0.1);
-	color: #ff9500;
+	background: rgba(245, 158, 11, 0.1);
+	color: #f59e0b;
 }
 
 .record-status.approved {
-	background: rgba(7, 193, 96, 0.1);
-	color: #07C160;
+	background: rgba(16, 185, 129, 0.1);
+	color: #059669;
 }
 
 .record-status.rejected {
@@ -321,7 +317,7 @@ function formatDate(timeStr: string): string {
 
 .record-reason {
 	font-size: 26rpx;
-	color: #999999;
+	color: #666666;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;

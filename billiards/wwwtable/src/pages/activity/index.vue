@@ -217,21 +217,15 @@ onMounted(() => {
 <style lang="scss" scoped>
 @use '@/styles/layout-system.scss';
 
-$primary: #07C160;
-$primary-dark: #06AD56;
-$bg: #f7f7f7;
-$card-bg: #ffffff;
-$text-primary: #333333;
-$text-secondary: #999999;
-
 .container {
   min-height: 100vh;
-  background: $bg;
+  background: linear-gradient(180deg, #0f0f16 0%, #12121a 30%, #16213e 70%, #0f0f16 100%);
   padding: 40rpx;
   padding-bottom: 180rpx;
   position: relative;
   overflow: hidden;
   
+  /* 动态背景光效 */
   &::before {
     content: '';
     position: absolute;
@@ -240,10 +234,37 @@ $text-secondary: #999999;
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(ellipse at 15% 15%, rgba($primary, 0.05) 0%, transparent 40%),
-      radial-gradient(ellipse at 85% 85%, rgba(6, 182, 212, 0.04) 0%, transparent 40%);
+      radial-gradient(ellipse at 15% 15%, rgba(201, 169, 98, 0.08) 0%, transparent 40%),
+      radial-gradient(ellipse at 85% 85%, rgba(165, 94, 234, 0.06) 0%, transparent 40%);
     pointer-events: none;
+    animation: bgPulse 8s ease-in-out infinite;
   }
+  
+  /* 网格背景 */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(201, 169, 98, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 169, 98, 0.02) 1px, transparent 1px);
+    background-size: 80rpx 80rpx;
+    pointer-events: none;
+    animation: gridFade 4s ease-in-out infinite;
+  }
+}
+
+@keyframes bgPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes gridFade {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
 }
 
 .activity-list {
@@ -252,32 +273,44 @@ $text-secondary: #999999;
   
   .activity-card {
     position: relative;
-    background: $card-bg;
+    background: linear-gradient(135deg, #1a1a2e, #252542);
     border-radius: 48rpx;
     padding: 48rpx;
     margin-bottom: 48rpx;
-    border: 2rpx solid rgba($primary, 0.08);
+    border: 2rpx solid #374151;
     display: flex;
     overflow: hidden;
     transition: all 0.35s ease;
     min-height: 240rpx;
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
     
     &::before {
-      display: none;
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(201, 169, 98, 0.05) 50%,
+        transparent 60%
+      );
+      transform: rotate(45deg);
+      animation: shimmer 3s infinite;
     }
     
     &:active {
-      border-color: rgba($primary, 0.3);
-      background: rgba($primary, 0.03);
+      border-color: rgba(201, 169, 98, 0.6);
+      background: rgba(201, 169, 98, 0.1);
       transform: scale(0.97);
-      box-shadow: 0 0 50rpx rgba($primary, 0.15);
+      box-shadow: 0 0 50rpx rgba(201, 169, 98, 0.4);
     }
     
     &.featured {
-      background: rgba($primary, 0.04);
-      border-color: rgba($primary, 0.15);
-      box-shadow: 0 0 60rpx rgba($primary, 0.1);
+      background: linear-gradient(135deg, rgba(201, 169, 98, 0.25), rgba(168, 139, 98, 0.12));
+      border-color: rgba(201, 169, 98, 0.5);
+      box-shadow: 0 0 60rpx rgba(201, 169, 98, 0.25);
       flex-direction: column;
       padding: 0;
       
@@ -286,9 +319,9 @@ $text-secondary: #999999;
         top: 0;
         right: 0;
         padding: 16rpx 40rpx;
-        background: linear-gradient(135deg, $primary, $primary-dark);
+        background: linear-gradient(135deg, #c9a962, #a88562);
         border-radius: 0 48rpx 0 28rpx;
-        box-shadow: 0 6rpx 24rpx rgba($primary, 0.3);
+        box-shadow: 0 6rpx 24rpx rgba(201, 169, 98, 0.5);
         z-index: 2;
         
         text {
@@ -302,13 +335,14 @@ $text-secondary: #999999;
         width: 100%;
         height: 360rpx;
         border-radius: 48rpx 48rpx 0 0;
-        background: linear-gradient(135deg, rgba($primary, 0.12), rgba($primary, 0.06));
+        background: linear-gradient(135deg, rgba(201, 169, 98, 0.35), rgba(168, 139, 98, 0.25));
         border: none;
-        border-bottom: 2rpx solid rgba($primary, 0.1);
+        border-bottom: 2rpx solid rgba(201, 169, 98, 0.3);
         margin-right: 0;
         
         .image-icon {
           font-size: 240rpx;
+          filter: drop-shadow(0 8rpx 32rpx rgba(201, 169, 98, 0.4));
         }
       }
       
@@ -341,6 +375,7 @@ $text-secondary: #999999;
             
             &.highlight {
               font-size: 60rpx;
+              text-shadow: 0 0 20rpx rgba(201, 169, 98, 0.6);
             }
           }
         }
@@ -350,11 +385,11 @@ $text-secondary: #999999;
         margin-top: 36rpx;
         
         .action-btn {
-          background: linear-gradient(135deg, $primary, $primary-dark);
+          background: linear-gradient(135deg, #c9a962, #a88562);
           padding: 28rpx 56rpx;
           border-radius: 36rpx;
           display: inline-flex;
-          box-shadow: 0 12rpx 36rpx rgba($primary, 0.3);
+          box-shadow: 0 12rpx 36rpx rgba(201, 169, 98, 0.4);
           transition: all 0.3s ease;
           min-height: 96rpx;
           align-items: center;
@@ -376,14 +411,14 @@ $text-secondary: #999999;
       position: relative;
       width: 220rpx;
       height: 220rpx;
-      background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.05));
+      background: linear-gradient(135deg, rgba(201, 169, 98, 0.3), rgba(168, 139, 98, 0.2));
       border-radius: 36rpx;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-right: 40rpx;
       flex-shrink: 0;
-      border: 2rpx solid rgba($primary, 0.1);
+      border: 2rpx solid rgba(201, 169, 98, 0.25);
       
       &.small {
         width: 200rpx;
@@ -396,6 +431,7 @@ $text-secondary: #999999;
       
       .image-icon {
         font-size: 160rpx;
+        filter: drop-shadow(0 4rpx 16rpx rgba(201, 169, 98, 0.3));
       }
     }
     
@@ -415,7 +451,7 @@ $text-secondary: #999999;
         .activity-title {
           font-size: 66rpx;
           font-weight: 700;
-          color: $text-primary;
+          color: #fff;
         }
         
         .activity-tag {
@@ -425,32 +461,32 @@ $text-secondary: #999999;
           font-weight: 600;
           
           &.new {
-            background: rgba($primary, 0.1);
-            color: $primary;
+            background: linear-gradient(135deg, #c9a962, #a88562);
+            color: #fff;
           }
           &.hot {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+            background: linear-gradient(135deg, #c9a962, #a88562);
+            color: #fff;
             animation: pulse 2s infinite;
           }
           &.vip {
-            background: rgba(139, 92, 246, 0.1);
-            color: #8b5cf6;
+            background: linear-gradient(135deg, #c9a962, #a88562);
+            color: #fff;
           }
           &.match {
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
+            background: linear-gradient(135deg, #c9a962, #a88562);
+            color: #fff;
           }
           &.student {
-            background: rgba(245, 158, 11, 0.1);
-            color: #f59e0b;
+            background: linear-gradient(135deg, #c9a962, #a88562);
+            color: #fff;
           }
         }
       }
       
       .activity-desc {
         font-size: 48rpx;
-        color: $text-secondary;
+        color: #8a8a9a;
         margin-bottom: auto;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -469,17 +505,18 @@ $text-secondary: #999999;
           
           .info-label {
             font-size: 45rpx;
-            color: $text-secondary;
+            color: #6b7280;
           }
           
           .info-value {
             font-size: 45rpx;
-            color: $text-primary;
+            color: #fff;
             
             &.highlight {
-              color: $primary;
+              color: #c9a962;
               font-weight: 700;
               font-size: 54rpx;
+              text-shadow: 0 0 16rpx rgba(201, 169, 98, 0.5);
             }
           }
         }
@@ -493,13 +530,14 @@ $text-secondary: #999999;
         
         .activity-date {
           font-size: 42rpx;
-          color: $text-secondary;
+          color: #8a8a9a;
         }
         
         .activity-price {
           font-size: 66rpx;
           font-weight: 700;
-          color: $primary;
+          color: #c9a962;
+          text-shadow: 0 0 16rpx rgba(201, 169, 98, 0.5);
         }
       }
     }
@@ -511,9 +549,9 @@ $text-secondary: #999999;
     
     .divider-title {
       font-size: 54rpx;
-      color: $text-secondary;
+      color: #6b7280;
       padding: 0 40rpx;
-      background: $card-bg;
+      background: #1a1a2e;
       position: relative;
       font-weight: 600;
       
@@ -524,7 +562,7 @@ $text-secondary: #999999;
         top: 50%;
         width: 180rpx;
         height: 2rpx;
-        background: linear-gradient(90deg, transparent, rgba($primary, 0.2), transparent);
+        background: linear-gradient(90deg, transparent, rgba(201, 169, 98, 0.3), transparent);
       }
       
       &::before {
@@ -535,6 +573,15 @@ $text-secondary: #999999;
         right: -200rpx;
       }
     }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
   }
 }
 
@@ -553,17 +600,18 @@ $text-secondary: #999999;
   .detail-image {
     width: 320rpx;
     height: 320rpx;
-    background: linear-gradient(135deg, rgba($primary, 0.12), rgba($primary, 0.06));
+    background: linear-gradient(135deg, rgba(201, 169, 98, 0.35), rgba(168, 139, 98, 0.25));
     border-radius: 40rpx;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 48rpx;
-    border: 3rpx solid rgba($primary, 0.15);
-    box-shadow: 0 8rpx 40rpx rgba($primary, 0.1);
+    border: 3rpx solid rgba(201, 169, 98, 0.4);
+    box-shadow: 0 8rpx 40rpx rgba(201, 169, 98, 0.2);
     
     .detail-icon {
       font-size: 240rpx;
+      filter: drop-shadow(0 8rpx 32rpx rgba(201, 169, 98, 0.4));
     }
   }
   
@@ -573,14 +621,14 @@ $text-secondary: #999999;
     .detail-title {
       display: block;
       font-size: 54rpx;
-      color: $text-secondary;
+      color: #8a8a9a;
       margin-bottom: 20rpx;
       font-weight: 600;
     }
     
     .detail-content {
       font-size: 54rpx;
-      color: $text-primary;
+      color: #fff;
       line-height: 1.8;
     }
     
@@ -588,7 +636,8 @@ $text-secondary: #999999;
       .discount-label {
         font-size: 96rpx;
         font-weight: 800;
-        color: $primary;
+        color: #feca57;
+        text-shadow: 0 0 40rpx rgba(254, 202, 87, 0.6);
       }
     }
   }
@@ -596,17 +645,17 @@ $text-secondary: #999999;
 
 .confirm-btn {
   height: 128rpx;
-  background: linear-gradient(135deg, $primary, $primary-dark);
+  background: linear-gradient(135deg, #c9a962, #8a6d3b);
   border-radius: 36rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 16rpx 48rpx rgba($primary, 0.3);
+  box-shadow: 0 16rpx 48rpx rgba(201, 169, 98, 0.4);
   transition: all 0.3s;
   
   &:active {
     transform: scale(0.97);
-    box-shadow: 0 8rpx 24rpx rgba($primary, 0.2);
+    box-shadow: 0 8rpx 24rpx rgba(201, 169, 98, 0.5);
   }
   
   text {
@@ -628,31 +677,32 @@ $text-secondary: #999999;
     font-size: 240rpx;
     margin-bottom: 48rpx;
     opacity: 0.9;
+    filter: drop-shadow(0 8rpx 32rpx rgba(201, 169, 98, 0.3));
   }
 
   .empty-title {
     display: block;
     font-size: 72rpx;
     font-weight: 700;
-    color: $text-primary;
+    color: #fff;
     margin-bottom: 24rpx;
   }
 
   .empty-desc {
     font-size: 54rpx;
-    color: $text-secondary;
+    color: #8a8a9a;
     margin-bottom: 60rpx;
   }
 
   .retry-btn {
     padding: 32rpx 80rpx;
-    background: linear-gradient(135deg, $primary, $primary-dark);
+    background: linear-gradient(135deg, #c9a962, #8a6d3b);
     border-radius: 36rpx;
     transition: all 0.3s;
     min-height: 96rpx;
     display: flex;
     align-items: center;
-    box-shadow: 0 12rpx 36rpx rgba($primary, 0.25);
+    box-shadow: 0 12rpx 36rpx rgba(201, 169, 98, 0.35);
 
     &:active {
       transform: scale(0.95);

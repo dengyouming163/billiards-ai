@@ -79,7 +79,7 @@
 					</view>
 					<view class="action-btns">
 						<view class="btn-edit" @click="goEdit">
-							<text class="btn-icon">✏️</text>
+							<text class="btn-icon">✏</text>
 							<text class="btn-text">编辑信息</text>
 						</view>
 						<view class="btn-delete" @click="handleDelete">
@@ -100,7 +100,6 @@ import { ref, onMounted } from 'vue'
 import { getEmployeeDetail, deleteEmployee } from '@/api/modules/employee'
 import type { Employee } from '@/types'
 import StateView from '@/components/StateView.vue'
-''
 
 const id = ref('')
 const employee = ref<Employee | null>(null)
@@ -208,7 +207,7 @@ function goBack() {
 	min-height: 100vh;
 	max-width: 100vw;
 	overflow-x: hidden;
-	background: #f7f7f7;
+	background: #fafafa;
 	display: flex;
 	flex-direction: column;
 	padding: 0 24rpx;
@@ -233,7 +232,7 @@ function goBack() {
 		right: 32rpx;
 		bottom: 0;
 		height: 1rpx;
-		background: #e5e5e5;
+		background: rgba(0, 0, 0, 0.06);
 		transform: scaleY(0.5);
 	}
 }
@@ -243,7 +242,7 @@ function goBack() {
 	align-items: center;
 	gap: 6rpx;
 	font-size: 26rpx;
-	color: #07C160;
+	color: #059669;
 	font-weight: 500;
 	padding: 8rpx 4rpx;
 	transition: opacity 200ms ease-out;
@@ -262,7 +261,7 @@ function goBack() {
 .header-title {
 	font-size: 34rpx;
 	font-weight: 700;
-	color: #333333;
+	color: #09090b;
 	letter-spacing: 1rpx;
 }
 
@@ -281,14 +280,14 @@ function goBack() {
 .hero-card {
 	position: relative;
 	overflow: hidden;
-	background: linear-gradient(135deg, #07C160 0%, #06AD56 100%);
-	border-radius: 16rpx;
+	background: linear-gradient(135deg, #047857 0%, #059669 40%, #10b981 100%);
+	border-radius: 36rpx;
 	padding: 52rpx 36rpx 48rpx;
 	margin-bottom: 16rpx;
 	text-align: center;
 	box-shadow:
-		0 8rpx 32rpx rgba(7, 193, 96, 0.2),
-		0 2rpx 8rpx rgba(7, 193, 96, 0.1);
+		0 8rpx 32rpx rgba(5, 150, 105, 0.25),
+		0 2rpx 8rpx rgba(5, 150, 105, 0.15);
 }
 
 .hero-glow {
@@ -296,7 +295,7 @@ function goBack() {
 	width: 280rpx;
 	height: 280rpx;
 	border-radius: 50%;
-	background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+	background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
 	top: -80rpx;
 	right: -60rpx;
 	pointer-events: none;
@@ -306,8 +305,8 @@ function goBack() {
 	position: absolute;
 	inset: 0;
 	background-image:
-		radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
-		radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+		radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+		radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
 	pointer-events: none;
 }
 
@@ -321,18 +320,18 @@ function goBack() {
 	margin-bottom: 24rpx;
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1rpx solid rgba(255, 255, 255, 0.3);
-	background: rgba(255, 255, 255, 0.2);
+	border: 1rpx solid rgba(255, 255, 255, 0.25);
+	background: rgba(255, 255, 255, 0.18);
 	z-index: 1;
 
 	&.active {
 		background: rgba(255, 255, 255, 0.15);
-		border-color: rgba(255, 255, 255, 0.25);
+		border-color: rgba(255, 255, 255, 0.2);
 	}
 
 	&.inactive {
-		background: rgba(239, 68, 68, 0.25);
-		border-color: rgba(239, 68, 68, 0.35);
+		background: rgba(239, 68, 68, 0.2);
+		border-color: rgba(239, 68, 68, 0.3);
 	}
 }
 
@@ -344,7 +343,7 @@ function goBack() {
 	flex-shrink: 0;
 
 	.inactive & {
-		background: #ffd1d1;
+		background: #fca5a5;
 	}
 }
 
@@ -400,12 +399,12 @@ function goBack() {
 
 .section-card {
 	background: #ffffff;
-	border-radius: 16rpx;
+	border-radius: 28rpx;
 	padding: 30rpx 28rpx;
 	margin-bottom: 16rpx;
 	box-shadow:
-		0 2rpx 12rpx rgba(0, 0, 0, 0.05);
-	border: 1rpx solid #e5e5e5;
+		0 4rpx 24rpx rgba(0, 0, 0, 0.06),
+		0 0 0 1rpx rgba(0, 0, 0, 0.03);
 	transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 
 	&:active {
@@ -428,14 +427,14 @@ function goBack() {
 	width: 6rpx;
 	height: 28rpx;
 	border-radius: 3rpx;
-	background: #07C160;
+	background: linear-gradient(180deg, $color-primary, #10b981);
 	flex-shrink: 0;
 }
 
 .section-title {
 	font-size: 30rpx;
 	font-weight: 700;
-	color: #333333;
+	color: #09090b;
 	letter-spacing: 1rpx;
 }
 
@@ -451,11 +450,11 @@ function goBack() {
 	flex-direction: column;
 	gap: 8rpx;
 	padding: 18rpx 0;
-	border-bottom: 1rpx solid #f0f0f0;
+	border-bottom: 1rpx solid #f4f4f5;
 	transition: background 200ms ease-out;
 
 	&:active {
-		background: #f7f7f7;
+		background: #fafafa;
 		border-radius: 12rpx;
 		padding-left: 12rpx;
 		padding-right: 12rpx;
@@ -481,13 +480,13 @@ function goBack() {
 
 .info-label {
 	font-size: 22rpx;
-	color: #999999;
+	color: #a1a1aa;
 	font-weight: 400;
 }
 
 .info-value {
 	font-size: 26rpx;
-	color: #333333;
+	color: #09090b;
 	font-weight: 500;
 	word-break: break-all;
 }
@@ -510,22 +509,22 @@ function goBack() {
 }
 
 .btn-edit {
-	background: linear-gradient(135deg, rgba(7, 193, 96, 0.1), rgba(6, 173, 86, 0.1));
-	border: 2rpx solid rgba(7, 193, 96, 0.3);
+	background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+	border: 2rpx solid rgba($color-primary, 0.3);
 	box-shadow:
-		0 4rpx 16rpx rgba(7, 193, 96, 0.1),
-		inset 0 1rpx 0 rgba(255, 255, 255, 0.8);
+		0 4rpx 16rpx rgba(5, 150, 105, 0.12),
+		inset 0 1rpx 0 rgba(255, 255, 255, 0.6);
 
 	&:active {
 		transform: scale(0.97);
 		box-shadow:
-			0 2rpx 8rpx rgba(7, 193, 96, 0.08),
-			inset 0 1rpx 0 rgba(255, 255, 255, 0.8);
+			0 2rpx 8rpx rgba(5, 150, 105, 0.08),
+			inset 0 1rpx 0 rgba(255, 255, 255, 0.6);
 	}
 }
 
 .btn-delete {
-	background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15));
+	background: linear-gradient(135deg, #fef2f2, #fee2e2);
 	border: 2rpx solid rgba($color-danger, 0.3);
 	box-shadow:
 		0 4rpx 16rpx rgba(220, 38, 38, 0.08),
@@ -551,11 +550,11 @@ function goBack() {
 }
 
 .btn-edit .btn-text {
-	color: #07C160;
+	color: $color-primary-dark;
 }
 
 .btn-delete .btn-text {
-	color: #dc2626;
+	color: $color-danger;
 }
 
 .bottom-safe {

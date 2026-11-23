@@ -32,7 +32,6 @@ interface ReportStatCardsProps {
   occupiedTables?: number;
   totalTables?: number;
   formatCurrency: (value: number) => string;
-  formatDuration: (minutes: number) => string;
 }
 
 function fmtDur(m: number): string {

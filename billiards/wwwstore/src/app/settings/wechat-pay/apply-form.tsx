@@ -181,7 +181,7 @@ export function ApplyForm({ initialData, onSuccess, onCancel }: Props) {
       ...formData.business_info,
       sales_info: {
         sales_scenes_type: ['SALES_SCENES_WEB'],
-        web_info: { domain: 'https://poolstore.kyyp.cn' },
+        web_info: { domain: 'https://store.tpzl88.com' },
       },
     };
     // 结算规则根据主体类型硬编码

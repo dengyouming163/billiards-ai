@@ -55,12 +55,11 @@ function goToAlbum() {
 
 <style lang="scss" scoped>
 .album-entry {
-	background: rgba(30, 41, 59, 0.7);
+	background: #ffffff;
 	border-radius: 24rpx;
 	padding: 24rpx;
 	margin-bottom: 20rpx;
-	border: 1rpx solid rgba(71, 85, 105, 0.3);
-	box-shadow: 0 4rpx 20rpx rgba(0,0,0,.2);
+	box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
 .entry-header {
@@ -83,7 +82,7 @@ function goToAlbum() {
 .entry-title {
 	font-size: 32rpx;
 	font-weight: 600;
-	color: #f8fafc;
+	color: #1f2937;
 }
 
 .header-right {
@@ -94,12 +93,12 @@ function goToAlbum() {
 
 .entry-count {
 	font-size: 26rpx;
-	color: #64748b;
+	color: #9ca3af;
 }
 
 .entry-arrow {
 	font-size: 32rpx;
-	color: #64748b;
+	color: #9ca3af;
 }
 
 .album-preview {
@@ -127,7 +126,7 @@ function goToAlbum() {
 	padding-bottom: 177.78%;
 	overflow: hidden;
 	border-radius: 12rpx;
-	background: rgba(71, 85, 105, 0.3);
+	background: #f3f4f6;
 }
 
 .empty-album {
@@ -137,7 +136,7 @@ function goToAlbum() {
 	align-items: center;
 	justify-content: center;
 	padding: 40rpx 0;
-	background: rgba(71, 85, 105, 0.3);
+	background: #f9fafb;
 	border-radius: 12rpx;
 }
 
@@ -148,7 +147,7 @@ function goToAlbum() {
 
 .empty-text {
 	font-size: 26rpx;
-	color: #64748b;
+	color: #9ca3af;
 }
 
 .more-count {

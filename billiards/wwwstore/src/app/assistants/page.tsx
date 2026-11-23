@@ -263,7 +263,7 @@ export default function AssistantsPage() {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('type', 'product');
-      const res = await fetch('http://poolapi.kyyp.cn/storeapi/upload.Upload/image', { method: 'POST', body: formData });
+      const res = await fetch('http://api.tpzl88.com/storeapi/upload.Upload/image', { method: 'POST', body: formData });
       const data = await res.json();
       if (data.code === 1 && data.data?.url) {
         await uploadAssistantAlbum(selectedAssistant.id, data.data.url);
@@ -299,7 +299,7 @@ export default function AssistantsPage() {
         icon={GraduationCap}
       >
         <Button
-          className="rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] hover:from-[#06AD56] hover:to-[#07C160] text-white shadow-lg shadow-[#07C160]/25"
+          className="rounded-xl bg-white text-emerald-600 hover:bg-slate-50 shadow-lg cursor-pointer"
           onClick={() => setAddDialogOpen(true)}
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -307,13 +307,13 @@ export default function AssistantsPage() {
         </Button>
       </PageHeader>
 
-      <div className="flex flex-wrap gap-2 p-2 bg-[#f7f7f7] backdrop-blur-sm rounded-xl">
+      <div className="flex flex-wrap gap-2 p-2 bg-slate-100/80 backdrop-blur-sm rounded-xl">
         <Button
           variant={activeTab === "list" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "list"
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl"
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl"
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("list")}
@@ -324,9 +324,9 @@ export default function AssistantsPage() {
         <Button
           variant={activeTab === "levels" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "levels"
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl"
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl"
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("levels")}
@@ -337,9 +337,9 @@ export default function AssistantsPage() {
         <Button
           variant={activeTab === "schedule" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "schedule"
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl"
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl"
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("schedule")}
@@ -350,9 +350,9 @@ export default function AssistantsPage() {
         <Button
           variant={activeTab === "commission" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "commission"
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl"
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl"
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("commission")}
@@ -363,9 +363,9 @@ export default function AssistantsPage() {
         <Button
           variant={activeTab === "salary" ? "default" : "ghost"}
           size="sm"
-          className={`rounded-full transition-all duration-200 px-4 ${
+          className={`rounded-xl transition-all duration-200 px-4 ${
             activeTab === "salary"
-              ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25 hover:shadow-xl"
+              ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl"
               : "hover:bg-white/80"
           }`}
           onClick={() => setActiveTab("salary")}
@@ -376,12 +376,12 @@ export default function AssistantsPage() {
       </div>
 
       {activeTab === "list" && (
-        <div className="rounded-[24px] border border-[#e5e5e5] bg-white shadow-sm overflow-hidden">
+        <div className="rounded-2xl border border-slate-200/60 bg-white/95 backdrop-blur-xl shadow-lg overflow-hidden">
           <div className="p-4 space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-black">助教列表</h2>
-                <p className="text-sm text-[#999999]">管理助教档案、等级和相册信息</p>
+                <h2 className="text-lg font-semibold text-slate-900">助教列表</h2>
+                <p className="text-sm text-slate-500">管理助教档案、等级和相册信息</p>
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -389,25 +389,25 @@ export default function AssistantsPage() {
               label="助教总数"
               value={stats.total_assistants}
               icon={GraduationCap}
-              gradient="from-[#FF976A] to-[#FF7A45]"
+              gradient="from-amber-500 to-orange-500"
             />
             <StatCard
               label="今日订单"
               value={stats.today_orders}
               icon={CalendarCheck}
-              gradient="from-[#06B6D4] to-[#0891B2]"
+              gradient="from-blue-500 to-indigo-500"
             />
             <StatCard
               label="本月营收"
               value={formatCurrency(stats.month_revenue)}
               icon={TrendingUp}
-              gradient="from-[#07C160] to-[#06AD56]"
+              gradient="from-green-500 to-emerald-500"
             />
             <StatCard
               label="累计营收"
               value={formatCurrency(stats.total_revenue)}
               icon={DollarSign}
-              gradient="from-[#8B5CF6] to-[#7C3AED]"
+              gradient="from-rose-500 to-pink-500"
             />
           </div>
 

@@ -53,48 +53,48 @@ export default function SelectStorePage() {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen bg-[#f7f7f7] flex items-center justify-center">
+      <div className="h-screen w-screen bg-gradient-to-br from-sky-50 via-emerald-50 to-amber-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#07C160] to-[#06AD56] rounded-3xl shadow-xl mb-6">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-3xl shadow-xl mb-6">
             <Waves className="w-12 h-12 text-white animate-pulse" />
           </div>
-          <p className="text-xl text-[#999999]">加载门店列表...</p>
+          <p className="text-xl text-slate-500">加载门店列表...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen w-screen bg-[#f7f7f7] flex items-center justify-center p-6">
+    <div className="h-screen w-screen bg-gradient-to-br from-sky-50 via-emerald-50 to-amber-50 flex items-center justify-center p-6">
       <div className="w-full max-w-xl">
         <div className="text-center mb-14">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#07C160] to-[#06AD56] rounded-3xl shadow-xl mb-6">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl shadow-xl mb-6">
             <StoreIcon className="w-12 h-12 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-[#333333] mb-3">选择门店</h1>
-          <p className="text-lg text-[#999999]">请选择您要管理的门店</p>
+          <h1 className="text-4xl font-bold text-slate-800 mb-3">选择门店</h1>
+          <p className="text-lg text-slate-500">请选择您要管理的门店</p>
         </div>
 
-        <div className="bg-white border border-[#e5e5e5] rounded-[3rem] shadow-lg p-10">
+        <div className="bg-white rounded-[3rem] shadow-2xl p-10">
           {loading ? (
             <div className="text-center py-12">
-              <div className="animate-spin w-12 h-12 border-4 border-[#07C160] border-t-transparent rounded-full mx-auto mb-4" />
-              <p className="text-lg text-[#999999]">加载中...</p>
+              <div className="animate-spin w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4" />
+              <p className="text-lg text-slate-500">加载中...</p>
             </div>
           ) : error ? (
             <div className="text-center py-12">
               <p className="text-lg text-red-500 mb-6">{error}</p>
               <button
                 onClick={loadStores}
-                className="px-8 py-4 bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white text-base rounded-full hover:opacity-90 transition-opacity shadow-lg"
+                className="px-8 py-4 bg-emerald-500 text-white text-base rounded-2xl hover:bg-emerald-600 transition-colors shadow-lg"
               >
                 重新加载
               </button>
             </div>
           ) : stores.length === 0 ? (
             <div className="text-center py-12">
-              <Building2 className="w-20 h-20 text-[#cccccc] mx-auto mb-4" />
-              <p className="text-lg text-[#999999]">暂无门店数据</p>
+              <Building2 className="w-20 h-20 text-slate-300 mx-auto mb-4" />
+              <p className="text-lg text-slate-500">暂无门店数据</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -103,28 +103,28 @@ export default function SelectStorePage() {
                   key={store.id}
                   onClick={() => handleSelectStore(store)}
                   disabled={switching}
-                  className="w-full flex items-center justify-between p-6 rounded-2xl border-2 border-[#e5e5e5] hover:border-[#07C160] hover:bg-[#D1FAE5]/50 transition-all group disabled:opacity-50"
+                  className="w-full flex items-center justify-between p-6 rounded-3xl border-2 border-slate-100 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all group disabled:opacity-50"
                 >
                   <div className="flex items-center gap-5">
-                    <div className="w-16 h-16 bg-gradient-to-br from-[#07C160] to-[#06AD56] rounded-xl flex items-center justify-center text-white font-bold text-2xl">
+                    <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl">
                       {store.name.charAt(0)}
                     </div>
                     <div className="text-left">
-                      <h3 className="font-bold text-xl text-[#333333]">{store.name}</h3>
+                      <h3 className="font-bold text-xl text-slate-800">{store.name}</h3>
                       {store.address && (
-                        <p className="text-base text-[#999999]">{store.address}</p>
+                        <p className="text-base text-slate-400">{store.address}</p>
                       )}
                     </div>
                   </div>
-                  <ChevronRight className="w-7 h-7 text-[#cccccc] group-hover:text-[#07C160] transition-colors" />
+                  <ChevronRight className="w-7 h-7 text-slate-300 group-hover:text-emerald-500 transition-colors" />
                 </button>
               ))}
             </div>
           )}
         </div>
 
-        <p className="text-center text-base text-[#999999] mt-10">
-          © 2026 客稻云 · 台球行业数字化管理平台
+        <p className="text-center text-base text-slate-400 mt-10">
+          © 2026 台屏智联 · 台球行业数字化管理平台
         </p>
       </div>
     </div>

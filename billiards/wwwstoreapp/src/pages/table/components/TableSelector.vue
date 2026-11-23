@@ -74,13 +74,12 @@ defineExpose({ open, close })
 }
 
 .selector-popup {
-  background: #ffffff;
+  background: #fff;
   border-radius: 24rpx 24rpx 0 0;
   padding: 24rpx;
   max-height: 60vh;
   display: flex;
   flex-direction: column;
-  border-top: 1rpx solid #e5e5e5;
 }
 
 .popup-header {
@@ -92,13 +91,13 @@ defineExpose({ open, close })
 .popup-title {
   font-size: 30rpx;
   font-weight: 700;
-  color: #000000;
+  color: #1f2937;
 }
 
 .popup-close {
   width: 32rpx;
   height: 32rpx;
-  color: #999999;
+  color: #9ca3af;
   padding: 8rpx;
 }
 
@@ -109,7 +108,7 @@ defineExpose({ open, close })
 
 .table-item {
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #e5e5e5;
+  border-bottom: 1rpx solid #f4f4f5;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -124,12 +123,12 @@ defineExpose({ open, close })
 .table-no {
   font-size: 28rpx;
   font-weight: 500;
-  color: #333333;
+  color: #1f2937;
 }
 
 .table-zone {
   font-size: 22rpx;
-  color: #999999;
+  color: #9ca3af;
 }
 
 .table-status-badge {
@@ -138,24 +137,24 @@ defineExpose({ open, close })
   border-radius: 8rpx;
 
   &.idle {
-    background: rgba(7, 193, 96, 0.1);
-    color: #07C160;
+    background: #d1fae5;
+    color: #065f46;
   }
 
   &.occupied {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    background: #fee2e2;
+    color: #991b1b;
   }
 
   &.reserved {
-    background: rgba(7, 193, 96, 0.08);
-    color: #07C160;
+    background: #fef3c7;
+    color: #92400e;
   }
 }
 
 .empty {
   padding: 40rpx;
   text-align: center;
-  color: #999999;
+  color: #9ca3af;
 }
 </style>

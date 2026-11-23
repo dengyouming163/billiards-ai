@@ -71,14 +71,16 @@ function handleMinus() {
 </script>
 
 <style lang="scss" scoped>
+$gold: #c9a962;
+
 .quick-buttons {
-  background: #ffffff;
-  border-radius: 40rpx;
+  background: linear-gradient(145deg, rgba(35, 35, 80, 0.98), rgba(25, 25, 55, 0.99));
+  border-radius: 56rpx;
   padding: 40rpx;
-  border: 2rpx solid rgba(7,193,96,0.06);
+  border: 4rpx solid rgba($gold, 0.15);
   box-shadow: 
-    0 8rpx 24rpx rgba(0, 0, 0, 0.05),
-    0 0 20rpx rgba(7,193,96,0.03);
+    0 16rpx 64rpx rgba(0, 0, 0, 0.4),
+    0 0 40rpx rgba($gold, 0.08);
   
   .qb-header {
     display: flex;
@@ -93,7 +95,7 @@ function handleMinus() {
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2rpx solid rgba(7,193,96,0.08);
+      border: 2rpx solid rgba(255, 255, 255, 0.15);
       
       .icon-text {
         font-size: 48rpx;
@@ -110,11 +112,11 @@ function handleMinus() {
   .qb-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16rpx;
+    gap: 20rpx;
     
     .qb-btn {
       aspect-ratio: 1;
-      border-radius: 28rpx;
+      border-radius: 32rpx;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -123,20 +125,28 @@ function handleMinus() {
       transition: all 0.2s;
       
       &:active {
-        transform: scale(0.94);
+        transform: scale(0.92);
         opacity: 0.85;
+      }
+      
+      &.plus {
+        box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.3), inset 0 2rpx 4rpx rgba(255, 255, 255, 0.2);
+      }
+      
+      &.minus {
+        box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.3), inset 0 2rpx 4rpx rgba(255, 255, 255, 0.1);
       }
       
       .btn-icon {
         font-size: 48rpx;
         font-weight: 800;
-        color: #ffffff;
+        color: #fff;
       }
       
       .btn-num {
         font-size: 56rpx;
         font-weight: 900;
-        color: #ffffff;
+        color: #fff;
         font-family: 'Courier New', monospace;
       }
     }

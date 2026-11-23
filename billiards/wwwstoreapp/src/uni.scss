@@ -1,43 +1,38 @@
-/* ====== 微信小程序风格设计系统 ====== */
+/* ====== BilliardsHub Mobile v2.0 Design Tokens ====== */
 
-/* ---------- 主色调 ---------- */
-$color-primary: #07C160;
-$color-primary-dark: #06AD56;
-$color-primary-light: rgba(7, 193, 96, 0.1);
+/* ---------- Brand Colors ---------- */
+$color-primary: #059669;
+$color-primary-light: #ecfdf5;
+$color-primary-dark: #047857;
 
-/* ---------- 强调色 ---------- */
-$color-accent: #FF976A;
-$color-accent-light: rgba(255, 151, 106, 0.1);
-
-/* ---------- 中性色 ---------- */
-$color-bg-page: #f7f7f7;
+/* ---------- Neutral Colors ---------- */
+$color-bg-page: #fafafa;
 $color-bg-card: #ffffff;
-$color-bg-hover: rgba(0, 0, 0, 0.04);
-$color-text-primary: #000000;
-$color-text-secondary: #333333;
-$color-text-muted: #999999;
-$color-text-dim: #cccccc;
-$color-border-light: #e5e5e5;
-$color-border: #d9d9d9;
+$color-bg-hover: #f4f4f5;
+$color-text-primary: #09090b;
+$color-text-secondary: #71717a;
+$color-text-muted: #a1a1aa;
+$color-border-light: #f4f4f5;
+$color-border: #e4e4e7;
 
-/* ---------- 语义色 ---------- */
-$color-success: #07C160;
-$color-warning: #FF976A;
-$color-danger: #FF4D4F;
-$color-info: #1890FF;
+/* ---------- Semantic Colors ---------- */
+$color-success: #059669;
+$color-warning: #d97706;
+$color-danger: #dc2626;
+$color-info: #0284c7;
 
-/* ---------- 阴影 ---------- */
-$shadow-card: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
-$shadow-floating: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
-$shadow-modal: 0 12rpx 32rpx rgba(0, 0, 0, 0.12);
+/* ---------- Shadows ---------- */
+$shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+$shadow-floating: 0 4px 24px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
+$shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.12);
 
-/* ---------- 圆角 ---------- */
-$radius-sm: 8rpx;
+/* ---------- Border Radius ---------- */
+$radius-sm: 12rpx;
 $radius-md: 16rpx;
-$radius-lg: 20rpx;
-$radius-xl: 44rpx;
+$radius-lg: 24rpx;
+$radius-xl: 36rpx;
 
-/* ---------- 间距 ---------- */
+/* ---------- Spacing (8px base) ---------- */
 $space-xs: 8rpx;
 $space-sm: 16rpx;
 $space-md: 24rpx;
@@ -45,8 +40,8 @@ $space-lg: 32rpx;
 $space-xl: 48rpx;
 $space-2xl: 64rpx;
 
-/* ---------- 字体 ---------- */
-$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+/* ---------- Typography ---------- */
+$font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
 $font-display: 32px;
 $font-title: 20px;
@@ -60,68 +55,61 @@ $font-weight-semibold: 600;
 $font-weight-medium: 500;
 $font-weight-regular: 400;
 
-/* ---------- 全局重置 ---------- */
+/* ---------- Global Reset ---------- */
 page {
   background: $color-bg-page;
   font-family: $font-family;
   font-size: $font-body;
-  color: $color-text-secondary;
+  color: $color-text-primary;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
 }
 
-/* ---------- 卡片 ---------- */
+/* ---------- Utility Classes ---------- */
 .card {
   background: $color-bg-card;
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
-  padding: $space-lg;
-  margin-bottom: $space-md;
+  padding: $space-md;
+  margin-bottom: 12rpx;
 }
 
-/* ---------- 文字工具类 ---------- */
 .text-primary { color: $color-primary; }
 .text-secondary { color: $color-text-secondary; }
 .text-muted { color: $color-text-muted; }
-.text-dim { color: $color-text-dim; }
-.text-black { color: #000000; }
 
-/* ---------- 按钮 ---------- */
 .btn {
-  height: 88rpx;
-  border-radius: $radius-xl;
+  height: 48rpx;
+  border-radius: $radius-md;
   font-size: $font-body;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-medium;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 48rpx;
-  transition: all 0.2s;
+  padding: 0 24rpx;
+  transition: transform 0.15s ease-out;
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
 }
 
 .btn-primary {
   @extend .btn;
   background: $color-primary;
-  color: #ffffff;
+  color: #fff;
 }
 
 .btn-secondary {
   @extend .btn;
-  background: $color-bg-card;
-  color: $color-primary;
-  border: 2rpx solid $color-primary;
+  background: $color-bg-hover;
+  color: $color-text-primary;
 }
 
 .btn-danger {
   @extend .btn;
-  background: $color-bg-card;
+  background: #fef2f2;
   color: $color-danger;
-  border: 2rpx solid $color-danger;
 }
 
 .btn-ghost {

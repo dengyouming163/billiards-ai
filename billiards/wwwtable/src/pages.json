@@ -72,26 +72,26 @@
     }
   ],
   "globalStyle": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "客稻云",
-    "navigationBarBackgroundColor": "#ffffff",
-    "backgroundColor": "#f7f7f7",
-    "backgroundColorTop": "#f7f7f7",
-    "backgroundColorBottom": "#f7f7f7"
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "台球厅 · 尊享",
+    "navigationBarBackgroundColor": "#0f0f16",
+    "backgroundColor": "#0f0f16",
+    "backgroundColorTop": "#0f0f16",
+    "backgroundColorBottom": "#0f0f16"
   },
   "tabBar": {
-    "custom": true,
-    "color": "#999999",
-    "fontSize": "36rpx",
-    "padding": "24rpx 0",
-    "height": "140rpx",
-    "iconSize": "80rpx",
-    "selectedColor": "#07C160",
-    "backgroundColor": "#ffffff",
-    "borderStyle": "white",
+    "custom": false,
+    "color": "rgba(255,255,255,0.38)",
+    "fontSize": "18px",
+    "padding": "16px 0",
+    "height": "120px",
+    "iconSize": "72px",
+    "selectedColor": "#c9a962",
+    "backgroundColor": "#0a0a14",
     "list": [
-      { "pagePath": "pages/product/index", "text": "点单", "iconPath": "static/tabbar/product.png", "selectedIconPath": "static/tabbar/product-active.png" },
-      { "pagePath": "pages/index/index", "text": "账单", "iconPath": "static/tabbar/home.png", "selectedIconPath": "static/tabbar/home-active.png" },
+      { "pagePath": "pages/assistant/index", "text": "教练", "iconPath": "static/tabbar/assistant.png", "selectedIconPath": "static/tabbar/assistant-active.png" },
+      { "pagePath": "pages/product/index", "text": "商品", "iconPath": "static/tabbar/product.png", "selectedIconPath": "static/tabbar/product-active.png" },
+      { "pagePath": "pages/index/index", "text": "首页", "iconPath": "static/tabbar/home.png", "selectedIconPath": "static/tabbar/home-active.png" },
       { "pagePath": "pages/score/index", "text": "计分", "iconPath": "static/tabbar/score.png", "selectedIconPath": "static/tabbar/score-active.png" }
     ]
   },

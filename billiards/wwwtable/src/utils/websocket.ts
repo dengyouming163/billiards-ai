@@ -140,7 +140,7 @@ class TableWebSocket {
   }
 
   private getDefaultWsUrl(): string {
-    return config.WS_URL || 'wss://poolapi.kyyp.cn:8282'
+    return config.WS_URL || 'wss://api.tpzl88.com:8282'
   }
 
   private setupEventHandlers(

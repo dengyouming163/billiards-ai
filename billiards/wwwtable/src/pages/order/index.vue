@@ -320,18 +320,11 @@ onMounted(() => {
 <style lang="scss" scoped>
 @use '@/styles/layout-system.scss';
 
-$primary: #07C160;
-$primary-dark: #06AD56;
-$bg: #f7f7f7;
-$card-bg: #ffffff;
-$text-primary: #333333;
-$text-secondary: #999999;
-
 .container {
   padding: 0;
   min-height: 100vh;
   padding-bottom: 220rpx;
-  background: $bg;
+  background: linear-gradient(180deg, #0f0f16 0%, #12121a 30%, #1a1a2e 70%, #0f0f16 100%);
   position: relative;
   overflow: hidden;
   
@@ -343,43 +336,41 @@ $text-secondary: #999999;
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(ellipse at 30% 20%, rgba($primary, 0.05) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 80%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+      radial-gradient(ellipse at 30% 20%, rgba(201, 169, 98, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 50%);
     pointer-events: none;
   }
 }
 
 .back-btn {
   padding: 20rpx 36rpx;
-  background: $card-bg;
+  background: linear-gradient(135deg, #1a1a2e, #252542);
   border-radius: 24rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2rpx solid rgba($primary, 0.2);
+  border: 2rpx solid #374151;
   transition: all 0.3s;
   min-height: 80rpx;
   
   &:active {
     transform: scale(0.95);
-    border-color: $primary;
-    background: rgba($primary, 0.05);
+    border-color: #c9a962;
   }
   
   text {
     font-size: 42rpx;
-    color: $primary;
+    color: #fff;
   }
 }
 
 .action-tabs {
   display: flex;
-  background: $card-bg;
+  background: #1a1a2e;
   border-radius: 28rpx;
   padding: 16rpx;
   margin: 40rpx 40rpx 56rpx;
-  border: 2rpx solid rgba($primary, 0.1);
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  border: 2rpx solid #374151;
   
   .tab-item {
     flex: 1;
@@ -392,8 +383,8 @@ $text-secondary: #999999;
     min-height: 80rpx;
     
     &.active {
-      background: linear-gradient(135deg, $primary, $primary-dark);
-      box-shadow: 0 8rpx 32rpx rgba($primary, 0.3);
+      background: linear-gradient(135deg, #c9a962, #8a6d3b);
+      box-shadow: 0 8rpx 32rpx rgba(201, 169, 98, 0.4);
       
       text {
         color: #fff;
@@ -403,7 +394,7 @@ $text-secondary: #999999;
     
     &:not(.active) {
       text {
-        color: $text-secondary;
+        color: #8a8a9a;
       }
     }
     
@@ -417,12 +408,12 @@ $text-secondary: #999999;
   display: block;
   font-size: 60rpx;
   font-weight: 700;
-  color: $text-primary;
+  color: #fff;
   margin-bottom: 36rpx;
   margin-left: 40rpx;
   margin-right: 40rpx;
   padding-left: 24rpx;
-  border-left: 10rpx solid $primary;
+  border-left: 10rpx solid #c9a962;
 }
 
 .table-section {
@@ -436,19 +427,18 @@ $text-secondary: #999999;
     
     .table-card {
       position: relative;
-      background: $card-bg;
+      background: linear-gradient(135deg, #1a1a2e, #252542);
       border-radius: 48rpx;
       padding: 40rpx 24rpx;
       min-height: 280rpx;
       text-align: center;
-      border: 3rpx solid rgba($primary, 0.08);
+      border: 3rpx solid #374151;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
       
       &::before {
         content: '';
@@ -458,7 +448,7 @@ $text-secondary: #999999;
         right: 0;
         bottom: 0;
         border-radius: inherit;
-        background: linear-gradient(135deg, rgba($primary, 0.06), transparent 50%);
+        background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), transparent 50%);
         opacity: 0;
         transition: opacity 0.4s;
       }
@@ -470,7 +460,7 @@ $text-secondary: #999999;
         left: 10%;
         right: 10%;
         height: 4rpx;
-        background: linear-gradient(90deg, transparent, rgba($primary, 0.3), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
         border-radius: 4rpx;
         opacity: 0;
         transition: opacity 0.4s;
@@ -478,11 +468,11 @@ $text-secondary: #999999;
       
       &.idle {
         &:active, &.selected {
-          border-color: $primary;
-          background: rgba($primary, 0.05);
+          border-color: #c9a962;
+          background: linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(138, 109, 59, 0.12));
           box-shadow: 
-            0 0 60rpx rgba($primary, 0.2),
-            0 12rpx 40rpx rgba($primary, 0.08);
+            0 0 60rpx rgba(201, 169, 98, 0.4),
+            0 12rpx 40rpx rgba(0, 0, 0, 0.5);
           transform: translateY(-6rpx) scale(1.03);
           
           &::before {
@@ -502,15 +492,15 @@ $text-secondary: #999999;
           left: 0;
           right: 0;
           height: 8rpx;
-          background: linear-gradient(90deg, $primary, lighten($primary, 10%), $primary);
+          background: linear-gradient(90deg, #c9a962, #d4b87a, #c9a962);
           border-radius: 4rpx 4rpx 0 0;
         }
       }
       
       &.occupied, &.reserved {
-        opacity: 0.6;
+        opacity: 0.5;
         pointer-events: none;
-        filter: grayscale(0.2);
+        filter: grayscale(0.3);
       }
       
       .table-number {
@@ -518,8 +508,9 @@ $text-secondary: #999999;
         z-index: 1;
         font-size: 100rpx;
         font-weight: 800;
-        color: $text-primary;
+        color: #fff;
         margin-bottom: 16rpx;
+        text-shadow: 0 0 24rpx rgba(255, 255, 255, 0.3);
         transition: all 0.3s;
       }
       
@@ -527,7 +518,7 @@ $text-secondary: #999999;
         position: relative;
         z-index: 1;
         font-size: 42rpx;
-        color: $text-secondary;
+        color: #8a8a9a;
         margin-bottom: 24rpx;
         display: block;
       }
@@ -543,19 +534,19 @@ $text-secondary: #999999;
         transition: all 0.3s;
         
         &.idle {
-          background: rgba($primary, 0.1);
-          color: $primary;
-          border: 2rpx solid rgba($primary, 0.15);
+          background: linear-gradient(135deg, rgba(46, 213, 115, 0.25), rgba(29, 209, 161, 0.15));
+          color: #2ed573;
+          box-shadow: 0 0 24rpx rgba(46, 213, 115, 0.25);
         }
         &.occupied {
-          background: rgba(245, 158, 11, 0.1);
+          background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.15));
           color: #f59e0b;
-          border: 2rpx solid rgba(245, 158, 11, 0.15);
+          box-shadow: 0 0 24rpx rgba(245, 158, 11, 0.25);
         }
         &.reserved {
-          background: rgba(59, 130, 246, 0.1);
-          color: #3b82f6;
-          border: 2rpx solid rgba(59, 130, 246, 0.15);
+          background: linear-gradient(135deg, rgba(83, 82, 237, 0.25), rgba(66, 65, 204, 0.15));
+          color: #5352ed;
+          box-shadow: 0 0 24rpx rgba(83, 82, 237, 0.25);
         }
       }
       
@@ -565,12 +556,12 @@ $text-secondary: #999999;
         right: 20rpx;
         width: 72rpx;
         height: 72rpx;
-        background: linear-gradient(135deg, $primary, $primary-dark);
+        background: linear-gradient(135deg, #c9a962, #8a6d3b);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 0 28rpx rgba($primary, 0.4);
+        box-shadow: 0 0 28rpx rgba(201, 169, 98, 0.6);
         animation: checkPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         
         text {
@@ -600,11 +591,10 @@ $text-secondary: #999999;
   padding: 0 40rpx;
   
   .info-card {
-    background: $card-bg;
+    background: #16162a;
     border-radius: 32rpx;
     padding: 40rpx;
-    border: 2rpx solid rgba($primary, 0.08);
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+    border: 2rpx solid #374151;
     
     .info-row {
       display: flex;
@@ -612,20 +602,20 @@ $text-secondary: #999999;
       padding: 24rpx 0;
       
       &:not(:last-child) {
-        border-bottom: 2rpx solid rgba($primary, 0.06);
+        border-bottom: 2rpx solid #374151;
       }
       
       .info-label {
         font-size: 48rpx;
-        color: $text-secondary;
+        color: #8a8a9a;
       }
       
       .info-value {
         font-size: 48rpx;
-        color: $text-primary;
+        color: #fff;
         
         &.highlight {
-          color: $primary;
+          color: #feca57;
           font-weight: 600;
           font-size: 52rpx;
         }
@@ -648,20 +638,19 @@ $text-secondary: #999999;
       align-items: center;
       gap: 20rpx;
       padding: 36rpx 48rpx;
-      background: $card-bg;
+      background: linear-gradient(135deg, #1a1a2e, #252542);
       border-radius: 32rpx;
-      border: 2rpx solid rgba($primary, 0.08);
+      border: 2rpx solid #374151;
       transition: all 0.35s ease;
       min-height: 120rpx;
-      box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
       
       &.selected {
-        border-color: $primary;
-        background: rgba($primary, 0.05);
-        box-shadow: 0 0 28rpx rgba($primary, 0.15);
+        border-color: #c9a962;
+        background: rgba(201, 169, 98, 0.15);
+        box-shadow: 0 0 28rpx rgba(201, 169, 98, 0.25);
         
         .player-count {
-          color: $primary;
+          color: #c9a962;
         }
       }
       
@@ -671,7 +660,7 @@ $text-secondary: #999999;
       
       .player-count {
         font-size: 56rpx;
-        color: $text-primary;
+        color: #fff;
         font-weight: 600;
       }
     }
@@ -689,29 +678,28 @@ $text-secondary: #999999;
     
     .time-option {
       padding: 36rpx 56rpx;
-      background: $card-bg;
+      background: linear-gradient(135deg, #1a1a2e, #252542);
       border-radius: 32rpx;
-      border: 2rpx solid rgba($primary, 0.08);
+      border: 2rpx solid #374151;
       transition: all 0.35s ease;
       min-height: 120rpx;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
       
       &.selected {
-        border-color: $primary;
-        background: rgba($primary, 0.05);
-        box-shadow: 0 0 28rpx rgba($primary, 0.15);
+        border-color: #c9a962;
+        background: rgba(201, 169, 98, 0.15);
+        box-shadow: 0 0 28rpx rgba(201, 169, 98, 0.25);
         
         text {
-          color: $primary;
+          color: #c9a962;
         }
       }
       
       text {
         font-size: 56rpx;
-        color: $text-primary;
+        color: #fff;
         font-weight: 600;
       }
     }
@@ -724,14 +712,19 @@ $text-secondary: #999999;
   
   .summary-card {
     position: relative;
-    background: linear-gradient(135deg, rgba($primary, 0.08), rgba($primary, 0.04));
+    background: linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(138, 109, 59, 0.14));
     border-radius: 36rpx;
     padding: 48rpx;
-    border: 2rpx solid rgba($primary, 0.15);
+    border: 2rpx solid rgba(201, 169, 98, 0.4);
     overflow: hidden;
     
     .summary-glow {
-      display: none;
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(201, 169, 98, 0.12) 0%, transparent 70%);
     }
     
     .summary-row {
@@ -743,13 +736,14 @@ $text-secondary: #999999;
       
       .summary-label {
         font-size: 60rpx;
-        color: $text-secondary;
+        color: #8a8a9a;
       }
       
       .summary-value {
         font-size: 96rpx;
         font-weight: 700;
-        color: $primary;
+        color: #feca57;
+        text-shadow: 0 0 28rpx rgba(254, 202, 87, 0.6);
       }
     }
     
@@ -760,7 +754,7 @@ $text-secondary: #999999;
       
       text {
         font-size: 44rpx;
-        color: $text-secondary;
+        color: #8a8a9a;
       }
     }
   }
@@ -774,22 +768,22 @@ $text-secondary: #999999;
   
   .confirm-btn {
     height: 160rpx;
-    background: linear-gradient(135deg, $primary, $primary-dark);
+    background: linear-gradient(135deg, #c9a962, #8a6d3b);
     border-radius: 40rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 16rpx 48rpx rgba($primary, 0.35);
+    box-shadow: 0 16rpx 48rpx rgba(201, 169, 98, 0.45);
     transition: all 0.3s;
     min-height: 80rpx;
     
     &:not(.disabled):active {
       transform: scale(0.98);
-      box-shadow: 0 8rpx 24rpx rgba($primary, 0.25);
+      box-shadow: 0 8rpx 24rpx rgba(201, 169, 98, 0.35);
     }
     
     &.disabled {
-      background: #e5e5e5;
+      background: linear-gradient(135deg, #444, #333);
       box-shadow: none;
     }
     
@@ -807,7 +801,7 @@ $text-secondary: #999999;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -816,16 +810,15 @@ $text-secondary: #999999;
 
 .success-modal-content {
   width: 600rpx;
-  background: $card-bg;
+  background: #1a1a2e;
   border-radius: 40rpx;
   padding: 60rpx;
   text-align: center;
-  box-shadow: 0 20rpx 80rpx rgba(0, 0, 0, 0.15);
   
   .success-icon {
     width: 160rpx;
     height: 160rpx;
-    background: linear-gradient(135deg, $primary, $primary-dark);
+    background: linear-gradient(135deg, #2ed573, #1dd1a1);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -839,7 +832,7 @@ $text-secondary: #999999;
     display: block;
     font-size: 72rpx;
     font-weight: 700;
-    color: $text-primary;
+    color: #fff;
     margin-bottom: 40rpx;
   }
   
@@ -847,7 +840,7 @@ $text-secondary: #999999;
     display: flex;
     justify-content: space-between;
     padding: 20rpx 0;
-    border-bottom: 2rpx solid rgba($primary, 0.08);
+    border-bottom: 2rpx solid #374151;
     
     &:last-child {
       border-bottom: none;
@@ -855,12 +848,12 @@ $text-secondary: #999999;
     
     .success-label {
       font-size: 48rpx;
-      color: $text-secondary;
+      color: #6b7280;
     }
     
     .success-value {
       font-size: 48rpx;
-      color: $text-primary;
+      color: #fff;
       font-weight: 500;
     }
   }
@@ -868,7 +861,7 @@ $text-secondary: #999999;
   .success-btn {
     margin-top: 40rpx;
     height: 120rpx;
-    background: linear-gradient(135deg, $primary, $primary-dark);
+    background: linear-gradient(135deg, #c9a962, #8a6d3b);
     border-radius: 28rpx;
     display: flex;
     align-items: center;
@@ -889,7 +882,7 @@ $text-secondary: #999999;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -898,11 +891,10 @@ $text-secondary: #999999;
 
 .merge-modal-content {
   width: 700rpx;
-  background: $card-bg;
+  background: #1a1a2e;
   border-radius: 40rpx;
   padding: 60rpx;
-  border: 2rpx solid rgba($primary, 0.08);
-  box-shadow: 0 20rpx 80rpx rgba(0, 0, 0, 0.15);
+  border: 2rpx solid #374151;
 }
 
 .merge-modal-header {
@@ -914,7 +906,7 @@ $text-secondary: #999999;
   .merge-icon {
     width: 96rpx;
     height: 96rpx;
-    background: linear-gradient(135deg, $primary, $primary-dark);
+    background: linear-gradient(135deg, #c9a962, #8a6d3b);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -928,12 +920,12 @@ $text-secondary: #999999;
   .merge-title {
     font-size: 64rpx;
     font-weight: 700;
-    color: $text-primary;
+    color: #fff;
   }
 }
 
 .merge-table-list {
-  background: rgba($primary, 0.04);
+  background: #16162a;
   border-radius: 28rpx;
   padding: 32rpx;
   margin-bottom: 40rpx;
@@ -945,7 +937,7 @@ $text-secondary: #999999;
     padding: 24rpx 0;
     
     &:not(:last-child) {
-      border-bottom: 2rpx solid rgba($primary, 0.08);
+      border-bottom: 2rpx solid #374151;
     }
     
     .table-info {
@@ -956,18 +948,18 @@ $text-secondary: #999999;
       .table-num {
         font-size: 56rpx;
         font-weight: 600;
-        color: $text-primary;
+        color: #fff;
       }
       
       .table-type {
         font-size: 44rpx;
-        color: $text-secondary;
+        color: #8a8a9a;
       }
     }
     
     .table-rate {
       font-size: 48rpx;
-      color: $primary;
+      color: #feca57;
     }
   }
 }
@@ -978,18 +970,18 @@ $text-secondary: #999999;
   align-items: center;
   margin-bottom: 40rpx;
   padding: 32rpx;
-  background: rgba($primary, 0.08);
+  background: rgba(201, 169, 98, 0.12);
   border-radius: 28rpx;
   
   .summary-label {
     font-size: 56rpx;
-    color: $text-secondary;
+    color: #8a8a9a;
   }
   
   .summary-amount {
     font-size: 72rpx;
     font-weight: 700;
-    color: $primary;
+    color: #feca57;
   }
 }
 
@@ -1000,7 +992,7 @@ $text-secondary: #999999;
   .merge-btn {
     flex: 1;
     height: 120rpx;
-    background: linear-gradient(135deg, $primary, $primary-dark);
+    background: linear-gradient(135deg, #c9a962, #8a6d3b);
     border-radius: 28rpx;
     display: flex;
     align-items: center;
@@ -1017,7 +1009,7 @@ $text-secondary: #999999;
   .cancel-btn {
     flex: 1;
     height: 120rpx;
-    background: rgba($text-secondary, 0.1);
+    background: #374151;
     border-radius: 28rpx;
     display: flex;
     align-items: center;
@@ -1027,7 +1019,7 @@ $text-secondary: #999999;
     text {
       font-size: 56rpx;
       font-weight: 600;
-      color: $text-secondary;
+      color: #fff;
     }
   }
 }
@@ -1040,7 +1032,7 @@ $text-secondary: #999999;
 
   .loading-text {
     font-size: 56rpx;
-    color: $text-secondary;
+    color: #a0a0b0;
   }
 }
 </style>

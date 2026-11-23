@@ -74,7 +74,7 @@ const sections = [
 <style lang="scss" scoped>
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: linear-gradient(180deg, #eefbf5 0%, #f7f7f7 220rpx);
 	padding: 24rpx;
 	box-sizing: border-box;
 }
@@ -87,21 +87,21 @@ const sections = [
 	display: block;
 	font-size: 42rpx;
 	font-weight: 700;
-	color: #07C160;
+	color: #111827;
 	margin-bottom: 12rpx;
 }
 
 .hero-subtitle {
 	display: block;
 	font-size: 24rpx;
-	color: #999999;
+	color: #6b7280;
 }
 
 .content-card {
 	background: #ffffff;
-	border-radius: 16rpx;
+	border-radius: 24rpx;
 	padding: 32rpx 28rpx;
-	border: 1rpx solid #e5e5e5;
+	box-shadow: 0 12rpx 32rpx rgba(15, 23, 42, 0.06);
 }
 
 .section {
@@ -116,15 +116,15 @@ const sections = [
 	display: block;
 	font-size: 30rpx;
 	font-weight: 700;
-	color: #000000;
+	color: #111827;
 	margin-bottom: 16rpx;
 }
 
 .section-text {
 	display: block;
-	font-size: 28rpx;
+	font-size: 26rpx;
 	line-height: 1.8;
-	color: #333333;
+	color: #4b5563;
 	margin-bottom: 12rpx;
 }
 

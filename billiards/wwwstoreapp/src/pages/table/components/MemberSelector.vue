@@ -109,13 +109,12 @@ defineExpose({ open, close })
 }
 
 .selector-popup {
-  background: #ffffff;
+  background: #fff;
   border-radius: 24rpx 24rpx 0 0;
   padding: 24rpx;
   max-height: 60vh;
   display: flex;
   flex-direction: column;
-  border-top: 1rpx solid #e5e5e5;
 }
 
 .popup-header {
@@ -127,13 +126,13 @@ defineExpose({ open, close })
 .popup-title {
   font-size: 30rpx;
   font-weight: 700;
-  color: #000000;
+  color: #1f2937;
 }
 
 .popup-close {
   width: 32rpx;
   height: 32rpx;
-  color: #999999;
+  color: #9ca3af;
   padding: 8rpx;
 }
 
@@ -146,15 +145,14 @@ defineExpose({ open, close })
 .search-input {
   flex: 1;
   padding: 16rpx 20rpx;
-  background: #f7f7f7;
+  background: #f3f4f6;
   border-radius: 12rpx;
   font-size: 26rpx;
-  color: #333333;
 }
 
 .search-btn {
   padding: 16rpx 24rpx;
-  background: #07C160;
+  background: #059669;
   color: #fff;
   border-radius: 12rpx;
   font-size: 24rpx;
@@ -167,7 +165,7 @@ defineExpose({ open, close })
 
 .member-item {
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #e5e5e5;
+  border-bottom: 1rpx solid #f4f4f5;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -182,12 +180,12 @@ defineExpose({ open, close })
 .member-name {
   font-size: 28rpx;
   font-weight: 500;
-  color: #333333;
+  color: #1f2937;
 }
 
 .member-phone {
   font-size: 22rpx;
-  color: #999999;
+  color: #9ca3af;
 }
 
 .member-right {
@@ -200,20 +198,20 @@ defineExpose({ open, close })
 .member-level {
   font-size: 20rpx;
   padding: 2rpx 12rpx;
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
+  background: #ecfdf5;
+  color: #059669;
   border-radius: 6rpx;
 }
 
 .member-balance {
   font-size: 26rpx;
-  color: #07C160;
+  color: #ef4444;
   font-weight: 600;
 }
 
 .empty {
   padding: 40rpx;
   text-align: center;
-  color: #999999;
+  color: #9ca3af;
 }
 </style>

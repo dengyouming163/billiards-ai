@@ -4,9 +4,7 @@
 			<view class="section-title">账号安全</view>
 			<view class="menu-list">
 				<view class="menu-item" @click="goToChangePassword">
-					<view class="menu-icon-wrap">
-						<Icon name="lock" :size="24" class="menu-icon" />
-					</view>
+					<text class="menu-icon">🔒</text>
 					<text class="menu-text">修改密码</text>
 					<text class="menu-arrow">›</text>
 				</view>
@@ -19,18 +17,14 @@
 			<view class="section-title">系统设置</view>
 			<view class="menu-list">
 				<view class="menu-item" @click="handleItemClick('notification')">
-					<view class="menu-icon-wrap">
-						<Icon name="bell" :size="24" class="menu-icon" />
-					</view>
+					<text class="menu-icon">🔔</text>
 					<text class="menu-text">通知设置</text>
 					<view class="menu-switch">
-						<switch :checked="notificationEnabled" @change="toggleNotification" color="#07C160" />
+						<switch :checked="notificationEnabled" @change="toggleNotification" color="#059669" />
 					</view>
 				</view>
 				<view class="menu-item" @click="handleItemClick('about')">
-					<view class="menu-icon-wrap">
-						<Icon name="info" :size="24" class="menu-icon" />
-					</view>
+					<text class="menu-icon">ℹ️</text>
 					<text class="menu-text">关于我们</text>
 					<text class="menu-arrow">›</text>
 				</view>
@@ -41,16 +35,12 @@
 			<view class="section-title">协议与隐私</view>
 			<view class="menu-list">
 				<view class="menu-item" @click="handleItemClick('service-agreement')">
-					<view class="menu-icon-wrap">
-						<Icon name="fileText" :size="24" class="menu-icon" />
-					</view>
+					<text class="menu-icon">📄</text>
 					<text class="menu-text">服务协议</text>
 					<text class="menu-arrow">›</text>
 				</view>
 				<view class="menu-item" @click="handleItemClick('privacy-policy')">
-					<view class="menu-icon-wrap">
-						<Icon name="shield" :size="24" class="menu-icon" />
-					</view>
+					<text class="menu-icon">🛡️</text>
 					<text class="menu-text">隐私政策</text>
 					<text class="menu-arrow">›</text>
 				</view>
@@ -61,11 +51,12 @@
 			<button class="logout-btn" @click="handleLogout">退出登录</button>
 		</view>
 
+		<!-- 修改密码弹窗 -->
 		<view class="modal-overlay" v-if="showChangePassword" @click="showChangePassword = false">
 			<view class="modal-content" @click.stop>
 				<view class="modal-header">
 					<text class="modal-title">修改密码</text>
-					<view class="modal-close" @click="showChangePassword = false"><Icon name="x" :size="24" /></view>
+					<view class="modal-close" @click="showChangePassword = false">✕</view>
 				</view>
 				<view class="modal-body">
 					<input v-model="passwordForm.oldPassword" class="modal-input" type="password" placeholder="请输入原密码" />
@@ -88,7 +79,6 @@
 import { ref, reactive } from 'vue'
 import { authStore } from '@/stores/auth'
 import { changePassword } from '@/api/modules/auth'
-import Icon from '@/components/Icon.vue'
 
 const notificationEnabled = ref(uni.getStorageSync('notificationEnabled') !== false)
 
@@ -182,7 +172,7 @@ function handleLogout() {
 <style lang="scss" scoped>
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #fafafa;
 }
 
 .page-header {
@@ -194,7 +184,6 @@ function handleLogout() {
 	position: sticky;
 	top: 0;
 	z-index: 100;
-	border-bottom: 1rpx solid #e5e5e5;
 }
 
 .back-btn {
@@ -210,7 +199,7 @@ function handleLogout() {
 .page-title {
 	font-size: 34rpx;
 	font-weight: 600;
-	color: #000000;
+	color: #09090b;
 }
 
 .placeholder {
@@ -220,9 +209,8 @@ function handleLogout() {
 .section-card {
 	background: #ffffff;
 	margin: 20rpx 24rpx 24rpx;
-	border-radius: 20rpx;
+	border-radius: 24rpx;
 	overflow: hidden;
-	border: 1rpx solid #e5e5e5;
 }
 
 .section-title {
@@ -240,32 +228,16 @@ function handleLogout() {
 	display: flex;
 	align-items: center;
 	height: 96rpx;
-	border-bottom: 1rpx solid #e5e5e5;
-	transition: all 0.22s ease;
-
-	&:active {
-		background: #f5f5f5;
-	}
+	border-bottom: 1rpx solid #f5f5f5;
 }
 
 .menu-item:last-child {
 	border-bottom: none;
 }
 
-.menu-icon-wrap {
-	width: 56rpx;
-	height: 56rpx;
-	margin-right: 20rpx;
-	border-radius: 16rpx;
-	background: rgba(7, 193, 96, 0.1);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-}
-
 .menu-icon {
-	color: #07C160;
+	font-size: 36rpx;
+	margin-right: 20rpx;
 }
 
 .menu-text {
@@ -275,7 +247,8 @@ function handleLogout() {
 }
 
 .menu-arrow {
-	color: #999999;
+	font-size: 32rpx;
+	color: #cccccc;
 }
 
 .menu-switch {
@@ -289,18 +262,12 @@ function handleLogout() {
 .logout-btn {
 	width: 100%;
 	height: 88rpx;
-	background: #ffffff;
-	color: #999999;
+	background: #f5f5f5;
+	color: #dc2626;
 	font-size: 32rpx;
 	font-weight: 600;
 	border-radius: 44rpx;
-	border: 2rpx solid #e5e5e5;
-	transition: all 0.22s ease;
-
-	&:active {
-		transform: scale(0.98);
-		background: #f5f5f5;
-	}
+	border: none;
 }
 
 .modal-overlay {
@@ -319,11 +286,10 @@ function handleLogout() {
 
 .modal-content {
 	background: #ffffff;
-	border-radius: 20rpx;
+	border-radius: 32rpx;
 	width: 100%;
 	max-width: 600rpx;
 	overflow: hidden;
-	border: 1rpx solid #e5e5e5;
 }
 
 .modal-header {
@@ -331,18 +297,18 @@ function handleLogout() {
 	align-items: center;
 	justify-content: space-between;
 	padding: 32rpx;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f4f4f5;
 }
 
 .modal-title {
 	font-size: 34rpx;
 	font-weight: 700;
-	color: #000000;
+	color: #111827;
 }
 
 .modal-close {
 	font-size: 36rpx;
-	color: #999999;
+	color: #9ca3af;
 	padding: 8rpx;
 }
 
@@ -356,17 +322,13 @@ function handleLogout() {
 .modal-input {
 	width: 100%;
 	height: 88rpx;
-	border: 2rpx solid #e5e5e5;
+	border: 2rpx solid #e5e7eb;
 	border-radius: 16rpx;
 	padding: 0 20rpx;
 	font-size: 28rpx;
 	color: #333333;
-	background: #ffffff;
+	background: #f9fafb;
 	box-sizing: border-box;
-
-	&::placeholder {
-		color: #999999;
-	}
 }
 
 .modal-footer {
@@ -382,18 +344,12 @@ function handleLogout() {
 	font-size: 30rpx;
 	font-weight: 600;
 	border: none;
-	transition: all 0.22s ease;
-
-	&:active {
-		transform: scale(0.98);
-	}
-
 	&.cancel {
 		background: #f5f5f5;
-		color: #333333;
+		color: #6b7280;
 	}
 	&.confirm {
-		background: #07C160;
+		background: linear-gradient(135deg, #059669, #047857);
 		color: #ffffff;
 	}
 }

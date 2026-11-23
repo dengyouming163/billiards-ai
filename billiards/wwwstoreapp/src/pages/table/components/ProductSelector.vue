@@ -160,13 +160,12 @@ defineExpose({ open, close })
 }
 
 .selector-popup {
-  background: #ffffff;
+  background: #fff;
   border-radius: 24rpx 24rpx 0 0;
   padding: 24rpx;
   max-height: 70vh;
   display: flex;
   flex-direction: column;
-  border-top: 1rpx solid #e5e5e5;
 }
 
 .popup-header {
@@ -178,13 +177,13 @@ defineExpose({ open, close })
 .popup-title {
   font-size: 30rpx;
   font-weight: 700;
-  color: #000000;
+  color: #1f2937;
 }
 
 .popup-close {
   width: 32rpx;
   height: 32rpx;
-  color: #999999;
+  color: #9ca3af;
   padding: 8rpx;
 }
 
@@ -197,15 +196,14 @@ defineExpose({ open, close })
 .search-input {
   flex: 1;
   padding: 16rpx 20rpx;
-  background: #f7f7f7;
+  background: #f3f4f6;
   border-radius: 12rpx;
   font-size: 26rpx;
-  color: #333333;
 }
 
 .search-btn {
   padding: 16rpx 24rpx;
-  background: #07C160;
+  background: #059669;
   color: #fff;
   border-radius: 12rpx;
   font-size: 24rpx;
@@ -219,7 +217,7 @@ defineExpose({ open, close })
 
 .product-item {
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #e5e5e5;
+  border-bottom: 1rpx solid #f4f4f5;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -235,12 +233,12 @@ defineExpose({ open, close })
 .product-name {
   font-size: 28rpx;
   font-weight: 500;
-  color: #333333;
+  color: #1f2937;
 }
 
 .product-meta {
   font-size: 22rpx;
-  color: #999999;
+  color: #9ca3af;
 }
 
 .product-right {
@@ -253,7 +251,7 @@ defineExpose({ open, close })
 .product-price {
   font-size: 28rpx;
   font-weight: 700;
-  color: #07C160;
+  color: #ef4444;
 }
 
 .qty-ctrl {
@@ -268,17 +266,17 @@ defineExpose({ open, close })
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f7f7f7;
+  background: #f3f4f6;
   border-radius: 8rpx;
   font-size: 28rpx;
   font-weight: 700;
-  color: #333333;
+  color: #374151;
 }
 
 .qty-val {
   font-size: 26rpx;
   font-weight: 600;
-  color: #333333;
+  color: #1f2937;
   min-width: 40rpx;
   text-align: center;
 }
@@ -288,18 +286,18 @@ defineExpose({ open, close })
   justify-content: space-between;
   align-items: center;
   padding-top: 16rpx;
-  border-top: 1rpx solid #e5e5e5;
+  border-top: 1rpx solid #f3f4f6;
   margin-top: 16rpx;
 }
 
 .confirm-info {
   font-size: 26rpx;
-  color: #999999;
+  color: #6b7280;
 }
 
 .confirm-btn {
   padding: 0 40rpx;
-  background: #07C160;
+  background: #059669;
   color: #fff;
   border-radius: 12rpx;
   font-size: 26rpx;
@@ -311,7 +309,7 @@ defineExpose({ open, close })
 .empty {
   padding: 40rpx;
   text-align: center;
-  color: #999999;
+  color: #9ca3af;
   font-size: 26rpx;
 }
 </style>

@@ -120,10 +120,9 @@ function handleConfirm() {
 .modal-content {
 	width: 80%;
 	max-width: 600rpx;
-	background: rgba(30, 41, 59, 0.7);
+	background: #fff;
 	border-radius: 24rpx;
 	overflow: hidden;
-	border: 1rpx solid rgba(71, 85, 105, 0.3);
 }
 
 .modal-header {
@@ -131,18 +130,18 @@ function handleConfirm() {
 	align-items: center;
 	justify-content: space-between;
 	padding: 32rpx;
-	border-bottom: 1rpx solid rgba(71, 85, 105, 0.3);
+	border-bottom: 1rpx solid #f0f0f0;
 }
 
 .modal-title {
 	font-size: 32rpx;
 	font-weight: 600;
-	color: #f8fafc;
+	color: #333;
 }
 
 .modal-close {
 	font-size: 48rpx;
-	color: #94a3b8;
+	color: #999;
 	line-height: 1;
 }
 
@@ -163,21 +162,21 @@ function handleConfirm() {
 	align-items: center;
 	justify-content: space-between;
 	height: 88rpx;
-	background: rgba(71, 85, 105, 0.3);
+	background: #fafafa;
 	border-radius: 12rpx;
 	padding: 0 24rpx;
 	font-size: 28rpx;
-	color: #f8fafc;
+	color: #333;
 }
 
 .picker-arrow {
 	font-size: 32rpx;
-	color: #94a3b8;
+	color: #999;
 }
 
 .modal-footer {
 	display: flex;
-	border-top: 1rpx solid rgba(71, 85, 105, 0.3);
+	border-top: 1rpx solid #f0f0f0;
 	
 	.btn-cancel, .btn-confirm {
 		flex: 1;
@@ -189,12 +188,12 @@ function handleConfirm() {
 	}
 	
 	.btn-cancel {
-		color: #94a3b8;
-		border-right: 1rpx solid rgba(71, 85, 105, 0.3);
+		color: #666;
+		border-right: 1rpx solid #f0f0f0;
 	}
 	
 	.btn-confirm {
-		color: #f59e0b;
+		color: #10B981;
 	}
 }
 </style>

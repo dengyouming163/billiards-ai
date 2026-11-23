@@ -1,85 +1,87 @@
 <template>
   <view class="assistant-home page-content">
-    <view class="status-card">
-      <view class="status-left">
-        <view class="status-dot" :class="status === 1 || status === 2 ? 'active' : ''"></view>
-        <view class="status-info">
-          <text class="status-text">{{ statusLabel }}</text>
-          <text class="status-sub">{{ profile.today_orders }}单 / {{ formatDuration(profile.today_duration) }}</text>
+    <view class="hero-card">
+      <view class="hero-stats">
+        <view class="hero-stat-card">
+          <view class="hero-stat-icon-wrap">
+            <text class="hero-stat-icon">📋</text>
+          </view>
+          <view class="hero-stat-info">
+            <text class="hero-stat-value">{{ profile.today_orders || 0 }}</text>
+            <text class="hero-stat-label">接单量</text>
+          </view>
+        </view>
+        <view class="hero-stat-card">
+          <view class="hero-stat-icon-wrap">
+            <text class="hero-stat-icon">⏱</text>
+          </view>
+          <view class="hero-stat-info">
+            <text class="hero-stat-value">{{ formatDuration(profile.today_duration || 0) }}</text>
+            <text class="hero-stat-label">服务时长</text>
+          </view>
         </view>
       </view>
-      <view class="status-right">
-        <view v-if="status === 0" class="status-btn on" @click="handleGoOnline">上线接单</view>
-        <view v-else-if="status === 1" class="status-btn off" @click="handleGoOffline">停止接单</view>
-        <view v-else class="status-btn busy">服务中</view>
-      </view>
-    </view>
 
-    <view class="stats-row">
-      <view class="stat-item">
-        <view class="stat-icon-wrap">
-          <text class="stat-emoji">📋</text>
+      <view class="hero-status-bar">
+        <view class="hero-status-left">
+          <view class="hero-status-dot" :class="status === 1 || status === 2 ? 'active' : ''"></view>
+          <text class="hero-status-text">{{ statusLabel }}</text>
         </view>
-        <view class="stat-content">
-          <text class="stat-value">{{ profile.today_orders || 0 }}</text>
-          <text class="stat-label">今日接单</text>
-        </view>
-      </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <view class="stat-icon-wrap">
-          <text class="stat-emoji">⏱</text>
-        </view>
-        <view class="stat-content">
-          <text class="stat-value">{{ formatDuration(profile.today_duration || 0) }}</text>
-          <text class="stat-label">服务时长</text>
+        <view class="hero-status-right">
+          <view v-if="status === 0" class="hero-switch-btn on" @click="handleGoOnline">上线接单</view>
+          <view v-else-if="status === 1" class="hero-switch-btn off" @click="handleGoOffline">停止接单</view>
+          <view v-else class="hero-switch-btn busy">服务中</view>
         </view>
       </view>
     </view>
 
     <view class="section-bar">
       <text class="section-title">接单列表</text>
-      <text class="section-link" @click="goMyOrders">我的订单</text>
+      <text class="section-link" @click="goMyOrders">📋 我的订单</text>
     </view>
 
-    <view class="status-tabs">
+    <scroll-view class="status-tabs" scroll-x :show-scrollbar="false">
       <view class="tabs-inner">
         <view v-for="tab in statusTabs" :key="tab.key" class="tab-item"
           :class="{ active: activeTab === tab.key }" @click="switchTab(tab.key)">
           <text>{{ tab.label }}{{ tab.key === 'all' ? ' ' + orders.length : '' }}</text>
         </view>
       </view>
-    </view>
+    </scroll-view>
 
     <StateView :loading="loading" :empty="!loading && orders.length === 0" empty-msg="暂无订单"
       :error="hasError" error-msg="加载失败" @retry="loadOrders">
-      <view class="order-list">
-        <view v-for="order in orders" :key="order.id" class="order-card" @click="handleOrderClick(order)">
-          <view class="order-left">
-            <view class="order-table-tag">
-              <text class="table-icon">🎱</text>
-              <text class="table-no">{{ order.table_no || order.table_name }}</text>
+      <view v-for="order in orders" :key="order.id" class="order-card">
+        <view class="oc-head">
+          <view class="oc-head-left">
+            <text class="oc-table">桌 {{ order.table_no || order.table_name }}</text>
+            <text class="oc-no">#{{ order.order_no }}</text>
+          </view>
+          <view class="oc-status" :class="'st-'+order.status">{{ order.status_name || statusText(order.status) }}</view>
+        </view>
+
+        <view class="oc-body">
+          <view class="oc-grid">
+            <view class="oc-grid-item">
+              <text class="oc-grid-label">客户</text>
+              <text class="oc-grid-value">{{ order.student_name || '-' }}</text>
             </view>
-            <text class="order-no">#{{ order.order_no }}</text>
-            <view class="order-meta">
-              <view class="meta-item">
-                <text class="meta-emoji">👤</text>
-                <text>{{ order.student_name || '-' }}</text>
-              </view>
-              <view class="meta-item" v-if="order.status === 'in_progress' && order.start_time">
-                <text class="meta-emoji">⏱</text>
-                <text class="timer">{{ getElapsed(order.start_time) }}</text>
-              </view>
+            <view class="oc-grid-item">
+              <text class="oc-grid-label">金额</text>
+              <text class="oc-grid-price">¥{{ order.price || order.total_amount || order.amount || 0 }}</text>
+            </view>
+            <view class="oc-grid-item" v-if="order.status === 'in_progress' && order.start_time">
+              <text class="oc-grid-label">计时</text>
+              <text class="oc-grid-timer">{{ getElapsed(order.start_time) }}</text>
             </view>
           </view>
-          <view class="order-right">
-            <view class="order-price">¥{{ order.price || order.total_amount || order.amount || 0 }}</view>
-            <view class="order-status" :class="'st-'+order.status">{{ order.status_name || statusText(order.status) }}</view>
-            <view class="order-actions" v-if="order.status === 'accepted' || order.status === 'in_progress'">
-              <button v-if="order.status === 'accepted'" class="btn-action btn-start" @click.stop="handleStart(order)">开始服务</button>
-              <button v-if="order.status === 'in_progress'" class="btn-action btn-end" @click.stop="handleComplete(order)">结束服务</button>
-            </view>
-          </view>
+        </view>
+
+        <view class="oc-foot">
+          <text v-if="order.status === 'pending'" class="oc-hint">等待收银确认</text>
+          <button v-if="order.status === 'accepted'" class="btn-action btn-start" @click="handleStart(order)">开始服务</button>
+          <button v-if="order.status === 'in_progress'" class="btn-action btn-end" @click="handleComplete(order)">结束服务</button>
+          <text v-if="order.status === 'completed'" class="oc-done">已完成</text>
         </view>
       </view>
     </StateView>
@@ -91,7 +93,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { getProfile, goOnline, goOffline, getAssistantStatus, type ProfileData } from '@/api/modules/profile'
 import { getAssistantOrderList } from '@/api/modules/order'
 import StateView from '@/components/StateView.vue'
-''
 
 const profile = ref<ProfileData>({ id: '', name: '', phone: '', role: '', store_name: '', join_time: '', avatar: '', nickname: '', signature: '', tags: [], album: [], services: [], today_income: 0, today_orders: 0, today_duration: 0, status: 0 })
 const status = ref(0)
@@ -128,7 +129,7 @@ function formatDuration(minutes: number): string {
   if (!minutes || minutes <= 0) return '0分钟'
   const h = Math.floor(minutes / 60)
   const m = minutes % 60
-  return h > 0 ? `${h}h${m}m` : `${m}m`
+  return h > 0 ? `${h}小时${m}分钟` : `${m}分钟`
 }
 
 async function initStatus() {
@@ -154,12 +155,6 @@ async function loadOrders() {
 }
 
 function switchTab(key: string) { activeTab.value = key; loadOrders() }
-
-function handleOrderClick(order: any) {
-  if (order.status === 'in_progress') {
-    uni.navigateTo({ url: `/pages/assistant-orders/detail?id=${order.id}` })
-  }
-}
 
 async function handleGoOnline() {
   try { await goOnline(); status.value = 1; uni.showToast({ title: '已上线', icon: 'success' }) }
@@ -231,296 +226,298 @@ defineExpose({ loadOrders })
 <style lang="scss" scoped>
 .assistant-home {
   min-height: 100vh;
-  padding: 24rpx;
-  background: #f7f7f7;
+  padding: 30rpx 24rpx 0;
+  background: #f2f3f5;
   display: flex;
   flex-direction: column;
   gap: 20rpx;
 }
 
-.page-content { padding-bottom: calc(env(safe-area-inset-bottom) + 132rpx); }
-
-.status-card {
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 24rpx;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+.page-content {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 132rpx);
 }
 
-.status-left {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
+.hero-card {
+  margin-top: 8rpx;
+  padding: 36rpx;
+  border-radius: 48rpx;
+  background: linear-gradient(135deg, #059669, #10b981);
+  box-shadow: 0 16rpx 48rpx rgba(5, 150, 105, 0.25);
 }
 
-.status-dot {
-  width: 16rpx;
-  height: 16rpx;
-  border-radius: 50%;
-  background: #cccccc;
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  padding: 8rpx 0 24rpx;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.15);
 }
 
-.status-dot.active {
-  background: #07C160;
-}
-
-.status-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4rpx;
-}
-
-.status-text {
-  font-size: 30rpx;
-  font-weight: 700;
-  color: #000000;
-}
-
-.status-sub {
-  font-size: 22rpx;
-  color: #999999;
-}
-
-.status-right {
-  flex-shrink: 0;
-}
-
-.status-btn {
-  padding: 14rpx 32rpx;
-  border-radius: 999rpx;
-  font-size: 26rpx;
-  font-weight: 700;
-}
-
-.status-btn.on {
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
-  border: 1rpx solid #07C160;
-}
-
-.status-btn.off {
-  background: rgba(255, 82, 82, 0.1);
-  color: #FF5252;
-  border: 1rpx solid #FF5252;
-}
-
-.status-btn.busy {
-  background: rgba(255, 151, 106, 0.1);
-  color: #FF976A;
-  border: 1rpx solid #FF976A;
-}
-
-.stats-row {
+.hero-stat-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 24rpx;
+  padding: 28rpx 24rpx;
   display: flex;
   align-items: center;
-  background: #ffffff;
-  border-radius: 16rpx;
-  padding: 20rpx 24rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+  gap: 20rpx;
 }
 
-.stat-item {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 14rpx;
-}
-
-.stat-icon-wrap {
-  width: 48rpx;
-  height: 48rpx;
-  border-radius: 12rpx;
-  background: rgba(7, 193, 96, 0.1);
+.hero-stat-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 18rpx;
+  background: rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.stat-emoji {
-  font-size: 28rpx;
-  line-height: 1;
+.hero-stat-icon {
+  font-size: 32rpx;
 }
 
-.meta-emoji {
-  font-size: 22rpx;
-  line-height: 1;
-}
-
-.stat-content {
+.hero-stat-info {
   display: flex;
   flex-direction: column;
-  gap: 2rpx;
+  gap: 4rpx;
 }
 
-.stat-value {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #000000;
+.hero-stat-value {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #fff;
 }
 
-.stat-label {
+.hero-stat-label {
   font-size: 22rpx;
-  color: #999999;
+  color: rgba(255, 255, 255, 0.65);
 }
 
-.stat-divider {
-  width: 1rpx;
-  height: 48rpx;
-  background: #e5e5e5;
+.hero-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24rpx;
+}
+
+.hero-status-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.hero-status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.hero-status-dot.active {
+  background: #fff;
+  box-shadow: 0 0 12rpx rgba(255, 255, 255, 0.6);
+}
+
+.hero-status-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.hero-status-right {
+  flex-shrink: 0;
+}
+
+.hero-switch-btn {
+  padding: 18rpx 40rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.hero-switch-btn.on {
+  background: #fff;
+  color: #059669;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+.hero-switch-btn.off {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.hero-switch-btn.busy {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .section-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4rpx 0;
+  padding: 4rpx 4rpx 0;
 }
 
 .section-title {
-  font-size: 32rpx;
+  font-size: 34rpx;
   font-weight: 700;
-  color: #000000;
+  color: #1f2937;
 }
 
 .section-link {
   font-size: 26rpx;
-  color: #07C160;
-  font-weight: 600;
+  color: #059669;
+  font-weight: 700;
 }
 
 .status-tabs {
   width: 100%;
-  overflow-x: auto;
+  white-space: nowrap;
   padding: 4rpx 0;
 }
 
 .tabs-inner {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10rpx;
-  flex-wrap: wrap;
+  gap: 12rpx;
+  min-width: 100%;
+}
+
+.assistant-home :deep(.state-content) {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
 }
 
 .tab-item {
-  padding: 12rpx 28rpx;
-  font-size: 24rpx;
+  padding: 16rpx 34rpx;
+  font-size: 26rpx;
   font-weight: 500;
-  color: #999999;
+  color: #6b7280;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  background: #ffffff;
-  border-radius: 999rpx;
+  background: #fff;
+  border-radius: 36rpx;
   flex-shrink: 0;
   transition: all 0.2s;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
 }
 
 .tab-item.active {
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
   font-weight: 600;
-  border: 1rpx solid #07C160;
-}
-
-.order-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
+  box-shadow: 0 8rpx 18rpx rgba(5, 150, 105, 0.22);
 }
 
 .order-card {
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 24rpx;
-  display: flex;
-  gap: 20rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+  background: #fff;
+  border-radius: 36rpx;
+  padding: 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(15, 23, 42, 0.04);
 }
 
-.order-left {
-  flex: 1;
+.oc-head {
   display: flex;
-  flex-direction: column;
-  gap: 10rpx;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
 }
 
-.order-table-tag {
+.oc-head-left {
   display: flex;
   align-items: center;
-  gap: 8rpx;
+  gap: 12rpx;
 }
 
-.table-icon {
-  font-size: 28rpx;
-}
-
-.table-no {
-  font-size: 30rpx;
+.oc-table {
+  font-size: 32rpx;
   font-weight: 700;
-  color: #000000;
+  color: #1f2937;
 }
 
-.order-no {
+.oc-no {
   font-size: 24rpx;
-  color: #999999;
+  color: #9ca3af;
 }
 
-.order-meta {
-  display: flex;
+.oc-status {
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 10rpx 22rpx;
+  border-radius: 24rpx;
+}
+
+.st-pending { background: rgba(255, 149, 0, 0.1); color: #e67c00; }
+.st-accepted, .st-in_progress { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.st-completed { background: rgba(52, 199, 89, 0.1); color: #22c55e; }
+
+.oc-body {
+  margin-bottom: 20rpx;
+}
+
+.oc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20rpx;
 }
 
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 6rpx;
-  font-size: 22rpx;
-  color: #999999;
+.oc-grid-item {
+  background: #f8fafc;
+  border-radius: 16rpx;
+  padding: 20rpx;
 }
 
-.meta-item .timer {
-  color: #007AFF;
+.oc-grid-label {
+  font-size: 22rpx;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.oc-grid-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #374151;
+}
+
+.oc-grid-price {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #059669;
+}
+
+.oc-grid-timer {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #3b82f6;
   font-variant-numeric: tabular-nums;
 }
 
-.order-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10rpx;
-  flex-shrink: 0;
+.oc-foot {
+  text-align: center;
+  padding-top: 16rpx;
 }
 
-.order-price {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #FF976A;
+.oc-hint {
+  font-size: 26rpx;
+  color: #9ca3af;
 }
 
-.order-status {
-  font-size: 22rpx;
+.oc-done {
+  font-size: 26rpx;
+  color: #059669;
   font-weight: 600;
-  padding: 6rpx 16rpx;
-  border-radius: 999rpx;
-}
-
-.st-pending { background: rgba(255, 151, 106, 0.1); color: #FF976A; }
-.st-accepted, .st-in_progress { background: rgba(0, 122, 255, 0.1); color: #007AFF; }
-.st-completed { background: rgba(7, 193, 96, 0.1); color: #07C160; }
-
-.order-actions {
-  margin-top: 4rpx;
 }
 
 .btn-action {
-  height: 64rpx;
-  padding: 0 32rpx;
-  border-radius: 32rpx;
-  font-size: 26rpx;
+  height: 88rpx;
+  padding: 0 64rpx;
+  border-radius: 44rpx;
+  font-size: 30rpx;
   font-weight: 700;
   border: none;
   transition: transform 0.15s ease;
@@ -531,18 +528,18 @@ defineExpose({ loadOrders })
 }
 
 .btn-start {
-  background: rgba(7, 193, 96, 0.1);
-  color: #07C160;
-  border: 1rpx solid #07C160;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  box-shadow: 0 8rpx 20rpx rgba(5, 150, 105, 0.25);
 }
 
 .btn-end {
-  background: rgba(255, 82, 82, 0.1);
-  color: #FF5252;
-  border: 1rpx solid #FF5252;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  box-shadow: 0 8rpx 20rpx rgba(245, 158, 11, 0.25);
 }
 
-.order-actions button::after {
+.oc-foot button::after {
   border: none;
 }
 </style>

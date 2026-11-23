@@ -35,7 +35,7 @@
 - [ ] **Step 2: 验证编译通过**
 
 ```bash
-cd d:/wwwroot/wwwbilliards-dky/www/wwwtable && npx vue-tsc --noEmit src/api/modules/tablet.ts 2>&1 | head -5
+cd d:/wwwroot/wwwbilliards/www/wwwtable && npx vue-tsc --noEmit src/api/modules/tablet.ts 2>&1 | head -5
 ```
 
 - [ ] **Step 3: Commit**
@@ -432,7 +432,7 @@ function goToCheckout() {
 - [ ] **Step 2: 验证编译**
 
 ```bash
-cd d:/wwwroot/wwwbilliards-dky/www/wwwtable && npx vue-tsc --noEmit 2>&1 | grep -i "error" | head -5
+cd d:/wwwroot/wwwbilliards/www/wwwtable && npx vue-tsc --noEmit 2>&1 | grep -i "error" | head -5
 ```
 
 - [ ] **Step 3: Commit**
@@ -611,8 +611,8 @@ git commit -m "refactor: remove gift feature from assistant page, simplify offli
 - [ ] **Step 1: 删除备份文件**
 
 ```bash
-rm d:/wwwroot/wwwbilliards-dky/www/wwwtable/src/pages/service/index.vue.backup
-rm d:/wwwroot/wwwbilliards-dky/www/wwwtable/src/styles/global.scss.backup
+rm d:/wwwroot/wwwbilliards/www/wwwtable/src/pages/service/index.vue.backup
+rm d:/wwwroot/wwwbilliards/www/wwwtable/src/styles/global.scss.backup
 ```
 
 - [ ] **Step 2: Commit**

@@ -237,7 +237,7 @@ const NOTIFICATION_CONFIG: Record<NotificationType, NotificationConfig> = {
 #### 连接配置
 
 ```
-URL:     wss://poolapi.kyyp.cn:8282 (从 config 读取)
+URL:     wss://api.tpzl88.com:8282 (从 config 读取)
 频道:    store_{storeId}
 心跳:    25s ping
 重连:    指数退避 1s→2s→4s→8s→16s，最多 5 次

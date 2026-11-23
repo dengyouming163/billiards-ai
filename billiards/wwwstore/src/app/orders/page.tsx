@@ -83,26 +83,26 @@ const orderTypeConfig: Record<string, {
   table: {
     label: '台费',
     icon: Gamepad2,
-    color: '#07C160',
-    bgColor: 'bg-[#07C160]/10 text-[#07C160]',
+    color: 'emerald-600',
+    bgColor: 'bg-emerald-100 text-emerald-700',
   },
   product: {
     label: '商品',
     icon: ShoppingBag,
-    color: '#06B6D4',
-    bgColor: 'bg-[#06B6D4]/10 text-[#06B6D4]',
+    color: 'blue-600',
+    bgColor: 'bg-blue-100 text-blue-700',
   },
   assistant: {
     label: '助教',
     icon: GraduationCap,
-    color: '#FF976A',
-    bgColor: 'bg-[#FF976A]/10 text-[#FF976A]',
+    color: 'amber-600',
+    bgColor: 'bg-amber-100 text-amber-700',
   },
   quick_order: {
     label: '快速下单',
     icon: Zap,
-    color: '#8B5CF6',
-    bgColor: 'bg-[#8B5CF6]/10 text-[#8B5CF6]',
+    color: 'violet-600',
+    bgColor: 'bg-violet-100 text-violet-700',
   },
 };
 
@@ -113,33 +113,33 @@ const statusConfig: Record<string, {
 }> = {
   pending: {
     label: '待支付',
-    color: 'text-[#FF976A]',
-    bgColor: 'bg-[#FF976A]/10 border-[#FF976A]/30 text-[#FF976A]',
+    color: 'text-amber-600',
+    bgColor: 'bg-amber-50 border-amber-200 text-amber-700',
   },
   in_progress: {
     label: '进行中',
-    color: 'text-[#07C160]',
-    bgColor: 'bg-[#07C160]/10 border-[#07C160]/30 text-[#07C160]',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50 border-blue-200 text-blue-700',
   },
   paused: {
     label: '已暂停',
-    color: 'text-[#FF976A]',
-    bgColor: 'bg-[#FF976A]/10 border-[#FF976A]/30 text-[#FF976A]',
+    color: 'text-orange-600',
+    bgColor: 'bg-orange-50 border-orange-200 text-orange-700',
   },
   completed: {
     label: '已完成',
-    color: 'text-[#07C160]',
-    bgColor: 'bg-[#07C160]/10 border-[#07C160]/30 text-[#07C160]',
+    color: 'text-emerald-600',
+    bgColor: 'bg-emerald-50 border-emerald-200 text-emerald-700',
   },
   cancelled: {
     label: '已取消',
-    color: 'text-[#999999]',
-    bgColor: 'bg-[#f7f7f7] border-[#e5e5e5] text-[#999999]',
+    color: 'text-slate-500',
+    bgColor: 'bg-slate-100 border-slate-200 text-slate-600',
   },
   merged: {
     label: '已合并',
-    color: 'text-[#8B5CF6]',
-    bgColor: 'bg-[#8B5CF6]/10 border-[#8B5CF6]/30 text-[#8B5CF6]',
+    color: 'text-violet-600',
+    bgColor: 'bg-violet-50 border-violet-200 text-violet-700',
   },
 };
 
@@ -161,26 +161,26 @@ function StatCard({
   trendValue?: string;
 }) {
   const colorMap = {
-    green: { bg: 'from-[#07C160] to-[#06AD56]', text: 'text-[#07C160]', light: 'bg-[#07C160]/5' },
-    red: { bg: 'from-[#FF5252] to-[#FF3B3B]', text: 'text-[#FF5252]', light: 'bg-[#FF5252]/5' },
-    amber: { bg: 'from-[#FF976A] to-[#FF7A45]', text: 'text-[#FF976A]', light: 'bg-[#FF976A]/5' },
-    gray: { bg: 'from-[#999999] to-[#666666]', text: 'text-[#999999]', light: 'bg-[#f7f7f7]' },
-    slate: { bg: 'from-[#999999] to-[#666666]', text: 'text-black', light: 'bg-white' },
-    cyan: { bg: 'from-[#06B6D4] to-[#0891B2]', text: 'text-[#06B6D4]', light: 'bg-[#06B6D4]/5' },
-    blue: { bg: 'from-[#06B6D4] to-[#0891B2]', text: 'text-[#06B6D4]', light: 'bg-[#06B6D4]/5' },
+    green: { bg: 'from-emerald-400 to-teal-500', text: 'text-emerald-600', light: 'bg-emerald-50' },
+    red: { bg: 'from-rose-400 to-red-500', text: 'text-rose-600', light: 'bg-rose-50' },
+    amber: { bg: 'from-amber-400 to-orange-500', text: 'text-amber-600', light: 'bg-amber-50' },
+    gray: { bg: 'from-slate-400 to-slate-500', text: 'text-slate-600', light: 'bg-slate-50' },
+    slate: { bg: 'from-slate-400 to-slate-500', text: 'text-slate-600', light: 'bg-slate-50' },
+    cyan: { bg: 'from-cyan-400 to-teal-500', text: 'text-cyan-600', light: 'bg-cyan-50' },
+    blue: { bg: 'from-blue-400 to-indigo-500', text: 'text-blue-600', light: 'bg-blue-50' },
   };
 
   return (
-    <div className={`rounded-[20px] border border-[#e5e5e5] p-5 shadow-sm hover:shadow-lg transition-all duration-300 ${colorMap[color].light}`}>
+    <div className={`rounded-2xl border border-slate-200/60 p-5 shadow-sm hover:shadow-lg transition-all duration-300 ${colorMap[color].light}`}>
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-[#999999] mb-1">{title}</p>
+          <p className="text-sm text-slate-500 mb-1">{title}</p>
           <p className={`text-2xl font-bold ${colorMap[color].text}`}>{value}</p>
           {subValue && (
-            <p className="text-sm text-[#333333] mt-1">{subValue}</p>
+            <p className="text-sm text-slate-600 mt-1">{subValue}</p>
           )}
           {trend && trendValue && (
-            <div className={`flex items-center gap-1 mt-2 text-xs ${trend === 'up' ? 'text-[#07C160]' : 'text-[#FF5252]'}`}>
+            <div className={`flex items-center gap-1 mt-2 text-xs ${trend === 'up' ? 'text-emerald-600' : 'text-red-500'}`}>
               {trend === 'up' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
               <span>{trendValue}</span>
             </div>
@@ -206,25 +206,25 @@ function TypeStatCard({
   const config = orderTypeConfig[type] || {
     label: type,
     icon: DollarSign,
-    bgColor: 'bg-[#f7f7f7] text-[#999999]',
-    color: '#999999',
+    bgColor: 'bg-slate-100 text-slate-700',
+    color: 'text-slate-600',
   };
   const Icon = config.icon;
 
   return (
-    <div className="bg-white rounded-[20px] border border-[#e5e5e5] p-5 shadow-sm hover:shadow-lg transition-all duration-300">
+    <div className="bg-white rounded-2xl border border-slate-200/60 p-5 shadow-sm hover:shadow-lg transition-all duration-300">
       <div className="flex items-center gap-4">
         <div className={`w-12 h-12 rounded-xl ${config.bgColor} flex items-center justify-center shadow-md`}>
           <Icon className="w-6 h-6" />
         </div>
         <div className="flex-1">
-          <p className="text-sm text-[#999999]">{config.label}订单</p>
+          <p className="text-sm text-slate-500">{config.label}订单</p>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-black">{count}</span>
-            <span className="text-sm text-[#333333]">{formatCurrency(amount)}</span>
+            <span className="text-2xl font-bold text-slate-800">{count}</span>
+            <span className="text-sm text-slate-600">{formatCurrency(amount)}</span>
           </div>
         </div>
-        <div className={`w-2 h-2 rounded-full ${type === 'table' ? 'bg-[#07C160]' : type === 'product' ? 'bg-[#06B6D4]' : 'bg-[#FF976A]'}`} />
+        <div className={`w-2 h-2 rounded-full ${type === 'table' ? 'bg-emerald-500' : type === 'product' ? 'bg-blue-500' : 'bg-amber-500'}`} />
       </div>
     </div>
   );
@@ -420,7 +420,7 @@ export default function OrdersPage() {
         description="台费·商品·助教 统一账单查询与管理" 
         icon={Receipt}
       >
-        <Button className="bg-gradient-to-r from-[#07C160] to-[#06AD56] hover:from-[#06AD56] hover:to-[#07C160] text-white shadow-lg shadow-[#07C160]/25 rounded-full" onClick={() => setExportDialogOpen(true)}>
+        <Button variant="outline" className="bg-white/20 hover:bg-white/30 border-0 text-white backdrop-blur-sm" onClick={() => setExportDialogOpen(true)}>
           <Download className="w-4 h-4 mr-2" />
           导出订单
         </Button>
@@ -485,10 +485,10 @@ export default function OrdersPage() {
         />
       </div>
 
-      <div className="bg-white rounded-[24px] border border-[#e5e5e5] p-4 shadow-sm">
+      <div className="bg-white rounded-2xl border border-slate-200/60 p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-4">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#999999]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
               placeholder="搜索订单号、会员、台桌..."
               value={searchQuery}
@@ -496,7 +496,7 @@ export default function OrdersPage() {
                 setSearchQuery(e.target.value);
                 setPage(1);
               }}
-              className="pl-9 rounded-xl border-[#e5e5e5] focus:border-[#07C160] focus:ring-[#07C160]/20"
+              className="pl-9 rounded-xl border-slate-200/60 focus:border-emerald-400 focus:ring-emerald-100"
             />
           </div>
 
@@ -504,7 +504,7 @@ export default function OrdersPage() {
             setTypeFilter(value);
             setPage(1);
           }}>
-            <SelectTrigger className="w-[140px] rounded-xl border-[#e5e5e5]">
+            <SelectTrigger className="w-[140px] rounded-xl border-slate-200/60">
               <SelectValue placeholder="订单类型" />
             </SelectTrigger>
             <SelectContent>
@@ -519,7 +519,7 @@ export default function OrdersPage() {
             setStatusFilter(value);
             setPage(1);
           }}>
-            <SelectTrigger className="w-[140px] rounded-xl border-[#e5e5e5]">
+            <SelectTrigger className="w-[140px] rounded-xl border-slate-200/60">
               <SelectValue placeholder="订单状态" />
             </SelectTrigger>
             <SelectContent>
@@ -536,7 +536,7 @@ export default function OrdersPage() {
             setDateFilter(value);
             setPage(1);
           }}>
-            <SelectTrigger className="w-[120px] rounded-xl border-[#e5e5e5]">
+            <SelectTrigger className="w-[120px] rounded-xl border-slate-200/60">
               <Calendar className="w-4 h-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
@@ -548,20 +548,20 @@ export default function OrdersPage() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="sm" className="rounded-xl border-[#e5e5e5] hover:border-[#07C160] hover:bg-[#07C160]/10" onClick={handleRefresh}>
+          <Button variant="outline" size="sm" className="rounded-xl border-slate-200/60 hover:border-emerald-300 hover:bg-emerald-50" onClick={handleRefresh}>
             <RefreshCw className="w-4 h-4 mr-2" />
             刷新
           </Button>
         </div>
       </div>
 
-      <Card className="rounded-[24px] border border-[#e5e5e5] shadow-sm overflow-hidden">
-        <CardHeader className="border-b border-[#e5e5e5] bg-gradient-to-r from-[#f7f7f7] to-white py-5">
+      <Card className="rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+        <CardHeader className="border-b border-slate-200/50 bg-gradient-to-r from-slate-50/50 to-white py-5">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
-              <Receipt className="w-5 h-5 text-[#07C160]" />
+            <CardTitle className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+              <Receipt className="w-5 h-5 text-emerald-500" />
               订单列表
-              <span className="ml-2 text-sm font-normal text-[#999999]">
+              <span className="ml-2 text-sm font-normal text-slate-500">
                 ({total} 笔订单)
               </span>
             </CardTitle>
@@ -570,61 +570,61 @@ export default function OrdersPage() {
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-[#f7f7f7] hover:bg-transparent border-b-2 border-[#e5e5e5]">
-                    <TableHead className="w-10 text-[#999999] font-medium"></TableHead>
-                    <TableHead className="text-[#333333] font-semibold">订单号</TableHead>
-                    <TableHead className="text-[#333333] font-semibold">类型</TableHead>
-                    <TableHead className="text-[#333333] font-semibold">台桌</TableHead>
-                    <TableHead className="text-[#333333] font-semibold">会员/散客</TableHead>
-                    <TableHead className="text-[#333333] font-semibold text-right">金额</TableHead>
-                    <TableHead className="text-[#333333] font-semibold">状态</TableHead>
-                    <TableHead className="text-[#333333] font-semibold">收银员</TableHead>
-                    <TableHead className="text-[#333333] font-semibold">时间</TableHead>
-                    <TableHead className="text-right text-[#333333] font-semibold">操作</TableHead>
+              <TableRow className="bg-slate-50/30 hover:bg-transparent border-b-2 border-slate-200/50">
+                    <TableHead className="w-10 text-slate-500 font-medium"></TableHead>
+                    <TableHead className="text-slate-600 font-semibold">订单号</TableHead>
+                    <TableHead className="text-slate-600 font-semibold">类型</TableHead>
+                    <TableHead className="text-slate-600 font-semibold">台桌</TableHead>
+                    <TableHead className="text-slate-600 font-semibold">会员/散客</TableHead>
+                    <TableHead className="text-slate-600 font-semibold text-right">金额</TableHead>
+                    <TableHead className="text-slate-600 font-semibold">状态</TableHead>
+                    <TableHead className="text-slate-600 font-semibold">收银员</TableHead>
+                    <TableHead className="text-slate-600 font-semibold">时间</TableHead>
+                    <TableHead className="text-right text-slate-600 font-semibold">操作</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {orders.map((order) => (
                     <Fragment key={order.id}>
                       <TableRow 
-                        className="hover:bg-[#f7f7f7] transition-colors cursor-pointer"
+                        className="hover:bg-slate-50/50 transition-colors cursor-pointer"
                         onClick={() => toggleExpand(order.id)}
                       >
                         <TableCell className="w-10">
                           {expandedOrder === order.id ? (
-                            <ChevronDown className="w-4 h-4 text-[#999999]" />
+                            <ChevronDown className="w-4 h-4 text-slate-400" />
                           ) : (
-                            <ChevronRight className="w-4 h-4 text-[#999999]" />
+                            <ChevronRight className="w-4 h-4 text-slate-400" />
                           )}
                         </TableCell>
                         <TableCell>
-                          <span className="font-mono text-sm text-black font-medium">
+                          <span className="font-mono text-sm text-slate-800 font-medium">
                             {order.order_no}
                           </span>
                         </TableCell>
                         <TableCell>
                           {getTypeBadge(order.type)}
                         </TableCell>
-                        <TableCell className="text-[#333333]">
+                        <TableCell className="text-slate-600">
                           {order.table_name || order.table_id || '-'}
                         </TableCell>
                         <TableCell>
                           {order.member_name ? (
                             <div className="flex items-center gap-2">
-                              <Users className="w-4 h-4 text-[#07C160]" />
-                              <span className="text-[#07C160] font-medium">{order.member_name}</span>
+                              <Users className="w-4 h-4 text-emerald-500" />
+                              <span className="text-emerald-700 font-medium">{order.member_name}</span>
                             </div>
                           ) : (
-                            <span className="text-[#999999]">散客</span>
+                            <span className="text-slate-400">散客</span>
                           )}
                         </TableCell>
                         <TableCell className="text-right">
                           <div>
-                            <span className="font-mono font-bold text-black">
+                            <span className="font-mono font-bold text-slate-900">
                               {formatCurrency(order.final_amount)}
                             </span>
                             {order.discount_amount > 0 && (
-                              <span className="block text-xs text-[#07C160]">
+                              <span className="block text-xs text-emerald-500">
                                 优惠 {formatCurrency(order.discount_amount)}
                               </span>
                             )}
@@ -633,10 +633,10 @@ export default function OrdersPage() {
                         <TableCell>
                           {getStatusBadge(order.status)}
                         </TableCell>
-                        <TableCell className="text-[#999999] text-sm">
+                        <TableCell className="text-slate-500 text-sm">
                           {order.operator_name || '-'}
                         </TableCell>
-                        <TableCell className="text-[#999999] text-sm">
+                        <TableCell className="text-slate-500 text-sm">
                           <div>{new Date(order.created_at).toLocaleDateString('zh-CN')}</div>
                           <div className="text-xs">{new Date(order.created_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</div>
                         </TableCell>
@@ -645,7 +645,7 @@ export default function OrdersPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleViewDetail(order)}
-                            className="text-[#07C160] hover:text-[#06AD56] hover:bg-[#07C160]/10"
+                            className="text-slate-600 hover:text-slate-900"
                           >
                             <Eye className="w-4 h-4 mr-1" />
                             详情
@@ -654,19 +654,19 @@ export default function OrdersPage() {
                       </TableRow>
 
                       {expandedOrder === order.id && (
-                        <TableRow className="bg-[#f7f7f7] hover:bg-[#f7f7f7]">
+                        <TableRow className="bg-slate-50/30 hover:bg-slate-50/50">
                           <TableCell colSpan={10} className="p-4">
-                            <div className="bg-white rounded-[20px] border border-[#e5e5e5] p-4">
-                              <h4 className="text-sm font-semibold text-black mb-3">订单明细</h4>
+                            <div className="bg-white rounded-lg border border-slate-200 p-4">
+                              <h4 className="text-sm font-semibold text-slate-700 mb-3">订单明细</h4>
                               <div className="grid grid-cols-3 gap-4">
                                 <div className="col-span-2">
                                   <div className="space-y-2">
                                     {order.items.map((item) => (
                                       <div key={item.id} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
                                         <div className="flex items-center gap-3">
-                                          {item.item_type === 'table' && <Gamepad2 className="w-4 h-4 text-[#07C160]" />}
-                                          {item.item_type === 'product' && <ShoppingBag className="w-4 h-4 text-[#06B6D4]" />}
-                                          {item.item_type === 'assistant' && <GraduationCap className="w-4 h-4 text-[#FF976A]" />}
+                                          {item.item_type === 'table' && <Gamepad2 className="w-4 h-4 text-emerald-500" />}
+                                          {item.item_type === 'product' && <ShoppingBag className="w-4 h-4 text-blue-500" />}
+                                          {item.item_type === 'assistant' && <GraduationCap className="w-4 h-4 text-amber-500" />}
                                           <div>
                                             <span className="text-slate-700">{item.item_name}</span>
                                             {item.quantity > 1 && (
@@ -693,14 +693,14 @@ export default function OrdersPage() {
                                     {order.discount_amount > 0 && (
                                       <div className="flex justify-between">
                                         <span className="text-slate-500">优惠</span>
-                                        <span className="font-mono text-[#07C160]">
+                                        <span className="font-mono text-emerald-600">
                                           -{formatCurrency(order.discount_amount)}
                                         </span>
                                       </div>
                                     )}
                                     <div className="flex justify-between pt-2 border-t border-slate-200">
                                       <span className="font-semibold text-slate-900">实付</span>
-                                      <span className="font-mono font-bold text-lg text-[#07C160]">
+                                      <span className="font-mono font-bold text-lg text-emerald-600">
                                         {formatCurrency(order.final_amount)}
                                       </span>
                                     </div>
@@ -795,11 +795,11 @@ export default function OrdersPage() {
 
               {orders.length === 0 && (
                 <div className="text-center py-16">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#f7f7f7] flex items-center justify-center">
-                    <Receipt className="w-8 h-8 text-[#999999]" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
+                    <Receipt className="w-8 h-8 text-slate-400" />
                   </div>
-                  <p className="text-[#999999] text-base">暂无订单数据</p>
-                  <p className="text-[#cccccc] text-sm mt-1">尝试调整筛选条件或创建新订单</p>
+                  <p className="text-slate-500 text-base">暂无订单数据</p>
+                  <p className="text-slate-400 text-sm mt-1">尝试调整筛选条件或创建新订单</p>
                 </div>
               )}
         </CardContent>
@@ -868,9 +868,9 @@ export default function OrdersPage() {
                         <TableRow key={item.id}>
                           <TableCell className="font-medium">
                             <div className="flex items-center gap-2">
-                              {item.item_type === 'table' && <Gamepad2 className="w-4 h-4 text-[#07C160]" />}
-                              {item.item_type === 'product' && <ShoppingBag className="w-4 h-4 text-[#06B6D4]" />}
-                              {item.item_type === 'assistant' && <GraduationCap className="w-4 h-4 text-[#FF976A]" />}
+                              {item.item_type === 'table' && <Gamepad2 className="w-4 h-4 text-emerald-500" />}
+                              {item.item_type === 'product' && <ShoppingBag className="w-4 h-4 text-blue-500" />}
+                              {item.item_type === 'assistant' && <GraduationCap className="w-4 h-4 text-amber-500" />}
                               <span>{item.item_name}</span>
                             </div>
                           </TableCell>
@@ -899,14 +899,14 @@ export default function OrdersPage() {
                   {selectedOrder.discount_amount > 0 && (
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-500">优惠金额</span>
-                      <span className="font-mono text-[#07C160]">
+                      <span className="font-mono text-emerald-600">
                         -{formatCurrency(selectedOrder.discount_amount)}
                       </span>
                     </div>
                   )}
                   <div className="flex justify-between text-lg font-bold pt-2 border-t border-slate-200">
                     <span className="text-slate-900">实付金额</span>
-                    <span className="font-mono text-[#07C160]">
+                    <span className="font-mono text-emerald-600">
                       {formatCurrency(selectedOrder.final_amount)}
                     </span>
                   </div>
@@ -1036,10 +1036,10 @@ export default function OrdersPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" className="border-[#e5e5e5]" onClick={() => setExportDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setExportDialogOpen(false)}>
               取消
             </Button>
-            <Button className="bg-gradient-to-r from-[#07C160] to-[#06AD56] hover:from-[#06AD56] hover:to-[#07C160] rounded-full" onClick={handleExportConfirm}>
+            <Button className="bg-emerald-500 hover:bg-emerald-600" onClick={handleExportConfirm}>
               <Download className="w-4 h-4 mr-2" />
               确认导出
             </Button>

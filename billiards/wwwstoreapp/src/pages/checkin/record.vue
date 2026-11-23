@@ -61,7 +61,7 @@
 									</view>
 								</view>
 								<view v-if="item.work_hours" class="work-hours">
-									<text><Icon name="clock" size="22" style="margin-right: 8rpx;" />工时 {{ item.work_hours }} 小时</text>
+									<text>⏱️ 工时 {{ item.work_hours }} 小时</text>
 								</view>
 							</view>
 							<view v-if="canApplyCheckin(item)" class="record-right">
@@ -82,7 +82,6 @@ import { ref, onMounted, computed } from 'vue'
 import { getCheckinRecords } from '@/api/modules/checkin'
 import Header from '@/components/Header.vue'
 import StateView from '@/components/StateView.vue'
-import Icon from '@/components/Icon.vue'
 
 const currentYear = ref(new Date().getFullYear())
 const currentMonthNum = ref(new Date().getMonth() + 1)
@@ -228,7 +227,7 @@ function goToApply(item: any) {
 <style lang="scss">
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: linear-gradient(180deg, #f9fafb 0%, #f4f4f5 100%);
 }
 
 .content-scroll {
@@ -241,10 +240,10 @@ function goToApply(item: any) {
 
 .month-selector {
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
 	border-radius: 20rpx;
 	padding: 24rpx;
 	margin-bottom: 20rpx;
+	box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -254,27 +253,27 @@ function goToApply(item: any) {
 .selector-btn {
 	width: 72rpx;
 	height: 72rpx;
-	background: #f7f7f7;
+	background: #f4f4f5;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 40rpx;
-	color: #999999;
+	color: #71717a;
 }
 
 .month-text {
 	font-size: 32rpx;
 	font-weight: 700;
-	color: #000000;
+	color: #09090b;
 }
 
 .summary-card {
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
 	border-radius: 36rpx;
 	padding: 32rpx 24rpx;
 	margin-bottom: 20rpx;
+	box-shadow: 0 2rpx 16rpx rgba(0, 0, 0, 0.05);
 }
 
 .summary-row {
@@ -294,11 +293,11 @@ function goToApply(item: any) {
 	font-weight: 800;
 
 	&.primary {
-		color: #07C160;
+		color: #059669;
 	}
 
 	&.warning {
-		color: #07C160;
+		color: #f59e0b;
 	}
 
 	&.danger {
@@ -306,13 +305,13 @@ function goToApply(item: any) {
 	}
 
 	&.success {
-		color: #07C160;
+		color: #059669;
 	}
 }
 
 .summary-label {
 	font-size: 22rpx;
-	color: #999999;
+	color: #71717a;
 }
 
 .record-list {
@@ -324,9 +323,9 @@ function goToApply(item: any) {
 .record-item {
 	display: flex;
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
 	border-radius: 32rpx;
 	padding: 24rpx;
+	box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.03);
 }
 
 .record-left {
@@ -336,19 +335,19 @@ function goToApply(item: any) {
 	justify-content: center;
 	width: 100rpx;
 	padding-right: 20rpx;
-	border-right: 2rpx solid #e5e5e5;
+	border-right: 2rpx solid #f4f4f5;
 	margin-right: 20rpx;
 }
 
 .date-day {
 	font-size: 44rpx;
 	font-weight: 800;
-	color: #000000;
+	color: #09090b;
 }
 
 .date-week {
 	font-size: 24rpx;
-	color: #999999;
+	color: #a1a1aa;
 	margin-top: 4rpx;
 }
 
@@ -373,13 +372,13 @@ function goToApply(item: any) {
 	border-radius: 16rpx;
 
 	&.normal {
-		background: rgba(7, 193, 96, 0.15);
-		color: #07C160;
+		background: rgba(16, 185, 129, 0.1);
+		color: #059669;
 	}
 
 	&.partial {
-		background: rgba(7, 193, 96, 0.1);
-		color: #07C160;
+		background: rgba(245, 158, 11, 0.1);
+		color: #d97706;
 	}
 
 	&.late {
@@ -389,7 +388,7 @@ function goToApply(item: any) {
 
 	&.absent {
 		background: rgba(156, 163, 175, 0.1);
-		color: #999999;
+		color: #71717a;
 	}
 }
 
@@ -415,24 +414,24 @@ function goToApply(item: any) {
 
 .time-label {
 	font-size: 20rpx;
-	color: #999999;
+	color: #a1a1aa;
 }
 
 .time-value {
 	font-size: 28rpx;
 	font-weight: 700;
-	color: #333333;
+	color: #374151;
 }
 
 .time-divider {
 	width: 1px;
 	height: 32rpx;
-	background: #e5e5e5;
+	background: #e4e4e7;
 }
 
 .work-hours {
 	font-size: 22rpx;
-	color: #999999;
+	color: #71717a;
 }
 
 .record-right {
@@ -442,8 +441,8 @@ function goToApply(item: any) {
 }
 
 .apply-btn {
-	background: #07C160;
-	color: #ffffff;
+	background: linear-gradient(135deg, #fef3c7, #fde68a);
+	color: #92400e;
 	padding: 12rpx 24rpx;
 	border-radius: 16rpx;
 	font-size: 24rpx;

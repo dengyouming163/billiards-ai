@@ -592,33 +592,36 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$primary: #07C160;
-$primary-dark: #06AD56;
-$bg-light: #f7f7f7;
-$bg-white: #ffffff;
-$text-main: #333333;
-$text-secondary: #999999;
+@use '@/styles/layout-system.scss';
 
+$gold: #c9a962; $bg: #0f0f16;
+
+/* ── Container ── */
 .container {
   padding: 0; min-height: 100vh; padding-bottom: 200rpx;
-  background: linear-gradient(180deg, #f0fdf4 0%, #f7f7f7 40%, #f0fdf4 100%);
+  background: linear-gradient(180deg, $bg 0%, #12121a 30%, #1a1a2e 70%, $bg 100%);
   position: relative; overflow: hidden;
+  &::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 20%, rgba($gold,.05), transparent 50%), radial-gradient(ellipse at 80% 60%, rgba(139,92,246,.04), transparent 50%); pointer-events: none; }
 }
 
+/* ── Sticky Header ── */
 .sticky-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 28rpx 40rpx;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(30rpx);
-  border-bottom: 2rpx solid rgba(7,193,96,0.06);
-  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
+  background: linear-gradient(180deg, rgba($bg,.98), rgba($bg,.95));
+  backdrop-filter: blur(30rpx); -webkit-backdrop-filter: blur(30rpx);
+  border-bottom: 2rpx solid rgba($gold,.1);
+  box-shadow: 0 8rpx 40rpx rgba(0,0,0,.4);
+  &::after { content: ''; position: absolute; bottom: -2rpx; left: 0; right: 0; height: 2rpx; background: linear-gradient(90deg, transparent, rgba($gold,.3), transparent); }
 
   .header-card {
-    background: linear-gradient(135deg, $primary, $primary-dark);
-    border-radius: 32rpx;
+    background: linear-gradient(145deg, rgba(26, 26, 46, 0.9), rgba(20, 20, 40, 0.95));
+    border-radius: 48rpx;
     padding: 40rpx 48rpx;
     margin-bottom: 32rpx;
-    box-shadow: 0 8rpx 32rpx rgba(7,193,96,0.2);
+    border: 3rpx solid rgba($gold, 0.15);
+    box-shadow: 0 12rpx 48rpx rgba(0,0,0,0.35), 0 0 40rpx rgba($gold, 0.08), inset 0 1rpx 0 rgba(255,255,255,0.05);
+    backdrop-filter: blur(20rpx);
   }
 
   .header-row {
@@ -635,18 +638,18 @@ $text-secondary: #999999;
 
   .icon-glow {
     position: absolute; width: 100%; height: 100%;
-    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba($gold, 0.4) 0%, transparent 70%);
     border-radius: 50%; animation: iconPulse 3s ease-in-out infinite;
   }
 
   .icon-user {
     position: relative; width: 44rpx; height: 44rpx;
-    border: 4rpx solid rgba(255,255,255,0.8); border-radius: 50%;
-    box-shadow: 0 0 20rpx rgba(255,255,255,0.6);
+    border: 4rpx solid $gold; border-radius: 50%;
+    box-shadow: 0 0 20rpx rgba($gold, 0.8), inset 0 0 10rpx rgba($gold, 0.4);
     
     &::after {
       content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 16rpx; height: 16rpx; background: rgba(255,255,255,0.9); border-radius: 50%;
+      width: 16rpx; height: 16rpx; background: $gold; border-radius: 50%;
     }
   }
 
@@ -662,8 +665,8 @@ $text-secondary: #999999;
   .header-title { font-size: 64rpx; font-weight: 700; color: #fff; letter-spacing: 3rpx; }
 
   .header-count {
-    font-size: 36rpx; color: rgba(255,255,255,0.8); padding: 6rpx 20rpx;
-    background: rgba(255,255,255,0.2); border-radius: 32rpx;
+    font-size: 36rpx; color: rgba(255,255,255,0.5); padding: 6rpx 20rpx;
+    background: rgba(255,255,255,0.06); border-radius: 32rpx; border: 2rpx solid rgba(255,255,255,0.1);
   }
 
   .header-right {
@@ -673,19 +676,23 @@ $text-secondary: #999999;
   .status-tag {
     display: flex; align-items: center; padding: 16rpx 32rpx; border-radius: 40rpx; font-size: 36rpx; font-weight: 500;
 
-    &.empty { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); }
-    &.active { background: rgba(255,255,255,0.3); color: #fff; }
+    &.empty { background: rgba(255,255,255,0.08); border: 2rpx solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.5); }
+    &.active { background: linear-gradient(135deg, rgba($gold,0.25), rgba($gold,0.1)); border: 2rpx solid rgba($gold,0.45); color: $gold; box-shadow: 0 8rpx 24rpx rgba($gold,0.25), 0 0 30rpx rgba($gold,0.1); }
     &:active { transform: scale(0.96); }
   }
 }
 
 .filter-scroll { margin-bottom: 8rpx; }
 
+/* 搜索按钮和搜索栏 */
 .search-btn {
   width: 112rpx; height: 112rpx;
-  background: rgba(255,255,255,0.2);
+  background: linear-gradient(145deg, rgba(45,45,80,0.8), rgba(35,35,65,0.9));
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  &:active { transform: scale(0.94); background: rgba(255,255,255,0.3); }
+  border: 3rpx solid rgba($gold, 0.25);
+  box-shadow: 0 10rpx 32rpx rgba(0,0,0,0.35), inset 0 2rpx 0 rgba(255,255,255,0.08);
+
+  &:active { transform: scale(0.94); background: linear-gradient(145deg, rgba($gold,0.3), rgba($gold,0.15)); }
   text { font-size: 48rpx; }
 }
 
@@ -693,26 +700,40 @@ $text-secondary: #999999;
   padding: 0 0 28rpx;
   .search-box {
     display: flex; align-items: center; gap: 20rpx;
-    background: $bg-white; border-radius: 48rpx; padding: 20rpx 40rpx;
-    border: 2rpx solid rgba(7,193,96,0.08);
+    background: rgba(255, 255, 255, 0.06); border-radius: 48rpx; padding: 20rpx 40rpx;
+    border: 3rpx solid rgba($gold, 0.15);
     min-height: 96rpx;
-    box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
     .search-icon { font-size: 52rpx; }
-    .search-input { flex: 1; font-size: 48rpx; color: $text-main; background: transparent; min-height: 80rpx; }
-    .clear-btn { width: 64rpx; height: 64rpx; border-radius: 50%; background: rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: center; font-size: 36rpx; color: $text-secondary; }
+    .search-input { flex: 1; font-size: 48rpx; color: #fff; background: transparent; min-height: 80rpx; }
+    .clear-btn { width: 64rpx; height: 64rpx; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; font-size: 36rpx; color: rgba(255, 255, 255, 0.5); }
   }
 }
 .filter-row { display: flex; gap: 28rpx; padding: 12rpx 0; white-space: nowrap; }
 .filter-chip { display: inline-flex; align-items: center; justify-content: center; min-height: 96rpx; padding: 24rpx 56rpx; border-radius: 48rpx; font-size: 48rpx; font-weight: 700; letter-spacing: 2rpx;
-  background: $bg-white; color: $text-secondary; border: 2rpx solid rgba(0,0,0,0.06);
-  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04); transition: all .35s; flex-shrink: 0;
+  background: rgba(35,35,60,.6); color: rgba(255,255,255,.55); border: 3rpx solid rgba($gold,.15);
+  box-shadow: 0 8rpx 28rpx rgba(0,0,0,.25); transition: all .35s cubic-bezier(.4,0,.2,1); flex-shrink: 0;
+  position: relative; overflow: hidden;
+  &::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba($gold,.25), rgba($gold,.08)); opacity: 0; transform: scaleX(0); transform-origin: left; transition: all .35s cubic-bezier(.4,0,.2,1); }
+  &::after { content: ''; position: absolute; top: -2rpx; left: 50%; transform: translateX(-50%); width: 70%; height: 6rpx; background: linear-gradient(90deg, transparent, $gold, transparent); border-radius: 3rpx; opacity: 0; transition: all .35s cubic-bezier(.4,0,.2,1); }
   &:active { transform: scale(.96); }
   &.active {
-    background: rgba(7,193,96,0.08); color: $primary; border-color: $primary;
+    background: rgba($gold,.2); color: $gold; border-color: rgba($gold,.6);
+    box-shadow: 0 8rpx 32rpx rgba($gold,.3), 0 0 60rpx rgba($gold,.15), inset 0 0 24rpx rgba($gold,.05);
+    &::before { opacity: 1; transform: scaleX(1); }
+    &::after { opacity: 1; animation: categoryPulse 2s ease-in-out infinite; }
+    text { color: $gold; text-shadow: 0 0 28rpx rgba($gold,.6); position: relative; z-index: 1; }
   }
   text { position: relative; z-index: 1; }
 }
 
+@keyframes categoryPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ══════════════════════════════════════════
+   3列图片卡片 — 完全复用 product 页面设计
+   ══════════════════════════════════════════ */
 .assistant-list { height: calc(100vh - 80rpx); padding: 500rpx 40rpx 200rpx; position: relative; z-index: 1; }
 
 .product-grid {
@@ -723,15 +744,15 @@ $text-secondary: #999999;
 
 .product-card {
   position: relative;
-  border-radius: 40rpx;
+  border-radius: 48rpx;
   overflow: hidden;
   height: 1200rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+  box-shadow: 0 12rpx 48rpx rgba(0, 0, 0, 0.3);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:active {
     transform: scale(0.96);
-    box-shadow: 0 4rpx 16rpx rgba(7,193,96,0.1);
+    box-shadow: 0 6rpx 32rpx rgba(201, 169, 98, 0.25);
   }
 }
 
@@ -750,33 +771,36 @@ $text-secondary: #999999;
   display: flex; align-items: center; justify-content: center;
   width: 100%; height: 100%;
   font-size: 320rpx;
-  background: $bg-light;
+  background: linear-gradient(145deg, rgba(40, 40, 70, 0.5), rgba(32, 32, 58, 0.6));
 }
 
+/* 在线指示点 */
 .online-dot {
   position: absolute; top: 28rpx; right: 28rpx;
   width: 32rpx; height: 32rpx;
   background: #4ade80;
   border-radius: 50%;
-  border: 4rpx solid rgba(255,255,255,.6);
+  border: 4rpx solid rgba(0,0,0,.4);
   box-shadow: 0 0 24rpx rgba(74,222,128,.7);
   animation: pulseGreen 2s infinite;
   z-index: 3;
 }
 
+/* 忙碌遮罩 */
 .busy-overlay {
   position: absolute; inset: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.6);
   display: flex; align-items: center; justify-content: center;
   z-index: 2;
   backdrop-filter: blur(4rpx);
 }
 .busy-text {
-  font-size: 48rpx; color: rgba(255,255,255,.9); font-weight: 700;
-  padding: 20rpx 48rpx; background: rgba(0,0,0,.5);
-  border-radius: 32rpx;
+  font-size: 64rpx; color: rgba(255,255,255,.6); font-weight: 700;
+  padding: 24rpx 56rpx; background: rgba(0,0,0,.45);
+  border-radius: 36rpx; border: 1px solid rgba(255,255,255,.12);
 }
 
+/* 渐变 + 信息叠加层 — 全幅蒙版 */
 .product-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -786,7 +810,7 @@ $text-secondary: #999999;
 }
 .overlay-gradient {
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(0deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.3) 50%, transparent 100%);
+  background: linear-gradient(0deg, rgba(10,10,20,.95) 0%, rgba(10,10,20,.45) 50%, rgba(10,10,20,.15) 80%, transparent 100%);
   pointer-events: none;
 }
 .overlay-content {
@@ -796,9 +820,9 @@ $text-secondary: #999999;
 }
 .product-name {
   display: block;
-  font-size: 56rpx;
+  font-size: 64rpx;
   font-weight: 800;
-  color: #ffffff;
+  color: #f1f5f9;
   text-shadow: 0 4rpx 16rpx rgba(0,0,0,.8);
   letter-spacing: 2rpx;
   margin-bottom: 20rpx;
@@ -812,111 +836,148 @@ $text-secondary: #999999;
 .price-wrap {
   display: flex; align-items: baseline; gap: 4rpx;
   .price-value {
-    font-size: 72rpx; font-weight: 900; color: #ffffff;
-    font-family: 'Courier New', monospace;
-    &::before { content: '¥'; font-size: 40rpx; margin-right: 4rpx; }
+    font-size: 84rpx; font-weight: 900; color: $gold;
+    text-shadow: 0 0 32rpx rgba($gold,.5); font-family: 'Courier New', monospace;
+    &::before { content: '¥'; font-size: 48rpx; margin-right: 4rpx; }
   }
   .price-unit {
-    font-size: 36rpx; color: rgba(255,255,255,.6); margin-left: 4rpx;
+    font-size: 40rpx; color: rgba(255,255,255,.45); margin-left: 4rpx;
   }
 }
 .add-btn {
   position: relative;
   width: 100rpx; height: 100rpx;
-  background: rgba(255,255,255,.2);
+  background: linear-gradient(135deg, rgba($gold,.25), rgba($gold,.1));
   border-radius: 50%;
-  border: 3rpx solid rgba(255,255,255,.4);
+  border: 4rpx solid rgba($gold,.4);
   display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6rpx 24rpx rgba($gold,.25), 0 0 32rpx rgba($gold,.1);
   transition: all .25s;
 
-  text { font-size: 64rpx; color: #ffffff; font-weight: 400; line-height: 1; }
+  text { font-size: 72rpx; color: $gold; font-weight: 400; line-height: 1; }
 
-  &:active { transform: scale(1.15); }
+  .add-btn-glow {
+    position: absolute; inset: 0; border-radius: 50%;
+    opacity: 0; background: radial-gradient(circle, rgba($gold,.6), transparent);
+    transition: opacity .25s;
+  }
 
-  &.busy { opacity: .5; }
+  &:active { transform: scale(1.15);
+    .add-btn-glow { opacity: 1; }
+  }
+
+  &.busy { opacity: .35; }
 }
 
+/* ── 详情弹窗 ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.9); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(16rpx); padding: 40rpx; }
+.modal-card { width: 80vw; height: 80vh; background: linear-gradient(180deg, #232340 0%, #1a1a30 100%); border-radius: 64rpx; padding: 56rpx 56rpx 40rpx; border: 4rpx solid rgba($gold,.35); box-shadow: 0 40rpx 100rpx rgba(0,0,0,.6), 0 0 80rpx rgba($gold,.15), inset 0 2rpx 0 rgba(255,255,255,.08); position: relative; overflow: hidden; display: flex; flex-direction: column;
+  &::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6rpx; background: linear-gradient(90deg, transparent, rgba($gold,.8), rgba($gold,.4), transparent); }
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 36rpx; padding-bottom: 24rpx; border-bottom: 2rpx solid rgba($gold,.2); flex-shrink: 0; }
+.modal-title { font-size: 72rpx; font-weight: 800; color: $gold; letter-spacing: 3rpx; text-shadow: 0 0 24rpx rgba($gold,.5); }
+.modal-close { width: 64rpx; height: 64rpx; background: linear-gradient(135deg, rgba($gold,.12), rgba($gold,.04)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48rpx; color: $gold; border: 2rpx solid rgba($gold,.25);
+  &:active { transform: scale(.92); }
+}
+.modal-body { flex: 1; overflow-y: auto; margin-bottom: 28rpx; }
+.modal-footer { flex-shrink: 0; border-top: 2rpx solid rgba($gold,.2); padding-top: 24rpx; display: flex; flex-direction: column; gap: 16rpx; }
+.footer-summary { display: flex; justify-content: space-between; align-items: baseline;
+  .footer-summary-label { font-size: 42rpx; color: rgba(255,255,255,.5); }
+  .footer-summary-val { font-size: 72rpx; font-weight: 800; color: #feca57; text-shadow: 0 0 20rpx rgba(254,202,87,.5); }
+}
+.footer-action { height: 96rpx; border-radius: 28rpx; background: linear-gradient(135deg, $gold, #8a6d3b); display: flex; align-items: center; justify-content: center; font-size: 51rpx; font-weight: 700; color: #1a1a2e; box-shadow: 0 10rpx 36rpx rgba($gold,.35);
+  &:active { transform: scale(.97); }
+  &.secondary { background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); box-shadow: none; border: 2rpx solid rgba(255,255,255,.1); }
+  &.loading { opacity: .7; }
+}
+
+/* 详情内容 */
+/* ── 相册轮播 — 固定高度，图片 aspectFill */
 .carousel-wrap {
   width: 100%; height: 1800rpx;
   border-radius: 48rpx; overflow: hidden; margin-bottom: 40rpx; flex-shrink: 0;
-  background: $bg-light;
-  
+  background: linear-gradient(145deg, rgba(40,40,70,.5), rgba(32,32,58,.6));
+  border: 3rpx solid rgba($gold,.2);
   .carousel { width: 100%; height: 100%; }
   .carousel-img { width: 100%; height: 100%; object-fit: cover; }
 }
 .carousel-placeholder {
   width: 100%; height: 500rpx; border-radius: 48rpx; margin-bottom: 40rpx; flex-shrink: 0;
-  background: $bg-light;
+  background: linear-gradient(145deg, rgba(40,40,70,.5), rgba(32,32,58,.6));
+  border: 3rpx solid rgba($gold,.15);
   display: flex; align-items: center; justify-content: center;
   .placeholder-emoji { font-size: 240rpx; }
 }
 
+/* ── 等级/评分/价格 紧凑行 ── */
 .detail-meta-bar {
   display: flex; align-items: center; gap: 24rpx; margin-bottom: 36rpx;
   flex-wrap: wrap;
   .meta-level {
-    padding: 12rpx 32rpx; background: rgba(7,193,96,0.1);
-    border-radius: 28rpx; font-size: 48rpx; color: $primary; font-weight: 700;
+    padding: 12rpx 32rpx; background: linear-gradient(135deg, rgba($gold,.15), rgba($gold,.05));
+    border-radius: 28rpx; border: 2rpx solid rgba($gold,.25); font-size: 48rpx; color: $gold; font-weight: 700;
   }
-  .meta-divider { font-size: 42rpx; color: rgba(0,0,0,.1); }
-  .meta-rating { font-size: 48rpx; color: #feca57; font-weight: 600; }
-  .meta-price { font-size: 48rpx; color: $primary; font-weight: 700; }
+  .meta-divider { font-size: 42rpx; color: rgba(255,255,255,.2); }
+  .meta-rating { font-size: 48rpx; color: rgba(255,255,255,.6); font-weight: 600; }
+  .meta-price { font-size: 48rpx; color: #feca57; font-weight: 700; }
 }
 
 .info-block { margin-bottom: 40rpx; }
-.info-title { display: block; font-size: 56rpx; font-weight: 700; color: $text-main; margin-bottom: 24rpx; }
-.info-body { display: block; font-size: 48rpx; color: $text-secondary; line-height: 1.8; }
+.info-title { display: block; font-size: 56rpx; font-weight: 700; color: $gold; margin-bottom: 24rpx; letter-spacing: 2rpx; }
+.info-body { display: block; font-size: 48rpx; color: rgba(255,255,255,.55); line-height: 1.8; }
 .skill-tags { display: flex; gap: 16rpx; flex-wrap: wrap; margin-top: 24rpx; }
-.skill-tag { padding: 14rpx 32rpx; background: rgba(7,193,96,0.08); color: $primary; border-radius: 24rpx; font-size: 42rpx; font-weight: 600; }
+.skill-tag { padding: 14rpx 32rpx; background: rgba(139,92,246,.12); color: #a78bfa; border-radius: 24rpx; font-size: 42rpx; font-weight: 600; border: 2rpx solid rgba(139,92,246,.2); }
 
+/* 固定底部预约栏 */
 .fixed-book-bar {
   display: flex; align-items: center; justify-content: space-between; gap: 32rpx;
-  .fb-price { font-size: 64rpx; font-weight: 800; color: $primary; white-space: nowrap; }
-  .fb-btn { flex: 1; min-height: 120rpx; border-radius: 36rpx; display: flex; align-items: center; justify-content: center; font-size: 56rpx; font-weight: 700; background: linear-gradient(135deg, $primary, $primary-dark); color: #fff; box-shadow: 0 8rpx 32rpx rgba(7,193,96,0.3);
+  .fb-price { font-size: 72rpx; font-weight: 800; color: #feca57; text-shadow: 0 0 28rpx rgba(254,202,87,.5); white-space: nowrap; }
+  .fb-btn { flex: 1; min-height: 120rpx; border-radius: 36rpx; display: flex; align-items: center; justify-content: center; font-size: 56rpx; font-weight: 700; background: linear-gradient(135deg, $gold, #8a6d3b); color: #1a1a2e; box-shadow: 0 12rpx 48rpx rgba($gold,.45);
     &:active { transform: scale(.97); }
     &.loading { opacity: .7; }
   }
 }
 
 .duration-row { display: flex; gap: 24rpx;
-  .dur-chip { flex: 1; text-align: center; padding: 32rpx 20rpx; border-radius: 32rpx; background: $bg-light; border: 2rpx solid rgba(0,0,0,.06); transition: all .3s; min-height: 140rpx; display: flex; flex-direction: column; justify-content: center;
-    &.active { background: rgba(7,193,96,0.08); border-color: $primary; }
+  .dur-chip { flex: 1; text-align: center; padding: 32rpx 20rpx; border-radius: 32rpx; background: rgba(255,255,255,.03); border: 3rpx solid rgba(255,255,255,.06); transition: all .3s; min-height: 140rpx; display: flex; flex-direction: column; justify-content: center;
+    &.active { background: rgba($gold,.1); border-color: rgba($gold,.35); box-shadow: 0 0 24rpx rgba($gold,.15); }
   }
-  .dur-label { display: block; font-size: 52rpx; font-weight: 700; color: $text-main; }
-  .dur-price { display: block; font-size: 44rpx; color: $primary; margin-top: 12rpx; font-weight: 600; }
+  .dur-label { display: block; font-size: 52rpx; font-weight: 700; color: #f1f5f9; }
+  .dur-price { display: block; font-size: 44rpx; color: $gold; margin-top: 12rpx; font-weight: 600; }
 }
 
-.service-item { display: flex; align-items: center; gap: 28rpx; padding: 32rpx; margin-bottom: 20rpx; background: $bg-light; border-radius: 36rpx; }
-.si-avatar { width: 120rpx; height: 120rpx; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: $bg-light; display: flex; align-items: center; justify-content: center;
+/* 服务管理弹窗 */
+.service-item { display: flex; align-items: center; gap: 28rpx; padding: 32rpx; margin-bottom: 20rpx; background: rgba(255,255,255,.04); border-radius: 36rpx; border: 2rpx solid rgba(255,255,255,.06); }
+.si-avatar { width: 120rpx; height: 120rpx; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: linear-gradient(145deg, rgba(40,40,70,.5), rgba(32,32,58,.6)); display: flex; align-items: center; justify-content: center;
   image { width: 100%; height: 100%; object-fit: cover; }
   text { font-size: 72rpx; }
 }
 .si-info { flex: 1; min-width: 0; }
-.si-name { font-size: 52rpx; font-weight: 700; color: $text-main; display: block; }
+.si-name { font-size: 52rpx; font-weight: 700; color: #f1f5f9; display: block; }
 .si-meta { display: flex; align-items: center; gap: 20rpx; margin-top: 10rpx; }
-.si-rate { font-size: 44rpx; color: $primary; font-weight: 600; }
+.si-rate { font-size: 44rpx; color: $gold; font-weight: 600; }
 .si-status { font-size: 40rpx; padding: 8rpx 20rpx; border-radius: 18rpx; font-weight: 600;
-  &.pending { background: rgba(245,158,11,.1); color: #f59e0b; }
-  &.processing { background: rgba(59,130,246,.1); color: #3b82f6; }
-  &.serving { background: rgba(7,193,96,.1); color: $primary; }
-  &.completed { background: rgba(0,0,0,.04); color: $text-secondary; }
+  &.pending { background: rgba(245,158,11,.15); color: #f59e0b; }
+  &.processing { background: rgba(59,130,246,.15); color: #3b82f6; }
+  &.serving { background: rgba(34,197,94,.15); color: #22c55e; }
+  &.completed { background: rgba(255,255,255,.06); color: rgba(255,255,255,.4); }
 }
-.si-duration { display: block; font-size: 44rpx; color: $text-secondary; margin-top: 8rpx; font-family: 'Courier New', monospace; }
+.si-duration { display: block; font-size: 44rpx; color: rgba(255,255,255,.5); margin-top: 8rpx; font-family: 'Courier New', monospace; }
 .si-actions { display: flex; gap: 16rpx; flex-shrink: 0; flex-direction: column; }
 .si-btn { padding: 20rpx 32rpx; border-radius: 24rpx; font-size: 40rpx; font-weight: 700; transition: all .2s; min-width: 120rpx; text-align: center;
   &:active { transform: scale(.95); }
-  &.start { background: linear-gradient(135deg, $primary, $primary-dark); color: #fff; box-shadow: 0 8rpx 28rpx rgba(7,193,96,.3); }
+  &.start { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 8rpx 28rpx rgba(34,197,94,.3); }
   &.end { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 8rpx 28rpx rgba(239,68,68,.3); }
-  &.cancel { background: rgba(0,0,0,.04); color: $text-secondary; }
+  &.cancel { background: rgba(255,255,255,.06); color: rgba(255,255,255,.5); border: 2rpx solid rgba(255,255,255,.1); }
 }
 
 .modal-empty { text-align: center; padding: 120rpx 0; }
 .modal-empty-icon { font-size: 160rpx; display: block; margin-bottom: 32rpx; }
-.modal-empty-text { font-size: 52rpx; color: $text-secondary; }
+.modal-empty-text { font-size: 52rpx; color: rgba(255,255,255,.4); }
 
 .loading-state { text-align: center; padding: 160rpx 0; }
 .loading-icon { font-size: 128rpx; display: block; margin-bottom: 32rpx; }
-.loading-text { font-size: 52rpx; color: $text-secondary; }
+.loading-text { font-size: 52rpx; color: rgba(255,255,255,.4); }
 
 .call-waiter-btn-wrap {
   position: fixed;
@@ -927,12 +988,16 @@ $text-secondary: #999999;
 
 .call-waiter-btn {
   position: relative;
-  width: 160rpx;
-  height: 160rpx;
-  background: linear-gradient(135deg, $primary, $primary-dark);
+  width: 180rpx;
+  height: 180rpx;
+  background: linear-gradient(135deg, rgba(201, 169, 98, 0.95), rgba(138, 109, 59, 0.9));
   border-radius: 50%;
-  border: 3rpx solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 16rpx 48rpx rgba(7,193,96,0.4);
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 24rpx 72rpx rgba(201, 169, 98, 0.5),
+    0 0 60rpx rgba(201, 169, 98, 0.3),
+    inset 0 4rpx 8rpx rgba(255, 255, 255, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -940,13 +1005,17 @@ $text-secondary: #999999;
   
   &:active {
     transform: scale(0.92);
-    box-shadow: 0 8rpx 24rpx rgba(7,193,96,0.3);
+    box-shadow: 
+      0 12rpx 36rpx rgba(201, 169, 98, 0.4),
+      0 0 30rpx rgba(201, 169, 98, 0.2),
+      inset 0 4rpx 8rpx rgba(255, 255, 255, 0.2),
+      inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.3);
   }
   
   .call-icon-wrap {
     position: relative;
-    width: 100rpx;
-    height: 100rpx;
+    width: 120rpx;
+    height: 120rpx;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -963,27 +1032,28 @@ $text-secondary: #999999;
     .call-icon {
       position: relative;
       z-index: 1;
-      font-size: 64rpx;
+      font-size: 72rpx;
+      filter: drop-shadow(0 4rpx 12rpx rgba(0, 0, 0, 0.3));
     }
   }
   
   &.calling {
-    background: linear-gradient(135deg, #FF976A, #F97316);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.9));
+    border-color: rgba(255, 255, 255, 0.4);
     
     .btn-glow-ring {
       position: absolute;
-      top: -16rpx; left: -16rpx; right: -16rpx; bottom: -16rpx;
+      top: -20rpx; left: -20rpx; right: -20rpx; bottom: -20rpx;
       border-radius: 50%;
-      border: 3rpx solid rgba(249,115,22,0.5);
+      border: 4rpx solid rgba(245, 158, 11, 0.6);
       animation: glowPulse 2s ease-out infinite;
     }
     
     .btn-pulse-ring {
       position: absolute;
-      top: -24rpx; left: -24rpx; right: -24rpx; bottom: -24rpx;
+      top: -30rpx; left: -30rpx; right: -30rpx; bottom: -30rpx;
       border-radius: 50%;
-      border: 2rpx solid rgba(249,115,22,0.3);
+      border: 4rpx solid rgba(245, 158, 11, 0.4);
       animation: glowPulse 2s ease-out infinite;
       animation-delay: 0.5s;
     }
@@ -998,10 +1068,5 @@ $text-secondary: #999999;
 @keyframes glowPulse {
   0% { transform: scale(1); opacity: 0.8; }
   100% { transform: scale(1.4); opacity: 0; }
-}
-
-@keyframes pulseGreen {
-  0%, 100% { box-shadow: 0 0 24rpx rgba(74,222,128,.7); }
-  50% { box-shadow: 0 0 40rpx rgba(74,222,128,1); }
 }
 </style>

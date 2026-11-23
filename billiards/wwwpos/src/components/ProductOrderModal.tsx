@@ -262,17 +262,17 @@ export default function ProductOrderModal({
           {/* Left - Categories & Products */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Search */}
-            <div className="p-4 border-b border-[#e5e5e5]">
+            <div className="p-4 border-b border-[var(--color-border)]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#999999]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)]" />
                 <input
                   type="text"
                   placeholder="搜索商品名称或扫码..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 rounded-2xl bg-white border border-[#e5e5e5] focus:border-[#07C160] focus:outline-none transition-colors"
+                  className="w-full pl-10 pr-12 py-3 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-border)] focus:border-emerald-500 focus:outline-none transition-colors"
                 />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[#999999] text-sm">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[var(--color-text-muted)] text-sm">
                   <ScanLine className="w-4 h-4" />
                   <span>扫码</span>
                 </div>
@@ -280,16 +280,16 @@ export default function ProductOrderModal({
             </div>
 
             {/* Categories */}
-            <div className="px-4 py-3 border-b border-[#e5e5e5]">
+            <div className="px-4 py-3 border-b border-[var(--color-border)]">
               <div className="flex gap-2 overflow-x-auto">
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
+                    className={`px-4 py-2 rounded-xl whitespace-nowrap transition-colors ${
                       selectedCategory === cat.id
-                        ? 'bg-[#07C160] text-white'
-                        : 'bg-white text-[#333333] hover:bg-gray-50 border border-[#e5e5e5]'
+                        ? 'bg-emerald-500 text-white'
+                        : 'bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)]'
                     }`}
                   >
                     {cat.name}
@@ -326,20 +326,20 @@ export default function ProductOrderModal({
                         </span>
                       </div>
                     )}
-                    <div className="w-full h-16 bg-gray-50 rounded-xl mb-3 flex items-center justify-center">
+                    <div className="w-full h-16 bg-[var(--color-bg-hover)] rounded-xl mb-3 flex items-center justify-center">
                       {product.image ? (
                         <img src={product.image} alt={product.name} className="w-full h-full object-contain rounded-xl" />
                       ) : (
-                        <Package className="w-8 h-8 text-[#999999]" />
+                        <Package className="w-8 h-8 text-[var(--color-text-muted)]" />
                       )}
                     </div>
-                    <h4 className="font-medium text-sm text-[#333333] truncate">{product.name}</h4>
+                    <h4 className="font-medium text-sm truncate">{product.name}</h4>
                     <div className="flex items-center justify-between mt-2">
-                      <span className="money text-[#07C160] font-bold">
+                      <span className="money text-emerald-600 font-bold">
                         ¥{product.price}
                       </span>
                       {product.unit && (
-                        <span className="text-xs text-[#999999]">
+                        <span className="text-xs text-[var(--color-text-muted)]">
                           /{product.unit}
                         </span>
                       )}
@@ -349,7 +349,7 @@ export default function ProductOrderModal({
                         e.stopPropagation();
                         if (product.available) handleAddToCart(product);
                       }}
-                      className="absolute bottom-3 right-3 w-7 h-7 rounded-full bg-[#07C160] text-white flex items-center justify-center hover:scale-110 transition-transform"
+                      className="absolute bottom-3 right-3 w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center hover:scale-110 transition-transform"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -367,14 +367,14 @@ export default function ProductOrderModal({
           </div>
 
           {/* Right - Cart */}
-          <div className="w-[420px] border-l border-[#e5e5e5] flex flex-col bg-white">
-          {/* Cart Header */}
-          <div className="p-4 border-b border-[#e5e5e5]">
-            <h3 className="font-bold text-lg text-[#333333] flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-[#07C160]" />
-              已选商品
-            </h3>
-          </div>
+          <div className="w-[420px] border-l border-[var(--color-border)] flex flex-col bg-[var(--color-bg-card)]">
+            {/* Cart Header */}
+            <div className="p-4 border-b border-[var(--color-border)]">
+              <h3 className="font-bold text-lg flex items-center gap-2">
+                <ShoppingCart className="w-5 h-5" />
+                已选商品
+              </h3>
+            </div>
 
             {/* Submitted items */}
             {submittedItems.length > 0 && (
@@ -416,37 +416,37 @@ export default function ProductOrderModal({
                 localCart.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-[#e5e5e5]"
+                    className="flex items-center gap-3 p-3 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)]"
                   >
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-[#333333] truncate">{item.productName}</p>
-                      <p className="text-sm text-[#999999]">
+                      <p className="font-medium truncate">{item.productName}</p>
+                      <p className="text-sm text-[var(--color-text-muted)]">
                         ¥{item.unitPrice}/件
                       </p>
                       {itemRemarks[item.id] && (
-                        <p className="text-xs text-[#07C160] mt-1 flex items-center gap-1">
+                        <p className="text-xs text-emerald-600 mt-1 flex items-center gap-1">
                           <MessageSquare className="w-3 h-3" />
                           {itemRemarks[item.id]}
                         </p>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 bg-white rounded-lg p-1">
+                    <div className="flex items-center gap-2 bg-[var(--color-bg-hover)] rounded-lg p-1">
                       <button
                         onClick={() => updateQuantity(item.id, -1)}
-                        className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-[#07C160] hover:text-white transition-colors"
+                        className="w-8 h-8 rounded-lg bg-[var(--color-bg-card)] flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-colors"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="w-8 text-center font-bold text-[#333333]">{item.quantity}</span>
+                      <span className="w-8 text-center font-bold">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.id, 1)}
-                        className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-[#07C160] hover:text-white transition-colors"
+                        className="w-8 h-8 rounded-lg bg-[var(--color-bg-card)] flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-colors"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
                     </div>
                     <div className="w-20 text-right">
-                      <span className="font-bold money text-[#07C160]">
+                      <span className="font-bold money text-emerald-600">
                         ¥{item.subtotal}
                       </span>
                     </div>
@@ -475,8 +475,8 @@ export default function ProductOrderModal({
             </div>
 
             {/* Order remarks */}
-            <div className="p-4 border-t border-[#e5e5e5]">
-              <label className="text-sm text-[#999999] mb-2 flex items-center gap-2">
+            <div className="p-4 border-t border-[var(--color-border)]">
+              <label className="text-sm text-[var(--color-text-muted)] mb-2 flex items-center gap-2">
                 <MessageSquare className="w-4 h-4" />
                 整单备注
               </label>
@@ -485,17 +485,17 @@ export default function ProductOrderModal({
                 placeholder="可输入备注信息，如：少冰、不要辣..."
                 value={orderRemarks}
                 onChange={(e) => setOrderRemarks(e.target.value)}
-                className="w-full px-4 py-3 rounded-2xl bg-white border border-[#e5e5e5] focus:border-[#07C160] focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)] focus:border-emerald-500 focus:outline-none transition-colors"
               />
             </div>
 
             {/* Total & Submit */}
-            <div className="p-4 border-t border-[#e5e5e5] bg-gray-50">
+            <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)]">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[#999999]">
+                <span className="text-[var(--color-text-muted)]">
                   共 {cartCount} 件商品
                 </span>
-                <span className="text-3xl font-bold money text-[#07C160]">
+                <span className="text-3xl font-bold money text-emerald-600">
                   ¥{cartTotal}
                 </span>
               </div>
@@ -505,7 +505,7 @@ export default function ProductOrderModal({
               <button
                 onClick={handleSubmit}
                 disabled={localCart.length === 0 || !orderId || isSubmitting}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-bold text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 rounded-xl bg-emerald-500 text-white font-bold text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Check className="w-6 h-6" />
                 {isSubmitting ? '提交中...' : '提交订单'}
@@ -524,14 +524,14 @@ export default function ProductOrderModal({
                 setTempRemarks('');
               }}
             />
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-[400px] bg-white rounded-2xl p-6 shadow-xl border border-[#e5e5e5]">
-              <h3 className="font-bold text-lg text-[#333333] mb-4">单品备注</h3>
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-[400px] bg-[var(--color-bg-secondary)] rounded-2xl p-6 shadow-xl">
+              <h3 className="font-bold text-lg mb-4">单品备注</h3>
               <input
                 type="text"
                 placeholder="输入备注信息..."
                 value={tempRemarks}
                 onChange={(e) => setTempRemarks(e.target.value)}
-                className="w-full px-4 py-3 rounded-2xl bg-white border border-[#e5e5e5] focus:border-[#07C160] focus:outline-none mb-4"
+                className="w-full px-4 py-3 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-border)] focus:border-emerald-500 focus:outline-none mb-4"
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -545,13 +545,13 @@ export default function ProductOrderModal({
                     setShowRemarksModal(null);
                     setTempRemarks('');
                   }}
-                  className="flex-1 py-3 rounded-full bg-white border-2 border-[#e5e5e5] text-[#999999] font-medium hover:bg-gray-50"
+                  className="flex-1 py-3 rounded-xl bg-[var(--color-bg-hover)] font-medium"
                 >
                   取消
                 </button>
                 <button
                   onClick={() => updateItemRemarks(showRemarksModal, tempRemarks)}
-                  className="flex-1 py-3 rounded-full bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white font-medium"
+                  className="flex-1 py-3 rounded-xl bg-emerald-500 text-white font-medium"
                 >
                   确认
                 </button>

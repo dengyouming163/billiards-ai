@@ -1,20 +1,13 @@
 <template>
   <view class="owner-home page-content">
-    <view class="page-header">
-      <view class="header-left">
-        <view class="header-icon-wrap">
-          <text class="header-icon">📊</text>
-        </view>
-        <view class="header-info">
-          <text class="header-label">门店总览</text>
-          <text class="header-title">经营数据一目了然</text>
-        </view>
-      </view>
-      <view class="header-right">
-        <text class="header-date">{{ currentDate }}</text>
+    <view class="hero-card">
+      <view class="hero-copy">
+        <text class="hero-eyebrow">门店总览</text>
+        <text class="hero-title">经营数据一目了然</text>
       </view>
     </view>
 
+    <!-- 日期筛选 -->
     <view class="date-picker-bar">
       <view class="quick-dates">
         <view v-for="d in dateOptions" :key="d.key" class="date-chip" :class="{ active: dateType === d.key }" @click="switchDate(d.key)">
@@ -36,124 +29,134 @@
     </view>
 
     <StateView :loading="loading" :error="hasError" error-msg="加载失败" @retry="loadAll">
-      <view class="revenue-section">
-        <view class="section-header">
-          <text class="section-title">收入总览</text>
+      <!-- ① 收入总览 -->
+      <view class="section-card section-card-primary">
+        <view class="section-head">
+          <text class="section-title section-title-light">收入总览</text>
         </view>
-        <view class="revenue-card">
-          <view class="revenue-main">
-            <text class="revenue-total">¥{{ fmt(revenue.total_revenue) }}</text>
-          </view>
-          <view class="revenue-grid">
-            <view class="revenue-item" @click="goItemDetail('table', '台费')">
-              <text class="ri-icon">🎱</text>
-              <text class="ri-val">¥{{ fmt(revenue.table_revenue) }}</text>
-              <text class="ri-lbl">台费</text>
-            </view>
-            <view class="revenue-item" @click="goItemDetail('product', '商品')">
-              <text class="ri-icon">🛒</text>
-              <text class="ri-val">¥{{ fmt(revenue.product_revenue) }}</text>
-              <text class="ri-lbl">商品</text>
-            </view>
-            <view class="revenue-item" @click="goItemDetail('assistant', '助教')">
-              <text class="ri-icon">👤</text>
-              <text class="ri-val">¥{{ fmt(revenue.assistant_revenue) }}</text>
-              <text class="ri-lbl">助教</text>
-            </view>
-            <view class="revenue-item" @click="goItemDetail('charging', '充电')">
-              <text class="ri-icon">🔋</text>
-              <text class="ri-val">¥{{ fmt(revenue.charging_revenue) }}</text>
-              <text class="ri-lbl">充电</text>
-            </view>
-          </view>
+        <view class="total-big">¥{{ fmt(revenue.total_revenue) }}</view>
+        <view class="revenue-grid">
+          <view class="rv-item"><text class="rv-val">¥{{ fmt(revenue.table_revenue) }}</text><text class="rv-lbl">台费</text></view>
+          <view class="rv-item"><text class="rv-val">¥{{ fmt(revenue.product_revenue) }}</text><text class="rv-lbl">商品</text></view>
+          <view class="rv-item"><text class="rv-val">¥{{ fmt(revenue.assistant_revenue) }}</text><text class="rv-lbl">助教</text></view>
+          <view class="rv-item"><text class="rv-val">¥{{ fmt(revenue.charging_revenue) }}</text><text class="rv-lbl">充电</text></view>
         </view>
       </view>
 
-      <view class="metrics-section">
-        <view class="section-header">
-          <text class="section-title">核心指标</text>
-        </view>
-        <view class="metrics-grid">
-          <view class="metric-card">
-            <text class="metric-val">{{ operation.order_count || 0 }}</text>
-            <text class="metric-lbl">订单数</text>
-          </view>
-          <view class="metric-card highlight">
-            <text class="metric-val">{{ operation.occupancy_rate || 0 }}%</text>
-            <text class="metric-lbl">开台率</text>
-          </view>
-          <view class="metric-card">
-            <text class="metric-val">{{ operation.turnover_rate || 0 }}</text>
-            <text class="metric-lbl">翻台率</text>
-          </view>
-          <view class="metric-card">
-            <text class="metric-val">¥{{ operation.avg_customer_spend || 0 }}</text>
-            <text class="metric-lbl">客单价</text>
-          </view>
-          <view class="metric-card">
-            <text class="metric-val">¥{{ operation.avg_order_amount || 0 }}</text>
-            <text class="metric-lbl">均单金额</text>
-          </view>
-          <view class="metric-card">
-            <text class="metric-val">{{ operation.product_sales_count || 0 }}</text>
-            <text class="metric-lbl">商品销量</text>
-          </view>
-        </view>
-      </view>
-
-      <view class="channel-section">
-        <view class="section-header">
+      <!-- ② 收入渠道 -->
+      <view class="section-card">
+        <view class="section-head">
           <text class="section-title">收入渠道</text>
         </view>
         <view class="channel-grid">
-          <view v-for="ch in defaultChannels" :key="ch.channel" class="channel-item" @click="goChannelDetail(ch.channel, ch.label)">
-            <text class="channel-icon">{{ getChannelIcon(ch.channel) }}</text>
-            <text class="channel-amount">¥{{ fmt(ch.revenue) }}</text>
-            <text class="channel-name">{{ ch.label }}</text>
+          <view v-for="ch in defaultChannels" :key="ch.channel" class="ch-item" @click="goChannelDetail(ch.channel, ch.label)">
+            <text class="ch-val">¥{{ fmt(ch.revenue) }}</text>
+            <text class="ch-lbl">{{ ch.label }} ›</text>
           </view>
         </view>
       </view>
 
-      <view class="recharge-section">
-        <view class="section-header">
+      <!-- ③ 收入项目 -->
+      <view class="section-card">
+        <view class="section-head">
+          <text class="section-title">收入项目</text>
+        </view>
+        <view class="channel-grid">
+          <view v-for="it in defaultItemTypes" :key="it.item_type" class="ch-item" @click="goItemDetail(it.item_type, it.label)">
+            <text class="ch-val">¥{{ fmt(it.revenue) }}</text>
+            <text class="ch-lbl">{{ it.label }} ›</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- ④ 充值报表 -->
+      <view class="section-card">
+        <view class="section-head">
           <text class="section-title">充值报表</text>
         </view>
-        <view class="recharge-grid">
-          <view class="recharge-item" @click="goRechargeDetail('cash', '现金充值')">
-            <text class="recharge-icon">💵</text>
-            <text class="recharge-val">¥{{ fmt(rechargeCash) }}</text>
-            <text class="recharge-lbl">现金充值</text>
+        <view class="channel-grid">
+          <view class="ch-item" @click="goRechargeDetail('cash', '现金充值')"><text class="ch-val">¥{{ fmt(rechargeCash) }}</text><text class="ch-lbl">现金充值 ›</text></view>
+          <view class="ch-item" @click="goRechargeDetail('wechat', '微信充值')"><text class="ch-val">¥{{ fmt(rechargeWechat) }}</text><text class="ch-lbl">微信充值 ›</text></view>
+          <view class="ch-item" @click="goRechargeDetail('balance', '余额调整')"><text class="ch-val">¥{{ fmt(rechargeAdjust) }}</text><text class="ch-lbl">余额调整 ›</text></view>
+          <view class="ch-item"><text class="ch-val">{{ rechargeCount }}</text><text class="ch-lbl">充值笔数</text></view>
+        </view>
+      </view>
+
+      <!-- ⑤ 运营指标 -->
+      <view class="section-card">
+        <view class="section-head">
+          <text class="section-title">运营指标</text>
+        </view>
+        <view class="kpi-grid">
+          <view class="kpi-item">
+            <text class="kpi-val">{{ operation.occupancy_rate || 0 }}%</text>
+            <text class="kpi-lbl">开台率</text>
+            <text class="kpi-sub">{{ operation.occupied_tables || 0 }}/{{ operation.total_tables || 0 }} 桌</text>
           </view>
-          <view class="recharge-item" @click="goRechargeDetail('wechat', '微信充值')">
-            <text class="recharge-icon">💬</text>
-            <text class="recharge-val">¥{{ fmt(rechargeWechat) }}</text>
-            <text class="recharge-lbl">微信充值</text>
+          <view class="kpi-item">
+            <text class="kpi-val">{{ operation.turnover_rate || 0 }}</text>
+            <text class="kpi-lbl">翻台率</text>
           </view>
-          <view class="recharge-item" @click="goRechargeDetail('balance', '余额调整')">
-            <text class="recharge-icon">📊</text>
-            <text class="recharge-val">¥{{ fmt(rechargeAdjust) }}</text>
-            <text class="recharge-lbl">余额调整</text>
+          <view class="kpi-item">
+            <text class="kpi-val">¥{{ operation.avg_customer_spend || 0 }}</text>
+            <text class="kpi-lbl">客单价</text>
           </view>
-          <view class="recharge-item">
-            <text class="recharge-icon">✏️</text>
-            <text class="recharge-val">{{ rechargeCount }}</text>
-            <text class="recharge-lbl">充值笔数</text>
+          <view class="kpi-item">
+            <text class="kpi-val">{{ operation.avg_order_amount || 0 }}</text>
+            <text class="kpi-lbl">均单金额</text>
+          </view>
+        </view>
+        <view class="kpi-grid" style="margin-top:16rpx">
+          <view class="kpi-item">
+            <text class="kpi-val">{{ operation.order_count || 0 }}</text>
+            <text class="kpi-lbl">订单数</text>
+          </view>
+          <view class="kpi-item">
+            <text class="kpi-val">{{ operation.product_sales_count || 0 }}</text>
+            <text class="kpi-lbl">商品销售件数</text>
+          </view>
+          <view class="kpi-item">
+            <text class="kpi-val">{{ formatDuration(operation.table_duration_minutes || 0) }}</text>
+            <text class="kpi-lbl">台费时长</text>
+          </view>
+          <view class="kpi-item">
+            <text class="kpi-val">{{ formatDuration(operation.assistant_duration_minutes || 0) }}</text>
+            <text class="kpi-lbl">助教时长</text>
+          </view>
+        </view>
+        <view class="kpi-grid" style="margin-top:16rpx">
+          <view class="kpi-item">
+            <text class="kpi-val">{{ formatDuration(operation.outwork_duration_minutes || 0) }}</text>
+            <text class="kpi-lbl">外勤时长</text>
+          </view>
+          <view class="kpi-item">
+            <text class="kpi-val">{{ formatDuration(operation.meituan_duration_minutes || 0) }}</text>
+            <text class="kpi-lbl">美团时长</text>
+          </view>
+          <view class="kpi-item">
+            <text class="kpi-val">{{ formatDuration(operation.douyin_duration_minutes || 0) }}</text>
+            <text class="kpi-lbl">抖音时长</text>
+          </view>
+          <view class="kpi-item">
+            <text class="kpi-val">{{ formatDuration(operation.total_duration_minutes || 0) }}</text>
+            <text class="kpi-lbl">总经营时长</text>
           </view>
         </view>
       </view>
 
-      <view class="product-section" v-if="products.length > 0">
-        <view class="section-header">
+      <!-- 热销商品 -->
+      <view class="section-card" v-if="products.length > 0">
+        <view class="section-head">
           <text class="section-title">热销商品</text>
         </view>
-        <view class="product-list">
-          <view v-for="p in products" :key="p.rank" class="product-item">
-            <view class="pi-rank" :class="'rank-'+p.rank">{{ p.rank }}</view>
-            <view class="pi-info">
-              <text class="pi-name">{{ p.name }}</text>
-              <text class="pi-qty">售出 {{ p.quantity }} 件</text>
-            </view>
-            <text class="pi-revenue">¥{{ p.revenue }}</text>
+        <view v-for="p in products" :key="p.rank" class="product-row">
+          <view class="pr-left">
+            <text class="pr-rank" :class="'r'+p.rank">{{ p.rank }}</text>
+            <text class="pr-name">{{ p.name }}</text>
+          </view>
+          <view class="pr-right">
+            <text class="pr-qty">×{{ p.quantity }}</text>
+            <text class="pr-revenue">¥{{ p.revenue }}</text>
           </view>
         </view>
       </view>
@@ -180,10 +183,6 @@ const customEnd = ref(todayStr())
 const showCustomDate = ref(false)
 const loading = ref(false)
 const hasError = ref(false)
-const currentDate = computed(() => {
-  const d = new Date()
-  return `${d.getMonth() + 1}月${d.getDate()}日`
-})
 
 const revenue = ref<ReportRevenue>({ table_revenue:0,assistant_revenue:0,product_revenue:0,charging_revenue:0,package_revenue:0,total_revenue:0,order_count:0,last_period_revenue:0,revenue_change:0 })
 const operation = ref<ReportOperation>({ order_count:0,total_duration_minutes:0,avg_order_amount:0,avg_customer_spend:0,avg_duration_minutes:0,total_customers:0,total_tables:0,occupied_tables:0,occupancy_rate:0,turnover_rate:0,table_utilization:0,product_sales_count:0,table_duration_minutes:0,assistant_duration_minutes:0,outwork_duration_minutes:0 })
@@ -196,6 +195,7 @@ const rechargeAdjust = ref(0)
 const rechargeTotal = ref(0)
 const rechargeCount = ref(0)
 
+// 默认渠道列表（无数据时显示 0）
 const defaultChannels = computed(() => {
   const map: Record<string, { channel: string; label: string; revenue: number }> = {
     cash: { channel: 'cash', label: '现金', revenue: 0 },
@@ -227,21 +227,6 @@ const dateOptions = [
 ]
 
 function fmt(n: number | undefined): string { return (n || 0).toFixed(2) }
-
-function getChannelIcon(channel: string): string {
-  const icons: Record<string, string> = {
-    cash: '💵', wechat: '💬', member_balance: '💳',
-    coupon_meituan: '🥡', coupon_douyin: '🎵'
-  }
-  return icons[channel] || '📊'
-}
-
-function getItemIcon(itemType: string): string {
-  const icons: Record<string, string> = {
-    table: '🎱', product: '🛒', assistant: '👤', charging: '🔋'
-  }
-  return icons[itemType] || '📦'
-}
 
 function getDateRange(): { start: string; end: string } {
   const now = new Date()
@@ -303,10 +288,13 @@ async function loadAll() {
       getRechargeReport(params),
     ])
     revenue.value = r; operation.value = o; products.value = p
+    // 渠道加中文标签
     const channelLabelMap: Record<string,string> = { cash:'现金', wechat:'微信', meituan:'美团', douyin:'抖音', coupon:'团券', member_balance:'会员卡', member:'会员卡' }
     channels.value = (ch || []).map((c: any) => ({ ...c, channel_label: channelLabelMap[c.channel] || c.channel }))
+    // 收入项目加中文标签
     const itemLabelMap: Record<string,string> = { table:'台费', product:'商品', assistant:'助教', charging:'充电', merge_fee:'并入台费' }
     itemTypes.value = (it || []).map((i: any) => ({ ...i, item_label: itemLabelMap[i.item_type] || i.item_type }))
+    // 充值报表：数组 → 分类汇总
     const rcArr = rc || []
     rechargeCash.value = rcArr.filter((r: any) => r.channel === 'cash').reduce((s:number, r:any) => s + Number(r.amount||0), 0)
     rechargeWechat.value = rcArr.filter((r: any) => r.channel === 'wechat').reduce((s:number, r:any) => s + Number(r.amount||0), 0)
@@ -322,241 +310,73 @@ onMounted(() => loadAll())
 
 <style lang="scss" scoped>
 .owner-home {
-  padding: 24rpx;
+  padding: 30rpx 24rpx 0;
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
-  background: #f7f7f7;
+  gap: 22rpx;
 }
 .page-content { padding-bottom: calc(env(safe-area-inset-bottom) + 132rpx); }
 
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20rpx;
-  background: #ffffff;
-  border-radius: 20rpx;
-  border: 1rpx solid #e5e5e5;
+.hero-card {
+  background: linear-gradient(135deg, #059669, #10b981);
+  border-radius: 28rpx;
+  padding: 32rpx 28rpx;
 }
-.header-left { display: flex; align-items: center; gap: 16rpx; }
-.header-icon-wrap {
-  width: 72rpx;
-  height: 72rpx;
-  background: rgba(7, 193, 96, 0.08);
-  border-radius: 18rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.header-icon { font-size: 36rpx; }
-.header-info { display: flex; flex-direction: column; gap: 4rpx; }
-.header-label { font-size: 22rpx; color: #07C160; font-weight: 600; }
-.header-title { font-size: 32rpx; font-weight: 700; color: #000000; }
-.header-right { text-align: right; }
-.header-date { font-size: 24rpx; color: #999999; }
+.hero-eyebrow { font-size: 22rpx; color: rgba(255,255,255,.7); text-transform: uppercase; letter-spacing: 2rpx; }
+.hero-title { font-size: 36rpx; font-weight: 800; color: #fff; margin-top: 6rpx; display: block; }
+.hero-desc { font-size: 24rpx; color: rgba(255,255,255,.7); margin-top: 6rpx; display: block; }
 
-.date-picker-bar { 
-  background: #ffffff; 
-  border-radius: 24rpx; 
-  padding: 20rpx; 
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06); 
-  border: 1rpx solid #e5e5e5; 
-}
-.quick-dates { display: flex; gap: 10rpx; flex-wrap: wrap; }
-.date-chip { padding: 12rpx 22rpx; border-radius: 999rpx; font-size: 24rpx; background: #f7f7f7; color: #999999; transition: all 0.2s; }
-.date-chip.active { background: rgba(7, 193, 96, 0.1); color: #07C160; font-weight: 600; border: 1rpx solid #07C160; }
+/* 日期筛选 */
+.date-picker-bar { background: #fff; border-radius: 20rpx; padding: 20rpx 20rpx 16rpx; box-shadow: 0 4rpx 16rpx rgba(15,23,42,.04); }
+.quick-dates { display: flex; gap: 12rpx; flex-wrap: wrap; }
+.date-chip { padding: 12rpx 24rpx; border-radius: 20rpx; font-size: 24rpx; background: #f1f5f9; color: #64748b; }
+.date-chip.active { background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-weight: 600; }
 .custom-range { display: flex; align-items: center; gap: 12rpx; margin-top: 16rpx; }
 .date-picker { flex: 1; }
-.date-pick-box { padding: 14rpx 18rpx; background: #f7f7f7; border: 1rpx solid #e5e5e5; border-radius: 14rpx; font-size: 24rpx; color: #000000; text-align: center; }
-.date-sep { font-size: 24rpx; color: #999999; flex-shrink: 0; }
+.date-pick-box { padding: 16rpx 20rpx; background: #f8fafc; border: 1rpx solid #e2e8f0; border-radius: 16rpx; font-size: 24rpx; color: #1e293b; text-align: center; }
+.date-sep { font-size: 24rpx; color: #94a3b8; flex-shrink: 0; }
 
-.section-header { margin-bottom: 16rpx; }
-.section-title { font-size: 30rpx; font-weight: 700; color: #000000; }
+/* 卡片 — 白色背景，加大间距 */
+.section-card { background: #fff; border-radius: 24rpx; padding: 32rpx 28rpx; margin-bottom: 22rpx; box-shadow: 0 4rpx 20rpx rgba(15,23,42,.06); }
+.section-card-primary { background: linear-gradient(135deg, #059669, #10b981); }
+.section-head { margin-bottom: 22rpx; display: flex; justify-content: space-between; align-items: center; }
+.section-title { font-size: 30rpx; font-weight: 700; color: #1e293b; }
+.section-title-light { color: #fff; }
+.section-subtitle { font-size: 24rpx; color: #94a3b8; display: block; }
 
-.revenue-section {
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 20rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
-}
+/* 收入总览 */
+.total-big { font-size: 56rpx; font-weight: 800; color: #fff; margin-bottom: 20rpx; }
+.revenue-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12rpx; }
+.rv-item { text-align: center; }
+.rv-val { font-size: 26rpx; font-weight: 700; color: #fff; display: block; }
+.rv-lbl { font-size: 20rpx; color: rgba(255,255,255,.7); margin-top: 4rpx; display: block; }
+.rv-val-dark { font-size: 26rpx; font-weight: 700; color: #1e293b; display: block; }
+.rv-lbl-dark { font-size: 20rpx; color: #64748b; margin-top: 4rpx; display: block; }
 
-.revenue-card {
-  background: rgba(7, 193, 96, 0.04);
-  border-radius: 16rpx;
-  padding: 24rpx;
-  position: relative;
-  overflow: hidden;
-}
+/* 渠道 / 项目 */
+.channel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16rpx; }
+.ch-item { text-align: center; padding: 20rpx 0; background: #f8fafc; border-radius: 16rpx; }
+.ch-val { font-size: 30rpx; font-weight: 700; color: #1e293b; display: block; }
+.ch-lbl { font-size: 22rpx; color: #64748b; margin-top: 6rpx; display: block; }
+.empty-hint { text-align: center; color: #94a3b8; font-size: 24rpx; padding: 24rpx 0; }
 
-.revenue-main { margin-bottom: 24rpx; }
-.revenue-total { font-size: 56rpx; font-weight: 800; color: #07C160; }
+/* KPI */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16rpx; margin-top: 16rpx; }
+.kpi-item { text-align: left; background: #f8fafc; border-radius: 16rpx; padding: 20rpx 16rpx; }
+.kpi-val { font-size: 30rpx; font-weight: 700; color: #1e293b; display: block; }
+.kpi-lbl { font-size: 22rpx; color: #64748b; margin-top: 4rpx; display: block; }
+.kpi-sub { font-size: 20rpx; color: #94a3b8; margin-top: 2rpx; display: block; }
 
-.revenue-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12rpx;
-}
-
-.revenue-item {
-  background: #ffffff;
-  border-radius: 12rpx;
-  padding: 16rpx 12rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8rpx;
-  transition: all 0.2s;
-  
-  &:active {
-    transform: scale(0.96);
-    background: rgba(7, 193, 96, 0.08);
-  }
-}
-
-.ri-icon { font-size: 32rpx; }
-.ri-val { font-size: 26rpx; font-weight: 700; color: #000000; }
-.ri-lbl { font-size: 20rpx; color: #999999; }
-
-.metrics-section {
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 28rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16rpx;
-}
-
-.metric-card {
-  background: #f7f7f7;
-  border-radius: 16rpx;
-  padding: 20rpx 16rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6rpx;
-  
-  &.highlight {
-    background: rgba(7, 193, 96, 0.06);
-    border: 1rpx solid rgba(7, 193, 96, 0.2);
-  }
-}
-
-.metric-val { font-size: 36rpx; font-weight: 800; color: #000000; }
-.metric-card.highlight .metric-val { color: #07C160; }
-.metric-lbl { font-size: 22rpx; color: #999999; }
-
-.channel-section {
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 28rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
-}
-
-.channel-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12rpx;
-}
-
-.channel-item {
-  background: #f7f7f7;
-  border-radius: 12rpx;
-  padding: 16rpx 12rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8rpx;
-  transition: all 0.2s;
-  
-  &:active {
-    transform: scale(0.96);
-    background: rgba(7, 193, 96, 0.08);
-  }
-}
-
-.channel-icon { font-size: 36rpx; }
-.channel-amount { font-size: 24rpx; font-weight: 700; color: #FF976A; }
-.channel-name { font-size: 20rpx; color: #999999; }
-
-.recharge-section {
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 28rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
-}
-
-.recharge-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16rpx;
-}
-
-.recharge-item {
-  background: #f7f7f7;
-  border-radius: 16rpx;
-  padding: 20rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10rpx;
-  transition: all 0.2s;
-  
-  &:active {
-    transform: scale(0.96);
-    background: rgba(7, 193, 96, 0.08);
-  }
-}
-
-.recharge-icon { font-size: 36rpx; }
-.recharge-val { font-size: 32rpx; font-weight: 700; color: #000000; }
-.recharge-lbl { font-size: 22rpx; color: #999999; }
-
-.product-section {
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 28rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
-}
-
-.product-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14rpx;
-}
-
-.product-item {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-  padding: 16rpx;
-  background: #f7f7f7;
-  border-radius: 12rpx;
-}
-
-.pi-rank {
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 12rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22rpx;
-  font-weight: 700;
-  background: #e5e5e5;
-  color: #999999;
-}
-.pi-rank.rank-1 { background: rgba(7, 193, 96, 0.15); color: #07C160; }
-.pi-rank.rank-2 { background: rgba(158, 158, 158, 0.15); color: #666666; }
-.pi-rank.rank-3 { background: rgba(255, 151, 106, 0.15); color: #FF976A; }
-
-.pi-info { flex: 1; display: flex; flex-direction: column; gap: 4rpx; }
-.pi-name { font-size: 28rpx; color: #000000; font-weight: 600; }
-.pi-qty { font-size: 22rpx; color: #999999; }
-
-.pi-revenue { font-size: 30rpx; font-weight: 700; color: #FF976A; }
+/* 热销 */
+.product-row { display: flex; justify-content: space-between; align-items: center; padding: 18rpx 0; border-bottom: 1rpx solid #f1f5f9; }
+.product-row:last-child { border-bottom: none; }
+.pr-left { display: flex; align-items: center; gap: 16rpx; }
+.pr-rank { width: 40rpx; height: 40rpx; border-radius: 10rpx; display: flex; align-items: center; justify-content: center; font-size: 22rpx; font-weight: 700; background: #f1f5f9; color: #94a3b8; }
+.pr-rank.r1 { background: #fef3c7; color: #b45309; }
+.pr-rank.r2 { background: #e2e8f0; color: #64748b; }
+.pr-rank.r3 { background: #fed7aa; color: #9a3412; }
+.pr-name { font-size: 26rpx; color: #1e293b; }
+.pr-right { display: flex; align-items: center; gap: 16rpx; }
+.pr-qty { font-size: 24rpx; color: #94a3b8; }
+.pr-revenue { font-size: 26rpx; font-weight: 600; color: #059669; }
 </style>

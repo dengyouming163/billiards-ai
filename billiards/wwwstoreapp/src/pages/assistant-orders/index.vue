@@ -110,23 +110,23 @@ onMounted(() => loadAll())
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; background: #f7f7f7; padding: 24rpx; }
+.page { min-height: 100vh; background: #fafafa; padding: 24rpx; }
 .date-tabs { display: flex; gap: 12rpx; margin-bottom: 20rpx; }
-.date-tab { padding: 12rpx 28rpx; font-size: 24rpx; font-weight: 500; color: #999999; background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 20rpx; transition: all 0.2s; }
-.date-tab.active { background: #07C160; color: #ffffff; font-weight: 600; border-color: #07C160; }
+.date-tab { padding: 12rpx 28rpx; font-size: 24rpx; font-weight: 500; color: #6b7280; background: #f3f4f6; border-radius: 20rpx; transition: all 0.2s; }
+.date-tab.active { background: #059669; color: #fff; font-weight: 600; }
 .custom-range { display: flex; align-items: center; gap: 16rpx; margin-bottom: 20rpx; }
-.range-picker { padding: 14rpx 24rpx; background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 14rpx; font-size: 24rpx; color: #000000; }
-.range-sep { font-size: 24rpx; color: #999999; }
+.range-picker { padding: 14rpx 24rpx; background: #f3f4f6; border-radius: 14rpx; font-size: 24rpx; color: #374151; }
+.range-sep { font-size: 24rpx; color: #9ca3af; }
 .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16rpx; margin-bottom: 24rpx; }
-.stat-item { background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 16rpx; padding: 28rpx 16rpx; text-align: center; }
-.stat-val { display: block; font-size: 36rpx; font-weight: 700; color: #07C160; margin-bottom: 8rpx; }
-.stat-lbl { font-size: 24rpx; color: #999999; }
-.record-card { background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 16rpx; padding: 24rpx; margin-bottom: 16rpx; }
-.rc-head { display: flex; justify-content: space-between; margin-bottom: 16rpx; padding-bottom: 12rpx; border-bottom: 1rpx solid #e5e5e5; }
-.rc-no { font-size: 28rpx; font-weight: 600; color: #000000; }
-.rc-date { font-size: 24rpx; color: #999999; }
-.rc-row { display: flex; justify-content: space-between; padding: 8rpx 0; font-size: 26rpx; color: #333333; }
-.rc-row.total { border-top: 1rpx solid #e5e5e5; margin-top: 8rpx; padding-top: 14rpx; }
-.emerald { color: #07C160; }
+.stat-item { background: #fff; border-radius: 16rpx; padding: 28rpx 16rpx; text-align: center; box-shadow: 0 2rpx 8rpx rgba(0,0,0,.04); }
+.stat-val { display: block; font-size: 36rpx; font-weight: 700; color: #059669; margin-bottom: 8rpx; }
+.stat-lbl { font-size: 24rpx; color: #9ca3af; }
+.record-card { background: #fff; border-radius: 16rpx; padding: 24rpx; margin-bottom: 16rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,.04); }
+.rc-head { display: flex; justify-content: space-between; margin-bottom: 16rpx; padding-bottom: 12rpx; border-bottom: 1rpx solid #f3f4f6; }
+.rc-no { font-size: 28rpx; font-weight: 600; color: #1f2937; }
+.rc-date { font-size: 24rpx; color: #9ca3af; }
+.rc-row { display: flex; justify-content: space-between; padding: 8rpx 0; font-size: 26rpx; color: #6b7280; }
+.rc-row.total { border-top: 1rpx solid #f3f4f6; margin-top: 8rpx; padding-top: 14rpx; }
+.emerald { color: #059669; }
 .fw { font-weight: 700; font-size: 30rpx; }
 </style>

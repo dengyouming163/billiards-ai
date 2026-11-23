@@ -77,11 +77,11 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .panel {
-  background: #ffffff;
+  background: #fff;
   margin: 12rpx 24rpx;
   border-radius: 14rpx;
   overflow: hidden;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,.06);
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
 }
 
 .panel-header {
@@ -93,12 +93,12 @@ onUnmounted(() => {
 .panel-title {
   font-size: 28rpx;
   font-weight: 600;
-  color: #000000;
+  color: #1f2937;
 }
 
 .arrow {
   font-size: 20rpx;
-  color: #999999;
+  color: #9ca3af;
 }
 
 .panel-body {
@@ -113,24 +113,24 @@ onUnmounted(() => {
 
 .label {
   font-size: 26rpx;
-  color: #999999;
+  color: #6b7280;
 }
 
 .value {
   font-size: 26rpx;
-  color: #333333;
+  color: #374151;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 
   &.price {
-    color: #07C160;
+    color: #ef4444;
     font-weight: 700;
     font-size: 28rpx;
   }
 }
 
 .total {
-  border-top: 1rpx dashed #e5e5e5;
+  border-top: 1rpx dashed #e5e7eb;
   padding-top: 16rpx;
   margin-top: 8rpx;
 }
@@ -143,23 +143,23 @@ onUnmounted(() => {
 }
 
 .bill-label {
-  color: #999999;
+  color: #9ca3af;
 }
 
 .bill-value {
-  color: #333333;
+  color: #374151;
   font-weight: 500;
 }
 
 .text-amber {
-  color: #07C160;
+  color: #d97706;
 }
 
 .text-blue {
-  color: #07C160;
+  color: #2563eb;
 }
 
 .text-rose {
-  color: #ef4444;
+  color: #e11d48;
 }
 </style>

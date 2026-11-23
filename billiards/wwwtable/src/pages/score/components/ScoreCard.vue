@@ -97,28 +97,31 @@ function handleEdit() {
 </script>
 
 <style lang="scss" scoped>
+$gold: #c9a962;
+
 .score-card {
   position: relative;
-  background: #ffffff;
-  border-radius: 48rpx;
+  background: linear-gradient(145deg, rgba(35, 35, 80, 0.98), rgba(25, 25, 55, 0.99));
+  border-radius: 56rpx;
   padding: 48rpx;
-  min-height: 420rpx;
+  min-height: 400rpx;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 2rpx solid rgba(7,193,96,0.08);
+  border: 4rpx solid rgba($gold, 0.15);
   box-shadow: 
-    0 8rpx 32rpx rgba(0, 0, 0, 0.05),
-    0 0 20rpx rgba(7,193,96,0.04);
+    0 16rpx 64rpx rgba(0, 0, 0, 0.4),
+    0 0 40rpx rgba($gold, 0.08),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   
   &:active {
-    transform: scale(0.98);
-    border-color: rgba(7,193,96,0.2);
+    border-color: rgba($gold, 0.3);
     box-shadow: 
-      0 4rpx 16rpx rgba(0, 0, 0, 0.04),
-      0 0 30rpx rgba(7,193,96,0.1);
+      0 8rpx 32rpx rgba(0, 0, 0, 0.3),
+      0 0 20rpx rgba($gold, 0.15),
+      inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
   }
   
   &.span-2 {
@@ -134,7 +137,7 @@ function handleEdit() {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(ellipse at 50% 50%, rgba(7,193,96,0.06) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 50% 50%, rgba($gold, 0.15) 0%, transparent 60%);
     pointer-events: none;
     animation: cardGlow 4s ease-in-out infinite;
   }
@@ -162,17 +165,17 @@ function handleEdit() {
   gap: 20rpx;
   
   .header-icon {
-    width: 96rpx;
-    height: 96rpx;
+    width: 88rpx;
+    height: 88rpx;
     border-radius: 28rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2rpx solid rgba(7,193,96,0.1);
+    border: 2rpx solid rgba(255, 255, 255, 0.15);
     flex-shrink: 0;
     
     .icon-text {
-      font-size: 52rpx;
+      font-size: 48rpx;
     }
   }
   
@@ -180,7 +183,7 @@ function handleEdit() {
     flex: 1;
     font-size: 44rpx;
     font-weight: 700;
-    color: #333333;
+    color: rgba(255, 255, 255, 0.8);
     letter-spacing: 2rpx;
   }
   
@@ -188,14 +191,14 @@ function handleEdit() {
     width: 72rpx;
     height: 72rpx;
     border-radius: 50%;
-    background: rgba(7,193,96,0.06);
+    background: rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2rpx solid rgba(7,193,96,0.1);
+    border: 2rpx solid rgba(255, 255, 255, 0.12);
     
     &:active {
-      background: rgba(7,193,96,0.15);
+      background: rgba($gold, 0.2);
     }
     
     .edit-icon {
@@ -215,20 +218,21 @@ function handleEdit() {
     font-size: 180rpx;
     font-weight: 900;
     line-height: 1;
+    text-shadow: 0 0 60rpx currentColor;
     font-family: 'Courier New', monospace;
     letter-spacing: 8rpx;
   }
   
   .value-unit {
     font-size: 36rpx;
-    color: #999999;
+    color: rgba(255, 255, 255, 0.5);
     font-weight: 600;
   }
 }
 
 .card-actions {
   display: flex;
-  gap: 20rpx;
+  gap: 24rpx;
   
   .action-item {
     flex: 1;
@@ -236,8 +240,8 @@ function handleEdit() {
     align-items: center;
     justify-content: center;
     gap: 16rpx;
-    padding: 28rpx 24rpx;
-    border-radius: 32rpx;
+    padding: 32rpx 24rpx;
+    border-radius: 36rpx;
     transition: all 0.2s;
     
     &:active {
@@ -246,8 +250,8 @@ function handleEdit() {
     }
     
     &.minus {
-      background: rgba(239,68,68,0.06);
-      border: 2rpx solid rgba(239,68,68,0.15);
+      background: linear-gradient(145deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.08));
+      border: 3rpx solid rgba(239, 68, 68, 0.3);
       
       .action-label {
         color: #ef4444;
@@ -255,35 +259,35 @@ function handleEdit() {
     }
     
     &.edit {
-      background: rgba(0,0,0,0.04);
-      border: 2rpx solid rgba(0,0,0,0.06);
+      background: linear-gradient(145deg, rgba(107, 114, 128, 0.2), rgba(107, 114, 128, 0.08));
+      border: 3rpx solid rgba(255, 255, 255, 0.15);
       
       .action-label {
-        color: #666666;
+        color: rgba(255, 255, 255, 0.8);
       }
     }
     
     &.plus {
-      background: rgba(7,193,96,0.06);
-      border: 2rpx solid rgba(7,193,96,0.15);
+      background: linear-gradient(145deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.08));
+      border: 3rpx solid rgba(34, 197, 94, 0.3);
       
       .action-label {
-        color: #07C160;
+        color: #22c55e;
       }
     }
     
     .action-icon {
-      font-size: 48rpx;
+      font-size: 52rpx;
       font-weight: 700;
     }
     
     .action-label {
-      font-size: 36rpx;
+      font-size: 40rpx;
       font-weight: 700;
     }
     .action-label-num {
-      font-size: 64rpx;
-      font-weight: 900;
+      font-size: 70rpx;
+      font-weight: 700;
     }
   }
 }

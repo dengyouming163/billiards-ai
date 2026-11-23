@@ -24,31 +24,27 @@ defineProps<{
 </script>
 
 <style lang="scss" scoped>
-$primary: #07C160;
-$bg: #f7f7f7;
-$card-bg: #ffffff;
-$text-primary: #333333;
-$text-secondary: #999999;
+$gold: #c9a962; $bg: #0f0f16;
 
 .ph-sticky {
-  position: relative;
+  position: relative;  // for ::after absolute positioning
   padding: 28rpx 40rpx;
-  background: $card-bg;
+  background: linear-gradient(180deg, rgba($bg, .98), rgba($bg, .95));
   backdrop-filter: blur(30rpx); -webkit-backdrop-filter: blur(30rpx);
-  border-bottom: 2rpx solid rgba($primary, .08);
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, .04);
+  border-bottom: 2rpx solid rgba($gold, .1);
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, .4);
 
   &::after {
     content: ''; position: absolute; bottom: -2rpx; left: 0; right: 0;
-    height: 2rpx; background: linear-gradient(90deg, transparent, rgba($primary, .2), transparent);
+    height: 2rpx; background: linear-gradient(90deg, transparent, rgba($gold, .3), transparent);
   }
 }
 
 .ph-header { display: flex; justify-content: space-between; align-items: center; }
 .ph-left   { display: flex; align-items: center; gap: 30rpx; }
-.ph-icon   { font-size: 96rpx; }
+.ph-icon   { font-size: 96rpx; filter: drop-shadow(0 4rpx 12rpx rgba($gold, .3)); }
 .ph-text   { display: flex; flex-direction: column; }
-.ph-title  { font-size: 72rpx; font-weight: 800; color: $text-primary; letter-spacing: 2rpx; }
-.ph-subtitle { font-size: 40rpx; color: $text-secondary; margin-top: 6rpx; }
+.ph-title  { font-size: 72rpx; font-weight: 800; color: #fff; letter-spacing: 2rpx; }
+.ph-subtitle { font-size: 40rpx; color: #6b7280; margin-top: 6rpx; }
 .ph-right  { display: flex; align-items: center; gap: 24rpx; }
 </style>

@@ -42,7 +42,6 @@ defineEmits<{
 <style lang="scss" scoped>
 .state-view {
   min-height: 200rpx;
-  background: #f7f7f7;
 }
 .state-loading,
 .state-error,
@@ -51,12 +50,5 @@ defineEmits<{
   justify-content: center;
   align-items: center;
   min-height: 400rpx;
-  background: #f7f7f7;
-}
-
-.state-content {
-  display: flex;
-  flex-direction: column;
-  gap: 24rpx;
 }
 </style>

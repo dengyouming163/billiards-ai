@@ -1,5 +1,6 @@
 <template>
   <view class="page">
+    <Header />
     <view class="page-content">
       <!-- Search -->
       <view class="search-bar">
@@ -129,43 +130,43 @@ async function handleRecharge() {
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; background: #f7f7f7; }
+.page { min-height: 100vh; background: #f2f3f5; }
 .page-content { padding: 20rpx 24rpx calc(env(safe-area-inset-bottom) + 120rpx); }
 
 .search-bar { display: flex; gap: 16rpx; margin-bottom: 24rpx; }
-.search-input { flex: 1; height: 88rpx; background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 20rpx; padding: 0 24rpx; font-size: 28rpx; color: #333333; }
-.search-btn { width: 140rpx; height: 88rpx; background: #07C160; border-radius: 20rpx; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 28rpx; font-weight: 600; }
+.search-input { flex: 1; height: 88rpx; background: #fff; border-radius: 20rpx; padding: 0 24rpx; font-size: 28rpx; }
+.search-btn { width: 140rpx; height: 88rpx; background: #059669; border-radius: 20rpx; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28rpx; font-weight: 600; }
 
 .member-list { display: flex; flex-direction: column; gap: 16rpx; }
-.member-card { display: flex; align-items: center; gap: 20rpx; background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 20rpx; padding: 24rpx; }
-.mem-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: #07C160; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32rpx; font-weight: 700; }
+.member-card { display: flex; align-items: center; gap: 20rpx; background: #fff; border-radius: 20rpx; padding: 24rpx; }
+.mem-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#818cf8); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32rpx; font-weight: 700; }
 .mem-info { flex: 1; }
-.mem-name { font-size: 30rpx; font-weight: 700; color: #000000; display: block; }
-.mem-phone { font-size: 24rpx; color: #999999; }
+.mem-name { font-size: 30rpx; font-weight: 700; color: #0f172a; display: block; }
+.mem-phone { font-size: 24rpx; color: #94a3b8; }
 .mem-right { text-align: right; }
-.mem-balance { font-size: 28rpx; font-weight: 700; color: #07C160; display: block; }
-.mem-level { font-size: 22rpx; color: #999999; }
+.mem-balance { font-size: 28rpx; font-weight: 700; color: #6366f1; display: block; }
+.mem-level { font-size: 22rpx; color: #94a3b8; }
 
-.selected-card { background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 24rpx; padding: 28rpx; }
+.selected-card { background: #fff; border-radius: 24rpx; padding: 28rpx; }
 .sel-header { display: flex; align-items: center; gap: 16rpx; margin-bottom: 28rpx; }
-.sel-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: #07C160; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32rpx; font-weight: 700; }
+.sel-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#818cf8); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32rpx; font-weight: 700; }
 .sel-info { flex: 1; }
-.sel-name { font-size: 30rpx; font-weight: 700; color: #000000; display: block; }
-.sel-phone { font-size: 24rpx; color: #999999; }
-.sel-balance { font-size: 26rpx; font-weight: 700; color: #07C160; }
+.sel-name { font-size: 30rpx; font-weight: 700; color: #0f172a; display: block; }
+.sel-phone { font-size: 24rpx; color: #94a3b8; }
+.sel-balance { font-size: 26rpx; font-weight: 700; color: #6366f1; }
 
-.section-label { font-size: 24rpx; color: #999999; display: block; margin-bottom: 16rpx; }
+.section-label { font-size: 24rpx; color: #94a3b8; display: block; margin-bottom: 16rpx; }
 .quick-section { margin-bottom: 24rpx; }
 .quick-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
-.quick-chip { padding: 16rpx 28rpx; background: #f7f7f7; border-radius: 16rpx; font-size: 28rpx; font-weight: 600; color: #333333; }
-.quick-chip.active { background: #07C160; color: #ffffff; }
+.quick-chip { padding: 16rpx 28rpx; background: #f3f4f6; border-radius: 16rpx; font-size: 28rpx; font-weight: 600; color: #374151; }
+.quick-chip.active { background: #059669; color: #fff; }
 
 .custom-row { margin-bottom: 32rpx; }
-.amount-input { width: 100%; height: 100rpx; background: #f7f7f7; border-radius: 20rpx; padding: 0 24rpx; font-size: 40rpx; font-weight: 700; color: #07C160; text-align: center; }
+.amount-input { width: 100%; height: 100rpx; background: #f9fafb; border-radius: 20rpx; padding: 0 24rpx; font-size: 40rpx; font-weight: 700; color: #059669; text-align: center; }
 
-.btn-confirm { width: 100%; padding: 30rpx; background: #07C160; color: #ffffff; border-radius: 20rpx; font-size: 32rpx; font-weight: 700; border: none; }
+.btn-confirm { width: 100%; padding: 30rpx; background: linear-gradient(135deg,#059669,#10b981); color: #fff; border-radius: 20rpx; font-size: 32rpx; font-weight: 700; border: none; }
 .btn-confirm[disabled] { opacity: .5; }
 
-.operator-hint { text-align: center; font-size: 22rpx; color: #999999; margin-top: 16rpx; }
-.change-link { text-align: center; font-size: 26rpx; color: #07C160; margin-top: 24rpx; }
+.operator-hint { text-align: center; font-size: 22rpx; color: #94a3b8; margin-top: 16rpx; }
+.change-link { text-align: center; font-size: 26rpx; color: #059669; margin-top: 24rpx; }
 </style>

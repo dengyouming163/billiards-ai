@@ -19,7 +19,7 @@
 <style lang="scss">
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #f5f5f5;
 	padding: 24rpx;
 }
 
@@ -45,7 +45,7 @@
 .app-name {
 	font-size: 44rpx;
 	font-weight: 700;
-	color: #000000;
+	color: #333333;
 	margin-bottom: 12rpx;
 }
 
@@ -59,12 +59,11 @@
 	border-radius: 16rpx;
 	padding: 32rpx;
 	width: 100%;
-	border: 1rpx solid #e5e5e5;
 }
 
 .desc-text {
 	font-size: 28rpx;
-	color: #333333;
+	color: #666666;
 	line-height: 1.6;
 }
 </style>

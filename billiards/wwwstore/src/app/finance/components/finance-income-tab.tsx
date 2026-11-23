@@ -91,10 +91,6 @@ export function FinanceIncomeTab() {
     finally { setDetailLoading(false); }
   };
 
-  const handlePresetChange = (preset: string) => {
-    setActivePreset(preset);
-  };
-
   useEffect(() => { loadSummary(); }, [storeId]);
 
   const viewOrderDetail = async (orderId: number, orderNo: string) => {

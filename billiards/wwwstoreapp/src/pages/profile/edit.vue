@@ -5,10 +5,10 @@
 				<view class="form-item avatar-item">
 					<text class="form-label">头像</text>
 					<view class="avatar-upload" @click="handleAvatarUpload">
-						<Icon v-if="!form.avatar" class="avatar-icon" name="user" size="80" />
+						<text v-if="!form.avatar" class="avatar-icon">👤</text>
 						<image v-else :src="form.avatar" class="avatar-img" mode="aspectFill" />
 						<view class="upload-mask">
-							<Icon name="camera" size="24" />
+							<text>📷</text>
 						</view>
 					</view>
 				</view>
@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { getProfile, updateProfile, uploadAvatar, type ProfileData } from '@/api/modules/profile'
-import Icon from '@/components/Icon.vue'
 const originalProfile = ref<ProfileData>({
 	id: '',
 	name: '',
@@ -188,7 +187,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .page {
 	min-height: 100vh;
-	background: #f7f7f7;
+	background: #fafafa;
 }
 
 .page-header {
@@ -197,7 +196,6 @@ onMounted(() => {
 	justify-content: space-between;
 	padding: 24rpx;
 	background: #ffffff;
-	border-bottom: 1rpx solid #e5e5e5;
 	position: sticky;
 	top: 0;
 	z-index: 100;
@@ -216,17 +214,17 @@ onMounted(() => {
 .page-title {
 	font-size: 34rpx;
 	font-weight: 600;
-	color: #000000;
+	color: #09090b;
 }
 
 .save-btn {
 	font-size: 30rpx;
-	color: #999999;
+	color: #a1a1aa;
 	padding: 12rpx 24rpx;
 	border-radius: 24rpx;
 
 	&.active {
-		color: #07C160;
+		color: #059669;
 		font-weight: 600;
 	}
 }
@@ -237,16 +235,14 @@ onMounted(() => {
 
 .form-section {
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	border-radius: 32rpx;
 	padding: 24rpx;
 	margin-bottom: 20rpx;
 }
 
 .album-section {
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	border-radius: 32rpx;
 	padding: 24rpx;
 	margin-bottom: 20rpx;
 }
@@ -256,7 +252,7 @@ onMounted(() => {
 	align-items: center;
 	gap: 20rpx;
 	padding: 24rpx 0;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f4f4f5;
 
 	&:last-child {
 		border-bottom: none;
@@ -270,7 +266,7 @@ onMounted(() => {
 
 .form-label {
 	font-size: 28rpx;
-	color: #999999;
+	color: #666666;
 	width: 120rpx;
 	flex-shrink: 0;
 }
@@ -280,8 +276,8 @@ onMounted(() => {
 	height: 88rpx;
 	font-size: 30rpx;
 	color: #333333;
-	background: #f7f7f7;
-	border-radius: 8rpx;
+	background: #f9fafb;
+	border-radius: 12rpx;
 	padding: 0 20rpx;
 	box-sizing: border-box;
 }
@@ -292,8 +288,8 @@ onMounted(() => {
 	min-height: 160rpx;
 	font-size: 30rpx;
 	color: #333333;
-	background: #f7f7f7;
-	border-radius: 8rpx;
+	background: #f9fafb;
+	border-radius: 12rpx;
 	padding: 20rpx;
 	box-sizing: border-box;
 	line-height: 1.6;
@@ -301,7 +297,7 @@ onMounted(() => {
 
 .form-tip {
 	font-size: 24rpx;
-	color: #999999;
+	color: #a1a1aa;
 	text-align: right;
 	margin-top: 12rpx;
 	display: block;
@@ -311,7 +307,7 @@ onMounted(() => {
 	position: relative;
 	width: 160rpx;
 	height: 160rpx;
-	background: #f7f7f7;
+	background: #f9fafb;
 	border-radius: 80rpx;
 	display: flex;
 	align-items: center;
@@ -322,7 +318,6 @@ onMounted(() => {
 
 .avatar-icon {
 	font-size: 80rpx;
-	color: #999999;
 }
 
 .avatar-img {
@@ -341,13 +336,11 @@ onMounted(() => {
 	align-items: center;
 	justify-content: center;
 	font-size: 24rpx;
-	color: #ffffff;
 }
 
 .info-section {
 	background: #ffffff;
-	border: 1rpx solid #e5e5e5;
-	border-radius: 16rpx;
+	border-radius: 32rpx;
 	padding: 24rpx;
 }
 
@@ -356,7 +349,7 @@ onMounted(() => {
 	align-items: center;
 	justify-content: space-between;
 	padding: 20rpx 0;
-	border-bottom: 1rpx solid #e5e5e5;
+	border-bottom: 1rpx solid #f4f4f5;
 
 	&:last-child {
 		border-bottom: none;
@@ -365,7 +358,7 @@ onMounted(() => {
 
 .info-label {
 	font-size: 28rpx;
-	color: #999999;
+	color: #666666;
 }
 
 .info-value {

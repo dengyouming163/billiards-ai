@@ -284,64 +284,64 @@ async function handleCheckout() {
 
 <style lang="scss" scoped>
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1000; display: flex; flex-direction: column; justify-content: flex-end; }
-.modal-panel { background: #ffffff; border-radius: 36rpx 36rpx 0 0; max-height: 85vh; display: flex; flex-direction: column; border-top: 1rpx solid #e5e5e5; }
-.modal-header { padding: 32rpx 32rpx 24rpx; background: #07C160; position: relative; }
+.modal-panel { background: #f8fafc; border-radius: 36rpx 36rpx 0 0; max-height: 85vh; display: flex; flex-direction: column; }
+.modal-header { padding: 32rpx 32rpx 24rpx; background: linear-gradient(135deg, #059669, #10b981); position: relative; }
 .modal-title { display: block; font-size: 36rpx; font-weight: 800; color: #fff; }
-.modal-sub { display: block; font-size: 24rpx; color: rgba(255,255,255,.8); margin-top: 6rpx; }
-.modal-close { position: absolute; top: 32rpx; right: 32rpx; font-size: 36rpx; color: rgba(255,255,255,.9); padding: 8rpx; }
+.modal-sub { display: block; font-size: 24rpx; color: rgba(255,255,255,.7); margin-top: 6rpx; }
+.modal-close { position: absolute; top: 32rpx; right: 32rpx; font-size: 36rpx; color: rgba(255,255,255,.8); padding: 8rpx; }
 .modal-body { flex: 1; overflow-y: auto; padding: 24rpx; padding-bottom: calc(env(safe-area-inset-bottom) + 32rpx); }
-.center-hint { text-align: center; padding: 120rpx 0; color: #999999; font-size: 28rpx; }
+.center-hint { text-align: center; padding: 120rpx 0; color: #9ca3af; font-size: 28rpx; }
 
-.card { background: #f7f7f7; border-radius: 16rpx; padding: 24rpx; margin-bottom: 20rpx; }
-.card-title { font-size: 28rpx; font-weight: 700; color: #333333; margin-bottom: 18rpx; display: block; }
+.card { background: #fff; border-radius: 28rpx; padding: 28rpx; margin-bottom: 20rpx; box-shadow: 0 2rpx 12rpx rgba(0,0,0,.03); }
+.card-title { font-size: 28rpx; font-weight: 700; color: #1e293b; margin-bottom: 18rpx; display: block; }
 
-.card-amount { text-align: center; padding: 40rpx 28rpx 32rpx; border: 2rpx solid rgba(7, 193, 96, 0.3); }
-.card-label { font-size: 26rpx; color: #999999; margin-bottom: 12rpx; display: block; }
-.card-amount-value { font-size: 68rpx; font-weight: 800; color: #07C160; }
-.card-amount-timer { font-size: 24rpx; color: #999999; margin-top: 12rpx; display: block; }
+.card-amount { text-align: center; padding: 40rpx 28rpx 32rpx; border: 2rpx solid #a7f3d0; }
+.card-label { font-size: 26rpx; color: #64748b; margin-bottom: 12rpx; display: block; }
+.card-amount-value { font-size: 68rpx; font-weight: 800; color: #059669; }
+.card-amount-timer { font-size: 24rpx; color: #94a3b8; margin-top: 12rpx; display: block; }
 .card-amount-timer.timer-warn { color: #ef4444; font-weight: 700; }
-.card-amount-detail { margin-top: 24rpx; padding-top: 20rpx; border-top: 1rpx solid #e5e5e5; }
-.amount-detail-row { display: flex; justify-content: space-between; padding: 6rpx 0; font-size: 24rpx; color: #999999; }
+.card-amount-detail { margin-top: 24rpx; padding-top: 20rpx; border-top: 1rpx solid #e2e8f0; }
+.amount-detail-row { display: flex; justify-content: space-between; padding: 6rpx 0; font-size: 24rpx; color: #64748b; }
 .amount-detail-row.discount { color: #ef4444; }
-.amount-detail-row.rounding { color: #07C160; }
+.amount-detail-row.rounding { color: #f59e0b; }
 
-.card-coupon { background: rgba(7, 193, 96, 0.05); border: 2rpx solid rgba(7, 193, 96, 0.2); }
-.coupon-title { display: block; font-size: 28rpx; font-weight: 700; color: #07C160; }
-.coupon-detail { display: block; font-size: 24rpx; color: #07C160; margin-top: 6rpx; }
+.card-coupon { background: #fffbeb; border: 2rpx solid #fcd34d; }
+.coupon-title { display: block; font-size: 28rpx; font-weight: 700; color: #92400e; }
+.coupon-detail { display: block; font-size: 24rpx; color: #a16207; margin-top: 6rpx; }
 
 .discount-list { display: flex; flex-wrap: wrap; gap: 12rpx; margin-bottom: 20rpx; }
 .discount-chip {
-  padding: 14rpx 24rpx; background: #fff; border: 1rpx solid #e5e5e5; border-radius: 20rpx; font-size: 24rpx; color: #333333;
-  &.active { background: rgba(7, 193, 96, 0.1); color: #07C160; font-weight: 700; box-shadow: 0 0 0 2rpx #07C160 inset; }
+  padding: 14rpx 24rpx; background: #f1f5f9; border-radius: 20rpx; font-size: 24rpx; color: #475569;
+  &.active { background: #ecfdf5; color: #059669; font-weight: 700; box-shadow: 0 0 0 2rpx #059669 inset; }
 }
-.rounding-row { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1rpx solid #e5e5e5; border-radius: 20rpx; padding: 16rpx 20rpx; }
+.rounding-row { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border-radius: 20rpx; padding: 16rpx 20rpx; }
 .rounding-info { display: flex; align-items: center; gap: 12rpx; }
 .rounding-icon { font-size: 32rpx; }
-.rounding-label { font-size: 26rpx; font-weight: 600; color: #333333; display: block; }
-.rounding-amount { font-size: 22rpx; color: #999999; display: block; }
+.rounding-label { font-size: 26rpx; font-weight: 600; color: #1e293b; display: block; }
+.rounding-amount { font-size: 22rpx; color: #94a3b8; display: block; }
 
-.card-balance { border: 1rpx solid #e5e5e5; }
+.card-balance { border: 1rpx solid #e0e7ff; }
 .balance-member-row { display: flex; align-items: center; gap: 16rpx; }
-.balance-avatar { width: 72rpx; height: 72rpx; border-radius: 50%; background: #07C160; display: flex; align-items: center; justify-content: center; font-size: 32rpx; font-weight: 700; color: #fff; flex-shrink: 0; }
+.balance-avatar { width: 72rpx; height: 72rpx; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #818cf8); display: flex; align-items: center; justify-content: center; font-size: 32rpx; font-weight: 700; color: #fff; flex-shrink: 0; }
 .balance-member-info { flex: 1; }
-.balance-member-name { font-size: 28rpx; font-weight: 700; color: #333333; display: block; }
-.balance-member-balance { font-size: 24rpx; color: #07C160; margin-top: 4rpx; display: block; }
+.balance-member-name { font-size: 28rpx; font-weight: 700; color: #1e293b; display: block; }
+.balance-member-balance { font-size: 24rpx; color: #6366f1; margin-top: 4rpx; display: block; }
 .balance-empty { padding: 24rpx 0; text-align: center; }
-.balance-empty-text { font-size: 26rpx; color: #999999; }
-.balance-deduction-card { margin-top: 20rpx; padding: 24rpx; background: rgba(7, 193, 96, 0.08); border-radius: 16rpx; text-align: center; }
-.balance-deduction-label { font-size: 24rpx; color: #07C160; display: block; }
-.balance-deduction-value { font-size: 44rpx; font-weight: 800; color: #07C160; display: block; margin-top: 4rpx; }
-.balance-insufficient { font-size: 24rpx; color: #07C160; margin-top: 12rpx; display: block; }
+.balance-empty-text { font-size: 26rpx; color: #94a3b8; }
+.balance-deduction-card { margin-top: 20rpx; padding: 24rpx; background: #eef2ff; border-radius: 20rpx; text-align: center; }
+.balance-deduction-label { font-size: 24rpx; color: #6366f1; display: block; }
+.balance-deduction-value { font-size: 44rpx; font-weight: 800; color: #4f46e5; display: block; margin-top: 4rpx; }
+.balance-insufficient { font-size: 24rpx; color: #f59e0b; margin-top: 12rpx; display: block; }
 .balance-remain { font-weight: 700; }
 
-.card-cash { border: 2rpx solid #e5e5e5; text-align: center; }
-.cash-amount-label { font-size: 24rpx; color: #999999; margin-bottom: 12rpx; display: block; }
-.cash-amount-fixed { font-size: 52rpx; font-weight: 800; color: #333333; display: block; }
+.card-cash { border: 2rpx solid #e2e8f0; text-align: center; }
+.cash-amount-label { font-size: 24rpx; color: #94a3b8; margin-bottom: 12rpx; display: block; }
+.cash-amount-fixed { font-size: 52rpx; font-weight: 800; color: #1e293b; display: block; }
 
 .btn-checkout {
-  width: 100%; padding: 32rpx; background: #07C160;
-  color: #fff; border-radius: 16rpx; font-size: 32rpx; font-weight: 800; border: none;
-  margin-top: 8rpx;
-  &[disabled] { opacity: 0.5; }
+  width: 100%; padding: 32rpx; background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff; border-radius: 28rpx; font-size: 32rpx; font-weight: 800; border: none;
+  margin-top: 8rpx; box-shadow: 0 8rpx 24rpx rgba(5,150,105,.25);
+  &[disabled] { opacity: 0.5; box-shadow: none; }
 }
 </style>

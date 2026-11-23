@@ -1,5 +1,6 @@
 <template>
   <view class="page">
+    <Header />
     <view class="page-content">
       <view class="date-bar">
         <view v-for="d in dateOptions" :key="d.key" class="date-chip"
@@ -116,34 +117,34 @@ onMounted(() => loadData())
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; background: #f7f7f7; }
+.page { min-height: 100vh; background: #f2f3f5; }
 .page-content { padding: 20rpx 24rpx calc(env(safe-area-inset-bottom) + 120rpx); }
 .date-bar { display: flex; gap: 14rpx; margin-bottom: 20rpx; }
-.date-chip { padding: 14rpx 28rpx; background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 999rpx; font-size: 24rpx; font-weight: 600; color: #999999; }
-.date-chip.active { background: #07C160; border-color: #07C160; color: #ffffff; }
-.summary-card { display: flex; justify-content: space-around; background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 24rpx; padding: 28rpx; margin-bottom: 20rpx; }
+.date-chip { padding: 14rpx 28rpx; background: #f3f4f6; border-radius: 999rpx; font-size: 24rpx; font-weight: 600; color: #64748b; }
+.date-chip.active { background: linear-gradient(135deg,#059669,#10b981); color: #fff; }
+.summary-card { display: flex; justify-content: space-around; background: #fff; border-radius: 24rpx; padding: 28rpx; margin-bottom: 20rpx; }
 .sum-item { text-align: center; }
-.sum-num { font-size: 40rpx; font-weight: 800; color: #333333; display: block; }
-.sum-lbl { font-size: 22rpx; color: #999999; }
+.sum-num { font-size: 40rpx; font-weight: 800; color: #0f172a; display: block; }
+.sum-lbl { font-size: 22rpx; color: #94a3b8; }
 
 .day-list { display: flex; flex-direction: column; gap: 16rpx; }
-.day-card { background: #ffffff; border: 1rpx solid #e5e5e5; border-radius: 20rpx; padding: 24rpx; }
+.day-card { background: #fff; border-radius: 20rpx; padding: 24rpx; }
 .day-header { display: flex; justify-content: space-between; align-items: center; }
-.day-date { font-size: 30rpx; font-weight: 700; color: #333333; }
-.day-weekday { font-size: 22rpx; color: #999999; margin-left: 12rpx; }
+.day-date { font-size: 30rpx; font-weight: 700; color: #0f172a; }
+.day-weekday { font-size: 22rpx; color: #94a3b8; margin-left: 12rpx; }
 .day-right { text-align: right; }
-.day-amount { font-size: 30rpx; font-weight: 800; color: #07C160; display: block; }
-.day-meta { font-size: 22rpx; color: #999999; }
+.day-amount { font-size: 30rpx; font-weight: 800; color: #059669; display: block; }
+.day-meta { font-size: 22rpx; color: #94a3b8; }
 
-.day-detail { margin-top: 20rpx; padding-top: 20rpx; border-top: 1rpx solid #e5e5e5; }
-.detail-row { display: flex; justify-content: space-between; align-items: center; padding: 14rpx 0; border-bottom: 1rpx solid #e5e5e5; }
+.day-detail { margin-top: 20rpx; padding-top: 20rpx; border-top: 1rpx solid #f1f5f9; }
+.detail-row { display: flex; justify-content: space-between; align-items: center; padding: 14rpx 0; border-bottom: 1rpx solid #f9fafb; }
 .detail-row:last-child { border-bottom: none; }
 .detail-left { flex: 1; }
-.detail-member { font-size: 26rpx; color: #333333; display: block; }
-.detail-op { font-size: 22rpx; color: #999999; }
+.detail-member { font-size: 26rpx; color: #374151; display: block; }
+.detail-op { font-size: 22rpx; color: #9ca3af; }
 .detail-right { text-align: right; }
-.detail-amount { font-size: 28rpx; font-weight: 700; color: #07C160; display: block; }
+.detail-amount { font-size: 28rpx; font-weight: 700; color: #059669; display: block; }
 .detail-meta-row { display: flex; gap: 12rpx; justify-content: flex-end; }
-.detail-method { font-size: 22rpx; color: #999999; }
-.detail-time { font-size: 22rpx; color: #999999; }
+.detail-method { font-size: 22rpx; color: #94a3b8; }
+.detail-time { font-size: 22rpx; color: #94a3b8; }
 </style>

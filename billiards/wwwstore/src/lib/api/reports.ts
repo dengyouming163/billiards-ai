@@ -189,6 +189,10 @@ export interface OperationOverview {
   occupancy_rate: number
   turnover_rate: number
   table_utilization: number
+  product_sales_count?: number
+  table_duration_minutes?: number
+  assistant_duration_minutes?: number
+  outwork_duration_minutes?: number
 }
 
 export async function fetchRevenueSummary(params: { start_date: string; end_date: string }) {

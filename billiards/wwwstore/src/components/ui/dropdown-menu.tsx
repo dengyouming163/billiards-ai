@@ -90,7 +90,7 @@ const DropdownMenuItem = React.forwardRef<
       'relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-2 text-sm text-slate-700',
       'transition-colors duration-150',
       'outline-none',
-      'data-[highlighted]:bg-[#07C160]/10 data-[highlighted]:text-[#07C160]',
+      'data-[highlighted]:bg-emerald-50 data-[highlighted]:text-emerald-700',
       'hover:bg-slate-50 hover:text-slate-900',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       inset && 'pl-8',
@@ -120,7 +120,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className="h-4 w-4 text-[#07C160]" />
+        <Check className="h-4 w-4 text-emerald-600" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -145,7 +145,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   >
     <span className="absolute left-2">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Circle className="h-2 w-2 fill-[#07C160] text-[#07C160]" />
+        <Circle className="h-2 w-2 fill-emerald-600 text-emerald-600" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}

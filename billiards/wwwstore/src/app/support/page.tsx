@@ -38,7 +38,7 @@ export default function SupportPage() {
       />
 
       {/* Tab Bar */}
-      <div className="flex gap-2 p-2 bg-[#f7f7f7] backdrop-blur-sm rounded-xl w-fit">
+      <div className="flex gap-2 p-2 bg-slate-100/80 backdrop-blur-sm rounded-xl w-fit">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.key;
@@ -46,10 +46,10 @@ export default function SupportPage() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-lg shadow-[#07C160]/25"
-                  : "text-[#999999] hover:text-[#333333] hover:bg-white"
+                  ? "bg-white shadow text-slate-800"
+                  : "text-slate-500 hover:text-slate-700"
               }`}
             >
               <Icon className="w-4 h-4" />

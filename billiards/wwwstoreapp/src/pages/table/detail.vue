@@ -8,7 +8,7 @@
         </view>
         <view class="log-entry" @click="goLog">
           <text class="log-text">操作日志</text>
-          <text class="log-arrow">›</text>
+          <text class="log-arrow">→</text>
         </view>
       </view>
 
@@ -16,14 +16,14 @@
       <view class="fee-card">
         <view class="fee-card-header">
           <text class="fee-card-label">实时费用</text>
-          <view class="fee-card-timer"><text class="timer-emoji">⏱</text>{{ orderStatus === 'paused' ? '已暂停' : displayTime }}</view>
+          <text class="fee-card-timer">⏱ {{ orderStatus === 'paused' ? '已暂停' : displayTime }}</text>
         </view>
         <text class="fee-card-amount">¥{{ displayFee }}</text>
         <text class="fee-card-breakdown">
           台费¥{{ tableFee.toFixed(2) }} + 商品¥{{ productFee.toFixed(2) }} + 助教¥{{ assistantFee.toFixed(2) }}{{ chargingFee > 0 ? ' + 充电¥' + chargingFee.toFixed(2) : '' }}
         </text>
         <view class="fee-card-tags">
-          <view v-if="orderStatus === 'paused'" class="fee-tag tag-paused"><text class="tag-emoji">⏸</text>暂停 · {{ pausedMinutes }}分钟</view>
+          <text v-if="orderStatus === 'paused'" class="fee-tag tag-paused">⏸ 暂停 · {{ pausedMinutes }}分钟</text>
           <text v-if="coefficient !== 1.0" class="fee-tag" :class="coefficient > 1 ? 'tag-warn' : 'tag-cool'">{{ periodLabel }}</text>
           <text v-if="hasDiscount" class="fee-tag tag-discount">会员{{ (discountRate / 10).toFixed(1) }}折</text>
           <text v-if="hasPrepaid" class="fee-tag tag-prepaid">预付{{ prepaidHours }}h</text>
@@ -114,7 +114,7 @@
       <view class="member-card" @click="handleMemberClick">
         <view class="member-left">
           <view class="member-icon">
-            <text class="member-emoji">👤</text>
+            <text>👤</text>
           </view>
           <view class="member-info">
             <text class="member-title">会员</text>
@@ -125,7 +125,7 @@
         </view>
         <view class="member-right">
           <text class="member-action">{{ bill?.member_info ? '更换' : '绑定' }}</text>
-          <text class="action-arrow">›</text>
+          <text class="action-arrow">→</text>
         </view>
       </view>
     </view>
@@ -204,7 +204,6 @@ import AssistantSelector from './components/AssistantSelector.vue'
 import AssistantOvertimeModal from './components/AssistantOvertimeModal.vue'
 import CheckoutModal from './components/CheckoutModal.vue'
 import TransferMergeModal from './components/TransferMergeModal.vue'
-''
 import { getTimePeriodLabel, getCurrentCoefficient } from '@/utils/billing'
 import { formatDateTimeFixed, parseDateLike } from '@/utils/date'
 import {
@@ -747,7 +746,7 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .detail-page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f2f3f5;
   display: flex;
   flex-direction: column;
 }
@@ -755,9 +754,10 @@ onUnmounted(() => {
 .status-card {
   margin: 28rpx 24rpx 0;
   padding: 34rpx 30rpx;
-  background: #ffffff;
+  background: linear-gradient(180deg, rgba(255,255,255,.95) 0%, rgba(255,255,255,.88) 100%);
   border-radius: 34rpx;
-  box-shadow: 0 12rpx 36rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+  border: 1rpx solid rgba(255,255,255,.78);
 }
 
 .status-header {
@@ -776,35 +776,36 @@ onUnmounted(() => {
     width: 12rpx;
     height: 12rpx;
     border-radius: 50%;
-    background: #999999;
+    background: #d1d5db;
   }
 
   &.in_progress .status-dot {
-    background: #07C160;
-    box-shadow: 0 0 8rpx rgba(7, 193, 96, 0.4);
+    background: #22c55e;
+    box-shadow: 0 0 8rpx rgba(34, 197, 94, 0.4);
   }
 
   &.paused .status-dot {
-    background: #FF9500;
-    box-shadow: 0 0 8rpx rgba(255, 149, 0, 0.4);
+    background: #f59e0b;
+    box-shadow: 0 0 8rpx rgba(245, 158, 11, 0.4);
   }
 
   &.pending .status-dot {
-    background: #FF9500;
-    box-shadow: 0 0 8rpx rgba(255, 149, 0, 0.4);
+    background: #f59e0b;
+    box-shadow: 0 0 8rpx rgba(245, 158, 11, 0.4);
   }
 
   &.cancelled .status-dot {
-    background: #FF3B30;
+    background: #ef4444;
   }
 }
 
 .status-label {
   font-size: 26rpx;
   font-weight: 700;
-  color: #000000;
+  color: #374151;
 }
 
+/* 暂停横幅 */
 .pause-banner {
   display: flex;
   align-items: center;
@@ -812,9 +813,9 @@ onUnmounted(() => {
   gap: 12rpx;
   padding: 20rpx;
   margin-bottom: 18rpx;
-  background: rgba(255, 149, 0, 0.08);
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
   border-radius: 20rpx;
-  border: 2rpx solid rgba(255, 149, 0, 0.2);
+  border: 2rpx solid #fcd34d;
 }
 
 .pause-banner-icon {
@@ -824,7 +825,7 @@ onUnmounted(() => {
 .pause-banner-text {
   font-size: 28rpx;
   font-weight: 700;
-  color: #FF9500;
+  color: #92400e;
 }
 
 .log-entry {
@@ -833,18 +834,17 @@ onUnmounted(() => {
   gap: 6rpx;
   padding: 12rpx 18rpx;
   border-radius: 999rpx;
-  background: #f7f7f7;
+  background: #f3f6f5;
 }
 
 .log-text {
   font-size: 24rpx;
-  color: #333333;
+  color: #6b7280;
 }
 
 .log-arrow {
-  font-size: 28rpx;
-  color: #999999;
-  font-weight: 700;
+  font-size: 24rpx;
+  color: #9ca3af;
 }
 
 .meta-row {
@@ -854,7 +854,7 @@ onUnmounted(() => {
   gap: 36rpx;
   padding-top: 20rpx;
   margin-top: 8rpx;
-  border-top: 1rpx solid #e5e5e5;
+  border-top: 1rpx solid #edf2f7;
 }
 
 .meta-chip {
@@ -866,19 +866,19 @@ onUnmounted(() => {
 
 .meta-label {
   font-size: 22rpx;
-  color: #999999;
+  color: #94a3b8;
 }
 
 .meta-value {
   font-size: 26rpx;
-  color: #000000;
+  color: #334155;
   font-weight: 700;
 }
 
 .meta-divider {
   width: 1rpx;
   height: 40rpx;
-  background: #e5e5e5;
+  background: #e5e7eb;
 }
 
 .detail-body {
@@ -892,9 +892,9 @@ onUnmounted(() => {
   align-items: center;
   padding: 32rpx 30rpx;
   margin: 0 24rpx;
-  background: #ffffff;
+  background: rgba(255,255,255,.95);
   border-radius: 34rpx;
-  box-shadow: 0 12rpx 36rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.05);
 }
 
 .member-left {
@@ -907,15 +907,11 @@ onUnmounted(() => {
   width: 72rpx;
   height: 72rpx;
   border-radius: 24rpx;
-  background: rgba(7, 193, 96, 0.1);
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.member-emoji {
-  font-size: 36rpx;
-  line-height: 1;
+  font-size: 32rpx;
 }
 
 .member-info {
@@ -926,18 +922,18 @@ onUnmounted(() => {
 
 .member-title {
   font-size: 24rpx;
-  color: #999999;
+  color: #94a3b8;
 }
 
 .member-bound {
   font-size: 28rpx;
-  color: #07C160;
+  color: #059669;
   font-weight: 600;
 }
 
 .member-unbound {
   font-size: 28rpx;
-  color: #999999;
+  color: #d1d5db;
 }
 
 .member-right {
@@ -948,13 +944,13 @@ onUnmounted(() => {
 
 .member-action {
   font-size: 26rpx;
-  color: #07C160;
+  color: #059669;
   font-weight: 700;
 }
 
 .action-arrow {
   font-size: 26rpx;
-  color: #999999;
+  color: #9ca3af;
 }
 
 .overlay {
@@ -965,13 +961,13 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  backdrop-filter: blur(4rpx);
 }
 
 .checkout-popup {
-  background: #ffffff;
+  background: #fff;
   border-radius: 36rpx 36rpx 0 0;
   padding: 32rpx 28rpx;
-  border-top: 1rpx solid #e5e5e5;
 }
 
 .popup-header {
@@ -984,12 +980,12 @@ onUnmounted(() => {
 .popup-title {
   font-size: 32rpx;
   font-weight: 700;
-  color: #000000;
+  color: #111827;
 }
 
 .popup-close {
   font-size: 32rpx;
-  color: #999999;
+  color: #9ca3af;
   padding: 8rpx;
   width: 48rpx;
   height: 48rpx;
@@ -1006,10 +1002,10 @@ onUnmounted(() => {
   font-size: 30rpx;
   text-align: center;
   margin-bottom: 28rpx;
-  color: #333333;
+  color: #374151;
 
   .price {
-    color: #07C160;
+    color: #dc2626;
     font-weight: 700;
     font-size: 44rpx;
   }
@@ -1023,35 +1019,35 @@ onUnmounted(() => {
 }
 
 .pay-input-row { display: flex; align-items: center; gap: 16rpx; margin-bottom: 16rpx; }
-.pay-input-label { font-size: 26rpx; color: #999999; flex-shrink: 0; }
-.pay-input { flex: 1; height: 80rpx; border: 2rpx solid #e5e5e5; border-radius: 18rpx; padding: 0 20rpx; font-size: 28rpx; background: #f7f7f7; color: #000000; }
-.change-row { display: flex; justify-content: space-between; padding: 20rpx; background: rgba(7, 193, 96, 0.08); border-radius: 18rpx; margin-bottom: 16rpx; }
-.change-label { font-size: 26rpx; color: #07C160; }
-.change-value { font-size: 32rpx; font-weight: 700; color: #07C160; }
+.pay-input-label { font-size: 26rpx; color: #6b7280; flex-shrink: 0; }
+.pay-input { flex: 1; height: 80rpx; border: 2rpx solid #e5e7eb; border-radius: 18rpx; padding: 0 20rpx; font-size: 28rpx; background: #fff; }
+.change-row { display: flex; justify-content: space-between; padding: 20rpx; background: #f0fdf4; border-radius: 18rpx; margin-bottom: 16rpx; }
+.change-label { font-size: 26rpx; color: #059669; }
+.change-value { font-size: 32rpx; font-weight: 700; color: #059669; }
 .pay-method {
   flex: 1;
   min-width: 42%;
   padding: 28rpx 16rpx;
   text-align: center;
-  background: #f7f7f7;
+  background: #f3f4f6;
   border-radius: 20rpx;
   font-size: 26rpx;
-  color: #333333;
+  color: #374151;
   transition: all 0.15s ease;
 
   &.active {
-    background: rgba(7, 193, 96, 0.08);
-    color: #07C160;
+    background: #ecfdf5;
+    color: #059669;
     font-weight: 600;
-    box-shadow: 0 0 0 2rpx #07C160 inset;
+    box-shadow: 0 0 0 2rpx #059669 inset;
   }
 }
 
 .btn-primary {
   width: 100%;
   padding: 30rpx;
-  background: #07C160;
-  color: #ffffff;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
   border-radius: 22rpx;
   font-size: 30rpx;
   font-weight: 700;
@@ -1063,33 +1059,35 @@ onUnmounted(() => {
 }
 
 .fee-tag { font-size: 20rpx; padding: 4rpx 16rpx; border-radius: 20rpx; font-weight: 600; }
-.tag-warn { background: rgba(255, 149, 0, 0.1); color: #FF9500; }
-.tag-cool { background: rgba(59, 130, 246, 0.1); color: #3B82F6; }
-.tag-discount { background: rgba(236, 72, 153, 0.1); color: #EC4899; }
-.tag-prepaid { background: rgba(139, 92, 246, 0.1); color: #8B5CF6; }
-.tag-paused { background: rgba(255, 149, 0, 0.1); color: #FF9500; }
+.tag-warn { background: #fef3c7; color: #92400e; }
+.tag-cool { background: #dbeafe; color: #1e40af; }
+.tag-discount { background: #fce7f3; color: #9d174d; }
+.tag-prepaid { background: #e0e7ff; color: #3730a3; }
+.tag-paused { background: #fef3c7; color: #92400e; }
 
+/* 实时费用卡片 */
 .fee-card {
-  background: #ffffff;
+  background: linear-gradient(135deg, #059669, #10b981);
   border-radius: 30rpx;
   padding: 36rpx 32rpx;
   margin: 18rpx 0;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+  box-shadow: 0 16rpx 34rpx rgba(5,150,105,.22);
   transition: all 0.3s ease;
 }
 .fee-card--paused {
-  background: #ffffff;
+  background: linear-gradient(135deg, #92400e, #b45309);
+  box-shadow: 0 16rpx 34rpx rgba(146,64,14,.25);
 }
 
 .fee-card-paused-badge {
   text-align: center;
   margin-bottom: 18rpx;
   padding: 10rpx 0;
-  background: rgba(255, 149, 0, 0.08);
+  background: rgba(255,255,255,.15);
   border-radius: 16rpx;
   font-size: 24rpx;
   font-weight: 600;
-  color: #FF9500;
+  color: #ffedd5;
 }
 
 .fee-card-header {
@@ -1099,73 +1097,74 @@ onUnmounted(() => {
   margin-bottom: 18rpx;
 }
 
-.fee-card-label { font-size: 24rpx; color: #999999; }
-.fee-card-timer { font-size: 24rpx; color: #333333; display: flex; align-items: center; }
-.timer-emoji { margin-right: 8rpx; }
-.tag-emoji { margin-right: 6rpx; }
+.fee-card-label { font-size: 24rpx; color: rgba(255,255,255,.8); }
+.fee-card-timer { font-size: 24rpx; color: rgba(255,255,255,.9); }
 
 .fee-card-amount {
   display: block;
   font-size: 68rpx;
   font-weight: 800;
-  color: #07C160;
+  color: #fff;
   margin-bottom: 12rpx;
 }
 
 .fee-card-breakdown {
   display: block;
   font-size: 22rpx;
-  color: #999999;
+  color: rgba(255,255,255,.75);
   margin-bottom: 16rpx;
 }
 
 .fee-card-tags { display: flex; gap: 12rpx; flex-wrap: wrap; }
 
-.fee-paid-row { display: flex; justify-content: space-between; align-items: center; padding: 14rpx 0; margin-top: 12rpx; border-top: 1rpx solid #e5e5e5; }
-.fee-paid-label { font-size: 24rpx; color: #999999; }
-.fee-paid-val { font-size: 28rpx; font-weight: 700; color: #07C160; }
-.fee-payable-row { display: flex; justify-content: space-between; align-items: center; margin-top: 6rpx; padding: 18rpx 20rpx; background: rgba(7, 193, 96, 0.08); border-radius: 16rpx; }
-.fee-payable-label { font-size: 26rpx; color: #07C160; font-weight: 600; }
-.fee-payable-val { font-size: 36rpx; font-weight: 800; color: #07C160; }
+/* 账单汇总 */
+.fee-paid-row { display: flex; justify-content: space-between; align-items: center; padding: 14rpx 0; margin-top: 12rpx; border-top: 1rpx solid rgba(0,0,0,.06); }
+.fee-paid-label { font-size: 24rpx; color: #059669; }
+.fee-paid-val { font-size: 28rpx; font-weight: 700; color: #059669; }
+.fee-payable-row { display: flex; justify-content: space-between; align-items: center; margin-top: 6rpx; padding: 18rpx 20rpx; background: linear-gradient(135deg, #059669, #10b981); border-radius: 16rpx; }
+.fee-payable-label { font-size: 26rpx; color: rgba(255,255,255,.85); font-weight: 600; }
+.fee-payable-val { font-size: 36rpx; font-weight: 800; color: #fff; }
 
+/* 台费明细 */
 .section-card {
   margin: 0 24rpx 18rpx;
   padding: 34rpx 30rpx;
-  background: #ffffff;
+  background: rgba(255,255,255,.95);
   border-radius: 34rpx;
-  box-shadow: 0 12rpx 36rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12rpx 36rpx rgba(15,23,42,.05);
 }
 
-.section-title { font-size: 32rpx; font-weight: 800; color: #000000; margin-bottom: 24rpx; }
+.section-title { font-size: 32rpx; font-weight: 800; color: #111827; margin-bottom: 24rpx; }
 
 .fee-detail-list { }
 
-.fd-row { display: flex; justify-content: space-between; padding: 18rpx 0; border-bottom: 1rpx solid #e5e5e5; }
+.fd-row { display: flex; justify-content: space-between; padding: 18rpx 0; border-bottom: 1rpx solid #f3f4f6; }
 .fd-row:last-child { border-bottom: none; }
-.fd-row--total { border-top: 1rpx solid #e5e5e5; margin-top: 10rpx; padding-top: 20rpx; }
+.fd-row--total { border-top: 1rpx solid #e5e7eb; margin-top: 10rpx; padding-top: 20rpx; }
 
-.fd-label { font-size: 26rpx; color: #999999; }
-.fd-value { font-size: 26rpx; color: #000000; font-weight: 600; }
+.fd-label { font-size: 26rpx; color: #6b7280; }
+.fd-value { font-size: 26rpx; color: #374151; font-weight: 600; }
 
-.emerald { color: #07C160; }
-.amber { color: #FF9500; }
-.blue { color: #3B82F6; }
-.rose { color: #FF3B30; }
+.emerald { color: #059669; }
+.amber { color: #d97706; }
+.blue { color: #2563eb; }
+.rose { color: #e11d48; }
 .fw-bold { font-weight: 700; }
 
+/* 固定预付支付弹窗 */
 .buyout-pay-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999; display: flex; align-items: flex-end; }
-.buyout-pay-modal { width: 100%; background: #ffffff; border-radius: 32rpx 32rpx 0 0; padding: 40rpx 32rpx 48rpx; }
+.buyout-pay-modal { width: 100%; background: #fff; border-radius: 32rpx 32rpx 0 0; padding: 40rpx 32rpx 48rpx; }
 .bpm-header { display: flex; justify-content: center; align-items: center; margin-bottom: 32rpx; position: relative; }
-.bpm-title { font-size: 34rpx; font-weight: 700; color: #000000; }
-.bpm-close { position: absolute; right: 0; font-size: 36rpx; color: #999999; padding: 8rpx; }
+.bpm-title { font-size: 34rpx; font-weight: 700; color: #1e293b; }
+.bpm-close { position: absolute; right: 0; font-size: 36rpx; color: #94a3b8; padding: 8rpx; }
 .bpm-body { text-align: center; margin-bottom: 32rpx; }
 .bpm-info { margin-bottom: 16rpx; }
-.bpm-name { font-size: 30rpx; font-weight: 600; color: #000000; display: block; }
-.bpm-detail { font-size: 24rpx; color: #999999; margin-top: 8rpx; display: block; }
-.bpm-amount { font-size: 64rpx; font-weight: 800; color: #07C160; margin-bottom: 24rpx; }
-.bpm-pay-label { display: inline-block; font-size: 24rpx; color: #999999; background: #f7f7f7; padding: 12rpx 32rpx; border-radius: 24rpx; }
+.bpm-name { font-size: 30rpx; font-weight: 600; color: #1e293b; display: block; }
+.bpm-detail { font-size: 24rpx; color: #94a3b8; margin-top: 8rpx; display: block; }
+.bpm-amount { font-size: 64rpx; font-weight: 800; color: #059669; margin-bottom: 24rpx; }
+.bpm-pay-label { display: inline-block; font-size: 24rpx; color: #64748b; background: #f8fafc; padding: 12rpx 32rpx; border-radius: 24rpx; }
 .bpm-footer { display: flex; gap: 20rpx; }
-.bpm-btn-cancel { flex: 1; padding: 28rpx; border-radius: 36rpx; background: #f7f7f7; color: #999999; font-size: 28rpx; text-align: center; border: none; }
-.bpm-btn-pay { flex: 2; padding: 28rpx; border-radius: 36rpx; background: #07C160; color: #ffffff; font-size: 30rpx; font-weight: 700; text-align: center; border: none; }
+.bpm-btn-cancel { flex: 1; padding: 28rpx; border-radius: 36rpx; background: #f1f5f9; color: #64748b; font-size: 28rpx; text-align: center; border: none; }
+.bpm-btn-pay { flex: 2; padding: 28rpx; border-radius: 36rpx; background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-size: 30rpx; font-weight: 700; text-align: center; border: none; }
 .bpm-btn-pay[disabled] { opacity: .5; }
 </style>

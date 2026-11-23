@@ -104,56 +104,52 @@ function TableCard({ table, isSelected, onClick, onContextMenu }: TableCardProps
       onContextMenu={handleContextMenu}
       className={`table-card group relative overflow-hidden flex flex-col justify-start aspect-square ${
         isSelected 
-          ? 'ring-3 ring-[#07C160] shadow-[0_10px_40px_rgba(7,193,96,0.35)] scale-[1.03]' 
-          : 'hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] hover:scale-[1.02]'
-      } w-full text-left bg-white rounded-2xl border-2 border-[#e5e5e5] shadow-[0_4px_16px_rgba(0,0,0,0.06)]`}
+          ? 'ring-2 ring-emerald-400 shadow-xl scale-[1.02]' 
+          : 'hover:shadow-lg hover:scale-[1.01]'
+      } w-full text-left`}
     >
-      {/* 背景渐变 - 加深 */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${statusConfig.bgClass} opacity-90`} />
+      {/* 背景渐变 */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${statusConfig.bgClass} opacity-80`} />
       
-      {/* 顶部装饰条 - 加宽加深 */}
-      <div className={`absolute top-0 left-0 right-0 h-[clamp(4px,4%,10px)] bg-gradient-to-r ${statusConfig.borderClass.replace('border', 'from')} ${statusConfig.borderClass.replace('border', 'to')} rounded-t-2xl shadow-[0_2px_8px_currentColor/30]`} />
-
-      {/* 侧边发光效果 */}
-      <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-gradient-to-b ${statusConfig.borderClass.replace('border', 'from')} opacity-60 rounded-l-2xl`} />
-      <div className={`absolute right-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-gradient-to-b ${statusConfig.borderClass.replace('border', 'from')} opacity-40 rounded-r-2xl`} />
+      {/* 顶部装饰条 */}
+      <div className={`h-[clamp(2px,2%,6px)] bg-gradient-to-r ${statusConfig.borderClass.replace('border', 'from')}`} />
 
       {/* 内容区域 — 内间距随卡片自适应 */}
-      <div className="relative p-[clamp(4px,5%,10px)] flex flex-col justify-start flex-1 overflow-hidden min-h-0">
+      <div className="relative p-[clamp(2px,4%,8px)] flex flex-col justify-start flex-1 overflow-hidden min-h-0">
         {/* 台桌名称 — 单独一行 */}
-        <div className="mb-[clamp(2px,2%,6px)] flex-shrink-0">
-          <span className={`text-[clamp(15px,9%,18px)] font-extrabold ${statusConfig.textClass} truncate block drop-shadow-sm`}>{table.name}</span>
+        <div className="mb-[clamp(1px,1.5%,4px)] flex-shrink-0">
+          <span className={`text-[clamp(14px,8.5%,17px)] font-bold ${statusConfig.textClass} truncate block`}>{table.name}</span>
         </div>
 
         {/* Content */}
         {table.status === 'occupied' && table.currentSession ? (
-          <div className="space-y-[clamp(1px,1.5%,4px)] overflow-hidden min-h-0">
-            <div className="flex items-center gap-[clamp(2px,2%,5px)] text-[clamp(11px,6.5%,15px)] text-slate-800 whitespace-nowrap min-w-0">
-              <Clock className="w-[clamp(12px,7%,15px)] h-[clamp(12px,7%,15px)] text-emerald-600 shrink-0" />
-              <span className="font-semibold truncate">{elapsedTime}</span>
+          <div className="space-y-[clamp(0px,1%,3px)] overflow-hidden min-h-0">
+            <div className="flex items-center gap-[clamp(1px,2%,4px)] text-[clamp(10px,6%,14px)] text-slate-700 whitespace-nowrap min-w-0">
+              <Clock className="w-[clamp(11px,7%,14px)] h-[clamp(11px,7%,14px)] text-emerald-600 shrink-0" />
+              <span className="font-medium truncate">{elapsedTime}</span>
             </div>
             {table.currentSession.assistantName && (
-              <div className="flex items-center gap-[clamp(2px,2%,5px)] text-[clamp(11px,6.5%,15px)] text-emerald-800 whitespace-nowrap min-w-0">
-                <UserCog className="w-[clamp(12px,7%,15px)] h-[clamp(12px,7%,15px)] shrink-0" />
-                <span className="font-semibold truncate">{table.currentSession.assistantName}</span>
+              <div className="flex items-center gap-[clamp(1px,2%,4px)] text-[clamp(10px,6%,14px)] text-emerald-700 whitespace-nowrap min-w-0">
+                <UserCog className="w-[clamp(11px,7%,14px)] h-[clamp(11px,7%,14px)] shrink-0" />
+                <span className="font-medium truncate">{table.currentSession.assistantName}</span>
               </div>
             )}
             {orderCount > 0 && (
-              <div className="flex items-center gap-[clamp(2px,2%,5px)] text-[clamp(11px,6.5%,15px)] text-orange-700 whitespace-nowrap min-w-0">
-                <Sparkles className="w-[clamp(12px,7%,15px)] h-[clamp(12px,7%,15px)] shrink-0" />
-                <span className="font-semibold truncate">商品{orderCount}件 ¥{orderTotal}</span>
+              <div className="flex items-center gap-[clamp(1px,2%,4px)] text-[clamp(10px,6%,14px)] text-orange-600 whitespace-nowrap min-w-0">
+                <Sparkles className="w-[clamp(11px,7%,14px)] h-[clamp(11px,7%,14px)] shrink-0" />
+                <span className="truncate">商品{orderCount}件 ¥{orderTotal}</span>
               </div>
             )}
-            <div className="pt-[clamp(2px,2%,5px)] mt-[clamp(1px,1.5%,4px)] border-t-2 border-slate-200/40">
-              <div className="flex items-baseline gap-[clamp(1px,1%,4px)] whitespace-nowrap">
-                <span className="text-[clamp(14px,10%,22px)] font-extrabold bg-gradient-to-r from-emerald-700 to-teal-700 bg-clip-text text-transparent truncate">
+            <div className="pt-[clamp(1px,2%,4px)] mt-[clamp(0px,1%,3px)] border-t border-slate-200/30">
+              <div className="flex items-baseline gap-[clamp(0px,1%,3px)] whitespace-nowrap">
+                <span className="text-[clamp(13px,9%,20px)] font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent truncate">
                   ¥{currentFee + orderTotal}
                 </span>
-                <span className="text-[clamp(9px,4.5%,11px)] text-slate-500 shrink-0">消费</span>
+                <span className="text-[clamp(8px,4%,10px)] text-slate-400 shrink-0">消费</span>
               </div>
               {coefficient !== 1.0 && (
-                <div className="mt-[clamp(1px,1.5%,4px)]">
-                  <span className={`text-[clamp(9px,4.5%,11px)] px-1.5 py-0.5 rounded-full whitespace-nowrap font-medium ${coefficient > 1 ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}`}>
+                <div className="mt-[clamp(0px,1%,3px)]">
+                  <span className={`text-[clamp(8px,4%,10px)] px-1 py-0.5 rounded whitespace-nowrap ${coefficient > 1 ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
                     {getTimePeriodLabel()}
                   </span>
                 </div>
@@ -161,27 +157,26 @@ function TableCard({ table, isSelected, onClick, onContextMenu }: TableCardProps
             </div>
           </div>
         ) : (
-          <span className="text-[clamp(12px,7.5%,16px)] text-slate-600 whitespace-nowrap font-medium">¥{table.hourlyRate}/小时</span>
+          <span className="text-[clamp(11px,7%,15px)] text-slate-500 whitespace-nowrap">¥{table.hourlyRate}/小时</span>
         )}
       </div>
 
       {/* 台桌状态 — 放在最后一行 */}
-      <div className="relative px-[clamp(4px,5%,10px)] pb-[clamp(4px,4%,8px)] mt-auto pt-[clamp(1px,1%,3px)] flex-shrink-0">
-        <span className={`inline-flex items-center gap-1.5 px-[clamp(3px,4%,8px)] py-1 rounded-full text-[clamp(9px,5%,11px)] font-semibold bg-white/80 backdrop-blur-sm border-2 shadow-sm ${
+      <div className="relative px-[clamp(2px,4%,8px)] pb-[clamp(2px,3%,6px)] mt-auto pt-[clamp(0px,0.5%,2px)] flex-shrink-0">
+        <span className={`inline-flex items-center gap-1 px-[clamp(2px,3%,6px)] py-0.5 rounded-full text-[clamp(8px,4%,10px)] font-medium bg-white/70 backdrop-blur-sm border ${
           table.currentSession?.tableFeePaused
-            ? 'border-amber-400 text-amber-800'
+            ? 'border-amber-400 text-amber-700'
             : `${statusConfig.borderClass} ${statusConfig.textClass}`
         }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${
-            table.currentSession?.tableFeePaused ? 'bg-amber-600' : statusConfig.dotClass
-          } ${table.status === 'occupied' && !table.currentSession?.tableFeePaused ? 'animate-pulse' : ''} shadow-md`} />
+          <span className={`w-1 h-1 rounded-full ${
+            table.currentSession?.tableFeePaused ? 'bg-amber-500' : statusConfig.dotClass
+          } ${table.status === 'occupied' && !table.currentSession?.tableFeePaused ? 'animate-pulse' : ''}`} />
           {table.currentSession?.tableFeePaused ? '⏸ 暂停' : statusConfig.label}
         </span>
       </div>
 
-      {/* Hover 效果 - 增强 */}
-      <div className={`absolute inset-0 bg-gradient-to-br from-transparent to-black/5 group-hover:from-black/5 group-hover:to-black/10 transition-all duration-300`} />
-      <div className={`absolute inset-0 border-2 border-transparent group-hover:border-${statusConfig.borderClass.replace('border-', '')}/50 rounded-2xl transition-all duration-300`} />
+      {/* Hover 效果 */}
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/0 to-teal-400/0 group-hover:from-emerald-400/5 group-hover:to-teal-400/5 transition-all duration-300" />
     </button>
   );
 }
@@ -257,8 +252,8 @@ function TableRow({ table, isSelected, onClick, onContextMenu }: TableRowProps) 
       onContextMenu={handleContextMenu}
       className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ${
         isSelected
-          ? 'ring-2 ring-[#07C160] shadow-lg bg-[#D1FAE5]'
-          : `bg-white hover:shadow-md border ${statusConfig.borderClass}`
+          ? 'ring-2 ring-emerald-400 shadow-lg bg-gradient-to-r from-emerald-50 to-teal-50'
+          : `bg-gradient-to-r ${statusConfig.bgClass} hover:shadow-md border ${statusConfig.borderClass}`
       }`}
     >
       {/* Table name */}
@@ -556,25 +551,25 @@ export function TableBoard({ onRefresh }: TableBoardProps) {
   return (
     <div className="h-full flex flex-col">
       {/* Toolbar */}
-      <div className="flex items-center gap-4 mb-4 p-4 bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-[#e5e5e5]/30">
+      <div className="flex items-center gap-4 mb-4">
         {/* View mode toggle */}
-        <div className="flex bg-[#f7f7f7] rounded-full p-1 shadow-inner">
+        <div className="flex bg-slate-100 rounded-xl p-1">
           <button
             onClick={() => dispatch({ type: 'SET_VIEW_MODE', payload: 'grid' })}
-            className={`p-2.5 rounded-full transition-all duration-200 ${
+            className={`p-2.5 rounded-lg transition-all duration-150 ${
               viewMode === 'grid'
-                ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-[0_2px_8px_rgba(7,193,96,0.3)]'
-                : 'text-[#999999] hover:bg-white hover:shadow-sm'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+                : 'text-slate-600 hover:bg-slate-200'
             }`}
           >
             <LayoutGrid className="w-5 h-5" />
           </button>
           <button
             onClick={() => dispatch({ type: 'SET_VIEW_MODE', payload: 'list' })}
-            className={`p-2.5 rounded-full transition-all duration-200 ${
+            className={`p-2.5 rounded-lg transition-all duration-150 ${
               viewMode === 'list'
-                ? 'bg-gradient-to-r from-[#07C160] to-[#06AD56] text-white shadow-[0_2px_8px_rgba(7,193,96,0.3)]'
-                : 'text-[#999999] hover:bg-white hover:shadow-sm'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+                : 'text-slate-600 hover:bg-slate-200'
             }`}
           >
             <List className="w-5 h-5" />
@@ -583,9 +578,7 @@ export function TableBoard({ onRefresh }: TableBoardProps) {
 
         {/* Search */}
         <div className="relative flex-1 max-w-xs">
-          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-[#f7f7f7] flex items-center justify-center">
-            <Search className="w-4 h-4 text-[#07C160]" />
-          </div>
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
           <input type="text" name="username" autoComplete="username" style={{ position: 'absolute', opacity: 0, width: 1, height: 1, pointerEvents: 'none' }} tabIndex={-1} />
           <input
             type="text"
@@ -593,15 +586,13 @@ export function TableBoard({ onRefresh }: TableBoardProps) {
             placeholder="搜索桌号..."
             value={localSearch}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-13 pr-4 py-3 bg-[#f7f7f7] border-0 rounded-2xl text-[#333333] placeholder:text-[#cccccc] focus:ring-2 focus:ring-[#07C160]/20 focus:bg-white focus:shadow-sm focus:outline-none transition-all"
+            className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 focus:outline-none transition-all"
           />
         </div>
 
         {/* Status filter */}
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-[#f7f7f7] flex items-center justify-center">
-            <Filter className="w-4 h-4 text-[#999999]" />
-          </div>
+          <Filter className="w-5 h-5 text-slate-500" />
           <select
             value={filterStatus}
             onChange={(e) =>
@@ -610,7 +601,7 @@ export function TableBoard({ onRefresh }: TableBoardProps) {
                 payload: e.target.value as TableStatus | 'all',
               })
             }
-            className="select text-sm pr-8 rounded-2xl bg-[#f7f7f7] border-0 focus:ring-2 focus:ring-[#07C160]/20"
+            className="select text-sm pr-8"
           >
             {statusOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -623,31 +614,31 @@ export function TableBoard({ onRefresh }: TableBoardProps) {
         {/* Stats */}
         <div className="ml-auto flex items-center gap-2">
             <button onClick={handleRefresh} disabled={isRefreshing}
-            className={`p-3 rounded-xl border-0 transition-all disabled:opacity-50 ${
+            className={`p-2.5 rounded-xl border transition-all disabled:opacity-50 ${
               refreshError
-                ? 'bg-rose-50 text-rose-500 hover:bg-rose-100'
-                : 'bg-[#f7f7f7] text-[#999999] hover:text-[#07C160] hover:bg-[#D1FAE5]'
+                ? 'bg-rose-50 border-rose-300 text-rose-500'
+                : 'bg-white border-slate-200 text-slate-500 hover:text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50'
             }`}
             title={refreshError ? '刷新失败，点击重试' : '刷新数据'}>
-            <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100">
-            <span className="w-3 h-3 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/30" />
-            <span className="text-sm text-emerald-700 font-medium">
-              空闲 <span className="font-bold">{state.tables.filter((t) => t.status === 'idle').length}</span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-200" />
+            <span className="text-sm text-slate-600">
+              空闲 <span className="font-bold text-emerald-600">{state.tables.filter((t) => t.status === 'idle').length}</span>
             </span>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-100 to-emerald-50 border border-emerald-200">
-            <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/40" />
-            <span className="text-sm text-emerald-800 font-medium">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-lg shadow-emerald-200" />
+            <span className="text-sm text-emerald-700">
               使用中 <span className="font-bold">{state.tables.filter((t) => t.status === 'occupied').length}</span>
             </span>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100">
-            <span className="w-3 h-3 rounded-full bg-amber-500 shadow-lg shadow-amber-500/30" />
-            <span className="text-sm text-amber-700 font-medium">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-lg shadow-amber-200" />
+            <span className="text-sm text-amber-700">
               预约 <span className="font-bold">{state.tables.filter((t) => t.status === 'reserved').length}</span>
             </span>
           </div>
@@ -728,7 +719,7 @@ export function TableBoard({ onRefresh }: TableBoardProps) {
                   {/* 列表 */}
                   <div className="space-y-2">
                     {/* Header */}
-                    <div className="flex items-center gap-4 px-4 py-2.5 text-sm text-[#999999] bg-[#f7f7f7] rounded-xl border border-[#e5e5e5]">
+                    <div className="flex items-center gap-4 px-4 py-2.5 text-sm text-slate-600 bg-gradient-to-r from-slate-100 to-slate-50 rounded-xl border border-slate-200">
                       <div className="w-16 font-semibold">桌号</div>
                       <div className="w-28 font-semibold">状态</div>
                       <div className="w-28 font-semibold">时长</div>
@@ -779,7 +770,7 @@ export function TableBoard({ onRefresh }: TableBoardProps) {
           <div className="fixed inset-0 z-40" onClick={() => setContextMenu(null)} />
           {/* Menu */}
           <div
-            className="fixed bg-white shadow-xl rounded-2xl border border-[#e5e5e5] z-50 overflow-hidden min-w-[180px] animate-in fade-in zoom-in-95"
+            className="fixed bg-white shadow-xl rounded-xl border border-slate-200 z-50 overflow-hidden min-w-[180px] animate-in fade-in zoom-in-95"
             style={{ left: contextMenu.x, top: contextMenu.y }}
           >
             {contextMenu.menuType === 'idle' && (
