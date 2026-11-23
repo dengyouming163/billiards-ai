@@ -1,0 +1,166 @@
+services:
+  db:
+    # 国内直连 Docker Hub 会超时，这里用 daocloud 镜像源；国内网络可复现
+    image: docker.m.daocloud.io/pgvector/pgvector:pg16
+    container_name: rag-kb-pg
+    environment:
+      POSTGRES_USER: kb
+      POSTGRES_PASSWORD: kb
+      POSTGRES_DB: kb
+    ports:
+      # 宿主 5433 -> 容器 5432，避开本机可能已有的 Postgres
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kb -d kb"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      # compose 文件在 deploy/ 下，构建上下文要指到项目根
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        PIP_INDEX_URL: https://pypi.tuna.tsinghua.edu.cn/simple
+    container_name: rag-kb-api
+    environment:
+      # 容器内用服务名 db + 5432，而不是宿主机的 5433
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: kb
+      DB_PASSWORD: kb
+      DB_NAME: kb
+      DEFAULT_TENANT: demo
+      # 没有 EMBED_API_KEY 时用 1024 维哈希向量，保证链路可用
+      EMBED_MODE: mock
+      # 容器内必须用服务名 minio；生产把 S3_ENDPOINT 改成实际地址
+      STORAGE_BACKEND: ${STORAGE_BACKEND:-local}
+      S3_ENDPOINT: http://minio:9000
+      S3_BUCKET: ${S3_BUCKET:-rag-kb}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-rag-app}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-rag-app-secret}
+      S3_REGION: ${S3_REGION:-us-east-1}
+      S3_USE_SSL: ${S3_USE_SSL:-false}
+    ports:
+      - "8000:8000"
+    # api 与 worker 是不同容器，上传文件必须通过 named volume 共享，
+    # 否则 worker 读不到 api 容器里落盘的文件。
+    volumes: ["uploads:/app/data/uploads"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # worker 设计为单副本串行消费；多副本并发重建同一 KB 的 BM25 快照时，
+  # 存在旧快照后写的已知限制，扩副本前需先解决。
+  worker:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        PIP_INDEX_URL: https://pypi.tuna.tsinghua.edu.cn/simple
+    container_name: rag-kb-worker
+    restart: unless-stopped
+    command: ["python", "scripts/run_worker.py", "--interval", "5"]
+    healthcheck: {disable: true}
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: kb
+      DB_PASSWORD: kb
+      DB_NAME: kb
+      DEFAULT_TENANT: demo
+      EMBED_MODE: mock
+      PARSER_BASE_URL: http://parser:8000
+      STORAGE_BACKEND: ${STORAGE_BACKEND:-local}
+      S3_ENDPOINT: http://minio:9000
+      S3_BUCKET: ${S3_BUCKET:-rag-kb}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-rag-app}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-rag-app-secret}
+      S3_REGION: ${S3_REGION:-us-east-1}
+      S3_USE_SSL: ${S3_USE_SSL:-false}
+    volumes: ["uploads:/app/data/uploads"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # 可选的 PDF 解析服务：默认不启动（profiles），这样 `docker compose up` 的
+  # 镜像体积和启动时间不受影响。需要解析 PDF 时：
+  #   docker compose --profile parser up -d parser
+  # 然后在 .env 里设 PARSER_BASE_URL=http://parser:8000
+  parser:
+    profiles: ["parser"]
+    build:
+      context: ../parser
+      dockerfile: Dockerfile
+    container_name: rag-kb-parser
+    ports:
+      - "8100:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/health')"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # 本地对象存储：仅 STORAGE_BACKEND=s3 时需要。API 9000、控制台 9001。
+  # 注意：官方 minio/minio 与 minio/mc 已在 2025-10 停止发布，这里改用 pgsty
+  # 社区 fork（Silo，基于 MinIO 技术，命令/入口完全兼容）。
+  minio:
+    image: pgsty/minio:latest
+    container_name: rag-kb-minio
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-ragkb}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-ragkb-secret}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+    restart: unless-stopped
+
+  # 一次性初始化：建桶 + 创建受限 IAM 用户与策略（幂等，已存在则跳过）。
+  minio-init:
+    image: pgsty/mc:latest
+    container_name: rag-kb-minio-init
+    depends_on:
+      minio:
+        condition: service_started
+    volumes:
+      # 策略 JSON 与本文件同级的 minio/ 目录
+      - ./minio:/policies:ro
+    entrypoint:
+      - /bin/sh
+      - -c
+      - >
+        until mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"; do sleep 2; done;
+        mc mb --ignore-existing local/rag-kb;
+        mc admin policy info local app-rag-kb-rw >/dev/null 2>&1 || mc admin policy create local app-rag-kb-rw /policies/app-rag-kb-rw.json;
+        mc admin user info local "$$S3_ACCESS_KEY" >/dev/null 2>&1 || mc admin user add local "$$S3_ACCESS_KEY" "$$S3_SECRET_KEY";
+        mc admin policy attach local app-rag-kb-rw --user "$$S3_ACCESS_KEY";
+        mc admin policy info local console-viewer >/dev/null 2>&1 || mc admin policy create local console-viewer /policies/console-viewer.json;
+        mc admin user info local "$$MINIO_VIEWER_USER" >/dev/null 2>&1 || mc admin user add local "$$MINIO_VIEWER_USER" "$$MINIO_VIEWER_PASSWORD";
+        mc admin policy attach local console-viewer --user "$$MINIO_VIEWER_USER";
+        mc ls local/rag-kb;
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-ragkb}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-ragkb-secret}
+      # 应用受限账号（与 api/worker 的 S3_ACCESS_KEY/S3_SECRET_KEY 保持一致）
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-rag-app}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-rag-app-secret}
+      # 控制台只读查看账号，用于登录 :9001 浏览
+      MINIO_VIEWER_USER: ${MINIO_VIEWER_USER:-rag-viewer}
+      MINIO_VIEWER_PASSWORD: ${MINIO_VIEWER_PASSWORD:-rag-viewer-secret}
+    restart: "no"
+
+volumes:
+  pgdata: {}
+  # local 模式仍需要 api 与 worker 共享；s3 模式可不再依赖它
+  uploads: {}
+  miniodata: {}

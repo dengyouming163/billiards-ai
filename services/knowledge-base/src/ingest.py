@@ -1,0 +1,167 @@
+"""入库执行器：把已落盘的原始文件变成可检索的知识块。
+
+执行顺序固定为：
+    解析 → 拼 Markdown → 切分 → 批量嵌入 → 落库 → 重建 BM25 → 更新文档状态
+
+两个刻意的设计：
+1. 父块不参与 embedding。父块只在检索命中子块后补上下文，写入 `None` 向量，
+   与 PgVectorStore.upsert 的既有契约保持一致。
+2. 任何异常都向上抛，由 worker 统一调用 mark_failed。执行器不做兜底，
+   否则失败会被伪装成 ready，用户看到"入库成功"却检索不到内容。
+
+提取阶段必须先于建 store / 连库：后缀不支持或内容为空时，不应该产生任何
+数据库副作用，也不需要数据库可用（见 tests/test_ingest.py 的 None engine 用例）。
+"""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+from sqlalchemy import text
+from sqlalchemy.engine import Engine
+
+from .bm25_store import BM25Store
+from .chunk import split_document
+from .parsers.office import (
+    OfficeParseError,
+    docx_to_markdown,
+    pptx_to_markdown,
+    xlsx_to_markdown,
+)
+from .parsers.pdf import ParserUnavailable, PdfParserClient, blocks_to_text
+from .store_pg import PgVectorStore
+
+_TEXT_SUFFIXES = {".md", ".txt"}
+_OFFICE_PARSERS = {
+    ".docx": docx_to_markdown,
+    ".pptx": pptx_to_markdown,
+    ".xlsx": xlsx_to_markdown,
+}
+
+StageCallback = Callable[[str, int, str], None]
+
+
+class NonRetryableIngestError(RuntimeError):
+    """文档本身无法通过重试恢复，需要用户处理后重新上传。"""
+
+
+def _extract_text(
+    file_path: Path, parser: Any, content: bytes | None = None
+) -> str:
+    """按后缀提取纯文本/Markdown；不支持的格式直接抛 ValueError。
+
+    `content` 用于从对象存储直接取回的内存字节，避免 worker 回写临时文件。
+    """
+    suffix = file_path.suffix.lower()
+    data = content if content is not None else file_path.read_bytes()
+    if suffix == ".pdf":
+        # 只在真正解析 PDF 时才创建客户端：构造本身不联网，
+        # 但没必要为 Markdown 上传也持有一个 httpx.Client。
+        try:
+            if parser is None:
+                with PdfParserClient() as client:
+                    blocks = client.parse(data, filename=file_path.name)
+            else:
+                blocks = parser.parse(data, filename=file_path.name)
+        except ParserUnavailable as exc:
+            message = str(exc)
+            if exc.retryable is True:
+                raise
+            if exc.retryable is None and "扫描件" not in message:
+                raise
+            if ("扫描件" in message or "OCR" in message) and "需要 OCR" not in message:
+                message = f"{message}；需要 OCR"
+            raise NonRetryableIngestError(message) from exc
+        return blocks_to_text(blocks)
+
+    if suffix in _OFFICE_PARSERS:
+        try:
+            extracted = _OFFICE_PARSERS[suffix](data)
+        except OfficeParseError as exc:
+            raise NonRetryableIngestError(str(exc)) from exc
+        if not extracted.strip():
+            # 空文档继续走流程会被标成 ready 却没有任何块，直接判不可重试失败
+            raise NonRetryableIngestError(
+                f"{suffix} 文档无可提取文本"
+                "（图片、图表和形状内文字不提取，可转 PDF 后走 OCR）"
+            )
+        return extracted
+
+    if suffix in _TEXT_SUFFIXES:
+        return data.decode("utf-8")
+
+    raise ValueError(f"不支持的文件类型：{suffix or '(none)'}")
+
+
+def ingest_document(
+    engine: Engine,
+    *,
+    tenant_id: str,
+    kb_id: str,
+    doc_id: str,
+    path: str | Path,
+    embed_client: Any,
+    content: bytes | None = None,
+    parser: Any = None,
+    on_stage: StageCallback | None = None,
+) -> dict:
+    """解析并入库一份文档，成功后返回 {"chunks": int, "doc_status": "ready"}。
+
+    `parser` 可注入（测试/自定义解析服务）；为 None 时延迟创建 PdfParserClient。
+    `on_stage` 用于上报阶段进度，属于旁路通知，不影响入库结果。
+    """
+    file_path = Path(path)
+
+    def stage(name: str, progress: int, message: str = "") -> None:
+        if on_stage is not None:
+            on_stage(name, progress, message)
+
+    stage("parsing", 30, "开始解析")
+    text_content = _extract_text(file_path, parser, content)
+    if not text_content.strip():
+        # 空内容如果继续走流程，最终会把文档标成 ready 却没有任何块，
+        # 这类"假成功"比直接失败更难排查。
+        raise ValueError(f"文档 {doc_id} 提取结果为空，无法入库")
+
+    stage("chunking", 50, "开始切分")
+    chunks = split_document(text_content, doc_id=doc_id)
+    texts = [chunk.text for chunk in chunks if not chunk.is_parent]
+
+    stage("embedding", 65, "开始嵌入")
+    vectors = embed_client.embed_texts(texts)
+    if len(vectors) != len(texts):
+        raise ValueError(
+            f"embedding 返回数量与子块数量不一致：期望 {len(texts)}，实际 {len(vectors)}"
+        )
+
+    # 按 chunks 原始顺序组装：父块占位 None，子块按 embedding 返回顺序消费。
+    remaining = iter(vectors)
+    vectors_with_none: list[list[float] | None] = [
+        None if chunk.is_parent else next(remaining) for chunk in chunks
+    ]
+
+    stage("publishing", 90, "开始原子发布")
+    store = PgVectorStore(engine, tenant_id=tenant_id, kb_id=kb_id)
+    with engine.begin() as connection:
+        connection.execute(
+            text("SELECT set_config('app.tenant_id', :tenant_id, true)"),
+            {"tenant_id": tenant_id},
+        )
+        # 重复导入同一文档时先清旧块，保证幂等：既避免 chunk_id 主键冲突，
+        # 也防止内容变短后留下不再属于本文档的孤儿块。
+        store.delete_by_doc(doc_id, connection=connection)
+        store.upsert(chunks, vectors_with_none, connection=connection)  # type: ignore[arg-type]
+
+        # 块、BM25 快照和 ready 状态必须作为同一事务发布，任一步失败都完整回滚。
+        BM25Store(engine).rebuild(tenant_id, kb_id, connection=connection)
+        connection.execute(
+            text(
+                "UPDATE documents SET status = 'ready', updated_at = now() "
+                "WHERE id = :doc_id AND tenant_id = :tenant_id AND kb_id = :kb_id"
+            ),
+            {"doc_id": doc_id, "tenant_id": tenant_id, "kb_id": kb_id},
+        )
+
+    return {"chunks": len(chunks), "doc_status": "ready"}

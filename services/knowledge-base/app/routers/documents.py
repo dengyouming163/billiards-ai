@@ -1,0 +1,238 @@
+"""文档上传接口：`POST /v1/kbs/{kb_id}/documents`。
+
+上传只负责"接收 + 建任务 + 落盘"，解析/切分/向量化交给异步 worker，
+所以立即返回 202 和 job_id，客户端靠任务接口轮询进度。
+
+写入顺序刻意是「先提交数据库、后落盘」：
+1. 同一份文件重复上传按 content_hash 去重，复用已有 doc_id，不再撞唯一约束；
+2. 落盘失败时把 documents 置为 failed，不会留下永远 pending 的行；
+3. 反过来，数据库失败时文件还没写，不会产生孤儿文件。
+
+租户只从依赖注入取（请求头 → Phase 3 换成 token），请求体/查询参数里
+出现 tenant_id 不会被接受；tenant_id / kb_id 还会做字符白名单校验，
+防止被拼进路径时发生目录穿越。
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import re
+from pathlib import Path
+from typing import Annotated, Any
+from uuid import uuid4
+
+from fastapi import APIRouter, File, HTTPException, Query, UploadFile
+from sqlalchemy import text
+
+from app.deps import EngineDep, TenantId
+from app.schemas import StorageResponse, UploadDocumentResponse
+from app.services import ensure_kb
+from src import ingest_jobs
+from src.ingest_events import record_job_event
+from src.storage import StorageError, build_storage, describe_storage
+
+router = APIRouter(prefix="/v1", tags=["documents"])
+
+ALLOWED_SUFFIX = {".pdf", ".md", ".txt", ".docx", ".pptx", ".xlsx"}
+DEFAULT_MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+_SAFE_ID = re.compile(r"^[A-Za-z0-9_-]+$")
+
+
+def max_upload_bytes() -> int:
+    """读取上限，环境变量非法时退回默认值，不让配置错误把上传打挂。"""
+    raw = os.environ.get("MAX_UPLOAD_BYTES", "").strip()
+    if not raw:
+        return DEFAULT_MAX_UPLOAD_BYTES
+    try:
+        value = int(raw)
+    except ValueError:
+        return DEFAULT_MAX_UPLOAD_BYTES
+    return value if value > 0 else DEFAULT_MAX_UPLOAD_BYTES
+
+
+def _validate_id(name: str, value: str) -> None:
+    if not _SAFE_ID.fullmatch(value):
+        raise HTTPException(status_code=400, detail=f"invalid {name}")
+
+
+@router.post(
+    "/kbs/{kb_id}/documents",
+    status_code=202,
+    response_model=UploadDocumentResponse,
+)
+async def upload_document(
+    kb_id: str,
+    tenant_id: TenantId,
+    engine: EngineDep,
+    file: Annotated[UploadFile, File()],
+) -> UploadDocumentResponse:
+    # 这两个值会拼进落盘路径，先卡字符白名单，杜绝 ../ 之类的穿越
+    _validate_id("tenant_id", tenant_id)
+    _validate_id("kb_id", kb_id)
+
+    # 归属校验：不存在和不属于你都返回 404，不泄露"这个库存在"
+    ensure_kb(engine, tenant_id, kb_id)
+
+    suffix = Path(file.filename or "").suffix.lower()
+    if suffix not in ALLOWED_SUFFIX:
+        raise HTTPException(status_code=422, detail=f"unsupported file type: {suffix or '(none)'}")
+
+    limit = max_upload_bytes()
+    # 只多读 1 字节即可判断超限，不把超大文件整个读入内存
+    content = await file.read(limit + 1)
+    if not content:
+        raise HTTPException(status_code=422, detail="empty file")
+    if len(content) > limit:
+        raise HTTPException(status_code=413, detail="file too large")
+
+    content_hash = hashlib.sha256(content).hexdigest()[:16]
+    duplicated = False
+
+    with engine.begin() as connection:
+        existing = connection.execute(
+            text(
+                "SELECT id FROM documents "
+                "WHERE tenant_id = :t AND kb_id = :kb AND content_hash = :hash"
+            ),
+            {"t": tenant_id, "kb": kb_id, "hash": content_hash},
+        ).scalar_one_or_none()
+
+        if existing is not None:
+            # 同一份内容已经收过：复用原文档，避免唯一约束报 500
+            doc_id = existing
+            duplicated = True
+        else:
+            doc_id = f"{kb_id}-{uuid4().hex[:8]}"
+            # 原始文件名与大小写入 meta，供「存储」视图展示；source_url 仍是 key
+            doc_meta = json.dumps(
+                {"filename": file.filename or "", "size": len(content)},
+                ensure_ascii=False,
+            )
+            inserted = connection.execute(
+                text(
+                    "INSERT INTO documents "
+                    "(id, tenant_id, kb_id, title, source_url, content_hash, status, meta) "
+                    "VALUES (:id, :t, :kb, :title, :url, :hash, 'pending', CAST(:meta AS jsonb)) "
+                    "ON CONFLICT (tenant_id, kb_id, content_hash) DO NOTHING "
+                    "RETURNING id"
+                ),
+                {
+                    "id": doc_id,
+                    "t": tenant_id,
+                    "kb": kb_id,
+                    # 原始文件名不参与命名，title 先用服务端生成的 doc_id 占位
+                    "title": doc_id,
+                    "url": (Path(tenant_id) / kb_id / f"{doc_id}{suffix}").as_posix(),
+                    "hash": content_hash,
+                    "meta": doc_meta,
+                },
+            ).scalar_one_or_none()
+            if inserted is None:
+                # 并发上传同一份内容：另一请求先插入了，复用它的 doc_id
+                doc_id = connection.execute(
+                    text(
+                        "SELECT id FROM documents "
+                        "WHERE tenant_id = :t AND kb_id = :kb AND content_hash = :hash"
+                    ),
+                    {"t": tenant_id, "kb": kb_id, "hash": content_hash},
+                ).scalar_one()
+                duplicated = True
+
+        job_id = ingest_jobs.enqueue(engine, tenant_id, kb_id, doc_id, source="upload")
+
+    # 任务已入队：写一条 queued 事件，驾驶舱据此展示排队起点（best-effort）
+    record_job_event(
+        engine,
+        job_id=job_id,
+        tenant_id=tenant_id,
+        stage="queued",
+        status="started",
+        progress=0,
+        message=f"source=upload doc_id={doc_id}",
+    )
+
+    # 数据库已提交，再写存储：这里的失败只会留下 failed 行，不会留下 pending 行
+    relative_path = Path(tenant_id) / kb_id / f"{doc_id}{suffix}"
+    key = relative_path.as_posix()
+    try:
+        build_storage().put_bytes(key, content)
+    except (OSError, StorageError) as exc:
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    "UPDATE documents SET status = 'failed', updated_at = now() "
+                    "WHERE id = :id AND tenant_id = :t"
+                ),
+                {"id": doc_id, "t": tenant_id},
+            )
+        raise HTTPException(status_code=500, detail="failed to persist upload") from exc
+
+    return UploadDocumentResponse(job_id=job_id, doc_id=doc_id, duplicated=duplicated)
+
+
+def _doc_filename(meta_filename: str | None, source_url: str, doc_id: str) -> str:
+    """meta.filename → source_url basename → doc_id。"""
+    if meta_filename:
+        return meta_filename
+    base = Path(source_url).name if source_url else ""
+    return base or doc_id
+
+
+@router.get("/storage", response_model=StorageResponse)
+def list_storage(
+    tenant_id: TenantId,
+    engine: EngineDep,
+    kb_id: str | None = None,
+    status: str | None = Query(default=None),
+    limit: int = Query(default=200, ge=1, le=500),
+) -> StorageResponse:
+    if kb_id is not None:
+        _validate_id("kb_id", kb_id)
+    status_value = status if status in {"pending", "ready", "failed"} else None
+
+    where = ["tenant_id = :t"]
+    params: dict[str, Any] = {"t": tenant_id, "limit": limit}
+    if kb_id:
+        where.append("kb_id = :kb")
+        params["kb"] = kb_id
+    if status_value:
+        where.append("status = :status")
+        params["status"] = status_value
+
+    sql = text(
+        "SELECT id, kb_id, source_url, meta->>'filename' AS filename, "
+        "NULLIF(meta->>'size', '')::bigint AS size, status, created_at "
+        "FROM documents WHERE " + " AND ".join(where) + " "
+        "ORDER BY created_at DESC LIMIT :limit"
+    )
+    with engine.connect() as connection:
+        rows = connection.execute(sql, params).mappings().all()
+
+    documents = []
+    by_status: dict[str, int] = {}
+    total_bytes = 0
+    for row in rows:
+        filename = _doc_filename(row["filename"], row["source_url"] or "", row["id"])
+        size = int(row["size"]) if row["size"] is not None else None
+        documents.append(
+            {
+                "id": row["id"],
+                "kb_id": row["kb_id"],
+                "filename": filename,
+                "size": size,
+                "status": row["status"],
+                "created_at": row["created_at"],
+            }
+        )
+        by_status[row["status"]] = by_status.get(row["status"], 0) + 1
+        total_bytes += size or 0
+
+    desc = describe_storage()
+    return StorageResponse(
+        backend=desc["backend"],
+        bucket=desc["bucket"],
+        stats={"total": len(documents), "bytes": total_bytes, "by_status": by_status},
+        documents=documents,
+    )
